@@ -1,0 +1,22 @@
+# Buf CI: lint, format, breaking. Optional BSR push when BUF_TOKEN is set.
+name: Buf CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+    types: [opened, synchronize, reopened, labeled, unlabeled]
+  delete:
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  buf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bufbuild/buf-action@v1
+        with:
+          # Optional: set BUF_TOKEN in repo secrets to push to BSR (buf.build/novamonline/novam-protos)
+          token: ${{ secrets.BUF_TOKEN }}
+          # Run push only when token is present (BSR publish)
+          push: ${{ secrets.BUF_TOKEN != '' }}

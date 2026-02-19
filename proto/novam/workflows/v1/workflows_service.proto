@@ -1,0 +1,146 @@
+syntax = "proto3";
+
+package novam.workflows.v1;
+
+import "novam/common/v1/common.proto";
+import "novam/common/v1/pagination.proto";  // PageRequest, PageResponse
+import "novam/entities/v1/workflow_run.proto";
+import "novam/entities/v1/flow_definition.proto";
+import "novam/entities/v1/flow_node.proto";
+import "novam/entities/v1/flow_ui_data.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/workflows/v1;workflowsv1";
+
+// WorkflowsService manages flow definitions, UI data, catalog nodes, and workflow runs.
+service WorkflowsService {
+  // Flow definition CRUD
+  rpc GetFlowDefinition(GetFlowDefinitionRequest) returns (GetFlowDefinitionResponse);
+  rpc ListFlowDefinitions(ListFlowDefinitionsRequest) returns (ListFlowDefinitionsResponse);
+  rpc CreateFlowDefinition(CreateFlowDefinitionRequest) returns (CreateFlowDefinitionResponse);
+  rpc UpdateFlowDefinition(UpdateFlowDefinitionRequest) returns (UpdateFlowDefinitionResponse);
+  rpc DeleteFlowDefinition(DeleteFlowDefinitionRequest) returns (DeleteFlowDefinitionResponse);
+  // Flow UI data (React Flow state)
+  rpc GetFlowUIData(GetFlowUIDataRequest) returns (GetFlowUIDataResponse);
+  rpc SetFlowUIData(SetFlowUIDataRequest) returns (SetFlowUIDataResponse);
+  // Catalog of available node types
+  rpc ListFlowNodes(ListFlowNodesRequest) returns (ListFlowNodesResponse);
+  // Run lifecycle (workflow_id is flow_definition_id)
+  rpc StartRun(StartRunRequest) returns (StartRunResponse);
+  rpc CancelRun(CancelRunRequest) returns (CancelRunResponse);
+  rpc GetRun(GetRunRequest) returns (GetRunResponse);
+}
+
+// ----- Flow definition -----
+message GetFlowDefinitionRequest {
+  string id = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message GetFlowDefinitionResponse {
+  novam.entities.v1.FlowDefinition flow_definition = 1;
+  repeated novam.entities.v1.FlowDefinitionNode nodes = 2;
+  repeated novam.entities.v1.FlowDefinitionEdge edges = 3;
+}
+
+message ListFlowDefinitionsRequest {
+  string org_id = 1;
+  novam.common.v1.PageRequest page = 2;
+  novam.common.v1.RequestMetadata metadata = 3;
+}
+
+message ListFlowDefinitionsResponse {
+  repeated novam.entities.v1.FlowDefinition flow_definitions = 1;
+  novam.common.v1.PageResponse page = 2;
+}
+
+message CreateFlowDefinitionRequest {
+  string org_id = 1;
+  string name = 2;
+  string description = 3;
+  string entry_node_id = 4;
+  bool enabled = 5;
+  repeated novam.entities.v1.FlowDefinitionNode nodes = 6;
+  repeated novam.entities.v1.FlowDefinitionEdge edges = 7;
+  novam.common.v1.RequestMetadata metadata = 8;
+}
+
+message CreateFlowDefinitionResponse {
+  novam.entities.v1.FlowDefinition flow_definition = 1;
+}
+
+message UpdateFlowDefinitionRequest {
+  string id = 1;
+  optional string name = 2;
+  optional string description = 3;
+  optional string entry_node_id = 4;
+  optional bool enabled = 5;
+  repeated novam.entities.v1.FlowDefinitionNode nodes = 6;
+  repeated novam.entities.v1.FlowDefinitionEdge edges = 7;
+  novam.common.v1.RequestMetadata metadata = 8;
+}
+
+message UpdateFlowDefinitionResponse {
+  novam.entities.v1.FlowDefinition flow_definition = 1;
+}
+
+message DeleteFlowDefinitionRequest {
+  string id = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message DeleteFlowDefinitionResponse {}
+
+// ----- Flow UI data -----
+message GetFlowUIDataRequest {
+  string flow_definition_id = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message GetFlowUIDataResponse {
+  novam.entities.v1.FlowUIData flow_ui_data = 1;
+}
+
+message SetFlowUIDataRequest {
+  novam.entities.v1.FlowUIData flow_ui_data = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message SetFlowUIDataResponse {}
+
+// ----- Flow nodes (catalog) -----
+message ListFlowNodesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message ListFlowNodesResponse {
+  repeated novam.entities.v1.FlowNode flow_nodes = 1;
+}
+
+// ----- Run lifecycle -----
+message StartRunRequest {
+  string workflow_id = 1;  // flow_definition_id
+  novam.common.v1.RequestMetadata metadata = 2;
+  string params = 3;
+}
+
+message StartRunResponse {
+  novam.entities.v1.WorkflowRun run = 1;
+}
+
+message CancelRunRequest {
+  string run_id = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message CancelRunResponse {
+  novam.entities.v1.WorkflowRun run = 1;
+}
+
+message GetRunRequest {
+  string run_id = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message GetRunResponse {
+  novam.entities.v1.WorkflowRun run = 1;
+}

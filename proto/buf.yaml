@@ -1,0 +1,10 @@
+version: v1
+name: buf.build/novamonline/novam-protos
+deps:
+  - buf.build/protocolbuffers/wellknowntypes
+lint:
+  use:
+    - STANDARD
+breaking:
+  use:
+    - FILE

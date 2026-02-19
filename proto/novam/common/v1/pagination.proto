@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package novam.common.v1;
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/common/v1;commonv1";
+
+// PageRequest is used to request a paginated list.
+message PageRequest {
+  string page_token = 1;
+  int32 page_size = 2;
+}
+
+// PageResponse is returned with a paginated list.
+message PageResponse {
+  string next_page_token = 1;
+  int64 total_size = 2;
+}

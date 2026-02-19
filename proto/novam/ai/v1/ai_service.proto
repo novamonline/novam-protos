@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package novam.ai.v1;
+
+import "novam/common/v1/common.proto";
+import "novam/entities/v1/ai.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/ai/v1;aiv1";
+
+// AIService provides chat and summarization.
+service AIService {
+  rpc Chat(ChatRequest) returns (ChatResponse);
+  rpc Summarize(SummarizeRequest) returns (SummarizeResponse);
+}
+
+message ChatRequest {
+  repeated novam.entities.v1.ChatMessage messages = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message ChatResponse {
+  novam.entities.v1.ChatResponse response = 1;
+}
+
+message SummarizeRequest {
+  string text = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message SummarizeResponse {
+  string summary = 1;
+}

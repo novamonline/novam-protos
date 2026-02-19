@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package novam.common.v1;
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/common/v1;commonv1";
+
+// TenantContext carries tenant and org identifiers for multi-tenant requests.
+message TenantContext {
+  string tenant_id = 1;
+  string org_id = 2;
+}
+
+// RequestMetadata carries request-scoped metadata (correlation, idempotency, tenant).
+message RequestMetadata {
+  string request_id = 1;
+  string idempotency_key = 2;
+  TenantContext tenant_context = 3;
+}

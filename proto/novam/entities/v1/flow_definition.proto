@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package novam.entities.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1";
+
+// FlowDefinition is the workflow definition header (metadata and entry point).
+message FlowDefinition {
+  string id = 1;
+  string org_id = 2;
+  string name = 3;
+  string description = 4;
+  string entry_node_id = 5;
+  bool enabled = 6;
+  google.protobuf.Timestamp created_at = 7;
+  google.protobuf.Timestamp updated_at = 8;
+}
+
+// FlowDefinitionNode is a single node in a flow definition (structural, for execution).
+message FlowDefinitionNode {
+  string id = 1;
+  string flow_definition_id = 2;
+  string flow_node_kind = 3;
+  google.protobuf.Struct config = 4;
+  int32 sort_order = 5;
+  google.protobuf.Timestamp created_at = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+// FlowDefinitionEdge connects two nodes in a flow definition.
+message FlowDefinitionEdge {
+  string id = 1;
+  string flow_definition_id = 2;
+  string from_node_id = 3;
+  string to_node_id = 4;
+  string condition_expression = 5;
+  google.protobuf.Timestamp created_at = 6;
+}

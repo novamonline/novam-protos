@@ -1,0 +1,15 @@
+version: v2
+plugins:
+  # Go — NOVAM Engine (messages + gRPC server stubs)
+  - remote: buf.build/protocolbuffers/go
+    out: gen/go
+    opt: paths=source_relative
+  - remote: buf.build/grpc/go
+    out: gen/go
+    opt: paths=source_relative
+  # TypeScript — NOVAM Portal (types) and TS clients
+  - remote: buf.build/bufbuild/es
+    out: gen/ts
+  # Node gRPC — NOVAM Data
+  - remote: buf.build/grpc/node
+    out: gen/node
