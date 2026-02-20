@@ -120,7 +120,7 @@ var File_novam_entities_v1_flow_node_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_flow_node_proto_rawDesc = "" +
 	"\n" +
-	"!novam/entities/v1/flow_node.proto\x12\x11novam.entities.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xa4\x02\n" +
+	"!novam/entities/v1/flow_node.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa4\x02\n" +
 	"\bFlowNode\x12\x12\n" +
 	"\x04kind\x18\x01 \x01(\tR\x04kind\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +

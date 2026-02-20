@@ -2,8 +2,8 @@ syntax = "proto3";
 
 package novam.entities.v1;
 
-import "google/protobuf/timestamp.proto";
 import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1";
 

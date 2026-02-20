@@ -1199,7 +1199,7 @@ var File_novam_workflows_v1_workflows_service_proto protoreflect.FileDescriptor
 
 const file_novam_workflows_v1_workflows_service_proto_rawDesc = "" +
 	"\n" +
-	"*novam/workflows/v1/workflows_service.proto\x12\x12novam.workflows.v1\x1a\x1cnovam/common/v1/common.proto\x1a novam/common/v1/pagination.proto\x1a$novam/entities/v1/workflow_run.proto\x1a'novam/entities/v1/flow_definition.proto\x1a!novam/entities/v1/flow_node.proto\x1a$novam/entities/v1/flow_ui_data.proto\"h\n" +
+	"*novam/workflows/v1/workflows_service.proto\x12\x12novam.workflows.v1\x1a\x1cnovam/common/v1/common.proto\x1a novam/common/v1/pagination.proto\x1a'novam/entities/v1/flow_definition.proto\x1a!novam/entities/v1/flow_node.proto\x1a$novam/entities/v1/flow_ui_data.proto\x1a$novam/entities/v1/workflow_run.proto\"h\n" +
 	"\x18GetFlowDefinitionRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12<\n" +
 	"\bmetadata\x18\x02 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"\xe1\x01\n" +

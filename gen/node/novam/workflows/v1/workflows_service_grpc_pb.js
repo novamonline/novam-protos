@@ -5,10 +5,10 @@ var grpc = require('grpc');
 var novam_workflows_v1_workflows_service_pb = require('../../../novam/workflows/v1/workflows_service_pb.js');
 var novam_common_v1_common_pb = require('../../../novam/common/v1/common_pb.js');
 var novam_common_v1_pagination_pb = require('../../../novam/common/v1/pagination_pb.js');
-var novam_entities_v1_workflow_run_pb = require('../../../novam/entities/v1/workflow_run_pb.js');
 var novam_entities_v1_flow_definition_pb = require('../../../novam/entities/v1/flow_definition_pb.js');
 var novam_entities_v1_flow_node_pb = require('../../../novam/entities/v1/flow_node_pb.js');
 var novam_entities_v1_flow_ui_data_pb = require('../../../novam/entities/v1/flow_ui_data_pb.js');
+var novam_entities_v1_workflow_run_pb = require('../../../novam/entities/v1/workflow_run_pb.js');
 
 function serialize_novam_workflows_v1_CancelRunRequest(arg) {
   if (!(arg instanceof novam_workflows_v1_workflows_service_pb.CancelRunRequest)) {

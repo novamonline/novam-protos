@@ -3,11 +3,11 @@ syntax = "proto3";
 package novam.workflows.v1;
 
 import "novam/common/v1/common.proto";
-import "novam/common/v1/pagination.proto";  // PageRequest, PageResponse
-import "novam/entities/v1/workflow_run.proto";
+import "novam/common/v1/pagination.proto"; // PageRequest, PageResponse
 import "novam/entities/v1/flow_definition.proto";
 import "novam/entities/v1/flow_node.proto";
 import "novam/entities/v1/flow_ui_data.proto";
+import "novam/entities/v1/workflow_run.proto";
 
 option go_package = "github.com/novamonline/novam-protos/gen/go/novam/workflows/v1;workflowsv1";
 
@@ -118,7 +118,7 @@ message ListFlowNodesResponse {
 
 // ----- Run lifecycle -----
 message StartRunRequest {
-  string workflow_id = 1;  // flow_definition_id
+  string workflow_id = 1; // flow_definition_id
   novam.common.v1.RequestMetadata metadata = 2;
   string params = 3;
 }

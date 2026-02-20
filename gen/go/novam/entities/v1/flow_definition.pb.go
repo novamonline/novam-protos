@@ -306,7 +306,7 @@ var File_novam_entities_v1_flow_definition_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
 	"\n" +
-	"'novam/entities/v1/flow_definition.proto\x12\x11novam.entities.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"\xa1\x02\n" +
+	"'novam/entities/v1/flow_definition.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa1\x02\n" +
 	"\x0eFlowDefinition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x12\n" +
