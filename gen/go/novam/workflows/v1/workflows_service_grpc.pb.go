@@ -30,6 +30,9 @@ const (
 	WorkflowsService_StartRun_FullMethodName             = "/novam.workflows.v1.WorkflowsService/StartRun"
 	WorkflowsService_CancelRun_FullMethodName            = "/novam.workflows.v1.WorkflowsService/CancelRun"
 	WorkflowsService_GetRun_FullMethodName               = "/novam.workflows.v1.WorkflowsService/GetRun"
+	WorkflowsService_Process_FullMethodName              = "/novam.workflows.v1.WorkflowsService/Process"
+	WorkflowsService_CreateFlow_FullMethodName           = "/novam.workflows.v1.WorkflowsService/CreateFlow"
+	WorkflowsService_EndFlow_FullMethodName              = "/novam.workflows.v1.WorkflowsService/EndFlow"
 )
 
 // WorkflowsServiceClient is the client API for WorkflowsService service.
@@ -53,6 +56,10 @@ type WorkflowsServiceClient interface {
 	StartRun(ctx context.Context, in *StartRunRequest, opts ...grpc.CallOption) (*StartRunResponse, error)
 	CancelRun(ctx context.Context, in *CancelRunRequest, opts ...grpc.CallOption) (*CancelRunResponse, error)
 	GetRun(ctx context.Context, in *GetRunRequest, opts ...grpc.CallOption) (*GetRunResponse, error)
+	// Process-style execution (one node per call, client-driven)
+	Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error)
+	CreateFlow(ctx context.Context, in *CreateFlowRequest, opts ...grpc.CallOption) (*CreateFlowResponse, error)
+	EndFlow(ctx context.Context, in *EndFlowRequest, opts ...grpc.CallOption) (*EndFlowResponse, error)
 }
 
 type workflowsServiceClient struct {
@@ -173,6 +180,36 @@ func (c *workflowsServiceClient) GetRun(ctx context.Context, in *GetRunRequest, 
 	return out, nil
 }
 
+func (c *workflowsServiceClient) Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProcessResponse)
+	err := c.cc.Invoke(ctx, WorkflowsService_Process_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workflowsServiceClient) CreateFlow(ctx context.Context, in *CreateFlowRequest, opts ...grpc.CallOption) (*CreateFlowResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateFlowResponse)
+	err := c.cc.Invoke(ctx, WorkflowsService_CreateFlow_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workflowsServiceClient) EndFlow(ctx context.Context, in *EndFlowRequest, opts ...grpc.CallOption) (*EndFlowResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EndFlowResponse)
+	err := c.cc.Invoke(ctx, WorkflowsService_EndFlow_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkflowsServiceServer is the server API for WorkflowsService service.
 // All implementations must embed UnimplementedWorkflowsServiceServer
 // for forward compatibility.
@@ -194,6 +231,10 @@ type WorkflowsServiceServer interface {
 	StartRun(context.Context, *StartRunRequest) (*StartRunResponse, error)
 	CancelRun(context.Context, *CancelRunRequest) (*CancelRunResponse, error)
 	GetRun(context.Context, *GetRunRequest) (*GetRunResponse, error)
+	// Process-style execution (one node per call, client-driven)
+	Process(context.Context, *ProcessRequest) (*ProcessResponse, error)
+	CreateFlow(context.Context, *CreateFlowRequest) (*CreateFlowResponse, error)
+	EndFlow(context.Context, *EndFlowRequest) (*EndFlowResponse, error)
 	mustEmbedUnimplementedWorkflowsServiceServer()
 }
 
@@ -236,6 +277,15 @@ func (UnimplementedWorkflowsServiceServer) CancelRun(context.Context, *CancelRun
 }
 func (UnimplementedWorkflowsServiceServer) GetRun(context.Context, *GetRunRequest) (*GetRunResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetRun not implemented")
+}
+func (UnimplementedWorkflowsServiceServer) Process(context.Context, *ProcessRequest) (*ProcessResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Process not implemented")
+}
+func (UnimplementedWorkflowsServiceServer) CreateFlow(context.Context, *CreateFlowRequest) (*CreateFlowResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateFlow not implemented")
+}
+func (UnimplementedWorkflowsServiceServer) EndFlow(context.Context, *EndFlowRequest) (*EndFlowResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method EndFlow not implemented")
 }
 func (UnimplementedWorkflowsServiceServer) mustEmbedUnimplementedWorkflowsServiceServer() {}
 func (UnimplementedWorkflowsServiceServer) testEmbeddedByValue()                          {}
@@ -456,6 +506,60 @@ func _WorkflowsService_GetRun_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkflowsService_Process_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProcessRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkflowsServiceServer).Process(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkflowsService_Process_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkflowsServiceServer).Process(ctx, req.(*ProcessRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkflowsService_CreateFlow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateFlowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkflowsServiceServer).CreateFlow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkflowsService_CreateFlow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkflowsServiceServer).CreateFlow(ctx, req.(*CreateFlowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkflowsService_EndFlow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndFlowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkflowsServiceServer).EndFlow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkflowsService_EndFlow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkflowsServiceServer).EndFlow(ctx, req.(*EndFlowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkflowsService_ServiceDesc is the grpc.ServiceDesc for WorkflowsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -506,6 +610,18 @@ var WorkflowsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRun",
 			Handler:    _WorkflowsService_GetRun_Handler,
+		},
+		{
+			MethodName: "Process",
+			Handler:    _WorkflowsService_Process_Handler,
+		},
+		{
+			MethodName: "CreateFlow",
+			Handler:    _WorkflowsService_CreateFlow_Handler,
+		},
+		{
+			MethodName: "EndFlow",
+			Handler:    _WorkflowsService_EndFlow_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -6,6 +6,7 @@ import "novam/common/v1/common.proto";
 import "novam/common/v1/pagination.proto"; // PageRequest, PageResponse
 import "novam/entities/v1/flow_definition.proto";
 import "novam/entities/v1/flow_node.proto";
+import "novam/entities/v1/flow_state.proto";
 import "novam/entities/v1/flow_ui_data.proto";
 import "novam/entities/v1/workflow_run.proto";
 
@@ -28,6 +29,10 @@ service WorkflowsService {
   rpc StartRun(StartRunRequest) returns (StartRunResponse);
   rpc CancelRun(CancelRunRequest) returns (CancelRunResponse);
   rpc GetRun(GetRunRequest) returns (GetRunResponse);
+  // Process-style execution (one node per call, client-driven)
+  rpc Process(ProcessRequest) returns (ProcessResponse);
+  rpc CreateFlow(CreateFlowRequest) returns (CreateFlowResponse);
+  rpc EndFlow(EndFlowRequest) returns (EndFlowResponse);
 }
 
 // ----- Flow definition -----
@@ -143,4 +148,46 @@ message GetRunRequest {
 
 message GetRunResponse {
   novam.entities.v1.WorkflowRun run = 1;
+}
+
+// ----- Process-style execution -----
+message ProcessRequest {
+  string flow_instance_id = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+  oneof msg {
+    string node_message = 3; // Input for current node (e.g. user message)
+    novam.entities.v1.ActionResponse action_response = 4;
+    novam.entities.v1.NodeTimeout node_timeout = 5; // Timeout-triggered step
+  }
+}
+
+message ProcessResponse {
+  novam.entities.v1.FlowState state = 1;
+  oneof msg {
+    novam.entities.v1.ActionRequest action_request = 2;
+    novam.entities.v1.NodeTimeout node_timeout = 3;
+    string node_message = 4;
+  }
+}
+
+message CreateFlowRequest {
+  string flow_definition_id = 1;
+  string snapshot_id = 2; // Empty for draft
+  string initial_context = 3; // JSON, default "{}"
+  novam.common.v1.RequestMetadata metadata = 4;
+}
+
+message CreateFlowResponse {
+  novam.entities.v1.FlowState state = 1;
+  string flow_instance_id = 2;
+}
+
+message EndFlowRequest {
+  string flow_instance_id = 1;
+  string reason = 2;
+  novam.common.v1.RequestMetadata metadata = 3;
+}
+
+message EndFlowResponse {
+  novam.entities.v1.FlowState state = 1;
 }

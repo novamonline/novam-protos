@@ -10,6 +10,7 @@ import type { PageRequest, PageResponse } from "../../common/v1/pagination_pb";
 import type { FlowUIData } from "../../entities/v1/flow_ui_data_pb";
 import type { FlowNode } from "../../entities/v1/flow_node_pb";
 import type { WorkflowRun } from "../../entities/v1/workflow_run_pb";
+import type { ActionRequest, ActionResponse, FlowState, NodeTimeout } from "../../entities/v1/flow_state_pb";
 
 /**
  * Describes the file novam/workflows/v1/workflows_service.proto.
@@ -506,6 +507,193 @@ export declare type GetRunResponse = Message<"novam.workflows.v1.GetRunResponse"
 export declare const GetRunResponseSchema: GenMessage<GetRunResponse>;
 
 /**
+ * ----- Process-style execution -----
+ *
+ * @generated from message novam.workflows.v1.ProcessRequest
+ */
+export declare type ProcessRequest = Message<"novam.workflows.v1.ProcessRequest"> & {
+  /**
+   * @generated from field: string flow_instance_id = 1;
+   */
+  flowInstanceId: string;
+
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 2;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from oneof novam.workflows.v1.ProcessRequest.msg
+   */
+  msg: {
+    /**
+     * Input for current node (e.g. user message)
+     *
+     * @generated from field: string node_message = 3;
+     */
+    value: string;
+    case: "nodeMessage";
+  } | {
+    /**
+     * @generated from field: novam.entities.v1.ActionResponse action_response = 4;
+     */
+    value: ActionResponse;
+    case: "actionResponse";
+  } | {
+    /**
+     * Timeout-triggered step
+     *
+     * @generated from field: novam.entities.v1.NodeTimeout node_timeout = 5;
+     */
+    value: NodeTimeout;
+    case: "nodeTimeout";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message novam.workflows.v1.ProcessRequest.
+ * Use `create(ProcessRequestSchema)` to create a new message.
+ */
+export declare const ProcessRequestSchema: GenMessage<ProcessRequest>;
+
+/**
+ * @generated from message novam.workflows.v1.ProcessResponse
+ */
+export declare type ProcessResponse = Message<"novam.workflows.v1.ProcessResponse"> & {
+  /**
+   * @generated from field: novam.entities.v1.FlowState state = 1;
+   */
+  state?: FlowState;
+
+  /**
+   * @generated from oneof novam.workflows.v1.ProcessResponse.msg
+   */
+  msg: {
+    /**
+     * @generated from field: novam.entities.v1.ActionRequest action_request = 2;
+     */
+    value: ActionRequest;
+    case: "actionRequest";
+  } | {
+    /**
+     * @generated from field: novam.entities.v1.NodeTimeout node_timeout = 3;
+     */
+    value: NodeTimeout;
+    case: "nodeTimeout";
+  } | {
+    /**
+     * @generated from field: string node_message = 4;
+     */
+    value: string;
+    case: "nodeMessage";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message novam.workflows.v1.ProcessResponse.
+ * Use `create(ProcessResponseSchema)` to create a new message.
+ */
+export declare const ProcessResponseSchema: GenMessage<ProcessResponse>;
+
+/**
+ * @generated from message novam.workflows.v1.CreateFlowRequest
+ */
+export declare type CreateFlowRequest = Message<"novam.workflows.v1.CreateFlowRequest"> & {
+  /**
+   * @generated from field: string flow_definition_id = 1;
+   */
+  flowDefinitionId: string;
+
+  /**
+   * Empty for draft
+   *
+   * @generated from field: string snapshot_id = 2;
+   */
+  snapshotId: string;
+
+  /**
+   * JSON, default "{}"
+   *
+   * @generated from field: string initial_context = 3;
+   */
+  initialContext: string;
+
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 4;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.workflows.v1.CreateFlowRequest.
+ * Use `create(CreateFlowRequestSchema)` to create a new message.
+ */
+export declare const CreateFlowRequestSchema: GenMessage<CreateFlowRequest>;
+
+/**
+ * @generated from message novam.workflows.v1.CreateFlowResponse
+ */
+export declare type CreateFlowResponse = Message<"novam.workflows.v1.CreateFlowResponse"> & {
+  /**
+   * @generated from field: novam.entities.v1.FlowState state = 1;
+   */
+  state?: FlowState;
+
+  /**
+   * @generated from field: string flow_instance_id = 2;
+   */
+  flowInstanceId: string;
+};
+
+/**
+ * Describes the message novam.workflows.v1.CreateFlowResponse.
+ * Use `create(CreateFlowResponseSchema)` to create a new message.
+ */
+export declare const CreateFlowResponseSchema: GenMessage<CreateFlowResponse>;
+
+/**
+ * @generated from message novam.workflows.v1.EndFlowRequest
+ */
+export declare type EndFlowRequest = Message<"novam.workflows.v1.EndFlowRequest"> & {
+  /**
+   * @generated from field: string flow_instance_id = 1;
+   */
+  flowInstanceId: string;
+
+  /**
+   * @generated from field: string reason = 2;
+   */
+  reason: string;
+
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 3;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.workflows.v1.EndFlowRequest.
+ * Use `create(EndFlowRequestSchema)` to create a new message.
+ */
+export declare const EndFlowRequestSchema: GenMessage<EndFlowRequest>;
+
+/**
+ * @generated from message novam.workflows.v1.EndFlowResponse
+ */
+export declare type EndFlowResponse = Message<"novam.workflows.v1.EndFlowResponse"> & {
+  /**
+   * @generated from field: novam.entities.v1.FlowState state = 1;
+   */
+  state?: FlowState;
+};
+
+/**
+ * Describes the message novam.workflows.v1.EndFlowResponse.
+ * Use `create(EndFlowResponseSchema)` to create a new message.
+ */
+export declare const EndFlowResponseSchema: GenMessage<EndFlowResponse>;
+
+/**
  * WorkflowsService manages flow definitions, UI data, catalog nodes, and workflow runs.
  *
  * @generated from service novam.workflows.v1.WorkflowsService
@@ -606,6 +794,32 @@ export declare const WorkflowsService: GenService<{
     methodKind: "unary";
     input: typeof GetRunRequestSchema;
     output: typeof GetRunResponseSchema;
+  },
+  /**
+   * Process-style execution (one node per call, client-driven)
+   *
+   * @generated from rpc novam.workflows.v1.WorkflowsService.Process
+   */
+  process: {
+    methodKind: "unary";
+    input: typeof ProcessRequestSchema;
+    output: typeof ProcessResponseSchema;
+  },
+  /**
+   * @generated from rpc novam.workflows.v1.WorkflowsService.CreateFlow
+   */
+  createFlow: {
+    methodKind: "unary";
+    input: typeof CreateFlowRequestSchema;
+    output: typeof CreateFlowResponseSchema;
+  },
+  /**
+   * @generated from rpc novam.workflows.v1.WorkflowsService.EndFlow
+   */
+  endFlow: {
+    methodKind: "unary";
+    input: typeof EndFlowRequestSchema;
+    output: typeof EndFlowResponseSchema;
   },
 }>;
 

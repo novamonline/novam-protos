@@ -7,6 +7,7 @@ var novam_common_v1_common_pb = require('../../../novam/common/v1/common_pb.js')
 var novam_common_v1_pagination_pb = require('../../../novam/common/v1/pagination_pb.js');
 var novam_entities_v1_flow_definition_pb = require('../../../novam/entities/v1/flow_definition_pb.js');
 var novam_entities_v1_flow_node_pb = require('../../../novam/entities/v1/flow_node_pb.js');
+var novam_entities_v1_flow_state_pb = require('../../../novam/entities/v1/flow_state_pb.js');
 var novam_entities_v1_flow_ui_data_pb = require('../../../novam/entities/v1/flow_ui_data_pb.js');
 var novam_entities_v1_workflow_run_pb = require('../../../novam/entities/v1/workflow_run_pb.js');
 
@@ -54,6 +55,28 @@ function deserialize_novam_workflows_v1_CreateFlowDefinitionResponse(buffer_arg)
   return novam_workflows_v1_workflows_service_pb.CreateFlowDefinitionResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_workflows_v1_CreateFlowRequest(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.CreateFlowRequest)) {
+    throw new Error('Expected argument of type novam.workflows.v1.CreateFlowRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_CreateFlowRequest(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.CreateFlowRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_CreateFlowResponse(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.CreateFlowResponse)) {
+    throw new Error('Expected argument of type novam.workflows.v1.CreateFlowResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_CreateFlowResponse(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.CreateFlowResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_workflows_v1_DeleteFlowDefinitionRequest(arg) {
   if (!(arg instanceof novam_workflows_v1_workflows_service_pb.DeleteFlowDefinitionRequest)) {
     throw new Error('Expected argument of type novam.workflows.v1.DeleteFlowDefinitionRequest');
@@ -74,6 +97,28 @@ function serialize_novam_workflows_v1_DeleteFlowDefinitionResponse(arg) {
 
 function deserialize_novam_workflows_v1_DeleteFlowDefinitionResponse(buffer_arg) {
   return novam_workflows_v1_workflows_service_pb.DeleteFlowDefinitionResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_EndFlowRequest(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.EndFlowRequest)) {
+    throw new Error('Expected argument of type novam.workflows.v1.EndFlowRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_EndFlowRequest(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.EndFlowRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_EndFlowResponse(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.EndFlowResponse)) {
+    throw new Error('Expected argument of type novam.workflows.v1.EndFlowResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_EndFlowResponse(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.EndFlowResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_novam_workflows_v1_GetFlowDefinitionRequest(arg) {
@@ -184,6 +229,28 @@ function serialize_novam_workflows_v1_ListFlowNodesResponse(arg) {
 
 function deserialize_novam_workflows_v1_ListFlowNodesResponse(buffer_arg) {
   return novam_workflows_v1_workflows_service_pb.ListFlowNodesResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_ProcessRequest(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.ProcessRequest)) {
+    throw new Error('Expected argument of type novam.workflows.v1.ProcessRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_ProcessRequest(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.ProcessRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_ProcessResponse(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.ProcessResponse)) {
+    throw new Error('Expected argument of type novam.workflows.v1.ProcessResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_ProcessResponse(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.ProcessResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_novam_workflows_v1_SetFlowUIDataRequest(arg) {
@@ -379,6 +446,40 @@ startRun: {
     requestDeserialize: deserialize_novam_workflows_v1_GetRunRequest,
     responseSerialize: serialize_novam_workflows_v1_GetRunResponse,
     responseDeserialize: deserialize_novam_workflows_v1_GetRunResponse,
+  },
+  // Process-style execution (one node per call, client-driven)
+process: {
+    path: '/novam.workflows.v1.WorkflowsService/Process',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_workflows_v1_workflows_service_pb.ProcessRequest,
+    responseType: novam_workflows_v1_workflows_service_pb.ProcessResponse,
+    requestSerialize: serialize_novam_workflows_v1_ProcessRequest,
+    requestDeserialize: deserialize_novam_workflows_v1_ProcessRequest,
+    responseSerialize: serialize_novam_workflows_v1_ProcessResponse,
+    responseDeserialize: deserialize_novam_workflows_v1_ProcessResponse,
+  },
+  createFlow: {
+    path: '/novam.workflows.v1.WorkflowsService/CreateFlow',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_workflows_v1_workflows_service_pb.CreateFlowRequest,
+    responseType: novam_workflows_v1_workflows_service_pb.CreateFlowResponse,
+    requestSerialize: serialize_novam_workflows_v1_CreateFlowRequest,
+    requestDeserialize: deserialize_novam_workflows_v1_CreateFlowRequest,
+    responseSerialize: serialize_novam_workflows_v1_CreateFlowResponse,
+    responseDeserialize: deserialize_novam_workflows_v1_CreateFlowResponse,
+  },
+  endFlow: {
+    path: '/novam.workflows.v1.WorkflowsService/EndFlow',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_workflows_v1_workflows_service_pb.EndFlowRequest,
+    responseType: novam_workflows_v1_workflows_service_pb.EndFlowResponse,
+    requestSerialize: serialize_novam_workflows_v1_EndFlowRequest,
+    requestDeserialize: deserialize_novam_workflows_v1_EndFlowRequest,
+    responseSerialize: serialize_novam_workflows_v1_EndFlowResponse,
+    responseDeserialize: deserialize_novam_workflows_v1_EndFlowResponse,
   },
 };
 
