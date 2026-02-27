@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package novam.ai.v1;
+
+import "novam/common/v1/common.proto";
+import "novam/entities/v1/ai.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/ai/v1;aiv1";
+
+// AgentService provides ADK-backed agent messaging.
+service AgentService {
+  rpc SendMessage(SendMessageRequest) returns (SendMessageResponse);
+}
+
+message SendMessageRequest {
+  string agent_id = 1;
+  repeated novam.entities.v1.ChatMessage messages = 2;
+  novam.common.v1.RequestMetadata metadata = 3;
+}
+
+message SendMessageResponse {
+  novam.entities.v1.ChatResponse response = 1;
+}
