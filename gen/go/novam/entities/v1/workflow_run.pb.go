@@ -33,6 +33,8 @@ const (
 	RunStatus_RUN_STATUS_SUCCEEDED   RunStatus = 3
 	RunStatus_RUN_STATUS_FAILED      RunStatus = 4
 	RunStatus_RUN_STATUS_CANCELLED   RunStatus = 5
+	// Paused on a wait step until a set time, holding no worker.
+	RunStatus_RUN_STATUS_WAITING RunStatus = 6
 )
 
 // Enum value maps for RunStatus.
@@ -44,6 +46,7 @@ var (
 		3: "RUN_STATUS_SUCCEEDED",
 		4: "RUN_STATUS_FAILED",
 		5: "RUN_STATUS_CANCELLED",
+		6: "RUN_STATUS_WAITING",
 	}
 	RunStatus_value = map[string]int32{
 		"RUN_STATUS_UNSPECIFIED": 0,
@@ -52,6 +55,7 @@ var (
 		"RUN_STATUS_SUCCEEDED":   3,
 		"RUN_STATUS_FAILED":      4,
 		"RUN_STATUS_CANCELLED":   5,
+		"RUN_STATUS_WAITING":     6,
 	}
 )
 
@@ -181,14 +185,15 @@ const file_novam_entities_v1_workflow_run_proto_rawDesc = "" +
 	"started_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12;\n" +
 	"\vfinished_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"finishedAt\x123\n" +
-	"\x05error\x18\x06 \x01(\v2\x1d.novam.common.v1.ErrorDetailsR\x05error*\xa2\x01\n" +
+	"\x05error\x18\x06 \x01(\v2\x1d.novam.common.v1.ErrorDetailsR\x05error*\xba\x01\n" +
 	"\tRunStatus\x12\x1a\n" +
 	"\x16RUN_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12RUN_STATUS_PENDING\x10\x01\x12\x16\n" +
 	"\x12RUN_STATUS_RUNNING\x10\x02\x12\x18\n" +
 	"\x14RUN_STATUS_SUCCEEDED\x10\x03\x12\x15\n" +
 	"\x11RUN_STATUS_FAILED\x10\x04\x12\x18\n" +
-	"\x14RUN_STATUS_CANCELLED\x10\x05BIZGgithub.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1b\x06proto3"
+	"\x14RUN_STATUS_CANCELLED\x10\x05\x12\x16\n" +
+	"\x12RUN_STATUS_WAITING\x10\x06BIZGgithub.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1b\x06proto3"
 
 var (
 	file_novam_entities_v1_workflow_run_proto_rawDescOnce sync.Once

@@ -387,6 +387,92 @@ export declare type ListFlowNodesResponse = Message<"novam.workflows.v1.ListFlow
 export declare const ListFlowNodesResponseSchema: GenMessage<ListFlowNodesResponse>;
 
 /**
+ * ----- Validation -----
+ *
+ * @generated from message novam.workflows.v1.ValidateFlowDefinitionRequest
+ */
+export declare type ValidateFlowDefinitionRequest = Message<"novam.workflows.v1.ValidateFlowDefinitionRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.entities.v1.FlowDefinition flow_definition = 2;
+   */
+  flowDefinition?: FlowDefinition;
+
+  /**
+   * @generated from field: repeated novam.entities.v1.FlowDefinitionNode nodes = 3;
+   */
+  nodes: FlowDefinitionNode[];
+
+  /**
+   * @generated from field: repeated novam.entities.v1.FlowDefinitionEdge edges = 4;
+   */
+  edges: FlowDefinitionEdge[];
+};
+
+/**
+ * Describes the message novam.workflows.v1.ValidateFlowDefinitionRequest.
+ * Use `create(ValidateFlowDefinitionRequestSchema)` to create a new message.
+ */
+export declare const ValidateFlowDefinitionRequestSchema: GenMessage<ValidateFlowDefinitionRequest>;
+
+/**
+ * @generated from message novam.workflows.v1.ValidateFlowDefinitionResponse
+ */
+export declare type ValidateFlowDefinitionResponse = Message<"novam.workflows.v1.ValidateFlowDefinitionResponse"> & {
+  /**
+   * Empty when the flow can run. A malformed request is INVALID_ARGUMENT instead.
+   *
+   * @generated from field: repeated novam.workflows.v1.FlowValidationIssue issues = 1;
+   */
+  issues: FlowValidationIssue[];
+};
+
+/**
+ * Describes the message novam.workflows.v1.ValidateFlowDefinitionResponse.
+ * Use `create(ValidateFlowDefinitionResponseSchema)` to create a new message.
+ */
+export declare const ValidateFlowDefinitionResponseSchema: GenMessage<ValidateFlowDefinitionResponse>;
+
+/**
+ * FlowValidationIssue is one reason a flow can't run, pointing at the node or edge at fault when there is one.
+ *
+ * @generated from message novam.workflows.v1.FlowValidationIssue
+ */
+export declare type FlowValidationIssue = Message<"novam.workflows.v1.FlowValidationIssue"> & {
+  /**
+   * @generated from field: string node_id = 1;
+   */
+  nodeId: string;
+
+  /**
+   * with to_node_id, the edge at fault
+   *
+   * @generated from field: string from_node_id = 2;
+   */
+  fromNodeId: string;
+
+  /**
+   * @generated from field: string to_node_id = 3;
+   */
+  toNodeId: string;
+
+  /**
+   * @generated from field: string message = 4;
+   */
+  message: string;
+};
+
+/**
+ * Describes the message novam.workflows.v1.FlowValidationIssue.
+ * Use `create(FlowValidationIssueSchema)` to create a new message.
+ */
+export declare const FlowValidationIssueSchema: GenMessage<FlowValidationIssue>;
+
+/**
  * ----- Run lifecycle -----
  *
  * @generated from message novam.workflows.v1.StartRunRequest
@@ -768,6 +854,16 @@ export declare const WorkflowsService: GenService<{
     methodKind: "unary";
     input: typeof ListFlowNodesRequestSchema;
     output: typeof ListFlowNodesResponseSchema;
+  },
+  /**
+   * Checks that a flow could run as written, without storing it. novam-data calls this before saving.
+   *
+   * @generated from rpc novam.workflows.v1.WorkflowsService.ValidateFlowDefinition
+   */
+  validateFlowDefinition: {
+    methodKind: "unary";
+    input: typeof ValidateFlowDefinitionRequestSchema;
+    output: typeof ValidateFlowDefinitionResponseSchema;
   },
   /**
    * Run lifecycle (workflow_id is flow_definition_id)

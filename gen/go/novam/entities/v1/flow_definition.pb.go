@@ -25,15 +25,17 @@ const (
 
 // FlowDefinition is the workflow definition header (metadata and entry point).
 type FlowDefinition struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	OrgId         string                 `protobuf:"bytes,2,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
-	EntryNodeId   string                 `protobuf:"bytes,5,opt,name=entry_node_id,json=entryNodeId,proto3" json:"entry_node_id,omitempty"`
-	Enabled       bool                   `protobuf:"varint,6,opt,name=enabled,proto3" json:"enabled,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	state       protoimpl.MessageState `protogen:"open.v1"`
+	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrgId       string                 `protobuf:"bytes,2,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
+	Name        string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Description string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
+	EntryNodeId string                 `protobuf:"bytes,5,opt,name=entry_node_id,json=entryNodeId,proto3" json:"entry_node_id,omitempty"`
+	Enabled     bool                   `protobuf:"varint,6,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// What starts this flow's runs. Unset means runs start only through StartRun.
+	Trigger       *FlowTrigger `protobuf:"bytes,9,opt,name=trigger,proto3" json:"trigger,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -124,6 +126,76 @@ func (x *FlowDefinition) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *FlowDefinition) GetTrigger() *FlowTrigger {
+	if x != nil {
+		return x.Trigger
+	}
+	return nil
+}
+
+// FlowTrigger is what starts a flow's runs, as the workflow builder saved it.
+type FlowTrigger struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Type  string                 `protobuf:"bytes,1,opt,name=type,proto3" json:"type,omitempty"` // manual, schedule, event, data_change, webhook
+	// Settings for the type, e.g. schedule {cron} or {before: "appointment.start", offsetHours: 24},
+	// event {event: "appointment.completed"}, data_change {resource: "clients"}.
+	Config        *structpb.Struct `protobuf:"bytes,2,opt,name=config,proto3" json:"config,omitempty"`
+	Enabled       bool             `protobuf:"varint,3,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FlowTrigger) Reset() {
+	*x = FlowTrigger{}
+	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FlowTrigger) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FlowTrigger) ProtoMessage() {}
+
+func (x *FlowTrigger) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FlowTrigger.ProtoReflect.Descriptor instead.
+func (*FlowTrigger) Descriptor() ([]byte, []int) {
+	return file_novam_entities_v1_flow_definition_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *FlowTrigger) GetType() string {
+	if x != nil {
+		return x.Type
+	}
+	return ""
+}
+
+func (x *FlowTrigger) GetConfig() *structpb.Struct {
+	if x != nil {
+		return x.Config
+	}
+	return nil
+}
+
+func (x *FlowTrigger) GetEnabled() bool {
+	if x != nil {
+		return x.Enabled
+	}
+	return false
+}
+
 // FlowDefinitionNode is a single node in a flow definition (structural, for execution).
 type FlowDefinitionNode struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
@@ -140,7 +212,7 @@ type FlowDefinitionNode struct {
 
 func (x *FlowDefinitionNode) Reset() {
 	*x = FlowDefinitionNode{}
-	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[1]
+	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -152,7 +224,7 @@ func (x *FlowDefinitionNode) String() string {
 func (*FlowDefinitionNode) ProtoMessage() {}
 
 func (x *FlowDefinitionNode) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[1]
+	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -165,7 +237,7 @@ func (x *FlowDefinitionNode) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FlowDefinitionNode.ProtoReflect.Descriptor instead.
 func (*FlowDefinitionNode) Descriptor() ([]byte, []int) {
-	return file_novam_entities_v1_flow_definition_proto_rawDescGZIP(), []int{1}
+	return file_novam_entities_v1_flow_definition_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *FlowDefinitionNode) GetId() string {
@@ -232,7 +304,7 @@ type FlowDefinitionEdge struct {
 
 func (x *FlowDefinitionEdge) Reset() {
 	*x = FlowDefinitionEdge{}
-	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[2]
+	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -244,7 +316,7 @@ func (x *FlowDefinitionEdge) String() string {
 func (*FlowDefinitionEdge) ProtoMessage() {}
 
 func (x *FlowDefinitionEdge) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[2]
+	mi := &file_novam_entities_v1_flow_definition_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -257,7 +329,7 @@ func (x *FlowDefinitionEdge) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FlowDefinitionEdge.ProtoReflect.Descriptor instead.
 func (*FlowDefinitionEdge) Descriptor() ([]byte, []int) {
-	return file_novam_entities_v1_flow_definition_proto_rawDescGZIP(), []int{2}
+	return file_novam_entities_v1_flow_definition_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *FlowDefinitionEdge) GetId() string {
@@ -306,7 +378,7 @@ var File_novam_entities_v1_flow_definition_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
 	"\n" +
-	"'novam/entities/v1/flow_definition.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa1\x02\n" +
+	"'novam/entities/v1/flow_definition.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xdb\x02\n" +
 	"\x0eFlowDefinition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x12\n" +
@@ -317,7 +389,12 @@ const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xbe\x02\n" +
+	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x128\n" +
+	"\atrigger\x18\t \x01(\v2\x1e.novam.entities.v1.FlowTriggerR\atrigger\"l\n" +
+	"\vFlowTrigger\x12\x12\n" +
+	"\x04type\x18\x01 \x01(\tR\x04type\x12/\n" +
+	"\x06config\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x06config\x12\x18\n" +
+	"\aenabled\x18\x03 \x01(\bR\aenabled\"\xbe\x02\n" +
 	"\x12FlowDefinitionNode\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12,\n" +
 	"\x12flow_definition_id\x18\x02 \x01(\tR\x10flowDefinitionId\x12$\n" +
@@ -352,26 +429,29 @@ func file_novam_entities_v1_flow_definition_proto_rawDescGZIP() []byte {
 	return file_novam_entities_v1_flow_definition_proto_rawDescData
 }
 
-var file_novam_entities_v1_flow_definition_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_novam_entities_v1_flow_definition_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_novam_entities_v1_flow_definition_proto_goTypes = []any{
 	(*FlowDefinition)(nil),        // 0: novam.entities.v1.FlowDefinition
-	(*FlowDefinitionNode)(nil),    // 1: novam.entities.v1.FlowDefinitionNode
-	(*FlowDefinitionEdge)(nil),    // 2: novam.entities.v1.FlowDefinitionEdge
-	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),       // 4: google.protobuf.Struct
+	(*FlowTrigger)(nil),           // 1: novam.entities.v1.FlowTrigger
+	(*FlowDefinitionNode)(nil),    // 2: novam.entities.v1.FlowDefinitionNode
+	(*FlowDefinitionEdge)(nil),    // 3: novam.entities.v1.FlowDefinitionEdge
+	(*timestamppb.Timestamp)(nil), // 4: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),       // 5: google.protobuf.Struct
 }
 var file_novam_entities_v1_flow_definition_proto_depIdxs = []int32{
-	3, // 0: novam.entities.v1.FlowDefinition.created_at:type_name -> google.protobuf.Timestamp
-	3, // 1: novam.entities.v1.FlowDefinition.updated_at:type_name -> google.protobuf.Timestamp
-	4, // 2: novam.entities.v1.FlowDefinitionNode.config:type_name -> google.protobuf.Struct
-	3, // 3: novam.entities.v1.FlowDefinitionNode.created_at:type_name -> google.protobuf.Timestamp
-	3, // 4: novam.entities.v1.FlowDefinitionNode.updated_at:type_name -> google.protobuf.Timestamp
-	3, // 5: novam.entities.v1.FlowDefinitionEdge.created_at:type_name -> google.protobuf.Timestamp
-	6, // [6:6] is the sub-list for method output_type
-	6, // [6:6] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	4, // 0: novam.entities.v1.FlowDefinition.created_at:type_name -> google.protobuf.Timestamp
+	4, // 1: novam.entities.v1.FlowDefinition.updated_at:type_name -> google.protobuf.Timestamp
+	1, // 2: novam.entities.v1.FlowDefinition.trigger:type_name -> novam.entities.v1.FlowTrigger
+	5, // 3: novam.entities.v1.FlowTrigger.config:type_name -> google.protobuf.Struct
+	5, // 4: novam.entities.v1.FlowDefinitionNode.config:type_name -> google.protobuf.Struct
+	4, // 5: novam.entities.v1.FlowDefinitionNode.created_at:type_name -> google.protobuf.Timestamp
+	4, // 6: novam.entities.v1.FlowDefinitionNode.updated_at:type_name -> google.protobuf.Timestamp
+	4, // 7: novam.entities.v1.FlowDefinitionEdge.created_at:type_name -> google.protobuf.Timestamp
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_novam_entities_v1_flow_definition_proto_init() }
@@ -385,7 +465,7 @@ func file_novam_entities_v1_flow_definition_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_entities_v1_flow_definition_proto_rawDesc), len(file_novam_entities_v1_flow_definition_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

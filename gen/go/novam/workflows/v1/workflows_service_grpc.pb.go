@@ -19,20 +19,21 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WorkflowsService_GetFlowDefinition_FullMethodName    = "/novam.workflows.v1.WorkflowsService/GetFlowDefinition"
-	WorkflowsService_ListFlowDefinitions_FullMethodName  = "/novam.workflows.v1.WorkflowsService/ListFlowDefinitions"
-	WorkflowsService_CreateFlowDefinition_FullMethodName = "/novam.workflows.v1.WorkflowsService/CreateFlowDefinition"
-	WorkflowsService_UpdateFlowDefinition_FullMethodName = "/novam.workflows.v1.WorkflowsService/UpdateFlowDefinition"
-	WorkflowsService_DeleteFlowDefinition_FullMethodName = "/novam.workflows.v1.WorkflowsService/DeleteFlowDefinition"
-	WorkflowsService_GetFlowUIData_FullMethodName        = "/novam.workflows.v1.WorkflowsService/GetFlowUIData"
-	WorkflowsService_SetFlowUIData_FullMethodName        = "/novam.workflows.v1.WorkflowsService/SetFlowUIData"
-	WorkflowsService_ListFlowNodes_FullMethodName        = "/novam.workflows.v1.WorkflowsService/ListFlowNodes"
-	WorkflowsService_StartRun_FullMethodName             = "/novam.workflows.v1.WorkflowsService/StartRun"
-	WorkflowsService_CancelRun_FullMethodName            = "/novam.workflows.v1.WorkflowsService/CancelRun"
-	WorkflowsService_GetRun_FullMethodName               = "/novam.workflows.v1.WorkflowsService/GetRun"
-	WorkflowsService_Process_FullMethodName              = "/novam.workflows.v1.WorkflowsService/Process"
-	WorkflowsService_CreateFlow_FullMethodName           = "/novam.workflows.v1.WorkflowsService/CreateFlow"
-	WorkflowsService_EndFlow_FullMethodName              = "/novam.workflows.v1.WorkflowsService/EndFlow"
+	WorkflowsService_GetFlowDefinition_FullMethodName      = "/novam.workflows.v1.WorkflowsService/GetFlowDefinition"
+	WorkflowsService_ListFlowDefinitions_FullMethodName    = "/novam.workflows.v1.WorkflowsService/ListFlowDefinitions"
+	WorkflowsService_CreateFlowDefinition_FullMethodName   = "/novam.workflows.v1.WorkflowsService/CreateFlowDefinition"
+	WorkflowsService_UpdateFlowDefinition_FullMethodName   = "/novam.workflows.v1.WorkflowsService/UpdateFlowDefinition"
+	WorkflowsService_DeleteFlowDefinition_FullMethodName   = "/novam.workflows.v1.WorkflowsService/DeleteFlowDefinition"
+	WorkflowsService_GetFlowUIData_FullMethodName          = "/novam.workflows.v1.WorkflowsService/GetFlowUIData"
+	WorkflowsService_SetFlowUIData_FullMethodName          = "/novam.workflows.v1.WorkflowsService/SetFlowUIData"
+	WorkflowsService_ListFlowNodes_FullMethodName          = "/novam.workflows.v1.WorkflowsService/ListFlowNodes"
+	WorkflowsService_ValidateFlowDefinition_FullMethodName = "/novam.workflows.v1.WorkflowsService/ValidateFlowDefinition"
+	WorkflowsService_StartRun_FullMethodName               = "/novam.workflows.v1.WorkflowsService/StartRun"
+	WorkflowsService_CancelRun_FullMethodName              = "/novam.workflows.v1.WorkflowsService/CancelRun"
+	WorkflowsService_GetRun_FullMethodName                 = "/novam.workflows.v1.WorkflowsService/GetRun"
+	WorkflowsService_Process_FullMethodName                = "/novam.workflows.v1.WorkflowsService/Process"
+	WorkflowsService_CreateFlow_FullMethodName             = "/novam.workflows.v1.WorkflowsService/CreateFlow"
+	WorkflowsService_EndFlow_FullMethodName                = "/novam.workflows.v1.WorkflowsService/EndFlow"
 )
 
 // WorkflowsServiceClient is the client API for WorkflowsService service.
@@ -52,6 +53,8 @@ type WorkflowsServiceClient interface {
 	SetFlowUIData(ctx context.Context, in *SetFlowUIDataRequest, opts ...grpc.CallOption) (*SetFlowUIDataResponse, error)
 	// Catalog of available node types
 	ListFlowNodes(ctx context.Context, in *ListFlowNodesRequest, opts ...grpc.CallOption) (*ListFlowNodesResponse, error)
+	// Checks that a flow could run as written, without storing it. novam-data calls this before saving.
+	ValidateFlowDefinition(ctx context.Context, in *ValidateFlowDefinitionRequest, opts ...grpc.CallOption) (*ValidateFlowDefinitionResponse, error)
 	// Run lifecycle (workflow_id is flow_definition_id)
 	StartRun(ctx context.Context, in *StartRunRequest, opts ...grpc.CallOption) (*StartRunResponse, error)
 	CancelRun(ctx context.Context, in *CancelRunRequest, opts ...grpc.CallOption) (*CancelRunResponse, error)
@@ -150,6 +153,16 @@ func (c *workflowsServiceClient) ListFlowNodes(ctx context.Context, in *ListFlow
 	return out, nil
 }
 
+func (c *workflowsServiceClient) ValidateFlowDefinition(ctx context.Context, in *ValidateFlowDefinitionRequest, opts ...grpc.CallOption) (*ValidateFlowDefinitionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ValidateFlowDefinitionResponse)
+	err := c.cc.Invoke(ctx, WorkflowsService_ValidateFlowDefinition_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *workflowsServiceClient) StartRun(ctx context.Context, in *StartRunRequest, opts ...grpc.CallOption) (*StartRunResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(StartRunResponse)
@@ -227,6 +240,8 @@ type WorkflowsServiceServer interface {
 	SetFlowUIData(context.Context, *SetFlowUIDataRequest) (*SetFlowUIDataResponse, error)
 	// Catalog of available node types
 	ListFlowNodes(context.Context, *ListFlowNodesRequest) (*ListFlowNodesResponse, error)
+	// Checks that a flow could run as written, without storing it. novam-data calls this before saving.
+	ValidateFlowDefinition(context.Context, *ValidateFlowDefinitionRequest) (*ValidateFlowDefinitionResponse, error)
 	// Run lifecycle (workflow_id is flow_definition_id)
 	StartRun(context.Context, *StartRunRequest) (*StartRunResponse, error)
 	CancelRun(context.Context, *CancelRunRequest) (*CancelRunResponse, error)
@@ -268,6 +283,9 @@ func (UnimplementedWorkflowsServiceServer) SetFlowUIData(context.Context, *SetFl
 }
 func (UnimplementedWorkflowsServiceServer) ListFlowNodes(context.Context, *ListFlowNodesRequest) (*ListFlowNodesResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListFlowNodes not implemented")
+}
+func (UnimplementedWorkflowsServiceServer) ValidateFlowDefinition(context.Context, *ValidateFlowDefinitionRequest) (*ValidateFlowDefinitionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ValidateFlowDefinition not implemented")
 }
 func (UnimplementedWorkflowsServiceServer) StartRun(context.Context, *StartRunRequest) (*StartRunResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method StartRun not implemented")
@@ -452,6 +470,24 @@ func _WorkflowsService_ListFlowNodes_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkflowsService_ValidateFlowDefinition_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ValidateFlowDefinitionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkflowsServiceServer).ValidateFlowDefinition(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkflowsService_ValidateFlowDefinition_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkflowsServiceServer).ValidateFlowDefinition(ctx, req.(*ValidateFlowDefinitionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _WorkflowsService_StartRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(StartRunRequest)
 	if err := dec(in); err != nil {
@@ -598,6 +634,10 @@ var WorkflowsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListFlowNodes",
 			Handler:    _WorkflowsService_ListFlowNodes_Handler,
+		},
+		{
+			MethodName: "ValidateFlowDefinition",
+			Handler:    _WorkflowsService_ValidateFlowDefinition_Handler,
 		},
 		{
 			MethodName: "StartRun",

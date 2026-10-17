@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package novam.data.v1;
+
+import "google/protobuf/struct.proto";
+import "novam/common/v1/common.proto";
+import "novam/events/v1/business_events.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1";
+
+// BusinessStoreService is how workflow steps read and change a business's records. novam-data owns the
+// records and applies its own rules and permissions as `acting_user_id`; the engine keeps none. Called with
+// the engine's credential (`authorization: Bearer <token>` metadata, a client-credentials token from
+// novam-data's /oauth/token), scoped to `metadata.tenant_context.org_id`.
+//
+// Writes are made safe to repeat with `metadata.idempotency_key`: a second call with the same key returns the
+// first call's result without changing anything, so a step retried after a crash never acts twice.
+service BusinessStoreService {
+  // One record, as the REST API would return it.
+  rpc GetRecord(GetRecordRequest) returns (GetRecordResponse);
+  // Changes the given fields of one record. Fields the resource doesn't allow to change are INVALID_ARGUMENT.
+  rpc UpdateRecord(UpdateRecordRequest) returns (UpdateRecordResponse);
+  rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
+  rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse);
+}
+
+// Who asked for a change, so novam-data can check permissions and say where it came from.
+message ActingFor {
+  string acting_user_id = 1; // the run's user
+  string flow_definition_id = 2;
+  string flow_instance_id = 3;
+}
+
+message GetRecordRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ActingFor acting_for = 2;
+  string resource = 3; // collection name as in the REST API, e.g. clients, appointments, invoices
+  string id = 4;
+}
+
+message GetRecordResponse {
+  google.protobuf.Struct record = 1;
+}
+
+message UpdateRecordRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ActingFor acting_for = 2;
+  string resource = 3;
+  string id = 4;
+  google.protobuf.Struct fields = 5; // only these fields change
+}
+
+message UpdateRecordResponse {
+  google.protobuf.Struct record = 1;
+}
+
+message CreateTaskRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ActingFor acting_for = 2;
+  string title = 3;
+  string notes = 4;
+  string due_date = 5; // YYYY-MM-DD in the org's time zone; empty for no due date
+  string assignee_user_id = 6; // empty leaves it unassigned
+  string client_id = 7; // empty when not about a client
+}
+
+message CreateTaskResponse {
+  google.protobuf.Struct task = 1;
+}
+
+message CreateInvoiceRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ActingFor acting_for = 2;
+  string client_id = 3;
+  // When set, line items come from the appointment's services and the invoice links to it.
+  string appointment_id = 4;
+  string status = 5; // draft or sent; empty means draft
+}
+
+message CreateInvoiceResponse {
+  novam.events.v1.ClientInvoice invoice = 1;
+}
