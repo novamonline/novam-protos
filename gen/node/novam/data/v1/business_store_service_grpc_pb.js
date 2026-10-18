@@ -4,6 +4,7 @@
 var grpc = require('grpc');
 var novam_data_v1_business_store_service_pb = require('../../../novam/data/v1/business_store_service_pb.js');
 var google_protobuf_struct_pb = require('google-protobuf/google/protobuf/struct_pb.js');
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 var novam_common_v1_common_pb = require('../../../novam/common/v1/common_pb.js');
 var novam_events_v1_business_events_pb = require('../../../novam/events/v1/business_events_pb.js');
 
@@ -73,6 +74,28 @@ function deserialize_novam_data_v1_GetRecordResponse(buffer_arg) {
   return novam_data_v1_business_store_service_pb.GetRecordResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_data_v1_ListRecordsRequest(arg) {
+  if (!(arg instanceof novam_data_v1_business_store_service_pb.ListRecordsRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.ListRecordsRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListRecordsRequest(buffer_arg) {
+  return novam_data_v1_business_store_service_pb.ListRecordsRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_ListRecordsResponse(arg) {
+  if (!(arg instanceof novam_data_v1_business_store_service_pb.ListRecordsResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.ListRecordsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListRecordsResponse(buffer_arg) {
+  return novam_data_v1_business_store_service_pb.ListRecordsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_data_v1_UpdateRecordRequest(arg) {
   if (!(arg instanceof novam_data_v1_business_store_service_pb.UpdateRecordRequest)) {
     throw new Error('Expected argument of type novam.data.v1.UpdateRecordRequest');
@@ -115,6 +138,18 @@ getRecord: {
     requestDeserialize: deserialize_novam_data_v1_GetRecordRequest,
     responseSerialize: serialize_novam_data_v1_GetRecordResponse,
     responseDeserialize: deserialize_novam_data_v1_GetRecordResponse,
+  },
+  // Records of one collection that match, newest first: for the assistant to look things up.
+listRecords: {
+    path: '/novam.data.v1.BusinessStoreService/ListRecords',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_business_store_service_pb.ListRecordsRequest,
+    responseType: novam_data_v1_business_store_service_pb.ListRecordsResponse,
+    requestSerialize: serialize_novam_data_v1_ListRecordsRequest,
+    requestDeserialize: deserialize_novam_data_v1_ListRecordsRequest,
+    responseSerialize: serialize_novam_data_v1_ListRecordsResponse,
+    responseDeserialize: deserialize_novam_data_v1_ListRecordsResponse,
   },
   // Changes the given fields of one record. Fields the resource doesn't allow to change are INVALID_ARGUMENT.
 updateRecord: {

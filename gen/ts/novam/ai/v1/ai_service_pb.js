@@ -10,7 +10,7 @@ import { file_novam_entities_v1_ai } from "../../entities/v1/ai_pb";
  * Describes the file novam/ai/v1/ai_service.proto.
  */
 export const file_novam_ai_v1_ai_service = /*@__PURE__*/
-  fileDesc("Chxub3ZhbS9haS92MS9haV9zZXJ2aWNlLnByb3RvEgtub3ZhbS5haS52MSJzCgtDaGF0UmVxdWVzdBIwCghtZXNzYWdlcxgBIAMoCzIeLm5vdmFtLmVudGl0aWVzLnYxLkNoYXRNZXNzYWdlEjIKCG1ldGFkYXRhGAIgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YSJBCgxDaGF0UmVzcG9uc2USMQoIcmVzcG9uc2UYASABKAsyHy5ub3ZhbS5lbnRpdGllcy52MS5DaGF0UmVzcG9uc2UiVAoQU3VtbWFyaXplUmVxdWVzdBIMCgR0ZXh0GAEgASgJEjIKCG1ldGFkYXRhGAIgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YSIkChFTdW1tYXJpemVSZXNwb25zZRIPCgdzdW1tYXJ5GAEgASgJMpQBCglBSVNlcnZpY2USOwoEQ2hhdBIYLm5vdmFtLmFpLnYxLkNoYXRSZXF1ZXN0Ghkubm92YW0uYWkudjEuQ2hhdFJlc3BvbnNlEkoKCVN1bW1hcml6ZRIdLm5vdmFtLmFpLnYxLlN1bW1hcml6ZVJlcXVlc3QaHi5ub3ZhbS5haS52MS5TdW1tYXJpemVSZXNwb25zZUI9WjtnaXRodWIuY29tL25vdmFtb25saW5lL25vdmFtLXByb3Rvcy9nZW4vZ28vbm92YW0vYWkvdjE7YWl2MWIGcHJvdG8z", [file_novam_common_v1_common, file_novam_entities_v1_ai]);
+  fileDesc("Chxub3ZhbS9haS92MS9haV9zZXJ2aWNlLnByb3RvEgtub3ZhbS5haS52MSKcAQoLQ2hhdFJlcXVlc3QSMAoIbWVzc2FnZXMYASADKAsyHi5ub3ZhbS5lbnRpdGllcy52MS5DaGF0TWVzc2FnZRIyCghtZXRhZGF0YRgCIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESJwoFbW9kZWwYAyABKAsyGC5ub3ZhbS5haS52MS5Nb2RlbENob2ljZSI/CgtNb2RlbENob2ljZRIQCghwcm92aWRlchgBIAEoCRINCgVtb2RlbBgCIAEoCRIPCgdhcGlfa2V5GAMgASgJIkEKDENoYXRSZXNwb25zZRIxCghyZXNwb25zZRgBIAEoCzIfLm5vdmFtLmVudGl0aWVzLnYxLkNoYXRSZXNwb25zZSJUChBTdW1tYXJpemVSZXF1ZXN0EgwKBHRleHQYASABKAkSMgoIbWV0YWRhdGEYAiABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhIiQKEVN1bW1hcml6ZVJlc3BvbnNlEg8KB3N1bW1hcnkYASABKAkylAEKCUFJU2VydmljZRI7CgRDaGF0Ehgubm92YW0uYWkudjEuQ2hhdFJlcXVlc3QaGS5ub3ZhbS5haS52MS5DaGF0UmVzcG9uc2USSgoJU3VtbWFyaXplEh0ubm92YW0uYWkudjEuU3VtbWFyaXplUmVxdWVzdBoeLm5vdmFtLmFpLnYxLlN1bW1hcml6ZVJlc3BvbnNlQj1aO2dpdGh1Yi5jb20vbm92YW1vbmxpbmUvbm92YW0tcHJvdG9zL2dlbi9nby9ub3ZhbS9haS92MTthaXYxYgZwcm90bzM", [file_novam_common_v1_common, file_novam_entities_v1_ai]);
 
 /**
  * Describes the message novam.ai.v1.ChatRequest.
@@ -20,25 +20,32 @@ export const ChatRequestSchema = /*@__PURE__*/
   messageDesc(file_novam_ai_v1_ai_service, 0);
 
 /**
+ * Describes the message novam.ai.v1.ModelChoice.
+ * Use `create(ModelChoiceSchema)` to create a new message.
+ */
+export const ModelChoiceSchema = /*@__PURE__*/
+  messageDesc(file_novam_ai_v1_ai_service, 1);
+
+/**
  * Describes the message novam.ai.v1.ChatResponse.
  * Use `create(ChatResponseSchema)` to create a new message.
  */
 export const ChatResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 1);
+  messageDesc(file_novam_ai_v1_ai_service, 2);
 
 /**
  * Describes the message novam.ai.v1.SummarizeRequest.
  * Use `create(SummarizeRequestSchema)` to create a new message.
  */
 export const SummarizeRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 2);
+  messageDesc(file_novam_ai_v1_ai_service, 3);
 
 /**
  * Describes the message novam.ai.v1.SummarizeResponse.
  * Use `create(SummarizeResponseSchema)` to create a new message.
  */
 export const SummarizeResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 3);
+  messageDesc(file_novam_ai_v1_ai_service, 4);
 
 /**
  * AIService provides chat and summarization.

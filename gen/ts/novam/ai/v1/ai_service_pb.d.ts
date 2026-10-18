@@ -25,6 +25,13 @@ export declare type ChatRequest = Message<"novam.ai.v1.ChatRequest"> & {
    * @generated from field: novam.common.v1.RequestMetadata metadata = 2;
    */
   metadata?: RequestMetadata;
+
+  /**
+   * The business's model choice; unset uses the service's default model and key.
+   *
+   * @generated from field: novam.ai.v1.ModelChoice model = 3;
+   */
+  model?: ModelChoice;
 };
 
 /**
@@ -32,6 +39,40 @@ export declare type ChatRequest = Message<"novam.ai.v1.ChatRequest"> & {
  * Use `create(ChatRequestSchema)` to create a new message.
  */
 export declare const ChatRequestSchema: GenMessage<ChatRequest>;
+
+/**
+ * ModelChoice is which model answers, and whose key pays for it.
+ *
+ * @generated from message novam.ai.v1.ModelChoice
+ */
+export declare type ModelChoice = Message<"novam.ai.v1.ModelChoice"> & {
+  /**
+   * gemini or anthropic; empty means the service's default provider
+   *
+   * @generated from field: string provider = 1;
+   */
+  provider: string;
+
+  /**
+   * the provider's model id; empty means that provider's default
+   *
+   * @generated from field: string model = 2;
+   */
+  model: string;
+
+  /**
+   * The business's own key for the provider. Empty uses the service's key, which only the default provider has.
+   *
+   * @generated from field: string api_key = 3;
+   */
+  apiKey: string;
+};
+
+/**
+ * Describes the message novam.ai.v1.ModelChoice.
+ * Use `create(ModelChoiceSchema)` to create a new message.
+ */
+export declare const ModelChoiceSchema: GenMessage<ModelChoice>;
 
 /**
  * @generated from message novam.ai.v1.ChatResponse

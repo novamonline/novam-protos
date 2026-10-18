@@ -12,6 +12,7 @@ import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	structpb "google.golang.org/protobuf/types/known/structpb"
+	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -197,6 +198,162 @@ func (x *GetRecordResponse) GetRecord() *structpb.Struct {
 	return nil
 }
 
+type ListRecordsRequest struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Metadata  *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	ActingFor *ActingFor             `protobuf:"bytes,2,opt,name=acting_for,json=actingFor,proto3" json:"acting_for,omitempty"`
+	Resource  string                 `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"`
+	// Words to look for in the record's name, email, phone, title or number; empty matches every record.
+	Query string `protobuf:"bytes,4,opt,name=query,proto3" json:"query,omitempty"`
+	// Fields that must equal these values, e.g. {status: "overdue"} or {client_id: "c1"}.
+	Equals *structpb.Struct `protobuf:"bytes,5,opt,name=equals,proto3" json:"equals,omitempty"`
+	// For appointments, those starting in [from, to); for invoices, those due in it. Either may be unset.
+	From          *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=from,proto3" json:"from,omitempty"`
+	To            *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=to,proto3" json:"to,omitempty"`
+	PageSize      int32                  `protobuf:"varint,8,opt,name=page_size,json=pageSize,proto3" json:"page_size,omitempty"` // at most 100; default 25
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecordsRequest) Reset() {
+	*x = ListRecordsRequest{}
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecordsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecordsRequest) ProtoMessage() {}
+
+func (x *ListRecordsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecordsRequest.ProtoReflect.Descriptor instead.
+func (*ListRecordsRequest) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ListRecordsRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ListRecordsRequest) GetActingFor() *ActingFor {
+	if x != nil {
+		return x.ActingFor
+	}
+	return nil
+}
+
+func (x *ListRecordsRequest) GetResource() string {
+	if x != nil {
+		return x.Resource
+	}
+	return ""
+}
+
+func (x *ListRecordsRequest) GetQuery() string {
+	if x != nil {
+		return x.Query
+	}
+	return ""
+}
+
+func (x *ListRecordsRequest) GetEquals() *structpb.Struct {
+	if x != nil {
+		return x.Equals
+	}
+	return nil
+}
+
+func (x *ListRecordsRequest) GetFrom() *timestamppb.Timestamp {
+	if x != nil {
+		return x.From
+	}
+	return nil
+}
+
+func (x *ListRecordsRequest) GetTo() *timestamppb.Timestamp {
+	if x != nil {
+		return x.To
+	}
+	return nil
+}
+
+func (x *ListRecordsRequest) GetPageSize() int32 {
+	if x != nil {
+		return x.PageSize
+	}
+	return 0
+}
+
+type ListRecordsResponse struct {
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Records []*structpb.Struct     `protobuf:"bytes,1,rep,name=records,proto3" json:"records,omitempty"`
+	// How many records matched in all; more than returned when the page was full.
+	Total         int32 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListRecordsResponse) Reset() {
+	*x = ListRecordsResponse{}
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListRecordsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListRecordsResponse) ProtoMessage() {}
+
+func (x *ListRecordsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListRecordsResponse.ProtoReflect.Descriptor instead.
+func (*ListRecordsResponse) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListRecordsResponse) GetRecords() []*structpb.Struct {
+	if x != nil {
+		return x.Records
+	}
+	return nil
+}
+
+func (x *ListRecordsResponse) GetTotal() int32 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 type UpdateRecordRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
@@ -210,7 +367,7 @@ type UpdateRecordRequest struct {
 
 func (x *UpdateRecordRequest) Reset() {
 	*x = UpdateRecordRequest{}
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[3]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -222,7 +379,7 @@ func (x *UpdateRecordRequest) String() string {
 func (*UpdateRecordRequest) ProtoMessage() {}
 
 func (x *UpdateRecordRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[3]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -235,7 +392,7 @@ func (x *UpdateRecordRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRecordRequest.ProtoReflect.Descriptor instead.
 func (*UpdateRecordRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{3}
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *UpdateRecordRequest) GetMetadata() *v1.RequestMetadata {
@@ -282,7 +439,7 @@ type UpdateRecordResponse struct {
 
 func (x *UpdateRecordResponse) Reset() {
 	*x = UpdateRecordResponse{}
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[4]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -294,7 +451,7 @@ func (x *UpdateRecordResponse) String() string {
 func (*UpdateRecordResponse) ProtoMessage() {}
 
 func (x *UpdateRecordResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[4]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -307,7 +464,7 @@ func (x *UpdateRecordResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateRecordResponse.ProtoReflect.Descriptor instead.
 func (*UpdateRecordResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{4}
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *UpdateRecordResponse) GetRecord() *structpb.Struct {
@@ -332,7 +489,7 @@ type CreateTaskRequest struct {
 
 func (x *CreateTaskRequest) Reset() {
 	*x = CreateTaskRequest{}
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[5]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -344,7 +501,7 @@ func (x *CreateTaskRequest) String() string {
 func (*CreateTaskRequest) ProtoMessage() {}
 
 func (x *CreateTaskRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[5]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -357,7 +514,7 @@ func (x *CreateTaskRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTaskRequest.ProtoReflect.Descriptor instead.
 func (*CreateTaskRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{5}
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *CreateTaskRequest) GetMetadata() *v1.RequestMetadata {
@@ -418,7 +575,7 @@ type CreateTaskResponse struct {
 
 func (x *CreateTaskResponse) Reset() {
 	*x = CreateTaskResponse{}
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[6]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -430,7 +587,7 @@ func (x *CreateTaskResponse) String() string {
 func (*CreateTaskResponse) ProtoMessage() {}
 
 func (x *CreateTaskResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[6]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -443,7 +600,7 @@ func (x *CreateTaskResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateTaskResponse.ProtoReflect.Descriptor instead.
 func (*CreateTaskResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{6}
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *CreateTaskResponse) GetTask() *structpb.Struct {
@@ -467,7 +624,7 @@ type CreateInvoiceRequest struct {
 
 func (x *CreateInvoiceRequest) Reset() {
 	*x = CreateInvoiceRequest{}
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[7]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -479,7 +636,7 @@ func (x *CreateInvoiceRequest) String() string {
 func (*CreateInvoiceRequest) ProtoMessage() {}
 
 func (x *CreateInvoiceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[7]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -492,7 +649,7 @@ func (x *CreateInvoiceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateInvoiceRequest.ProtoReflect.Descriptor instead.
 func (*CreateInvoiceRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{7}
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *CreateInvoiceRequest) GetMetadata() *v1.RequestMetadata {
@@ -539,7 +696,7 @@ type CreateInvoiceResponse struct {
 
 func (x *CreateInvoiceResponse) Reset() {
 	*x = CreateInvoiceResponse{}
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[8]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -551,7 +708,7 @@ func (x *CreateInvoiceResponse) String() string {
 func (*CreateInvoiceResponse) ProtoMessage() {}
 
 func (x *CreateInvoiceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[8]
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -564,7 +721,7 @@ func (x *CreateInvoiceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateInvoiceResponse.ProtoReflect.Descriptor instead.
 func (*CreateInvoiceResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{8}
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *CreateInvoiceResponse) GetInvoice() *v11.ClientInvoice {
@@ -578,7 +735,7 @@ var File_novam_data_v1_business_store_service_proto protoreflect.FileDescriptor
 
 const file_novam_data_v1_business_store_service_proto_rawDesc = "" +
 	"\n" +
-	"*novam/data/v1/business_store_service.proto\x12\rnovam.data.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1cnovam/common/v1/common.proto\x1a%novam/events/v1/business_events.proto\"\x89\x01\n" +
+	"*novam/data/v1/business_store_service.proto\x12\rnovam.data.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cnovam/common/v1/common.proto\x1a%novam/events/v1/business_events.proto\"\x89\x01\n" +
 	"\tActingFor\x12$\n" +
 	"\x0eacting_user_id\x18\x01 \x01(\tR\factingUserId\x12,\n" +
 	"\x12flow_definition_id\x18\x02 \x01(\tR\x10flowDefinitionId\x12(\n" +
@@ -590,7 +747,20 @@ const file_novam_data_v1_business_store_service_proto_rawDesc = "" +
 	"\bresource\x18\x03 \x01(\tR\bresource\x12\x0e\n" +
 	"\x02id\x18\x04 \x01(\tR\x02id\"D\n" +
 	"\x11GetRecordResponse\x12/\n" +
-	"\x06record\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x06record\"\xe9\x01\n" +
+	"\x06record\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x06record\"\xe7\x02\n" +
+	"\x12ListRecordsRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x127\n" +
+	"\n" +
+	"acting_for\x18\x02 \x01(\v2\x18.novam.data.v1.ActingForR\tactingFor\x12\x1a\n" +
+	"\bresource\x18\x03 \x01(\tR\bresource\x12\x14\n" +
+	"\x05query\x18\x04 \x01(\tR\x05query\x12/\n" +
+	"\x06equals\x18\x05 \x01(\v2\x17.google.protobuf.StructR\x06equals\x12.\n" +
+	"\x04from\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\x04from\x12*\n" +
+	"\x02to\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\x02to\x12\x1b\n" +
+	"\tpage_size\x18\b \x01(\x05R\bpageSize\"^\n" +
+	"\x13ListRecordsResponse\x121\n" +
+	"\arecords\x18\x01 \x03(\v2\x17.google.protobuf.StructR\arecords\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x05R\x05total\"\xe9\x01\n" +
 	"\x13UpdateRecordRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x127\n" +
 	"\n" +
@@ -619,9 +789,10 @@ const file_novam_data_v1_business_store_service_proto_rawDesc = "" +
 	"\x0eappointment_id\x18\x04 \x01(\tR\rappointmentId\x12\x16\n" +
 	"\x06status\x18\x05 \x01(\tR\x06status\"Q\n" +
 	"\x15CreateInvoiceResponse\x128\n" +
-	"\ainvoice\x18\x01 \x01(\v2\x1e.novam.events.v1.ClientInvoiceR\ainvoice2\xee\x02\n" +
+	"\ainvoice\x18\x01 \x01(\v2\x1e.novam.events.v1.ClientInvoiceR\ainvoice2\xc4\x03\n" +
 	"\x14BusinessStoreService\x12N\n" +
-	"\tGetRecord\x12\x1f.novam.data.v1.GetRecordRequest\x1a .novam.data.v1.GetRecordResponse\x12W\n" +
+	"\tGetRecord\x12\x1f.novam.data.v1.GetRecordRequest\x1a .novam.data.v1.GetRecordResponse\x12T\n" +
+	"\vListRecords\x12!.novam.data.v1.ListRecordsRequest\x1a\".novam.data.v1.ListRecordsResponse\x12W\n" +
 	"\fUpdateRecord\x12\".novam.data.v1.UpdateRecordRequest\x1a#.novam.data.v1.UpdateRecordResponse\x12Q\n" +
 	"\n" +
 	"CreateTask\x12 .novam.data.v1.CreateTaskRequest\x1a!.novam.data.v1.CreateTaskResponse\x12Z\n" +
@@ -639,48 +810,59 @@ func file_novam_data_v1_business_store_service_proto_rawDescGZIP() []byte {
 	return file_novam_data_v1_business_store_service_proto_rawDescData
 }
 
-var file_novam_data_v1_business_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_novam_data_v1_business_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_novam_data_v1_business_store_service_proto_goTypes = []any{
 	(*ActingFor)(nil),             // 0: novam.data.v1.ActingFor
 	(*GetRecordRequest)(nil),      // 1: novam.data.v1.GetRecordRequest
 	(*GetRecordResponse)(nil),     // 2: novam.data.v1.GetRecordResponse
-	(*UpdateRecordRequest)(nil),   // 3: novam.data.v1.UpdateRecordRequest
-	(*UpdateRecordResponse)(nil),  // 4: novam.data.v1.UpdateRecordResponse
-	(*CreateTaskRequest)(nil),     // 5: novam.data.v1.CreateTaskRequest
-	(*CreateTaskResponse)(nil),    // 6: novam.data.v1.CreateTaskResponse
-	(*CreateInvoiceRequest)(nil),  // 7: novam.data.v1.CreateInvoiceRequest
-	(*CreateInvoiceResponse)(nil), // 8: novam.data.v1.CreateInvoiceResponse
-	(*v1.RequestMetadata)(nil),    // 9: novam.common.v1.RequestMetadata
-	(*structpb.Struct)(nil),       // 10: google.protobuf.Struct
-	(*v11.ClientInvoice)(nil),     // 11: novam.events.v1.ClientInvoice
+	(*ListRecordsRequest)(nil),    // 3: novam.data.v1.ListRecordsRequest
+	(*ListRecordsResponse)(nil),   // 4: novam.data.v1.ListRecordsResponse
+	(*UpdateRecordRequest)(nil),   // 5: novam.data.v1.UpdateRecordRequest
+	(*UpdateRecordResponse)(nil),  // 6: novam.data.v1.UpdateRecordResponse
+	(*CreateTaskRequest)(nil),     // 7: novam.data.v1.CreateTaskRequest
+	(*CreateTaskResponse)(nil),    // 8: novam.data.v1.CreateTaskResponse
+	(*CreateInvoiceRequest)(nil),  // 9: novam.data.v1.CreateInvoiceRequest
+	(*CreateInvoiceResponse)(nil), // 10: novam.data.v1.CreateInvoiceResponse
+	(*v1.RequestMetadata)(nil),    // 11: novam.common.v1.RequestMetadata
+	(*structpb.Struct)(nil),       // 12: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil), // 13: google.protobuf.Timestamp
+	(*v11.ClientInvoice)(nil),     // 14: novam.events.v1.ClientInvoice
 }
 var file_novam_data_v1_business_store_service_proto_depIdxs = []int32{
-	9,  // 0: novam.data.v1.GetRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 0: novam.data.v1.GetRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 1: novam.data.v1.GetRecordRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	10, // 2: novam.data.v1.GetRecordResponse.record:type_name -> google.protobuf.Struct
-	9,  // 3: novam.data.v1.UpdateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 4: novam.data.v1.UpdateRecordRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	10, // 5: novam.data.v1.UpdateRecordRequest.fields:type_name -> google.protobuf.Struct
-	10, // 6: novam.data.v1.UpdateRecordResponse.record:type_name -> google.protobuf.Struct
-	9,  // 7: novam.data.v1.CreateTaskRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 8: novam.data.v1.CreateTaskRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	10, // 9: novam.data.v1.CreateTaskResponse.task:type_name -> google.protobuf.Struct
-	9,  // 10: novam.data.v1.CreateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 11: novam.data.v1.CreateInvoiceRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	11, // 12: novam.data.v1.CreateInvoiceResponse.invoice:type_name -> novam.events.v1.ClientInvoice
-	1,  // 13: novam.data.v1.BusinessStoreService.GetRecord:input_type -> novam.data.v1.GetRecordRequest
-	3,  // 14: novam.data.v1.BusinessStoreService.UpdateRecord:input_type -> novam.data.v1.UpdateRecordRequest
-	5,  // 15: novam.data.v1.BusinessStoreService.CreateTask:input_type -> novam.data.v1.CreateTaskRequest
-	7,  // 16: novam.data.v1.BusinessStoreService.CreateInvoice:input_type -> novam.data.v1.CreateInvoiceRequest
-	2,  // 17: novam.data.v1.BusinessStoreService.GetRecord:output_type -> novam.data.v1.GetRecordResponse
-	4,  // 18: novam.data.v1.BusinessStoreService.UpdateRecord:output_type -> novam.data.v1.UpdateRecordResponse
-	6,  // 19: novam.data.v1.BusinessStoreService.CreateTask:output_type -> novam.data.v1.CreateTaskResponse
-	8,  // 20: novam.data.v1.BusinessStoreService.CreateInvoice:output_type -> novam.data.v1.CreateInvoiceResponse
-	17, // [17:21] is the sub-list for method output_type
-	13, // [13:17] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	12, // 2: novam.data.v1.GetRecordResponse.record:type_name -> google.protobuf.Struct
+	11, // 3: novam.data.v1.ListRecordsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 4: novam.data.v1.ListRecordsRequest.acting_for:type_name -> novam.data.v1.ActingFor
+	12, // 5: novam.data.v1.ListRecordsRequest.equals:type_name -> google.protobuf.Struct
+	13, // 6: novam.data.v1.ListRecordsRequest.from:type_name -> google.protobuf.Timestamp
+	13, // 7: novam.data.v1.ListRecordsRequest.to:type_name -> google.protobuf.Timestamp
+	12, // 8: novam.data.v1.ListRecordsResponse.records:type_name -> google.protobuf.Struct
+	11, // 9: novam.data.v1.UpdateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 10: novam.data.v1.UpdateRecordRequest.acting_for:type_name -> novam.data.v1.ActingFor
+	12, // 11: novam.data.v1.UpdateRecordRequest.fields:type_name -> google.protobuf.Struct
+	12, // 12: novam.data.v1.UpdateRecordResponse.record:type_name -> google.protobuf.Struct
+	11, // 13: novam.data.v1.CreateTaskRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 14: novam.data.v1.CreateTaskRequest.acting_for:type_name -> novam.data.v1.ActingFor
+	12, // 15: novam.data.v1.CreateTaskResponse.task:type_name -> google.protobuf.Struct
+	11, // 16: novam.data.v1.CreateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 17: novam.data.v1.CreateInvoiceRequest.acting_for:type_name -> novam.data.v1.ActingFor
+	14, // 18: novam.data.v1.CreateInvoiceResponse.invoice:type_name -> novam.events.v1.ClientInvoice
+	1,  // 19: novam.data.v1.BusinessStoreService.GetRecord:input_type -> novam.data.v1.GetRecordRequest
+	3,  // 20: novam.data.v1.BusinessStoreService.ListRecords:input_type -> novam.data.v1.ListRecordsRequest
+	5,  // 21: novam.data.v1.BusinessStoreService.UpdateRecord:input_type -> novam.data.v1.UpdateRecordRequest
+	7,  // 22: novam.data.v1.BusinessStoreService.CreateTask:input_type -> novam.data.v1.CreateTaskRequest
+	9,  // 23: novam.data.v1.BusinessStoreService.CreateInvoice:input_type -> novam.data.v1.CreateInvoiceRequest
+	2,  // 24: novam.data.v1.BusinessStoreService.GetRecord:output_type -> novam.data.v1.GetRecordResponse
+	4,  // 25: novam.data.v1.BusinessStoreService.ListRecords:output_type -> novam.data.v1.ListRecordsResponse
+	6,  // 26: novam.data.v1.BusinessStoreService.UpdateRecord:output_type -> novam.data.v1.UpdateRecordResponse
+	8,  // 27: novam.data.v1.BusinessStoreService.CreateTask:output_type -> novam.data.v1.CreateTaskResponse
+	10, // 28: novam.data.v1.BusinessStoreService.CreateInvoice:output_type -> novam.data.v1.CreateInvoiceResponse
+	24, // [24:29] is the sub-list for method output_type
+	19, // [19:24] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_novam_data_v1_business_store_service_proto_init() }
@@ -694,7 +876,7 @@ func file_novam_data_v1_business_store_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_data_v1_business_store_service_proto_rawDesc), len(file_novam_data_v1_business_store_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

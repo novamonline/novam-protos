@@ -5,6 +5,7 @@
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { RequestMetadata } from "../../common/v1/common_pb";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { ClientInvoice } from "../../events/v1/business_events_pb";
 
 /**
@@ -90,6 +91,88 @@ export declare type GetRecordResponse = Message<"novam.data.v1.GetRecordResponse
  * Use `create(GetRecordResponseSchema)` to create a new message.
  */
 export declare const GetRecordResponseSchema: GenMessage<GetRecordResponse>;
+
+/**
+ * @generated from message novam.data.v1.ListRecordsRequest
+ */
+export declare type ListRecordsRequest = Message<"novam.data.v1.ListRecordsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.data.v1.ActingFor acting_for = 2;
+   */
+  actingFor?: ActingFor;
+
+  /**
+   * @generated from field: string resource = 3;
+   */
+  resource: string;
+
+  /**
+   * Words to look for in the record's name, email, phone, title or number; empty matches every record.
+   *
+   * @generated from field: string query = 4;
+   */
+  query: string;
+
+  /**
+   * Fields that must equal these values, e.g. {status: "overdue"} or {client_id: "c1"}.
+   *
+   * @generated from field: google.protobuf.Struct equals = 5;
+   */
+  equals?: JsonObject;
+
+  /**
+   * For appointments, those starting in [from, to); for invoices, those due in it. Either may be unset.
+   *
+   * @generated from field: google.protobuf.Timestamp from = 6;
+   */
+  from?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp to = 7;
+   */
+  to?: Timestamp;
+
+  /**
+   * at most 100; default 25
+   *
+   * @generated from field: int32 page_size = 8;
+   */
+  pageSize: number;
+};
+
+/**
+ * Describes the message novam.data.v1.ListRecordsRequest.
+ * Use `create(ListRecordsRequestSchema)` to create a new message.
+ */
+export declare const ListRecordsRequestSchema: GenMessage<ListRecordsRequest>;
+
+/**
+ * @generated from message novam.data.v1.ListRecordsResponse
+ */
+export declare type ListRecordsResponse = Message<"novam.data.v1.ListRecordsResponse"> & {
+  /**
+   * @generated from field: repeated google.protobuf.Struct records = 1;
+   */
+  records: JsonObject[];
+
+  /**
+   * How many records matched in all; more than returned when the page was full.
+   *
+   * @generated from field: int32 total = 2;
+   */
+  total: number;
+};
+
+/**
+ * Describes the message novam.data.v1.ListRecordsResponse.
+ * Use `create(ListRecordsResponseSchema)` to create a new message.
+ */
+export declare const ListRecordsResponseSchema: GenMessage<ListRecordsResponse>;
 
 /**
  * @generated from message novam.data.v1.UpdateRecordRequest
@@ -290,6 +373,16 @@ export declare const BusinessStoreService: GenService<{
     methodKind: "unary";
     input: typeof GetRecordRequestSchema;
     output: typeof GetRecordResponseSchema;
+  },
+  /**
+   * Records of one collection that match, newest first: for the assistant to look things up.
+   *
+   * @generated from rpc novam.data.v1.BusinessStoreService.ListRecords
+   */
+  listRecords: {
+    methodKind: "unary";
+    input: typeof ListRecordsRequestSchema;
+    output: typeof ListRecordsResponseSchema;
   },
   /**
    * Changes the given fields of one record. Fields the resource doesn't allow to change are INVALID_ARGUMENT.

@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	BusinessStoreService_GetRecord_FullMethodName     = "/novam.data.v1.BusinessStoreService/GetRecord"
+	BusinessStoreService_ListRecords_FullMethodName   = "/novam.data.v1.BusinessStoreService/ListRecords"
 	BusinessStoreService_UpdateRecord_FullMethodName  = "/novam.data.v1.BusinessStoreService/UpdateRecord"
 	BusinessStoreService_CreateTask_FullMethodName    = "/novam.data.v1.BusinessStoreService/CreateTask"
 	BusinessStoreService_CreateInvoice_FullMethodName = "/novam.data.v1.BusinessStoreService/CreateInvoice"
@@ -39,6 +40,8 @@ const (
 type BusinessStoreServiceClient interface {
 	// One record, as the REST API would return it.
 	GetRecord(ctx context.Context, in *GetRecordRequest, opts ...grpc.CallOption) (*GetRecordResponse, error)
+	// Records of one collection that match, newest first: for the assistant to look things up.
+	ListRecords(ctx context.Context, in *ListRecordsRequest, opts ...grpc.CallOption) (*ListRecordsResponse, error)
 	// Changes the given fields of one record. Fields the resource doesn't allow to change are INVALID_ARGUMENT.
 	UpdateRecord(ctx context.Context, in *UpdateRecordRequest, opts ...grpc.CallOption) (*UpdateRecordResponse, error)
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
@@ -57,6 +60,16 @@ func (c *businessStoreServiceClient) GetRecord(ctx context.Context, in *GetRecor
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetRecordResponse)
 	err := c.cc.Invoke(ctx, BusinessStoreService_GetRecord_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *businessStoreServiceClient) ListRecords(ctx context.Context, in *ListRecordsRequest, opts ...grpc.CallOption) (*ListRecordsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListRecordsResponse)
+	err := c.cc.Invoke(ctx, BusinessStoreService_ListRecords_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -107,6 +120,8 @@ func (c *businessStoreServiceClient) CreateInvoice(ctx context.Context, in *Crea
 type BusinessStoreServiceServer interface {
 	// One record, as the REST API would return it.
 	GetRecord(context.Context, *GetRecordRequest) (*GetRecordResponse, error)
+	// Records of one collection that match, newest first: for the assistant to look things up.
+	ListRecords(context.Context, *ListRecordsRequest) (*ListRecordsResponse, error)
 	// Changes the given fields of one record. Fields the resource doesn't allow to change are INVALID_ARGUMENT.
 	UpdateRecord(context.Context, *UpdateRecordRequest) (*UpdateRecordResponse, error)
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
@@ -123,6 +138,9 @@ type UnimplementedBusinessStoreServiceServer struct{}
 
 func (UnimplementedBusinessStoreServiceServer) GetRecord(context.Context, *GetRecordRequest) (*GetRecordResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetRecord not implemented")
+}
+func (UnimplementedBusinessStoreServiceServer) ListRecords(context.Context, *ListRecordsRequest) (*ListRecordsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListRecords not implemented")
 }
 func (UnimplementedBusinessStoreServiceServer) UpdateRecord(context.Context, *UpdateRecordRequest) (*UpdateRecordResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UpdateRecord not implemented")
@@ -168,6 +186,24 @@ func _BusinessStoreService_GetRecord_Handler(srv interface{}, ctx context.Contex
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(BusinessStoreServiceServer).GetRecord(ctx, req.(*GetRecordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BusinessStoreService_ListRecords_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRecordsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessStoreServiceServer).ListRecords(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BusinessStoreService_ListRecords_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessStoreServiceServer).ListRecords(ctx, req.(*ListRecordsRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -236,6 +272,10 @@ var BusinessStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRecord",
 			Handler:    _BusinessStoreService_GetRecord_Handler,
+		},
+		{
+			MethodName: "ListRecords",
+			Handler:    _BusinessStoreService_ListRecords_Handler,
 		},
 		{
 			MethodName: "UpdateRecord",
