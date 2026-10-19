@@ -1,4 +1,4 @@
-.PHONY: generate lint format breaking
+.PHONY: gen lint format breaking
 
 gen:
 	./scripts/gen.sh
