@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package novam.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/events/v1;eventsv1";
+
+// Business events novam-data publishes to NATS JetStream after a write commits. Each message travels as a
+// CloudEvent in binary mode: the body is one of the messages below (protobuf), and the CloudEvents
+// attributes ride in NATS headers (ce-specversion "1.0", ce-id, ce-source "novam-data", ce-type, ce-time,
+// ce-orgid, content-type "application/protobuf").
+//
+// Subject: novam.events.<org_id>.<entity>.<change>, e.g. novam.events.org-1.appointment.updated.
+// ce-type:  novam.<entity>.<change>, e.g. novam.appointment.updated.
+// Delivery is at least once: consumers dedupe on ce-id.
+//
+// Each event carries the entity as it stands after the change (for deleted, as it stood before), so a
+// consumer never needs to read novam-data to react to it.
+
+// What happened to the entity.
+enum ChangeType {
+  CHANGE_TYPE_UNSPECIFIED = 0;
+  CHANGE_TYPE_CREATED = 1;
+  CHANGE_TYPE_UPDATED = 2;
+  CHANGE_TYPE_DELETED = 3;
+}
+
+message Appointment {
+  string id = 1;
+  string org_id = 2;
+  string client_id = 3;
+  string title = 4;
+  google.protobuf.Timestamp start_time = 5;
+  google.protobuf.Timestamp end_time = 6;
+  string status = 7; // scheduled, completed, cancelled, no-show
+}
+
+message AppointmentEvent {
+  ChangeType change = 1;
+  Appointment appointment = 2;
+}
+
+message ClientInvoice {
+  string id = 1;
+  string org_id = 2;
+  string client_id = 3;
+  string invoice_number = 4;
+  string due_date = 5; // YYYY-MM-DD, a calendar date in the org's time zone
+  string status = 6; // draft, sent, paid, overdue, cancelled
+  int64 total_cents = 7;
+  string currency = 8; // ISO 4217, e.g. USD
+}
+
+message ClientInvoiceEvent {
+  ChangeType change = 1;
+  ClientInvoice invoice = 2;
+}
+
+// Only what other services need to address a client; full records stay in novam-data.
+message Client {
+  string id = 1;
+  string org_id = 2;
+  string name = 3;
+}
+
+message ClientEvent {
+  ChangeType change = 1;
+  Client client = 2;
+}
+
+message ReminderRule {
+  string id = 1;
+  string org_id = 2;
+  string type = 3; // appointment, invoice
+  string when = 4; // 1_day_before, on_date, 1_day_after, 3_days_after
+  string channel = 5; // email, sms, push
+  bool enabled = 6;
+}
+
+message ReminderRuleEvent {
+  ChangeType change = 1;
+  ReminderRule rule = 2;
+}

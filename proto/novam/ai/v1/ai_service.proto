@@ -16,6 +16,16 @@ service AIService {
 message ChatRequest {
   repeated novam.entities.v1.ChatMessage messages = 1;
   novam.common.v1.RequestMetadata metadata = 2;
+  // The business's model choice; unset uses the service's default model and key.
+  ModelChoice model = 3;
+}
+
+// ModelChoice is which model answers, and whose key pays for it.
+message ModelChoice {
+  string provider = 1; // gemini or anthropic; empty means the service's default provider
+  string model = 2; // the provider's model id; empty means that provider's default
+  // The business's own key for the provider. Empty uses the service's key, which only the default provider has.
+  string api_key = 3;
 }
 
 message ChatResponse {

@@ -898,6 +898,189 @@ func (x *ListFlowNodesResponse) GetFlowNodes() []*v11.FlowNode {
 	return nil
 }
 
+// ----- Validation -----
+type ValidateFlowDefinitionRequest struct {
+	state          protoimpl.MessageState    `protogen:"open.v1"`
+	Metadata       *v1.RequestMetadata       `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	FlowDefinition *v11.FlowDefinition       `protobuf:"bytes,2,opt,name=flow_definition,json=flowDefinition,proto3" json:"flow_definition,omitempty"`
+	Nodes          []*v11.FlowDefinitionNode `protobuf:"bytes,3,rep,name=nodes,proto3" json:"nodes,omitempty"`
+	Edges          []*v11.FlowDefinitionEdge `protobuf:"bytes,4,rep,name=edges,proto3" json:"edges,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *ValidateFlowDefinitionRequest) Reset() {
+	*x = ValidateFlowDefinitionRequest{}
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateFlowDefinitionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateFlowDefinitionRequest) ProtoMessage() {}
+
+func (x *ValidateFlowDefinitionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateFlowDefinitionRequest.ProtoReflect.Descriptor instead.
+func (*ValidateFlowDefinitionRequest) Descriptor() ([]byte, []int) {
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ValidateFlowDefinitionRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ValidateFlowDefinitionRequest) GetFlowDefinition() *v11.FlowDefinition {
+	if x != nil {
+		return x.FlowDefinition
+	}
+	return nil
+}
+
+func (x *ValidateFlowDefinitionRequest) GetNodes() []*v11.FlowDefinitionNode {
+	if x != nil {
+		return x.Nodes
+	}
+	return nil
+}
+
+func (x *ValidateFlowDefinitionRequest) GetEdges() []*v11.FlowDefinitionEdge {
+	if x != nil {
+		return x.Edges
+	}
+	return nil
+}
+
+type ValidateFlowDefinitionResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Empty when the flow can run. A malformed request is INVALID_ARGUMENT instead.
+	Issues        []*FlowValidationIssue `protobuf:"bytes,1,rep,name=issues,proto3" json:"issues,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ValidateFlowDefinitionResponse) Reset() {
+	*x = ValidateFlowDefinitionResponse{}
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ValidateFlowDefinitionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ValidateFlowDefinitionResponse) ProtoMessage() {}
+
+func (x *ValidateFlowDefinitionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ValidateFlowDefinitionResponse.ProtoReflect.Descriptor instead.
+func (*ValidateFlowDefinitionResponse) Descriptor() ([]byte, []int) {
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *ValidateFlowDefinitionResponse) GetIssues() []*FlowValidationIssue {
+	if x != nil {
+		return x.Issues
+	}
+	return nil
+}
+
+// FlowValidationIssue is one reason a flow can't run, pointing at the node or edge at fault when there is one.
+type FlowValidationIssue struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	NodeId        string                 `protobuf:"bytes,1,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	FromNodeId    string                 `protobuf:"bytes,2,opt,name=from_node_id,json=fromNodeId,proto3" json:"from_node_id,omitempty"` // with to_node_id, the edge at fault
+	ToNodeId      string                 `protobuf:"bytes,3,opt,name=to_node_id,json=toNodeId,proto3" json:"to_node_id,omitempty"`
+	Message       string                 `protobuf:"bytes,4,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FlowValidationIssue) Reset() {
+	*x = FlowValidationIssue{}
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FlowValidationIssue) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FlowValidationIssue) ProtoMessage() {}
+
+func (x *FlowValidationIssue) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FlowValidationIssue.ProtoReflect.Descriptor instead.
+func (*FlowValidationIssue) Descriptor() ([]byte, []int) {
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *FlowValidationIssue) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+func (x *FlowValidationIssue) GetFromNodeId() string {
+	if x != nil {
+		return x.FromNodeId
+	}
+	return ""
+}
+
+func (x *FlowValidationIssue) GetToNodeId() string {
+	if x != nil {
+		return x.ToNodeId
+	}
+	return ""
+}
+
+func (x *FlowValidationIssue) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 // ----- Run lifecycle -----
 type StartRunRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -910,7 +1093,7 @@ type StartRunRequest struct {
 
 func (x *StartRunRequest) Reset() {
 	*x = StartRunRequest{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[16]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -922,7 +1105,7 @@ func (x *StartRunRequest) String() string {
 func (*StartRunRequest) ProtoMessage() {}
 
 func (x *StartRunRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[16]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -935,7 +1118,7 @@ func (x *StartRunRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartRunRequest.ProtoReflect.Descriptor instead.
 func (*StartRunRequest) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{16}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *StartRunRequest) GetWorkflowId() string {
@@ -968,7 +1151,7 @@ type StartRunResponse struct {
 
 func (x *StartRunResponse) Reset() {
 	*x = StartRunResponse{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[17]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -980,7 +1163,7 @@ func (x *StartRunResponse) String() string {
 func (*StartRunResponse) ProtoMessage() {}
 
 func (x *StartRunResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[17]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -993,7 +1176,7 @@ func (x *StartRunResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use StartRunResponse.ProtoReflect.Descriptor instead.
 func (*StartRunResponse) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{17}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *StartRunResponse) GetRun() *v11.WorkflowRun {
@@ -1013,7 +1196,7 @@ type CancelRunRequest struct {
 
 func (x *CancelRunRequest) Reset() {
 	*x = CancelRunRequest{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[18]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1025,7 +1208,7 @@ func (x *CancelRunRequest) String() string {
 func (*CancelRunRequest) ProtoMessage() {}
 
 func (x *CancelRunRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[18]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1038,7 +1221,7 @@ func (x *CancelRunRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelRunRequest.ProtoReflect.Descriptor instead.
 func (*CancelRunRequest) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{18}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *CancelRunRequest) GetRunId() string {
@@ -1064,7 +1247,7 @@ type CancelRunResponse struct {
 
 func (x *CancelRunResponse) Reset() {
 	*x = CancelRunResponse{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[19]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1076,7 +1259,7 @@ func (x *CancelRunResponse) String() string {
 func (*CancelRunResponse) ProtoMessage() {}
 
 func (x *CancelRunResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[19]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1089,7 +1272,7 @@ func (x *CancelRunResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CancelRunResponse.ProtoReflect.Descriptor instead.
 func (*CancelRunResponse) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{19}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *CancelRunResponse) GetRun() *v11.WorkflowRun {
@@ -1109,7 +1292,7 @@ type GetRunRequest struct {
 
 func (x *GetRunRequest) Reset() {
 	*x = GetRunRequest{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[20]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1121,7 +1304,7 @@ func (x *GetRunRequest) String() string {
 func (*GetRunRequest) ProtoMessage() {}
 
 func (x *GetRunRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[20]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1134,7 +1317,7 @@ func (x *GetRunRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRunRequest.ProtoReflect.Descriptor instead.
 func (*GetRunRequest) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{20}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetRunRequest) GetRunId() string {
@@ -1160,7 +1343,7 @@ type GetRunResponse struct {
 
 func (x *GetRunResponse) Reset() {
 	*x = GetRunResponse{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[21]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1172,7 +1355,7 @@ func (x *GetRunResponse) String() string {
 func (*GetRunResponse) ProtoMessage() {}
 
 func (x *GetRunResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[21]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1185,7 +1368,7 @@ func (x *GetRunResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetRunResponse.ProtoReflect.Descriptor instead.
 func (*GetRunResponse) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{21}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetRunResponse) GetRun() *v11.WorkflowRun {
@@ -1212,7 +1395,7 @@ type ProcessRequest struct {
 
 func (x *ProcessRequest) Reset() {
 	*x = ProcessRequest{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[22]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1224,7 +1407,7 @@ func (x *ProcessRequest) String() string {
 func (*ProcessRequest) ProtoMessage() {}
 
 func (x *ProcessRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[22]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1237,7 +1420,7 @@ func (x *ProcessRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProcessRequest.ProtoReflect.Descriptor instead.
 func (*ProcessRequest) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{22}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *ProcessRequest) GetFlowInstanceId() string {
@@ -1325,7 +1508,7 @@ type ProcessResponse struct {
 
 func (x *ProcessResponse) Reset() {
 	*x = ProcessResponse{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[23]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1337,7 +1520,7 @@ func (x *ProcessResponse) String() string {
 func (*ProcessResponse) ProtoMessage() {}
 
 func (x *ProcessResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[23]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1350,7 +1533,7 @@ func (x *ProcessResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ProcessResponse.ProtoReflect.Descriptor instead.
 func (*ProcessResponse) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{23}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *ProcessResponse) GetState() *v11.FlowState {
@@ -1428,7 +1611,7 @@ type CreateFlowRequest struct {
 
 func (x *CreateFlowRequest) Reset() {
 	*x = CreateFlowRequest{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[24]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1440,7 +1623,7 @@ func (x *CreateFlowRequest) String() string {
 func (*CreateFlowRequest) ProtoMessage() {}
 
 func (x *CreateFlowRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[24]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1453,7 +1636,7 @@ func (x *CreateFlowRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFlowRequest.ProtoReflect.Descriptor instead.
 func (*CreateFlowRequest) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{24}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *CreateFlowRequest) GetFlowDefinitionId() string {
@@ -1494,7 +1677,7 @@ type CreateFlowResponse struct {
 
 func (x *CreateFlowResponse) Reset() {
 	*x = CreateFlowResponse{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[25]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1506,7 +1689,7 @@ func (x *CreateFlowResponse) String() string {
 func (*CreateFlowResponse) ProtoMessage() {}
 
 func (x *CreateFlowResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[25]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1519,7 +1702,7 @@ func (x *CreateFlowResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateFlowResponse.ProtoReflect.Descriptor instead.
 func (*CreateFlowResponse) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{25}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *CreateFlowResponse) GetState() *v11.FlowState {
@@ -1547,7 +1730,7 @@ type EndFlowRequest struct {
 
 func (x *EndFlowRequest) Reset() {
 	*x = EndFlowRequest{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[26]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1559,7 +1742,7 @@ func (x *EndFlowRequest) String() string {
 func (*EndFlowRequest) ProtoMessage() {}
 
 func (x *EndFlowRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[26]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1572,7 +1755,7 @@ func (x *EndFlowRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EndFlowRequest.ProtoReflect.Descriptor instead.
 func (*EndFlowRequest) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{26}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *EndFlowRequest) GetFlowInstanceId() string {
@@ -1605,7 +1788,7 @@ type EndFlowResponse struct {
 
 func (x *EndFlowResponse) Reset() {
 	*x = EndFlowResponse{}
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[27]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1617,7 +1800,7 @@ func (x *EndFlowResponse) String() string {
 func (*EndFlowResponse) ProtoMessage() {}
 
 func (x *EndFlowResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[27]
+	mi := &file_novam_workflows_v1_workflows_service_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1630,7 +1813,7 @@ func (x *EndFlowResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EndFlowResponse.ProtoReflect.Descriptor instead.
 func (*EndFlowResponse) Descriptor() ([]byte, []int) {
-	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{27}
+	return file_novam_workflows_v1_workflows_service_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *EndFlowResponse) GetState() *v11.FlowState {
@@ -1705,7 +1888,21 @@ const file_novam_workflows_v1_workflows_service_proto_rawDesc = "" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"S\n" +
 	"\x15ListFlowNodesResponse\x12:\n" +
 	"\n" +
-	"flow_nodes\x18\x01 \x03(\v2\x1b.novam.entities.v1.FlowNodeR\tflowNodes\"\x88\x01\n" +
+	"flow_nodes\x18\x01 \x03(\v2\x1b.novam.entities.v1.FlowNodeR\tflowNodes\"\xa3\x02\n" +
+	"\x1dValidateFlowDefinitionRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12J\n" +
+	"\x0fflow_definition\x18\x02 \x01(\v2!.novam.entities.v1.FlowDefinitionR\x0eflowDefinition\x12;\n" +
+	"\x05nodes\x18\x03 \x03(\v2%.novam.entities.v1.FlowDefinitionNodeR\x05nodes\x12;\n" +
+	"\x05edges\x18\x04 \x03(\v2%.novam.entities.v1.FlowDefinitionEdgeR\x05edges\"a\n" +
+	"\x1eValidateFlowDefinitionResponse\x12?\n" +
+	"\x06issues\x18\x01 \x03(\v2'.novam.workflows.v1.FlowValidationIssueR\x06issues\"\x88\x01\n" +
+	"\x13FlowValidationIssue\x12\x17\n" +
+	"\anode_id\x18\x01 \x01(\tR\x06nodeId\x12 \n" +
+	"\ffrom_node_id\x18\x02 \x01(\tR\n" +
+	"fromNodeId\x12\x1c\n" +
+	"\n" +
+	"to_node_id\x18\x03 \x01(\tR\btoNodeId\x12\x18\n" +
+	"\amessage\x18\x04 \x01(\tR\amessage\"\x88\x01\n" +
 	"\x0fStartRunRequest\x12\x1f\n" +
 	"\vworkflow_id\x18\x01 \x01(\tR\n" +
 	"workflowId\x12<\n" +
@@ -1750,7 +1947,7 @@ const file_novam_workflows_v1_workflows_service_proto_rawDesc = "" +
 	"\x06reason\x18\x02 \x01(\tR\x06reason\x12<\n" +
 	"\bmetadata\x18\x03 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"E\n" +
 	"\x0fEndFlowResponse\x122\n" +
-	"\x05state\x18\x01 \x01(\v2\x1c.novam.entities.v1.FlowStateR\x05state2\xa6\v\n" +
+	"\x05state\x18\x01 \x01(\v2\x1c.novam.entities.v1.FlowStateR\x05state2\xa7\f\n" +
 	"\x10WorkflowsService\x12p\n" +
 	"\x11GetFlowDefinition\x12,.novam.workflows.v1.GetFlowDefinitionRequest\x1a-.novam.workflows.v1.GetFlowDefinitionResponse\x12v\n" +
 	"\x13ListFlowDefinitions\x12..novam.workflows.v1.ListFlowDefinitionsRequest\x1a/.novam.workflows.v1.ListFlowDefinitionsResponse\x12y\n" +
@@ -1759,7 +1956,8 @@ const file_novam_workflows_v1_workflows_service_proto_rawDesc = "" +
 	"\x14DeleteFlowDefinition\x12/.novam.workflows.v1.DeleteFlowDefinitionRequest\x1a0.novam.workflows.v1.DeleteFlowDefinitionResponse\x12d\n" +
 	"\rGetFlowUIData\x12(.novam.workflows.v1.GetFlowUIDataRequest\x1a).novam.workflows.v1.GetFlowUIDataResponse\x12d\n" +
 	"\rSetFlowUIData\x12(.novam.workflows.v1.SetFlowUIDataRequest\x1a).novam.workflows.v1.SetFlowUIDataResponse\x12d\n" +
-	"\rListFlowNodes\x12(.novam.workflows.v1.ListFlowNodesRequest\x1a).novam.workflows.v1.ListFlowNodesResponse\x12U\n" +
+	"\rListFlowNodes\x12(.novam.workflows.v1.ListFlowNodesRequest\x1a).novam.workflows.v1.ListFlowNodesResponse\x12\x7f\n" +
+	"\x16ValidateFlowDefinition\x121.novam.workflows.v1.ValidateFlowDefinitionRequest\x1a2.novam.workflows.v1.ValidateFlowDefinitionResponse\x12U\n" +
 	"\bStartRun\x12#.novam.workflows.v1.StartRunRequest\x1a$.novam.workflows.v1.StartRunResponse\x12X\n" +
 	"\tCancelRun\x12$.novam.workflows.v1.CancelRunRequest\x1a%.novam.workflows.v1.CancelRunResponse\x12O\n" +
 	"\x06GetRun\x12!.novam.workflows.v1.GetRunRequest\x1a\".novam.workflows.v1.GetRunResponse\x12R\n" +
@@ -1780,123 +1978,133 @@ func file_novam_workflows_v1_workflows_service_proto_rawDescGZIP() []byte {
 	return file_novam_workflows_v1_workflows_service_proto_rawDescData
 }
 
-var file_novam_workflows_v1_workflows_service_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
+var file_novam_workflows_v1_workflows_service_proto_msgTypes = make([]protoimpl.MessageInfo, 31)
 var file_novam_workflows_v1_workflows_service_proto_goTypes = []any{
-	(*GetFlowDefinitionRequest)(nil),     // 0: novam.workflows.v1.GetFlowDefinitionRequest
-	(*GetFlowDefinitionResponse)(nil),    // 1: novam.workflows.v1.GetFlowDefinitionResponse
-	(*ListFlowDefinitionsRequest)(nil),   // 2: novam.workflows.v1.ListFlowDefinitionsRequest
-	(*ListFlowDefinitionsResponse)(nil),  // 3: novam.workflows.v1.ListFlowDefinitionsResponse
-	(*CreateFlowDefinitionRequest)(nil),  // 4: novam.workflows.v1.CreateFlowDefinitionRequest
-	(*CreateFlowDefinitionResponse)(nil), // 5: novam.workflows.v1.CreateFlowDefinitionResponse
-	(*UpdateFlowDefinitionRequest)(nil),  // 6: novam.workflows.v1.UpdateFlowDefinitionRequest
-	(*UpdateFlowDefinitionResponse)(nil), // 7: novam.workflows.v1.UpdateFlowDefinitionResponse
-	(*DeleteFlowDefinitionRequest)(nil),  // 8: novam.workflows.v1.DeleteFlowDefinitionRequest
-	(*DeleteFlowDefinitionResponse)(nil), // 9: novam.workflows.v1.DeleteFlowDefinitionResponse
-	(*GetFlowUIDataRequest)(nil),         // 10: novam.workflows.v1.GetFlowUIDataRequest
-	(*GetFlowUIDataResponse)(nil),        // 11: novam.workflows.v1.GetFlowUIDataResponse
-	(*SetFlowUIDataRequest)(nil),         // 12: novam.workflows.v1.SetFlowUIDataRequest
-	(*SetFlowUIDataResponse)(nil),        // 13: novam.workflows.v1.SetFlowUIDataResponse
-	(*ListFlowNodesRequest)(nil),         // 14: novam.workflows.v1.ListFlowNodesRequest
-	(*ListFlowNodesResponse)(nil),        // 15: novam.workflows.v1.ListFlowNodesResponse
-	(*StartRunRequest)(nil),              // 16: novam.workflows.v1.StartRunRequest
-	(*StartRunResponse)(nil),             // 17: novam.workflows.v1.StartRunResponse
-	(*CancelRunRequest)(nil),             // 18: novam.workflows.v1.CancelRunRequest
-	(*CancelRunResponse)(nil),            // 19: novam.workflows.v1.CancelRunResponse
-	(*GetRunRequest)(nil),                // 20: novam.workflows.v1.GetRunRequest
-	(*GetRunResponse)(nil),               // 21: novam.workflows.v1.GetRunResponse
-	(*ProcessRequest)(nil),               // 22: novam.workflows.v1.ProcessRequest
-	(*ProcessResponse)(nil),              // 23: novam.workflows.v1.ProcessResponse
-	(*CreateFlowRequest)(nil),            // 24: novam.workflows.v1.CreateFlowRequest
-	(*CreateFlowResponse)(nil),           // 25: novam.workflows.v1.CreateFlowResponse
-	(*EndFlowRequest)(nil),               // 26: novam.workflows.v1.EndFlowRequest
-	(*EndFlowResponse)(nil),              // 27: novam.workflows.v1.EndFlowResponse
-	(*v1.RequestMetadata)(nil),           // 28: novam.common.v1.RequestMetadata
-	(*v11.FlowDefinition)(nil),           // 29: novam.entities.v1.FlowDefinition
-	(*v11.FlowDefinitionNode)(nil),       // 30: novam.entities.v1.FlowDefinitionNode
-	(*v11.FlowDefinitionEdge)(nil),       // 31: novam.entities.v1.FlowDefinitionEdge
-	(*v1.PageRequest)(nil),               // 32: novam.common.v1.PageRequest
-	(*v1.PageResponse)(nil),              // 33: novam.common.v1.PageResponse
-	(*v11.FlowUIData)(nil),               // 34: novam.entities.v1.FlowUIData
-	(*v11.FlowNode)(nil),                 // 35: novam.entities.v1.FlowNode
-	(*v11.WorkflowRun)(nil),              // 36: novam.entities.v1.WorkflowRun
-	(*v11.ActionResponse)(nil),           // 37: novam.entities.v1.ActionResponse
-	(*v11.NodeTimeout)(nil),              // 38: novam.entities.v1.NodeTimeout
-	(*v11.FlowState)(nil),                // 39: novam.entities.v1.FlowState
-	(*v11.ActionRequest)(nil),            // 40: novam.entities.v1.ActionRequest
+	(*GetFlowDefinitionRequest)(nil),       // 0: novam.workflows.v1.GetFlowDefinitionRequest
+	(*GetFlowDefinitionResponse)(nil),      // 1: novam.workflows.v1.GetFlowDefinitionResponse
+	(*ListFlowDefinitionsRequest)(nil),     // 2: novam.workflows.v1.ListFlowDefinitionsRequest
+	(*ListFlowDefinitionsResponse)(nil),    // 3: novam.workflows.v1.ListFlowDefinitionsResponse
+	(*CreateFlowDefinitionRequest)(nil),    // 4: novam.workflows.v1.CreateFlowDefinitionRequest
+	(*CreateFlowDefinitionResponse)(nil),   // 5: novam.workflows.v1.CreateFlowDefinitionResponse
+	(*UpdateFlowDefinitionRequest)(nil),    // 6: novam.workflows.v1.UpdateFlowDefinitionRequest
+	(*UpdateFlowDefinitionResponse)(nil),   // 7: novam.workflows.v1.UpdateFlowDefinitionResponse
+	(*DeleteFlowDefinitionRequest)(nil),    // 8: novam.workflows.v1.DeleteFlowDefinitionRequest
+	(*DeleteFlowDefinitionResponse)(nil),   // 9: novam.workflows.v1.DeleteFlowDefinitionResponse
+	(*GetFlowUIDataRequest)(nil),           // 10: novam.workflows.v1.GetFlowUIDataRequest
+	(*GetFlowUIDataResponse)(nil),          // 11: novam.workflows.v1.GetFlowUIDataResponse
+	(*SetFlowUIDataRequest)(nil),           // 12: novam.workflows.v1.SetFlowUIDataRequest
+	(*SetFlowUIDataResponse)(nil),          // 13: novam.workflows.v1.SetFlowUIDataResponse
+	(*ListFlowNodesRequest)(nil),           // 14: novam.workflows.v1.ListFlowNodesRequest
+	(*ListFlowNodesResponse)(nil),          // 15: novam.workflows.v1.ListFlowNodesResponse
+	(*ValidateFlowDefinitionRequest)(nil),  // 16: novam.workflows.v1.ValidateFlowDefinitionRequest
+	(*ValidateFlowDefinitionResponse)(nil), // 17: novam.workflows.v1.ValidateFlowDefinitionResponse
+	(*FlowValidationIssue)(nil),            // 18: novam.workflows.v1.FlowValidationIssue
+	(*StartRunRequest)(nil),                // 19: novam.workflows.v1.StartRunRequest
+	(*StartRunResponse)(nil),               // 20: novam.workflows.v1.StartRunResponse
+	(*CancelRunRequest)(nil),               // 21: novam.workflows.v1.CancelRunRequest
+	(*CancelRunResponse)(nil),              // 22: novam.workflows.v1.CancelRunResponse
+	(*GetRunRequest)(nil),                  // 23: novam.workflows.v1.GetRunRequest
+	(*GetRunResponse)(nil),                 // 24: novam.workflows.v1.GetRunResponse
+	(*ProcessRequest)(nil),                 // 25: novam.workflows.v1.ProcessRequest
+	(*ProcessResponse)(nil),                // 26: novam.workflows.v1.ProcessResponse
+	(*CreateFlowRequest)(nil),              // 27: novam.workflows.v1.CreateFlowRequest
+	(*CreateFlowResponse)(nil),             // 28: novam.workflows.v1.CreateFlowResponse
+	(*EndFlowRequest)(nil),                 // 29: novam.workflows.v1.EndFlowRequest
+	(*EndFlowResponse)(nil),                // 30: novam.workflows.v1.EndFlowResponse
+	(*v1.RequestMetadata)(nil),             // 31: novam.common.v1.RequestMetadata
+	(*v11.FlowDefinition)(nil),             // 32: novam.entities.v1.FlowDefinition
+	(*v11.FlowDefinitionNode)(nil),         // 33: novam.entities.v1.FlowDefinitionNode
+	(*v11.FlowDefinitionEdge)(nil),         // 34: novam.entities.v1.FlowDefinitionEdge
+	(*v1.PageRequest)(nil),                 // 35: novam.common.v1.PageRequest
+	(*v1.PageResponse)(nil),                // 36: novam.common.v1.PageResponse
+	(*v11.FlowUIData)(nil),                 // 37: novam.entities.v1.FlowUIData
+	(*v11.FlowNode)(nil),                   // 38: novam.entities.v1.FlowNode
+	(*v11.WorkflowRun)(nil),                // 39: novam.entities.v1.WorkflowRun
+	(*v11.ActionResponse)(nil),             // 40: novam.entities.v1.ActionResponse
+	(*v11.NodeTimeout)(nil),                // 41: novam.entities.v1.NodeTimeout
+	(*v11.FlowState)(nil),                  // 42: novam.entities.v1.FlowState
+	(*v11.ActionRequest)(nil),              // 43: novam.entities.v1.ActionRequest
 }
 var file_novam_workflows_v1_workflows_service_proto_depIdxs = []int32{
-	28, // 0: novam.workflows.v1.GetFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	29, // 1: novam.workflows.v1.GetFlowDefinitionResponse.flow_definition:type_name -> novam.entities.v1.FlowDefinition
-	30, // 2: novam.workflows.v1.GetFlowDefinitionResponse.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
-	31, // 3: novam.workflows.v1.GetFlowDefinitionResponse.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
-	32, // 4: novam.workflows.v1.ListFlowDefinitionsRequest.page:type_name -> novam.common.v1.PageRequest
-	28, // 5: novam.workflows.v1.ListFlowDefinitionsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	29, // 6: novam.workflows.v1.ListFlowDefinitionsResponse.flow_definitions:type_name -> novam.entities.v1.FlowDefinition
-	33, // 7: novam.workflows.v1.ListFlowDefinitionsResponse.page:type_name -> novam.common.v1.PageResponse
-	30, // 8: novam.workflows.v1.CreateFlowDefinitionRequest.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
-	31, // 9: novam.workflows.v1.CreateFlowDefinitionRequest.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
-	28, // 10: novam.workflows.v1.CreateFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	29, // 11: novam.workflows.v1.CreateFlowDefinitionResponse.flow_definition:type_name -> novam.entities.v1.FlowDefinition
-	30, // 12: novam.workflows.v1.UpdateFlowDefinitionRequest.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
-	31, // 13: novam.workflows.v1.UpdateFlowDefinitionRequest.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
-	28, // 14: novam.workflows.v1.UpdateFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	29, // 15: novam.workflows.v1.UpdateFlowDefinitionResponse.flow_definition:type_name -> novam.entities.v1.FlowDefinition
-	28, // 16: novam.workflows.v1.DeleteFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	28, // 17: novam.workflows.v1.GetFlowUIDataRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	34, // 18: novam.workflows.v1.GetFlowUIDataResponse.flow_ui_data:type_name -> novam.entities.v1.FlowUIData
-	34, // 19: novam.workflows.v1.SetFlowUIDataRequest.flow_ui_data:type_name -> novam.entities.v1.FlowUIData
-	28, // 20: novam.workflows.v1.SetFlowUIDataRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	28, // 21: novam.workflows.v1.ListFlowNodesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	35, // 22: novam.workflows.v1.ListFlowNodesResponse.flow_nodes:type_name -> novam.entities.v1.FlowNode
-	28, // 23: novam.workflows.v1.StartRunRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	36, // 24: novam.workflows.v1.StartRunResponse.run:type_name -> novam.entities.v1.WorkflowRun
-	28, // 25: novam.workflows.v1.CancelRunRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	36, // 26: novam.workflows.v1.CancelRunResponse.run:type_name -> novam.entities.v1.WorkflowRun
-	28, // 27: novam.workflows.v1.GetRunRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	36, // 28: novam.workflows.v1.GetRunResponse.run:type_name -> novam.entities.v1.WorkflowRun
-	28, // 29: novam.workflows.v1.ProcessRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	37, // 30: novam.workflows.v1.ProcessRequest.action_response:type_name -> novam.entities.v1.ActionResponse
-	38, // 31: novam.workflows.v1.ProcessRequest.node_timeout:type_name -> novam.entities.v1.NodeTimeout
-	39, // 32: novam.workflows.v1.ProcessResponse.state:type_name -> novam.entities.v1.FlowState
-	40, // 33: novam.workflows.v1.ProcessResponse.action_request:type_name -> novam.entities.v1.ActionRequest
-	38, // 34: novam.workflows.v1.ProcessResponse.node_timeout:type_name -> novam.entities.v1.NodeTimeout
-	28, // 35: novam.workflows.v1.CreateFlowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	39, // 36: novam.workflows.v1.CreateFlowResponse.state:type_name -> novam.entities.v1.FlowState
-	28, // 37: novam.workflows.v1.EndFlowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	39, // 38: novam.workflows.v1.EndFlowResponse.state:type_name -> novam.entities.v1.FlowState
-	0,  // 39: novam.workflows.v1.WorkflowsService.GetFlowDefinition:input_type -> novam.workflows.v1.GetFlowDefinitionRequest
-	2,  // 40: novam.workflows.v1.WorkflowsService.ListFlowDefinitions:input_type -> novam.workflows.v1.ListFlowDefinitionsRequest
-	4,  // 41: novam.workflows.v1.WorkflowsService.CreateFlowDefinition:input_type -> novam.workflows.v1.CreateFlowDefinitionRequest
-	6,  // 42: novam.workflows.v1.WorkflowsService.UpdateFlowDefinition:input_type -> novam.workflows.v1.UpdateFlowDefinitionRequest
-	8,  // 43: novam.workflows.v1.WorkflowsService.DeleteFlowDefinition:input_type -> novam.workflows.v1.DeleteFlowDefinitionRequest
-	10, // 44: novam.workflows.v1.WorkflowsService.GetFlowUIData:input_type -> novam.workflows.v1.GetFlowUIDataRequest
-	12, // 45: novam.workflows.v1.WorkflowsService.SetFlowUIData:input_type -> novam.workflows.v1.SetFlowUIDataRequest
-	14, // 46: novam.workflows.v1.WorkflowsService.ListFlowNodes:input_type -> novam.workflows.v1.ListFlowNodesRequest
-	16, // 47: novam.workflows.v1.WorkflowsService.StartRun:input_type -> novam.workflows.v1.StartRunRequest
-	18, // 48: novam.workflows.v1.WorkflowsService.CancelRun:input_type -> novam.workflows.v1.CancelRunRequest
-	20, // 49: novam.workflows.v1.WorkflowsService.GetRun:input_type -> novam.workflows.v1.GetRunRequest
-	22, // 50: novam.workflows.v1.WorkflowsService.Process:input_type -> novam.workflows.v1.ProcessRequest
-	24, // 51: novam.workflows.v1.WorkflowsService.CreateFlow:input_type -> novam.workflows.v1.CreateFlowRequest
-	26, // 52: novam.workflows.v1.WorkflowsService.EndFlow:input_type -> novam.workflows.v1.EndFlowRequest
-	1,  // 53: novam.workflows.v1.WorkflowsService.GetFlowDefinition:output_type -> novam.workflows.v1.GetFlowDefinitionResponse
-	3,  // 54: novam.workflows.v1.WorkflowsService.ListFlowDefinitions:output_type -> novam.workflows.v1.ListFlowDefinitionsResponse
-	5,  // 55: novam.workflows.v1.WorkflowsService.CreateFlowDefinition:output_type -> novam.workflows.v1.CreateFlowDefinitionResponse
-	7,  // 56: novam.workflows.v1.WorkflowsService.UpdateFlowDefinition:output_type -> novam.workflows.v1.UpdateFlowDefinitionResponse
-	9,  // 57: novam.workflows.v1.WorkflowsService.DeleteFlowDefinition:output_type -> novam.workflows.v1.DeleteFlowDefinitionResponse
-	11, // 58: novam.workflows.v1.WorkflowsService.GetFlowUIData:output_type -> novam.workflows.v1.GetFlowUIDataResponse
-	13, // 59: novam.workflows.v1.WorkflowsService.SetFlowUIData:output_type -> novam.workflows.v1.SetFlowUIDataResponse
-	15, // 60: novam.workflows.v1.WorkflowsService.ListFlowNodes:output_type -> novam.workflows.v1.ListFlowNodesResponse
-	17, // 61: novam.workflows.v1.WorkflowsService.StartRun:output_type -> novam.workflows.v1.StartRunResponse
-	19, // 62: novam.workflows.v1.WorkflowsService.CancelRun:output_type -> novam.workflows.v1.CancelRunResponse
-	21, // 63: novam.workflows.v1.WorkflowsService.GetRun:output_type -> novam.workflows.v1.GetRunResponse
-	23, // 64: novam.workflows.v1.WorkflowsService.Process:output_type -> novam.workflows.v1.ProcessResponse
-	25, // 65: novam.workflows.v1.WorkflowsService.CreateFlow:output_type -> novam.workflows.v1.CreateFlowResponse
-	27, // 66: novam.workflows.v1.WorkflowsService.EndFlow:output_type -> novam.workflows.v1.EndFlowResponse
-	53, // [53:67] is the sub-list for method output_type
-	39, // [39:53] is the sub-list for method input_type
-	39, // [39:39] is the sub-list for extension type_name
-	39, // [39:39] is the sub-list for extension extendee
-	0,  // [0:39] is the sub-list for field type_name
+	31, // 0: novam.workflows.v1.GetFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	32, // 1: novam.workflows.v1.GetFlowDefinitionResponse.flow_definition:type_name -> novam.entities.v1.FlowDefinition
+	33, // 2: novam.workflows.v1.GetFlowDefinitionResponse.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
+	34, // 3: novam.workflows.v1.GetFlowDefinitionResponse.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
+	35, // 4: novam.workflows.v1.ListFlowDefinitionsRequest.page:type_name -> novam.common.v1.PageRequest
+	31, // 5: novam.workflows.v1.ListFlowDefinitionsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	32, // 6: novam.workflows.v1.ListFlowDefinitionsResponse.flow_definitions:type_name -> novam.entities.v1.FlowDefinition
+	36, // 7: novam.workflows.v1.ListFlowDefinitionsResponse.page:type_name -> novam.common.v1.PageResponse
+	33, // 8: novam.workflows.v1.CreateFlowDefinitionRequest.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
+	34, // 9: novam.workflows.v1.CreateFlowDefinitionRequest.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
+	31, // 10: novam.workflows.v1.CreateFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	32, // 11: novam.workflows.v1.CreateFlowDefinitionResponse.flow_definition:type_name -> novam.entities.v1.FlowDefinition
+	33, // 12: novam.workflows.v1.UpdateFlowDefinitionRequest.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
+	34, // 13: novam.workflows.v1.UpdateFlowDefinitionRequest.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
+	31, // 14: novam.workflows.v1.UpdateFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	32, // 15: novam.workflows.v1.UpdateFlowDefinitionResponse.flow_definition:type_name -> novam.entities.v1.FlowDefinition
+	31, // 16: novam.workflows.v1.DeleteFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	31, // 17: novam.workflows.v1.GetFlowUIDataRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	37, // 18: novam.workflows.v1.GetFlowUIDataResponse.flow_ui_data:type_name -> novam.entities.v1.FlowUIData
+	37, // 19: novam.workflows.v1.SetFlowUIDataRequest.flow_ui_data:type_name -> novam.entities.v1.FlowUIData
+	31, // 20: novam.workflows.v1.SetFlowUIDataRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	31, // 21: novam.workflows.v1.ListFlowNodesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	38, // 22: novam.workflows.v1.ListFlowNodesResponse.flow_nodes:type_name -> novam.entities.v1.FlowNode
+	31, // 23: novam.workflows.v1.ValidateFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	32, // 24: novam.workflows.v1.ValidateFlowDefinitionRequest.flow_definition:type_name -> novam.entities.v1.FlowDefinition
+	33, // 25: novam.workflows.v1.ValidateFlowDefinitionRequest.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
+	34, // 26: novam.workflows.v1.ValidateFlowDefinitionRequest.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
+	18, // 27: novam.workflows.v1.ValidateFlowDefinitionResponse.issues:type_name -> novam.workflows.v1.FlowValidationIssue
+	31, // 28: novam.workflows.v1.StartRunRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	39, // 29: novam.workflows.v1.StartRunResponse.run:type_name -> novam.entities.v1.WorkflowRun
+	31, // 30: novam.workflows.v1.CancelRunRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	39, // 31: novam.workflows.v1.CancelRunResponse.run:type_name -> novam.entities.v1.WorkflowRun
+	31, // 32: novam.workflows.v1.GetRunRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	39, // 33: novam.workflows.v1.GetRunResponse.run:type_name -> novam.entities.v1.WorkflowRun
+	31, // 34: novam.workflows.v1.ProcessRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	40, // 35: novam.workflows.v1.ProcessRequest.action_response:type_name -> novam.entities.v1.ActionResponse
+	41, // 36: novam.workflows.v1.ProcessRequest.node_timeout:type_name -> novam.entities.v1.NodeTimeout
+	42, // 37: novam.workflows.v1.ProcessResponse.state:type_name -> novam.entities.v1.FlowState
+	43, // 38: novam.workflows.v1.ProcessResponse.action_request:type_name -> novam.entities.v1.ActionRequest
+	41, // 39: novam.workflows.v1.ProcessResponse.node_timeout:type_name -> novam.entities.v1.NodeTimeout
+	31, // 40: novam.workflows.v1.CreateFlowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	42, // 41: novam.workflows.v1.CreateFlowResponse.state:type_name -> novam.entities.v1.FlowState
+	31, // 42: novam.workflows.v1.EndFlowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	42, // 43: novam.workflows.v1.EndFlowResponse.state:type_name -> novam.entities.v1.FlowState
+	0,  // 44: novam.workflows.v1.WorkflowsService.GetFlowDefinition:input_type -> novam.workflows.v1.GetFlowDefinitionRequest
+	2,  // 45: novam.workflows.v1.WorkflowsService.ListFlowDefinitions:input_type -> novam.workflows.v1.ListFlowDefinitionsRequest
+	4,  // 46: novam.workflows.v1.WorkflowsService.CreateFlowDefinition:input_type -> novam.workflows.v1.CreateFlowDefinitionRequest
+	6,  // 47: novam.workflows.v1.WorkflowsService.UpdateFlowDefinition:input_type -> novam.workflows.v1.UpdateFlowDefinitionRequest
+	8,  // 48: novam.workflows.v1.WorkflowsService.DeleteFlowDefinition:input_type -> novam.workflows.v1.DeleteFlowDefinitionRequest
+	10, // 49: novam.workflows.v1.WorkflowsService.GetFlowUIData:input_type -> novam.workflows.v1.GetFlowUIDataRequest
+	12, // 50: novam.workflows.v1.WorkflowsService.SetFlowUIData:input_type -> novam.workflows.v1.SetFlowUIDataRequest
+	14, // 51: novam.workflows.v1.WorkflowsService.ListFlowNodes:input_type -> novam.workflows.v1.ListFlowNodesRequest
+	16, // 52: novam.workflows.v1.WorkflowsService.ValidateFlowDefinition:input_type -> novam.workflows.v1.ValidateFlowDefinitionRequest
+	19, // 53: novam.workflows.v1.WorkflowsService.StartRun:input_type -> novam.workflows.v1.StartRunRequest
+	21, // 54: novam.workflows.v1.WorkflowsService.CancelRun:input_type -> novam.workflows.v1.CancelRunRequest
+	23, // 55: novam.workflows.v1.WorkflowsService.GetRun:input_type -> novam.workflows.v1.GetRunRequest
+	25, // 56: novam.workflows.v1.WorkflowsService.Process:input_type -> novam.workflows.v1.ProcessRequest
+	27, // 57: novam.workflows.v1.WorkflowsService.CreateFlow:input_type -> novam.workflows.v1.CreateFlowRequest
+	29, // 58: novam.workflows.v1.WorkflowsService.EndFlow:input_type -> novam.workflows.v1.EndFlowRequest
+	1,  // 59: novam.workflows.v1.WorkflowsService.GetFlowDefinition:output_type -> novam.workflows.v1.GetFlowDefinitionResponse
+	3,  // 60: novam.workflows.v1.WorkflowsService.ListFlowDefinitions:output_type -> novam.workflows.v1.ListFlowDefinitionsResponse
+	5,  // 61: novam.workflows.v1.WorkflowsService.CreateFlowDefinition:output_type -> novam.workflows.v1.CreateFlowDefinitionResponse
+	7,  // 62: novam.workflows.v1.WorkflowsService.UpdateFlowDefinition:output_type -> novam.workflows.v1.UpdateFlowDefinitionResponse
+	9,  // 63: novam.workflows.v1.WorkflowsService.DeleteFlowDefinition:output_type -> novam.workflows.v1.DeleteFlowDefinitionResponse
+	11, // 64: novam.workflows.v1.WorkflowsService.GetFlowUIData:output_type -> novam.workflows.v1.GetFlowUIDataResponse
+	13, // 65: novam.workflows.v1.WorkflowsService.SetFlowUIData:output_type -> novam.workflows.v1.SetFlowUIDataResponse
+	15, // 66: novam.workflows.v1.WorkflowsService.ListFlowNodes:output_type -> novam.workflows.v1.ListFlowNodesResponse
+	17, // 67: novam.workflows.v1.WorkflowsService.ValidateFlowDefinition:output_type -> novam.workflows.v1.ValidateFlowDefinitionResponse
+	20, // 68: novam.workflows.v1.WorkflowsService.StartRun:output_type -> novam.workflows.v1.StartRunResponse
+	22, // 69: novam.workflows.v1.WorkflowsService.CancelRun:output_type -> novam.workflows.v1.CancelRunResponse
+	24, // 70: novam.workflows.v1.WorkflowsService.GetRun:output_type -> novam.workflows.v1.GetRunResponse
+	26, // 71: novam.workflows.v1.WorkflowsService.Process:output_type -> novam.workflows.v1.ProcessResponse
+	28, // 72: novam.workflows.v1.WorkflowsService.CreateFlow:output_type -> novam.workflows.v1.CreateFlowResponse
+	30, // 73: novam.workflows.v1.WorkflowsService.EndFlow:output_type -> novam.workflows.v1.EndFlowResponse
+	59, // [59:74] is the sub-list for method output_type
+	44, // [44:59] is the sub-list for method input_type
+	44, // [44:44] is the sub-list for extension type_name
+	44, // [44:44] is the sub-list for extension extendee
+	0,  // [0:44] is the sub-list for field type_name
 }
 
 func init() { file_novam_workflows_v1_workflows_service_proto_init() }
@@ -1905,12 +2113,12 @@ func file_novam_workflows_v1_workflows_service_proto_init() {
 		return
 	}
 	file_novam_workflows_v1_workflows_service_proto_msgTypes[6].OneofWrappers = []any{}
-	file_novam_workflows_v1_workflows_service_proto_msgTypes[22].OneofWrappers = []any{
+	file_novam_workflows_v1_workflows_service_proto_msgTypes[25].OneofWrappers = []any{
 		(*ProcessRequest_NodeMessage)(nil),
 		(*ProcessRequest_ActionResponse)(nil),
 		(*ProcessRequest_NodeTimeout)(nil),
 	}
-	file_novam_workflows_v1_workflows_service_proto_msgTypes[23].OneofWrappers = []any{
+	file_novam_workflows_v1_workflows_service_proto_msgTypes[26].OneofWrappers = []any{
 		(*ProcessResponse_ActionRequest)(nil),
 		(*ProcessResponse_NodeTimeout)(nil),
 		(*ProcessResponse_NodeMessage)(nil),
@@ -1921,7 +2129,7 @@ func file_novam_workflows_v1_workflows_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_workflows_v1_workflows_service_proto_rawDesc), len(file_novam_workflows_v1_workflows_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   28,
+			NumMessages:   31,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

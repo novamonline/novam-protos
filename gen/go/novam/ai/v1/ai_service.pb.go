@@ -24,9 +24,11 @@ const (
 )
 
 type ChatRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Messages      []*v1.ChatMessage      `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"`
-	Metadata      *v11.RequestMetadata   `protobuf:"bytes,2,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Messages []*v1.ChatMessage      `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"`
+	Metadata *v11.RequestMetadata   `protobuf:"bytes,2,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// The business's model choice; unset uses the service's default model and key.
+	Model         *ModelChoice `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -75,6 +77,75 @@ func (x *ChatRequest) GetMetadata() *v11.RequestMetadata {
 	return nil
 }
 
+func (x *ChatRequest) GetModel() *ModelChoice {
+	if x != nil {
+		return x.Model
+	}
+	return nil
+}
+
+// ModelChoice is which model answers, and whose key pays for it.
+type ModelChoice struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Provider string                 `protobuf:"bytes,1,opt,name=provider,proto3" json:"provider,omitempty"` // gemini or anthropic; empty means the service's default provider
+	Model    string                 `protobuf:"bytes,2,opt,name=model,proto3" json:"model,omitempty"`       // the provider's model id; empty means that provider's default
+	// The business's own key for the provider. Empty uses the service's key, which only the default provider has.
+	ApiKey        string `protobuf:"bytes,3,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ModelChoice) Reset() {
+	*x = ModelChoice{}
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ModelChoice) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ModelChoice) ProtoMessage() {}
+
+func (x *ModelChoice) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ModelChoice.ProtoReflect.Descriptor instead.
+func (*ModelChoice) Descriptor() ([]byte, []int) {
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ModelChoice) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *ModelChoice) GetModel() string {
+	if x != nil {
+		return x.Model
+	}
+	return ""
+}
+
+func (x *ModelChoice) GetApiKey() string {
+	if x != nil {
+		return x.ApiKey
+	}
+	return ""
+}
+
 type ChatResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Response      *v1.ChatResponse       `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
@@ -84,7 +155,7 @@ type ChatResponse struct {
 
 func (x *ChatResponse) Reset() {
 	*x = ChatResponse{}
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -96,7 +167,7 @@ func (x *ChatResponse) String() string {
 func (*ChatResponse) ProtoMessage() {}
 
 func (x *ChatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -109,7 +180,7 @@ func (x *ChatResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChatResponse.ProtoReflect.Descriptor instead.
 func (*ChatResponse) Descriptor() ([]byte, []int) {
-	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{1}
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ChatResponse) GetResponse() *v1.ChatResponse {
@@ -129,7 +200,7 @@ type SummarizeRequest struct {
 
 func (x *SummarizeRequest) Reset() {
 	*x = SummarizeRequest{}
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -141,7 +212,7 @@ func (x *SummarizeRequest) String() string {
 func (*SummarizeRequest) ProtoMessage() {}
 
 func (x *SummarizeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -154,7 +225,7 @@ func (x *SummarizeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SummarizeRequest.ProtoReflect.Descriptor instead.
 func (*SummarizeRequest) Descriptor() ([]byte, []int) {
-	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{2}
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *SummarizeRequest) GetText() string {
@@ -180,7 +251,7 @@ type SummarizeResponse struct {
 
 func (x *SummarizeResponse) Reset() {
 	*x = SummarizeResponse{}
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -192,7 +263,7 @@ func (x *SummarizeResponse) String() string {
 func (*SummarizeResponse) ProtoMessage() {}
 
 func (x *SummarizeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -205,7 +276,7 @@ func (x *SummarizeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SummarizeResponse.ProtoReflect.Descriptor instead.
 func (*SummarizeResponse) Descriptor() ([]byte, []int) {
-	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{3}
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SummarizeResponse) GetSummary() string {
@@ -219,10 +290,15 @@ var File_novam_ai_v1_ai_service_proto protoreflect.FileDescriptor
 
 const file_novam_ai_v1_ai_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1cnovam/ai/v1/ai_service.proto\x12\vnovam.ai.v1\x1a\x1cnovam/common/v1/common.proto\x1a\x1anovam/entities/v1/ai.proto\"\x87\x01\n" +
+	"\x1cnovam/ai/v1/ai_service.proto\x12\vnovam.ai.v1\x1a\x1cnovam/common/v1/common.proto\x1a\x1anovam/entities/v1/ai.proto\"\xb7\x01\n" +
 	"\vChatRequest\x12:\n" +
 	"\bmessages\x18\x01 \x03(\v2\x1e.novam.entities.v1.ChatMessageR\bmessages\x12<\n" +
-	"\bmetadata\x18\x02 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"K\n" +
+	"\bmetadata\x18\x02 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12.\n" +
+	"\x05model\x18\x03 \x01(\v2\x18.novam.ai.v1.ModelChoiceR\x05model\"X\n" +
+	"\vModelChoice\x12\x1a\n" +
+	"\bprovider\x18\x01 \x01(\tR\bprovider\x12\x14\n" +
+	"\x05model\x18\x02 \x01(\tR\x05model\x12\x17\n" +
+	"\aapi_key\x18\x03 \x01(\tR\x06apiKey\"K\n" +
 	"\fChatResponse\x12;\n" +
 	"\bresponse\x18\x01 \x01(\v2\x1f.novam.entities.v1.ChatResponseR\bresponse\"d\n" +
 	"\x10SummarizeRequest\x12\x12\n" +
@@ -246,30 +322,32 @@ func file_novam_ai_v1_ai_service_proto_rawDescGZIP() []byte {
 	return file_novam_ai_v1_ai_service_proto_rawDescData
 }
 
-var file_novam_ai_v1_ai_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_novam_ai_v1_ai_service_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_novam_ai_v1_ai_service_proto_goTypes = []any{
 	(*ChatRequest)(nil),         // 0: novam.ai.v1.ChatRequest
-	(*ChatResponse)(nil),        // 1: novam.ai.v1.ChatResponse
-	(*SummarizeRequest)(nil),    // 2: novam.ai.v1.SummarizeRequest
-	(*SummarizeResponse)(nil),   // 3: novam.ai.v1.SummarizeResponse
-	(*v1.ChatMessage)(nil),      // 4: novam.entities.v1.ChatMessage
-	(*v11.RequestMetadata)(nil), // 5: novam.common.v1.RequestMetadata
-	(*v1.ChatResponse)(nil),     // 6: novam.entities.v1.ChatResponse
+	(*ModelChoice)(nil),         // 1: novam.ai.v1.ModelChoice
+	(*ChatResponse)(nil),        // 2: novam.ai.v1.ChatResponse
+	(*SummarizeRequest)(nil),    // 3: novam.ai.v1.SummarizeRequest
+	(*SummarizeResponse)(nil),   // 4: novam.ai.v1.SummarizeResponse
+	(*v1.ChatMessage)(nil),      // 5: novam.entities.v1.ChatMessage
+	(*v11.RequestMetadata)(nil), // 6: novam.common.v1.RequestMetadata
+	(*v1.ChatResponse)(nil),     // 7: novam.entities.v1.ChatResponse
 }
 var file_novam_ai_v1_ai_service_proto_depIdxs = []int32{
-	4, // 0: novam.ai.v1.ChatRequest.messages:type_name -> novam.entities.v1.ChatMessage
-	5, // 1: novam.ai.v1.ChatRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	6, // 2: novam.ai.v1.ChatResponse.response:type_name -> novam.entities.v1.ChatResponse
-	5, // 3: novam.ai.v1.SummarizeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0, // 4: novam.ai.v1.AIService.Chat:input_type -> novam.ai.v1.ChatRequest
-	2, // 5: novam.ai.v1.AIService.Summarize:input_type -> novam.ai.v1.SummarizeRequest
-	1, // 6: novam.ai.v1.AIService.Chat:output_type -> novam.ai.v1.ChatResponse
-	3, // 7: novam.ai.v1.AIService.Summarize:output_type -> novam.ai.v1.SummarizeResponse
-	6, // [6:8] is the sub-list for method output_type
-	4, // [4:6] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	5, // 0: novam.ai.v1.ChatRequest.messages:type_name -> novam.entities.v1.ChatMessage
+	6, // 1: novam.ai.v1.ChatRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	1, // 2: novam.ai.v1.ChatRequest.model:type_name -> novam.ai.v1.ModelChoice
+	7, // 3: novam.ai.v1.ChatResponse.response:type_name -> novam.entities.v1.ChatResponse
+	6, // 4: novam.ai.v1.SummarizeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0, // 5: novam.ai.v1.AIService.Chat:input_type -> novam.ai.v1.ChatRequest
+	3, // 6: novam.ai.v1.AIService.Summarize:input_type -> novam.ai.v1.SummarizeRequest
+	2, // 7: novam.ai.v1.AIService.Chat:output_type -> novam.ai.v1.ChatResponse
+	4, // 8: novam.ai.v1.AIService.Summarize:output_type -> novam.ai.v1.SummarizeResponse
+	7, // [7:9] is the sub-list for method output_type
+	5, // [5:7] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_novam_ai_v1_ai_service_proto_init() }
@@ -283,7 +361,7 @@ func file_novam_ai_v1_ai_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_ai_v1_ai_service_proto_rawDesc), len(file_novam_ai_v1_ai_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

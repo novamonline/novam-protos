@@ -319,6 +319,28 @@ function deserialize_novam_workflows_v1_UpdateFlowDefinitionResponse(buffer_arg)
   return novam_workflows_v1_workflows_service_pb.UpdateFlowDefinitionResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_workflows_v1_ValidateFlowDefinitionRequest(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.ValidateFlowDefinitionRequest)) {
+    throw new Error('Expected argument of type novam.workflows.v1.ValidateFlowDefinitionRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_ValidateFlowDefinitionRequest(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.ValidateFlowDefinitionRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_ValidateFlowDefinitionResponse(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.ValidateFlowDefinitionResponse)) {
+    throw new Error('Expected argument of type novam.workflows.v1.ValidateFlowDefinitionResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_ValidateFlowDefinitionResponse(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.ValidateFlowDefinitionResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 // WorkflowsService manages flow definitions, UI data, catalog nodes, and workflow runs.
 var WorkflowsServiceService = exports.WorkflowsServiceService = {
@@ -412,6 +434,18 @@ listFlowNodes: {
     requestDeserialize: deserialize_novam_workflows_v1_ListFlowNodesRequest,
     responseSerialize: serialize_novam_workflows_v1_ListFlowNodesResponse,
     responseDeserialize: deserialize_novam_workflows_v1_ListFlowNodesResponse,
+  },
+  // Checks that a flow could run as written, without storing it. novam-data calls this before saving.
+validateFlowDefinition: {
+    path: '/novam.workflows.v1.WorkflowsService/ValidateFlowDefinition',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_workflows_v1_workflows_service_pb.ValidateFlowDefinitionRequest,
+    responseType: novam_workflows_v1_workflows_service_pb.ValidateFlowDefinitionResponse,
+    requestSerialize: serialize_novam_workflows_v1_ValidateFlowDefinitionRequest,
+    requestDeserialize: deserialize_novam_workflows_v1_ValidateFlowDefinitionRequest,
+    responseSerialize: serialize_novam_workflows_v1_ValidateFlowDefinitionResponse,
+    responseDeserialize: deserialize_novam_workflows_v1_ValidateFlowDefinitionResponse,
   },
   // Run lifecycle (workflow_id is flow_definition_id)
 startRun: {

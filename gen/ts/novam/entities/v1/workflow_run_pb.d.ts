@@ -92,6 +92,13 @@ export enum RunStatus {
    * @generated from enum value: RUN_STATUS_CANCELLED = 5;
    */
   CANCELLED = 5,
+
+  /**
+   * Paused on a wait step until a set time, holding no worker.
+   *
+   * @generated from enum value: RUN_STATUS_WAITING = 6;
+   */
+  WAITING = 6,
 }
 
 /**

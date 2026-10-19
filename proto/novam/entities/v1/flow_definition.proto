@@ -17,6 +17,17 @@ message FlowDefinition {
   bool enabled = 6;
   google.protobuf.Timestamp created_at = 7;
   google.protobuf.Timestamp updated_at = 8;
+  // What starts this flow's runs. Unset means runs start only through StartRun.
+  FlowTrigger trigger = 9;
+}
+
+// FlowTrigger is what starts a flow's runs, as the workflow builder saved it.
+message FlowTrigger {
+  string type = 1; // manual, schedule, event, data_change, webhook
+  // Settings for the type, e.g. schedule {cron} or {before: "appointment.start", offsetHours: 24},
+  // event {event: "appointment.completed"}, data_change {resource: "clients"}.
+  google.protobuf.Struct config = 2;
+  bool enabled = 3;
 }
 
 // FlowDefinitionNode is a single node in a flow definition (structural, for execution).

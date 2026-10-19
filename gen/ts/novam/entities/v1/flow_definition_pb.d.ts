@@ -56,6 +56,13 @@ export declare type FlowDefinition = Message<"novam.entities.v1.FlowDefinition">
    * @generated from field: google.protobuf.Timestamp updated_at = 8;
    */
   updatedAt?: Timestamp;
+
+  /**
+   * What starts this flow's runs. Unset means runs start only through StartRun.
+   *
+   * @generated from field: novam.entities.v1.FlowTrigger trigger = 9;
+   */
+  trigger?: FlowTrigger;
 };
 
 /**
@@ -63,6 +70,39 @@ export declare type FlowDefinition = Message<"novam.entities.v1.FlowDefinition">
  * Use `create(FlowDefinitionSchema)` to create a new message.
  */
 export declare const FlowDefinitionSchema: GenMessage<FlowDefinition>;
+
+/**
+ * FlowTrigger is what starts a flow's runs, as the workflow builder saved it.
+ *
+ * @generated from message novam.entities.v1.FlowTrigger
+ */
+export declare type FlowTrigger = Message<"novam.entities.v1.FlowTrigger"> & {
+  /**
+   * manual, schedule, event, data_change, webhook
+   *
+   * @generated from field: string type = 1;
+   */
+  type: string;
+
+  /**
+   * Settings for the type, e.g. schedule {cron} or {before: "appointment.start", offsetHours: 24},
+   * event {event: "appointment.completed"}, data_change {resource: "clients"}.
+   *
+   * @generated from field: google.protobuf.Struct config = 2;
+   */
+  config?: JsonObject;
+
+  /**
+   * @generated from field: bool enabled = 3;
+   */
+  enabled: boolean;
+};
+
+/**
+ * Describes the message novam.entities.v1.FlowTrigger.
+ * Use `create(FlowTriggerSchema)` to create a new message.
+ */
+export declare const FlowTriggerSchema: GenMessage<FlowTrigger>;
 
 /**
  * FlowDefinitionNode is a single node in a flow definition (structural, for execution).

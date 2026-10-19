@@ -15,6 +15,8 @@ enum RunStatus {
   RUN_STATUS_SUCCEEDED = 3;
   RUN_STATUS_FAILED = 4;
   RUN_STATUS_CANCELLED = 5;
+  // Paused on a wait step until a set time, holding no worker.
+  RUN_STATUS_WAITING = 6;
 }
 
 // WorkflowRun represents a single execution of a workflow.

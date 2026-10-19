@@ -1,0 +1,177 @@
+syntax = "proto3";
+
+package novam.data.v1;
+
+import "google/protobuf/timestamp.proto";
+import "novam/common/v1/common.proto";
+import "novam/events/v1/business_events.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1";
+
+// NotificationStoreService is the storage novam-data provides to the notifications service. novam-data owns
+// the data; the service keeps none. It calls this with its own credential (`authorization: Bearer <token>`
+// metadata, a client-credentials token from novam-data's /oauth/token). Calls are scoped to
+// `metadata.tenant_context.org_id`, except ClaimDueNotifications, which spans orgs.
+service NotificationStoreService {
+  // The org's enabled reminder rules.
+  rpc ListReminderRules(ListReminderRulesRequest) returns (ListReminderRulesResponse);
+  // Appointments starting, or invoices due, in a time range. Used to rebuild schedules when rules change.
+  rpc ListReminderTargets(ListReminderTargetsRequest) returns (ListReminderTargetsResponse);
+  // Replaces the scheduled notifications for one target (an appointment or invoice) under one rule.
+  // Already-sent notifications are kept. Sending the same request twice is harmless.
+  rpc ReplaceScheduledNotifications(ReplaceScheduledNotificationsRequest) returns (ReplaceScheduledNotificationsResponse);
+  // Cancels unsent notifications for a target, or for every target of a rule.
+  rpc CancelScheduledNotifications(CancelScheduledNotificationsRequest) returns (CancelScheduledNotificationsResponse);
+  // Atomically leases due, unsent notifications across all orgs, so each is handed to one sender only.
+  // A lease that runs out without a RecordDelivery returns the notification to the queue.
+  rpc ClaimDueNotifications(ClaimDueNotificationsRequest) returns (ClaimDueNotificationsResponse);
+  // Records the outcome of sending a claimed notification.
+  rpc RecordDelivery(RecordDeliveryRequest) returns (RecordDeliveryResponse);
+  // What a sender needs to address a client: contact details, push devices, and the org's name and time zone.
+  rpc GetRecipient(GetRecipientRequest) returns (GetRecipientResponse);
+  // Adds an entry to a person's in-app notification center.
+  rpc CreateInAppNotification(CreateInAppNotificationRequest) returns (CreateInAppNotificationResponse);
+}
+
+// Where a notification goes.
+enum Channel {
+  CHANNEL_UNSPECIFIED = 0;
+  CHANNEL_EMAIL = 1;
+  CHANNEL_SMS = 2;
+  CHANNEL_PUSH = 3;
+  CHANNEL_IN_APP = 4;
+}
+
+// How sending went.
+enum DeliveryStatus {
+  DELIVERY_STATUS_UNSPECIFIED = 0;
+  DELIVERY_STATUS_SENT = 1;
+  // Will be retried until attempts run out.
+  DELIVERY_STATUS_FAILED = 2;
+  // Not sent, and won't be: e.g. no email address, or the channel isn't set up.
+  DELIVERY_STATUS_SKIPPED = 3;
+}
+
+// A notification waiting to be sent, or claimed for sending.
+message ScheduledNotification {
+  string id = 1;
+  string org_id = 2;
+  string rule_id = 3;
+  string target_type = 4; // appointment, invoice
+  string target_id = 5;
+  string client_id = 6;
+  Channel channel = 7;
+  google.protobuf.Timestamp send_at = 8;
+  // Unsent after this, the notification is dropped as stale (e.g. a reminder for an appointment that started).
+  google.protobuf.Timestamp expires_at = 9;
+  int32 attempts = 10;
+  // The target as it stood when scheduled; the sender writes the message from it.
+  oneof target {
+    novam.events.v1.Appointment appointment = 11;
+    novam.events.v1.ClientInvoice invoice = 12;
+  }
+  string rule_when = 13; // the rule's timing, e.g. 1_day_before, so the sender can word the message
+}
+
+message ListReminderRulesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message ListReminderRulesResponse {
+  repeated novam.events.v1.ReminderRule rules = 1;
+}
+
+message ListReminderTargetsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string target_type = 2; // appointment, invoice
+  google.protobuf.Timestamp from = 3;
+  google.protobuf.Timestamp to = 4;
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListReminderTargetsResponse {
+  repeated novam.events.v1.Appointment appointments = 1;
+  repeated novam.events.v1.ClientInvoice invoices = 2;
+  string next_page_token = 3;
+}
+
+message ReplaceScheduledNotificationsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string rule_id = 2;
+  string target_type = 3;
+  string target_id = 4;
+  // The full set that should exist for this rule and target; empty cancels them all.
+  repeated ScheduledNotification notifications = 5;
+}
+
+message ReplaceScheduledNotificationsResponse {
+  repeated ScheduledNotification notifications = 1;
+}
+
+message CancelScheduledNotificationsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // One of these: every unsent notification for the target, or for the rule.
+  string target_id = 2;
+  string rule_id = 3;
+}
+
+message CancelScheduledNotificationsResponse {
+  int32 cancelled = 1;
+}
+
+message ClaimDueNotificationsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  google.protobuf.Timestamp now = 2;
+  int32 limit = 3;
+  int32 lease_seconds = 4;
+}
+
+message ClaimDueNotificationsResponse {
+  repeated ScheduledNotification notifications = 1;
+}
+
+message RecordDeliveryRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string notification_id = 2;
+  DeliveryStatus status = 3;
+  string recipient = 4; // address or device it went to
+  string error_message = 5;
+  string provider_message_id = 6;
+}
+
+message RecordDeliveryResponse {}
+
+// A device registered for push notifications.
+message PushDevice {
+  string token = 1;
+  string platform = 2; // ios, android, web
+}
+
+message GetRecipientRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string client_id = 2;
+}
+
+message GetRecipientResponse {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+  repeated PushDevice devices = 4;
+  string org_name = 5;
+  string org_time_zone = 6; // IANA name, e.g. America/New_York
+  string pay_url_base = 7; // where invoice pay links point
+}
+
+message CreateInAppNotificationRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2; // empty: everyone in the org
+  string type = 3; // info, success, warning, error
+  string title = 4;
+  string message = 5;
+  string link = 6;
+}
+
+message CreateInAppNotificationResponse {
+  string id = 1;
+}

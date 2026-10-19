@@ -25,6 +25,8 @@ service WorkflowsService {
   rpc SetFlowUIData(SetFlowUIDataRequest) returns (SetFlowUIDataResponse);
   // Catalog of available node types
   rpc ListFlowNodes(ListFlowNodesRequest) returns (ListFlowNodesResponse);
+  // Checks that a flow could run as written, without storing it. novam-data calls this before saving.
+  rpc ValidateFlowDefinition(ValidateFlowDefinitionRequest) returns (ValidateFlowDefinitionResponse);
   // Run lifecycle (workflow_id is flow_definition_id)
   rpc StartRun(StartRunRequest) returns (StartRunResponse);
   rpc CancelRun(CancelRunRequest) returns (CancelRunResponse);
@@ -119,6 +121,27 @@ message ListFlowNodesRequest {
 
 message ListFlowNodesResponse {
   repeated novam.entities.v1.FlowNode flow_nodes = 1;
+}
+
+// ----- Validation -----
+message ValidateFlowDefinitionRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  novam.entities.v1.FlowDefinition flow_definition = 2;
+  repeated novam.entities.v1.FlowDefinitionNode nodes = 3;
+  repeated novam.entities.v1.FlowDefinitionEdge edges = 4;
+}
+
+message ValidateFlowDefinitionResponse {
+  // Empty when the flow can run. A malformed request is INVALID_ARGUMENT instead.
+  repeated FlowValidationIssue issues = 1;
+}
+
+// FlowValidationIssue is one reason a flow can't run, pointing at the node or edge at fault when there is one.
+message FlowValidationIssue {
+  string node_id = 1;
+  string from_node_id = 2; // with to_node_id, the edge at fault
+  string to_node_id = 3;
+  string message = 4;
 }
 
 // ----- Run lifecycle -----
