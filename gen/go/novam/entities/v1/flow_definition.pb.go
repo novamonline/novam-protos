@@ -298,8 +298,15 @@ type FlowDefinitionEdge struct {
 	ToNodeId            string                 `protobuf:"bytes,4,opt,name=to_node_id,json=toNodeId,proto3" json:"to_node_id,omitempty"`
 	ConditionExpression string                 `protobuf:"bytes,5,opt,name=condition_expression,json=conditionExpression,proto3" json:"condition_expression,omitempty"`
 	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	unknownFields       protoimpl.UnknownFields
-	sizeCache           protoimpl.SizeCache
+	// Which way out of the source node this edge leaves by (FlowNodeExit.key); empty means "next".
+	Exit string `protobuf:"bytes,7,opt,name=exit,proto3" json:"exit,omitempty"`
+	// A node's edges are tried in this order, and the first whose condition passes is taken. Ties fall back to
+	// to_node_id, which is how edges were ordered before this field existed.
+	SortOrder int32 `protobuf:"varint,8,opt,name=sort_order,json=sortOrder,proto3" json:"sort_order,omitempty"`
+	// What the editor shows on the edge, e.g. a branch path's name.
+	Label         string `protobuf:"bytes,9,opt,name=label,proto3" json:"label,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *FlowDefinitionEdge) Reset() {
@@ -374,6 +381,27 @@ func (x *FlowDefinitionEdge) GetCreatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *FlowDefinitionEdge) GetExit() string {
+	if x != nil {
+		return x.Exit
+	}
+	return ""
+}
+
+func (x *FlowDefinitionEdge) GetSortOrder() int32 {
+	if x != nil {
+		return x.SortOrder
+	}
+	return 0
+}
+
+func (x *FlowDefinitionEdge) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
 var File_novam_entities_v1_flow_definition_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
@@ -405,7 +433,7 @@ const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\x80\x02\n" +
+	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"\xc9\x02\n" +
 	"\x12FlowDefinitionEdge\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12,\n" +
 	"\x12flow_definition_id\x18\x02 \x01(\tR\x10flowDefinitionId\x12 \n" +
@@ -415,7 +443,11 @@ const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
 	"to_node_id\x18\x04 \x01(\tR\btoNodeId\x121\n" +
 	"\x14condition_expression\x18\x05 \x01(\tR\x13conditionExpression\x129\n" +
 	"\n" +
-	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAtBIZGgithub.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1b\x06proto3"
+	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x12\x12\n" +
+	"\x04exit\x18\a \x01(\tR\x04exit\x12\x1d\n" +
+	"\n" +
+	"sort_order\x18\b \x01(\x05R\tsortOrder\x12\x14\n" +
+	"\x05label\x18\t \x01(\tR\x05labelBIZGgithub.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1b\x06proto3"
 
 var (
 	file_novam_entities_v1_flow_definition_proto_rawDescOnce sync.Once

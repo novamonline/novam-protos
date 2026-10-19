@@ -187,6 +187,28 @@ export declare type FlowDefinitionEdge = Message<"novam.entities.v1.FlowDefiniti
    * @generated from field: google.protobuf.Timestamp created_at = 6;
    */
   createdAt?: Timestamp;
+
+  /**
+   * Which way out of the source node this edge leaves by (FlowNodeExit.key); empty means "next".
+   *
+   * @generated from field: string exit = 7;
+   */
+  exit: string;
+
+  /**
+   * A node's edges are tried in this order, and the first whose condition passes is taken. Ties fall back to
+   * to_node_id, which is how edges were ordered before this field existed.
+   *
+   * @generated from field: int32 sort_order = 8;
+   */
+  sortOrder: number;
+
+  /**
+   * What the editor shows on the edge, e.g. a branch path's name.
+   *
+   * @generated from field: string label = 9;
+   */
+  label: string;
 };
 
 /**

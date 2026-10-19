@@ -7,7 +7,8 @@ import "google/protobuf/timestamp.proto";
 
 option go_package = "github.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1";
 
-// FlowNode is a catalog entry for an available node type (e.g. noop, delay, llm).
+// FlowNode is a catalog entry for an available node type (e.g. noop, delay, llm). The workflow editor renders
+// a step's card, settings form, ways out and data from this entry alone, so it needs no code per kind.
 message FlowNode {
   string kind = 1;
   string name = 2;
@@ -16,4 +17,32 @@ message FlowNode {
   string category = 5;
   google.protobuf.Timestamp created_at = 6;
   google.protobuf.Timestamp updated_at = 7;
+  // How the editor shows the step: {icon, color, eyebrow, summary}, where summary is a template over the
+  // step's config such as "Text {{to}}".
+  google.protobuf.Struct ui = 8;
+  // The named ways out of the step. A kind with dynamic exits (branch) takes them from its configured paths.
+  repeated FlowNodeExit exits = 9;
+  // JSON Schema of the data the step adds to the run, readable by later steps as steps.<node_id>.output.
+  google.protobuf.Struct outputs_schema = 10;
+  FlowNodeCapabilities capabilities = 11;
+}
+
+// FlowNodeExit is one way out of a step; an edge leaving the step names it in FlowDefinitionEdge.exit.
+message FlowNodeExit {
+  string key = 1;
+  string label = 2;
+  // The step's config defines its exits (one per path of a branch), so key and label describe the pattern.
+  bool dynamic = 3;
+}
+
+// FlowNodeCapabilities says how a step behaves, for validation and the editor.
+message FlowNodeCapabilities {
+  // The run ends at this step; it has no ways out.
+  bool terminal = 1;
+  // The step can park the run until a time or an event.
+  bool waits = 2;
+  // The step changes something outside the run (sends a message, writes a record, calls a URL).
+  bool side_effects = 3;
+  // The step is safe to try again after a failure.
+  bool retryable = 4;
 }

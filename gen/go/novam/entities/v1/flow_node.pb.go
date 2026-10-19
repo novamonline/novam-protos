@@ -23,16 +23,25 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// FlowNode is a catalog entry for an available node type (e.g. noop, delay, llm).
+// FlowNode is a catalog entry for an available node type (e.g. noop, delay, llm). The workflow editor renders
+// a step's card, settings form, ways out and data from this entry alone, so it needs no code per kind.
 type FlowNode struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Kind          string                 `protobuf:"bytes,1,opt,name=kind,proto3" json:"kind,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	ConfigSchema  *structpb.Struct       `protobuf:"bytes,4,opt,name=config_schema,json=configSchema,proto3" json:"config_schema,omitempty"`
-	Category      string                 `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	state        protoimpl.MessageState `protogen:"open.v1"`
+	Kind         string                 `protobuf:"bytes,1,opt,name=kind,proto3" json:"kind,omitempty"`
+	Name         string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description  string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	ConfigSchema *structpb.Struct       `protobuf:"bytes,4,opt,name=config_schema,json=configSchema,proto3" json:"config_schema,omitempty"`
+	Category     string                 `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`
+	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	// How the editor shows the step: {icon, color, eyebrow, summary}, where summary is a template over the
+	// step's config such as "Text {{to}}".
+	Ui *structpb.Struct `protobuf:"bytes,8,opt,name=ui,proto3" json:"ui,omitempty"`
+	// The named ways out of the step. A kind with dynamic exits (branch) takes them from its configured paths.
+	Exits []*FlowNodeExit `protobuf:"bytes,9,rep,name=exits,proto3" json:"exits,omitempty"`
+	// JSON Schema of the data the step adds to the run, readable by later steps as steps.<node_id>.output.
+	OutputsSchema *structpb.Struct      `protobuf:"bytes,10,opt,name=outputs_schema,json=outputsSchema,proto3" json:"outputs_schema,omitempty"`
+	Capabilities  *FlowNodeCapabilities `protobuf:"bytes,11,opt,name=capabilities,proto3" json:"capabilities,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -116,11 +125,174 @@ func (x *FlowNode) GetUpdatedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+func (x *FlowNode) GetUi() *structpb.Struct {
+	if x != nil {
+		return x.Ui
+	}
+	return nil
+}
+
+func (x *FlowNode) GetExits() []*FlowNodeExit {
+	if x != nil {
+		return x.Exits
+	}
+	return nil
+}
+
+func (x *FlowNode) GetOutputsSchema() *structpb.Struct {
+	if x != nil {
+		return x.OutputsSchema
+	}
+	return nil
+}
+
+func (x *FlowNode) GetCapabilities() *FlowNodeCapabilities {
+	if x != nil {
+		return x.Capabilities
+	}
+	return nil
+}
+
+// FlowNodeExit is one way out of a step; an edge leaving the step names it in FlowDefinitionEdge.exit.
+type FlowNodeExit struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Key   string                 `protobuf:"bytes,1,opt,name=key,proto3" json:"key,omitempty"`
+	Label string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+	// The step's config defines its exits (one per path of a branch), so key and label describe the pattern.
+	Dynamic       bool `protobuf:"varint,3,opt,name=dynamic,proto3" json:"dynamic,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FlowNodeExit) Reset() {
+	*x = FlowNodeExit{}
+	mi := &file_novam_entities_v1_flow_node_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FlowNodeExit) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FlowNodeExit) ProtoMessage() {}
+
+func (x *FlowNodeExit) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_entities_v1_flow_node_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FlowNodeExit.ProtoReflect.Descriptor instead.
+func (*FlowNodeExit) Descriptor() ([]byte, []int) {
+	return file_novam_entities_v1_flow_node_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *FlowNodeExit) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *FlowNodeExit) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *FlowNodeExit) GetDynamic() bool {
+	if x != nil {
+		return x.Dynamic
+	}
+	return false
+}
+
+// FlowNodeCapabilities says how a step behaves, for validation and the editor.
+type FlowNodeCapabilities struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The run ends at this step; it has no ways out.
+	Terminal bool `protobuf:"varint,1,opt,name=terminal,proto3" json:"terminal,omitempty"`
+	// The step can park the run until a time or an event.
+	Waits bool `protobuf:"varint,2,opt,name=waits,proto3" json:"waits,omitempty"`
+	// The step changes something outside the run (sends a message, writes a record, calls a URL).
+	SideEffects bool `protobuf:"varint,3,opt,name=side_effects,json=sideEffects,proto3" json:"side_effects,omitempty"`
+	// The step is safe to try again after a failure.
+	Retryable     bool `protobuf:"varint,4,opt,name=retryable,proto3" json:"retryable,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *FlowNodeCapabilities) Reset() {
+	*x = FlowNodeCapabilities{}
+	mi := &file_novam_entities_v1_flow_node_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FlowNodeCapabilities) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FlowNodeCapabilities) ProtoMessage() {}
+
+func (x *FlowNodeCapabilities) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_entities_v1_flow_node_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FlowNodeCapabilities.ProtoReflect.Descriptor instead.
+func (*FlowNodeCapabilities) Descriptor() ([]byte, []int) {
+	return file_novam_entities_v1_flow_node_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *FlowNodeCapabilities) GetTerminal() bool {
+	if x != nil {
+		return x.Terminal
+	}
+	return false
+}
+
+func (x *FlowNodeCapabilities) GetWaits() bool {
+	if x != nil {
+		return x.Waits
+	}
+	return false
+}
+
+func (x *FlowNodeCapabilities) GetSideEffects() bool {
+	if x != nil {
+		return x.SideEffects
+	}
+	return false
+}
+
+func (x *FlowNodeCapabilities) GetRetryable() bool {
+	if x != nil {
+		return x.Retryable
+	}
+	return false
+}
+
 var File_novam_entities_v1_flow_node_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_flow_node_proto_rawDesc = "" +
 	"\n" +
-	"!novam/entities/v1/flow_node.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xa4\x02\n" +
+	"!novam/entities/v1/flow_node.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x91\x04\n" +
 	"\bFlowNode\x12\x12\n" +
 	"\x04kind\x18\x01 \x01(\tR\x04kind\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -130,7 +302,21 @@ const file_novam_entities_v1_flow_node_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAtBIZGgithub.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1b\x06proto3"
+	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x12'\n" +
+	"\x02ui\x18\b \x01(\v2\x17.google.protobuf.StructR\x02ui\x125\n" +
+	"\x05exits\x18\t \x03(\v2\x1f.novam.entities.v1.FlowNodeExitR\x05exits\x12>\n" +
+	"\x0eoutputs_schema\x18\n" +
+	" \x01(\v2\x17.google.protobuf.StructR\routputsSchema\x12K\n" +
+	"\fcapabilities\x18\v \x01(\v2'.novam.entities.v1.FlowNodeCapabilitiesR\fcapabilities\"P\n" +
+	"\fFlowNodeExit\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05label\x18\x02 \x01(\tR\x05label\x12\x18\n" +
+	"\adynamic\x18\x03 \x01(\bR\adynamic\"\x89\x01\n" +
+	"\x14FlowNodeCapabilities\x12\x1a\n" +
+	"\bterminal\x18\x01 \x01(\bR\bterminal\x12\x14\n" +
+	"\x05waits\x18\x02 \x01(\bR\x05waits\x12!\n" +
+	"\fside_effects\x18\x03 \x01(\bR\vsideEffects\x12\x1c\n" +
+	"\tretryable\x18\x04 \x01(\bR\tretryableBIZGgithub.com/novamonline/novam-protos/gen/go/novam/entities/v1;entitiesv1b\x06proto3"
 
 var (
 	file_novam_entities_v1_flow_node_proto_rawDescOnce sync.Once
@@ -144,21 +330,27 @@ func file_novam_entities_v1_flow_node_proto_rawDescGZIP() []byte {
 	return file_novam_entities_v1_flow_node_proto_rawDescData
 }
 
-var file_novam_entities_v1_flow_node_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_novam_entities_v1_flow_node_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_novam_entities_v1_flow_node_proto_goTypes = []any{
 	(*FlowNode)(nil),              // 0: novam.entities.v1.FlowNode
-	(*structpb.Struct)(nil),       // 1: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
+	(*FlowNodeExit)(nil),          // 1: novam.entities.v1.FlowNodeExit
+	(*FlowNodeCapabilities)(nil),  // 2: novam.entities.v1.FlowNodeCapabilities
+	(*structpb.Struct)(nil),       // 3: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil), // 4: google.protobuf.Timestamp
 }
 var file_novam_entities_v1_flow_node_proto_depIdxs = []int32{
-	1, // 0: novam.entities.v1.FlowNode.config_schema:type_name -> google.protobuf.Struct
-	2, // 1: novam.entities.v1.FlowNode.created_at:type_name -> google.protobuf.Timestamp
-	2, // 2: novam.entities.v1.FlowNode.updated_at:type_name -> google.protobuf.Timestamp
-	3, // [3:3] is the sub-list for method output_type
-	3, // [3:3] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	3, // 0: novam.entities.v1.FlowNode.config_schema:type_name -> google.protobuf.Struct
+	4, // 1: novam.entities.v1.FlowNode.created_at:type_name -> google.protobuf.Timestamp
+	4, // 2: novam.entities.v1.FlowNode.updated_at:type_name -> google.protobuf.Timestamp
+	3, // 3: novam.entities.v1.FlowNode.ui:type_name -> google.protobuf.Struct
+	1, // 4: novam.entities.v1.FlowNode.exits:type_name -> novam.entities.v1.FlowNodeExit
+	3, // 5: novam.entities.v1.FlowNode.outputs_schema:type_name -> google.protobuf.Struct
+	2, // 6: novam.entities.v1.FlowNode.capabilities:type_name -> novam.entities.v1.FlowNodeCapabilities
+	7, // [7:7] is the sub-list for method output_type
+	7, // [7:7] is the sub-list for method input_type
+	7, // [7:7] is the sub-list for extension type_name
+	7, // [7:7] is the sub-list for extension extendee
+	0, // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_novam_entities_v1_flow_node_proto_init() }
@@ -172,7 +364,7 @@ func file_novam_entities_v1_flow_node_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_entities_v1_flow_node_proto_rawDesc), len(file_novam_entities_v1_flow_node_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

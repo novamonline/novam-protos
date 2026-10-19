@@ -9,7 +9,7 @@ import { file_google_protobuf_struct, file_google_protobuf_timestamp } from "@bu
  * Describes the file novam/entities/v1/flow_node.proto.
  */
 export const file_novam_entities_v1_flow_node = /*@__PURE__*/
-  fileDesc("CiFub3ZhbS9lbnRpdGllcy92MS9mbG93X25vZGUucHJvdG8SEW5vdmFtLmVudGl0aWVzLnYxIt0BCghGbG93Tm9kZRIMCgRraW5kGAEgASgJEgwKBG5hbWUYAiABKAkSEwoLZGVzY3JpcHRpb24YAyABKAkSLgoNY29uZmlnX3NjaGVtYRgEIAEoCzIXLmdvb2dsZS5wcm90b2J1Zi5TdHJ1Y3QSEAoIY2F0ZWdvcnkYBSABKAkSLgoKY3JlYXRlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCSVpHZ2l0aHViLmNvbS9ub3ZhbW9ubGluZS9ub3ZhbS1wcm90b3MvZ2VuL2dvL25vdmFtL2VudGl0aWVzL3YxO2VudGl0aWVzdjFiBnByb3RvMw", [file_google_protobuf_struct, file_google_protobuf_timestamp]);
+  fileDesc("CiFub3ZhbS9lbnRpdGllcy92MS9mbG93X25vZGUucHJvdG8SEW5vdmFtLmVudGl0aWVzLnYxIqIDCghGbG93Tm9kZRIMCgRraW5kGAEgASgJEgwKBG5hbWUYAiABKAkSEwoLZGVzY3JpcHRpb24YAyABKAkSLgoNY29uZmlnX3NjaGVtYRgEIAEoCzIXLmdvb2dsZS5wcm90b2J1Zi5TdHJ1Y3QSEAoIY2F0ZWdvcnkYBSABKAkSLgoKY3JlYXRlZF9hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASLgoKdXBkYXRlZF9hdBgHIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXASIwoCdWkYCCABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0Ei4KBWV4aXRzGAkgAygLMh8ubm92YW0uZW50aXRpZXMudjEuRmxvd05vZGVFeGl0Ei8KDm91dHB1dHNfc2NoZW1hGAogASgLMhcuZ29vZ2xlLnByb3RvYnVmLlN0cnVjdBI9CgxjYXBhYmlsaXRpZXMYCyABKAsyJy5ub3ZhbS5lbnRpdGllcy52MS5GbG93Tm9kZUNhcGFiaWxpdGllcyI7CgxGbG93Tm9kZUV4aXQSCwoDa2V5GAEgASgJEg0KBWxhYmVsGAIgASgJEg8KB2R5bmFtaWMYAyABKAgiYAoURmxvd05vZGVDYXBhYmlsaXRpZXMSEAoIdGVybWluYWwYASABKAgSDQoFd2FpdHMYAiABKAgSFAoMc2lkZV9lZmZlY3RzGAMgASgIEhEKCXJldHJ5YWJsZRgEIAEoCEJJWkdnaXRodWIuY29tL25vdmFtb25saW5lL25vdmFtLXByb3Rvcy9nZW4vZ28vbm92YW0vZW50aXRpZXMvdjE7ZW50aXRpZXN2MWIGcHJvdG8z", [file_google_protobuf_struct, file_google_protobuf_timestamp]);
 
 /**
  * Describes the message novam.entities.v1.FlowNode.
@@ -17,4 +17,18 @@ export const file_novam_entities_v1_flow_node = /*@__PURE__*/
  */
 export const FlowNodeSchema = /*@__PURE__*/
   messageDesc(file_novam_entities_v1_flow_node, 0);
+
+/**
+ * Describes the message novam.entities.v1.FlowNodeExit.
+ * Use `create(FlowNodeExitSchema)` to create a new message.
+ */
+export const FlowNodeExitSchema = /*@__PURE__*/
+  messageDesc(file_novam_entities_v1_flow_node, 1);
+
+/**
+ * Describes the message novam.entities.v1.FlowNodeCapabilities.
+ * Use `create(FlowNodeCapabilitiesSchema)` to create a new message.
+ */
+export const FlowNodeCapabilitiesSchema = /*@__PURE__*/
+  messageDesc(file_novam_entities_v1_flow_node, 2);
 

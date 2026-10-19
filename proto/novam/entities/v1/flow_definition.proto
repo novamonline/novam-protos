@@ -49,4 +49,11 @@ message FlowDefinitionEdge {
   string to_node_id = 4;
   string condition_expression = 5;
   google.protobuf.Timestamp created_at = 6;
+  // Which way out of the source node this edge leaves by (FlowNodeExit.key); empty means "next".
+  string exit = 7;
+  // A node's edges are tried in this order, and the first whose condition passes is taken. Ties fall back to
+  // to_node_id, which is how edges were ordered before this field existed.
+  int32 sort_order = 8;
+  // What the editor shows on the edge, e.g. a branch path's name.
+  string label = 9;
 }

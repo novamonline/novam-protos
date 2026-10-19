@@ -12,7 +12,8 @@ import type { Timestamp } from "@bufbuild/protobuf/wkt";
 export declare const file_novam_entities_v1_flow_node: GenFile;
 
 /**
- * FlowNode is a catalog entry for an available node type (e.g. noop, delay, llm).
+ * FlowNode is a catalog entry for an available node type (e.g. noop, delay, llm). The workflow editor renders
+ * a step's card, settings form, ways out and data from this entry alone, so it needs no code per kind.
  *
  * @generated from message novam.entities.v1.FlowNode
  */
@@ -51,6 +52,33 @@ export declare type FlowNode = Message<"novam.entities.v1.FlowNode"> & {
    * @generated from field: google.protobuf.Timestamp updated_at = 7;
    */
   updatedAt?: Timestamp;
+
+  /**
+   * How the editor shows the step: {icon, color, eyebrow, summary}, where summary is a template over the
+   * step's config such as "Text {{to}}".
+   *
+   * @generated from field: google.protobuf.Struct ui = 8;
+   */
+  ui?: JsonObject;
+
+  /**
+   * The named ways out of the step. A kind with dynamic exits (branch) takes them from its configured paths.
+   *
+   * @generated from field: repeated novam.entities.v1.FlowNodeExit exits = 9;
+   */
+  exits: FlowNodeExit[];
+
+  /**
+   * JSON Schema of the data the step adds to the run, readable by later steps as steps.<node_id>.output.
+   *
+   * @generated from field: google.protobuf.Struct outputs_schema = 10;
+   */
+  outputsSchema?: JsonObject;
+
+  /**
+   * @generated from field: novam.entities.v1.FlowNodeCapabilities capabilities = 11;
+   */
+  capabilities?: FlowNodeCapabilities;
 };
 
 /**
@@ -58,4 +86,75 @@ export declare type FlowNode = Message<"novam.entities.v1.FlowNode"> & {
  * Use `create(FlowNodeSchema)` to create a new message.
  */
 export declare const FlowNodeSchema: GenMessage<FlowNode>;
+
+/**
+ * FlowNodeExit is one way out of a step; an edge leaving the step names it in FlowDefinitionEdge.exit.
+ *
+ * @generated from message novam.entities.v1.FlowNodeExit
+ */
+export declare type FlowNodeExit = Message<"novam.entities.v1.FlowNodeExit"> & {
+  /**
+   * @generated from field: string key = 1;
+   */
+  key: string;
+
+  /**
+   * @generated from field: string label = 2;
+   */
+  label: string;
+
+  /**
+   * The step's config defines its exits (one per path of a branch), so key and label describe the pattern.
+   *
+   * @generated from field: bool dynamic = 3;
+   */
+  dynamic: boolean;
+};
+
+/**
+ * Describes the message novam.entities.v1.FlowNodeExit.
+ * Use `create(FlowNodeExitSchema)` to create a new message.
+ */
+export declare const FlowNodeExitSchema: GenMessage<FlowNodeExit>;
+
+/**
+ * FlowNodeCapabilities says how a step behaves, for validation and the editor.
+ *
+ * @generated from message novam.entities.v1.FlowNodeCapabilities
+ */
+export declare type FlowNodeCapabilities = Message<"novam.entities.v1.FlowNodeCapabilities"> & {
+  /**
+   * The run ends at this step; it has no ways out.
+   *
+   * @generated from field: bool terminal = 1;
+   */
+  terminal: boolean;
+
+  /**
+   * The step can park the run until a time or an event.
+   *
+   * @generated from field: bool waits = 2;
+   */
+  waits: boolean;
+
+  /**
+   * The step changes something outside the run (sends a message, writes a record, calls a URL).
+   *
+   * @generated from field: bool side_effects = 3;
+   */
+  sideEffects: boolean;
+
+  /**
+   * The step is safe to try again after a failure.
+   *
+   * @generated from field: bool retryable = 4;
+   */
+  retryable: boolean;
+};
+
+/**
+ * Describes the message novam.entities.v1.FlowNodeCapabilities.
+ * Use `create(FlowNodeCapabilitiesSchema)` to create a new message.
+ */
+export declare const FlowNodeCapabilitiesSchema: GenMessage<FlowNodeCapabilities>;
 
