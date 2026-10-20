@@ -31,6 +31,8 @@ const (
 	WorkflowsService_StartRun_FullMethodName               = "/novam.workflows.v1.WorkflowsService/StartRun"
 	WorkflowsService_CancelRun_FullMethodName              = "/novam.workflows.v1.WorkflowsService/CancelRun"
 	WorkflowsService_GetRun_FullMethodName                 = "/novam.workflows.v1.WorkflowsService/GetRun"
+	WorkflowsService_ListRuns_FullMethodName               = "/novam.workflows.v1.WorkflowsService/ListRuns"
+	WorkflowsService_GetFlowStats_FullMethodName           = "/novam.workflows.v1.WorkflowsService/GetFlowStats"
 	WorkflowsService_Process_FullMethodName                = "/novam.workflows.v1.WorkflowsService/Process"
 	WorkflowsService_CreateFlow_FullMethodName             = "/novam.workflows.v1.WorkflowsService/CreateFlow"
 	WorkflowsService_EndFlow_FullMethodName                = "/novam.workflows.v1.WorkflowsService/EndFlow"
@@ -59,6 +61,11 @@ type WorkflowsServiceClient interface {
 	StartRun(ctx context.Context, in *StartRunRequest, opts ...grpc.CallOption) (*StartRunResponse, error)
 	CancelRun(ctx context.Context, in *CancelRunRequest, opts ...grpc.CallOption) (*CancelRunResponse, error)
 	GetRun(ctx context.Context, in *GetRunRequest, opts ...grpc.CallOption) (*GetRunResponse, error)
+	// A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
+	// left out unless asked for. Each run's steps come from GetRun.
+	ListRuns(ctx context.Context, in *ListRunsRequest, opts ...grpc.CallOption) (*ListRunsResponse, error)
+	// For each step of a workflow: how many runs reached it, are on it now and failed there (test runs left out).
+	GetFlowStats(ctx context.Context, in *GetFlowStatsRequest, opts ...grpc.CallOption) (*GetFlowStatsResponse, error)
 	// Process-style execution (one node per call, client-driven)
 	Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error)
 	CreateFlow(ctx context.Context, in *CreateFlowRequest, opts ...grpc.CallOption) (*CreateFlowResponse, error)
@@ -193,6 +200,26 @@ func (c *workflowsServiceClient) GetRun(ctx context.Context, in *GetRunRequest, 
 	return out, nil
 }
 
+func (c *workflowsServiceClient) ListRuns(ctx context.Context, in *ListRunsRequest, opts ...grpc.CallOption) (*ListRunsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListRunsResponse)
+	err := c.cc.Invoke(ctx, WorkflowsService_ListRuns_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workflowsServiceClient) GetFlowStats(ctx context.Context, in *GetFlowStatsRequest, opts ...grpc.CallOption) (*GetFlowStatsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetFlowStatsResponse)
+	err := c.cc.Invoke(ctx, WorkflowsService_GetFlowStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *workflowsServiceClient) Process(ctx context.Context, in *ProcessRequest, opts ...grpc.CallOption) (*ProcessResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(ProcessResponse)
@@ -246,6 +273,11 @@ type WorkflowsServiceServer interface {
 	StartRun(context.Context, *StartRunRequest) (*StartRunResponse, error)
 	CancelRun(context.Context, *CancelRunRequest) (*CancelRunResponse, error)
 	GetRun(context.Context, *GetRunRequest) (*GetRunResponse, error)
+	// A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
+	// left out unless asked for. Each run's steps come from GetRun.
+	ListRuns(context.Context, *ListRunsRequest) (*ListRunsResponse, error)
+	// For each step of a workflow: how many runs reached it, are on it now and failed there (test runs left out).
+	GetFlowStats(context.Context, *GetFlowStatsRequest) (*GetFlowStatsResponse, error)
 	// Process-style execution (one node per call, client-driven)
 	Process(context.Context, *ProcessRequest) (*ProcessResponse, error)
 	CreateFlow(context.Context, *CreateFlowRequest) (*CreateFlowResponse, error)
@@ -295,6 +327,12 @@ func (UnimplementedWorkflowsServiceServer) CancelRun(context.Context, *CancelRun
 }
 func (UnimplementedWorkflowsServiceServer) GetRun(context.Context, *GetRunRequest) (*GetRunResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetRun not implemented")
+}
+func (UnimplementedWorkflowsServiceServer) ListRuns(context.Context, *ListRunsRequest) (*ListRunsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListRuns not implemented")
+}
+func (UnimplementedWorkflowsServiceServer) GetFlowStats(context.Context, *GetFlowStatsRequest) (*GetFlowStatsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetFlowStats not implemented")
 }
 func (UnimplementedWorkflowsServiceServer) Process(context.Context, *ProcessRequest) (*ProcessResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Process not implemented")
@@ -542,6 +580,42 @@ func _WorkflowsService_GetRun_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkflowsService_ListRuns_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListRunsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkflowsServiceServer).ListRuns(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkflowsService_ListRuns_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkflowsServiceServer).ListRuns(ctx, req.(*ListRunsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkflowsService_GetFlowStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFlowStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkflowsServiceServer).GetFlowStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkflowsService_GetFlowStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkflowsServiceServer).GetFlowStats(ctx, req.(*GetFlowStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _WorkflowsService_Process_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(ProcessRequest)
 	if err := dec(in); err != nil {
@@ -650,6 +724,14 @@ var WorkflowsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetRun",
 			Handler:    _WorkflowsService_GetRun_Handler,
+		},
+		{
+			MethodName: "ListRuns",
+			Handler:    _WorkflowsService_ListRuns_Handler,
+		},
+		{
+			MethodName: "GetFlowStats",
+			Handler:    _WorkflowsService_GetFlowStats_Handler,
 		},
 		{
 			MethodName: "Process",

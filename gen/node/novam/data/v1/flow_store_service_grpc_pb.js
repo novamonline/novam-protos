@@ -6,6 +6,7 @@ var novam_data_v1_flow_store_service_pb = require('../../../novam/data/v1/flow_s
 var google_protobuf_struct_pb = require('google-protobuf/google/protobuf/struct_pb.js');
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 var novam_common_v1_common_pb = require('../../../novam/common/v1/common_pb.js');
+var novam_common_v1_pagination_pb = require('../../../novam/common/v1/pagination_pb.js');
 var novam_entities_v1_flow_definition_pb = require('../../../novam/entities/v1/flow_definition_pb.js');
 var novam_entities_v1_flow_state_pb = require('../../../novam/entities/v1/flow_state_pb.js');
 
@@ -97,6 +98,28 @@ function deserialize_novam_data_v1_GetFlowStateResponse(buffer_arg) {
   return novam_data_v1_flow_store_service_pb.GetFlowStateResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_data_v1_GetFlowStepStatsRequest(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.GetFlowStepStatsRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.GetFlowStepStatsRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_GetFlowStepStatsRequest(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.GetFlowStepStatsRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_GetFlowStepStatsResponse(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.GetFlowStepStatsResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.GetFlowStepStatsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_GetFlowStepStatsResponse(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.GetFlowStepStatsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_data_v1_ListFlowDefinitionsForEventRequest(arg) {
   if (!(arg instanceof novam_data_v1_flow_store_service_pb.ListFlowDefinitionsForEventRequest)) {
     throw new Error('Expected argument of type novam.data.v1.ListFlowDefinitionsForEventRequest');
@@ -117,6 +140,28 @@ function serialize_novam_data_v1_ListFlowDefinitionsForEventResponse(arg) {
 
 function deserialize_novam_data_v1_ListFlowDefinitionsForEventResponse(buffer_arg) {
   return novam_data_v1_flow_store_service_pb.ListFlowDefinitionsForEventResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_ListFlowInstancesRequest(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.ListFlowInstancesRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.ListFlowInstancesRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListFlowInstancesRequest(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.ListFlowInstancesRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_ListFlowInstancesResponse(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.ListFlowInstancesResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.ListFlowInstancesResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListFlowInstancesResponse(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.ListFlowInstancesResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_novam_data_v1_ListRunStepsRequest(arg) {
@@ -183,6 +228,28 @@ function serialize_novam_data_v1_ListWaitingRunsResponse(arg) {
 
 function deserialize_novam_data_v1_ListWaitingRunsResponse(buffer_arg) {
   return novam_data_v1_flow_store_service_pb.ListWaitingRunsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_RecordEnrollmentRequest(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.RecordEnrollmentRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.RecordEnrollmentRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_RecordEnrollmentRequest(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.RecordEnrollmentRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_RecordEnrollmentResponse(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.RecordEnrollmentResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.RecordEnrollmentResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_RecordEnrollmentResponse(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.RecordEnrollmentResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_novam_data_v1_SaveFlowInstanceRequest(arg) {
@@ -392,6 +459,46 @@ listWaitingRuns: {
     requestDeserialize: deserialize_novam_data_v1_ListWaitingRunsRequest,
     responseSerialize: serialize_novam_data_v1_ListWaitingRunsResponse,
     responseDeserialize: deserialize_novam_data_v1_ListWaitingRunsResponse,
+  },
+  // A flow's runs, newest first, optionally only those with a status or about a subject (the client of the
+// record that started them, else that record). Test runs are left out unless asked for.
+listFlowInstances: {
+    path: '/novam.data.v1.FlowStoreService/ListFlowInstances',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_flow_store_service_pb.ListFlowInstancesRequest,
+    responseType: novam_data_v1_flow_store_service_pb.ListFlowInstancesResponse,
+    requestSerialize: serialize_novam_data_v1_ListFlowInstancesRequest,
+    requestDeserialize: deserialize_novam_data_v1_ListFlowInstancesRequest,
+    responseSerialize: serialize_novam_data_v1_ListFlowInstancesResponse,
+    responseDeserialize: deserialize_novam_data_v1_ListFlowInstancesResponse,
+  },
+  // Per step of a flow, since a time: how many runs reached it, are on it now, and failed there. Test runs
+// are left out.
+getFlowStepStats: {
+    path: '/novam.data.v1.FlowStoreService/GetFlowStepStats',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_flow_store_service_pb.GetFlowStepStatsRequest,
+    responseType: novam_data_v1_flow_store_service_pb.GetFlowStepStatsResponse,
+    requestSerialize: serialize_novam_data_v1_GetFlowStepStatsRequest,
+    requestDeserialize: deserialize_novam_data_v1_GetFlowStepStatsRequest,
+    responseSerialize: serialize_novam_data_v1_GetFlowStepStatsResponse,
+    responseDeserialize: deserialize_novam_data_v1_GetFlowStepStatsResponse,
+  },
+  // Enrolls a subject in a flow under its re-enrollment rule, atomically: "once" allows one enrollment ever,
+// "cooldown" one per cooldown_hours since the last. Enrolling again with the same run_id is allowed, so a
+// redelivered event can still start the run it enrolled.
+recordEnrollment: {
+    path: '/novam.data.v1.FlowStoreService/RecordEnrollment',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_flow_store_service_pb.RecordEnrollmentRequest,
+    responseType: novam_data_v1_flow_store_service_pb.RecordEnrollmentResponse,
+    requestSerialize: serialize_novam_data_v1_RecordEnrollmentRequest,
+    requestDeserialize: deserialize_novam_data_v1_RecordEnrollmentRequest,
+    responseSerialize: serialize_novam_data_v1_RecordEnrollmentResponse,
+    responseDeserialize: deserialize_novam_data_v1_RecordEnrollmentResponse,
   },
 };
 

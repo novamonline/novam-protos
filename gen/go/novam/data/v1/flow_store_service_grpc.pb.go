@@ -30,6 +30,9 @@ const (
 	FlowStoreService_SaveRunStep_FullMethodName                  = "/novam.data.v1.FlowStoreService/SaveRunStep"
 	FlowStoreService_ListRunSteps_FullMethodName                 = "/novam.data.v1.FlowStoreService/ListRunSteps"
 	FlowStoreService_ListWaitingRuns_FullMethodName              = "/novam.data.v1.FlowStoreService/ListWaitingRuns"
+	FlowStoreService_ListFlowInstances_FullMethodName            = "/novam.data.v1.FlowStoreService/ListFlowInstances"
+	FlowStoreService_GetFlowStepStats_FullMethodName             = "/novam.data.v1.FlowStoreService/GetFlowStepStats"
+	FlowStoreService_RecordEnrollment_FullMethodName             = "/novam.data.v1.FlowStoreService/RecordEnrollment"
 )
 
 // FlowStoreServiceClient is the client API for FlowStoreService service.
@@ -67,6 +70,16 @@ type FlowStoreServiceClient interface {
 	// Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
 	// a client, so the event can wake them.
 	ListWaitingRuns(ctx context.Context, in *ListWaitingRunsRequest, opts ...grpc.CallOption) (*ListWaitingRunsResponse, error)
+	// A flow's runs, newest first, optionally only those with a status or about a subject (the client of the
+	// record that started them, else that record). Test runs are left out unless asked for.
+	ListFlowInstances(ctx context.Context, in *ListFlowInstancesRequest, opts ...grpc.CallOption) (*ListFlowInstancesResponse, error)
+	// Per step of a flow, since a time: how many runs reached it, are on it now, and failed there. Test runs
+	// are left out.
+	GetFlowStepStats(ctx context.Context, in *GetFlowStepStatsRequest, opts ...grpc.CallOption) (*GetFlowStepStatsResponse, error)
+	// Enrolls a subject in a flow under its re-enrollment rule, atomically: "once" allows one enrollment ever,
+	// "cooldown" one per cooldown_hours since the last. Enrolling again with the same run_id is allowed, so a
+	// redelivered event can still start the run it enrolled.
+	RecordEnrollment(ctx context.Context, in *RecordEnrollmentRequest, opts ...grpc.CallOption) (*RecordEnrollmentResponse, error)
 }
 
 type flowStoreServiceClient struct {
@@ -187,6 +200,36 @@ func (c *flowStoreServiceClient) ListWaitingRuns(ctx context.Context, in *ListWa
 	return out, nil
 }
 
+func (c *flowStoreServiceClient) ListFlowInstances(ctx context.Context, in *ListFlowInstancesRequest, opts ...grpc.CallOption) (*ListFlowInstancesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListFlowInstancesResponse)
+	err := c.cc.Invoke(ctx, FlowStoreService_ListFlowInstances_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *flowStoreServiceClient) GetFlowStepStats(ctx context.Context, in *GetFlowStepStatsRequest, opts ...grpc.CallOption) (*GetFlowStepStatsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetFlowStepStatsResponse)
+	err := c.cc.Invoke(ctx, FlowStoreService_GetFlowStepStats_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *flowStoreServiceClient) RecordEnrollment(ctx context.Context, in *RecordEnrollmentRequest, opts ...grpc.CallOption) (*RecordEnrollmentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RecordEnrollmentResponse)
+	err := c.cc.Invoke(ctx, FlowStoreService_RecordEnrollment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FlowStoreServiceServer is the server API for FlowStoreService service.
 // All implementations must embed UnimplementedFlowStoreServiceServer
 // for forward compatibility.
@@ -222,6 +265,16 @@ type FlowStoreServiceServer interface {
 	// Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
 	// a client, so the event can wake them.
 	ListWaitingRuns(context.Context, *ListWaitingRunsRequest) (*ListWaitingRunsResponse, error)
+	// A flow's runs, newest first, optionally only those with a status or about a subject (the client of the
+	// record that started them, else that record). Test runs are left out unless asked for.
+	ListFlowInstances(context.Context, *ListFlowInstancesRequest) (*ListFlowInstancesResponse, error)
+	// Per step of a flow, since a time: how many runs reached it, are on it now, and failed there. Test runs
+	// are left out.
+	GetFlowStepStats(context.Context, *GetFlowStepStatsRequest) (*GetFlowStepStatsResponse, error)
+	// Enrolls a subject in a flow under its re-enrollment rule, atomically: "once" allows one enrollment ever,
+	// "cooldown" one per cooldown_hours since the last. Enrolling again with the same run_id is allowed, so a
+	// redelivered event can still start the run it enrolled.
+	RecordEnrollment(context.Context, *RecordEnrollmentRequest) (*RecordEnrollmentResponse, error)
 	mustEmbedUnimplementedFlowStoreServiceServer()
 }
 
@@ -264,6 +317,15 @@ func (UnimplementedFlowStoreServiceServer) ListRunSteps(context.Context, *ListRu
 }
 func (UnimplementedFlowStoreServiceServer) ListWaitingRuns(context.Context, *ListWaitingRunsRequest) (*ListWaitingRunsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListWaitingRuns not implemented")
+}
+func (UnimplementedFlowStoreServiceServer) ListFlowInstances(context.Context, *ListFlowInstancesRequest) (*ListFlowInstancesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListFlowInstances not implemented")
+}
+func (UnimplementedFlowStoreServiceServer) GetFlowStepStats(context.Context, *GetFlowStepStatsRequest) (*GetFlowStepStatsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetFlowStepStats not implemented")
+}
+func (UnimplementedFlowStoreServiceServer) RecordEnrollment(context.Context, *RecordEnrollmentRequest) (*RecordEnrollmentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RecordEnrollment not implemented")
 }
 func (UnimplementedFlowStoreServiceServer) mustEmbedUnimplementedFlowStoreServiceServer() {}
 func (UnimplementedFlowStoreServiceServer) testEmbeddedByValue()                          {}
@@ -484,6 +546,60 @@ func _FlowStoreService_ListWaitingRuns_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FlowStoreService_ListFlowInstances_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListFlowInstancesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FlowStoreServiceServer).ListFlowInstances(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FlowStoreService_ListFlowInstances_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FlowStoreServiceServer).ListFlowInstances(ctx, req.(*ListFlowInstancesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FlowStoreService_GetFlowStepStats_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetFlowStepStatsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FlowStoreServiceServer).GetFlowStepStats(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FlowStoreService_GetFlowStepStats_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FlowStoreServiceServer).GetFlowStepStats(ctx, req.(*GetFlowStepStatsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FlowStoreService_RecordEnrollment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RecordEnrollmentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FlowStoreServiceServer).RecordEnrollment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FlowStoreService_RecordEnrollment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FlowStoreServiceServer).RecordEnrollment(ctx, req.(*RecordEnrollmentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FlowStoreService_ServiceDesc is the grpc.ServiceDesc for FlowStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -534,6 +650,18 @@ var FlowStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListWaitingRuns",
 			Handler:    _FlowStoreService_ListWaitingRuns_Handler,
+		},
+		{
+			MethodName: "ListFlowInstances",
+			Handler:    _FlowStoreService_ListFlowInstances_Handler,
+		},
+		{
+			MethodName: "GetFlowStepStats",
+			Handler:    _FlowStoreService_GetFlowStepStats_Handler,
+		},
+		{
+			MethodName: "RecordEnrollment",
+			Handler:    _FlowStoreService_RecordEnrollment_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

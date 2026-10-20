@@ -9,7 +9,8 @@ import type { FlowDefinition, FlowDefinitionEdge, FlowDefinitionNode } from "../
 import type { PageRequest, PageResponse } from "../../common/v1/pagination_pb";
 import type { FlowUIData } from "../../entities/v1/flow_ui_data_pb";
 import type { FlowNode } from "../../entities/v1/flow_node_pb";
-import type { WorkflowRun } from "../../entities/v1/workflow_run_pb";
+import type { RunStatus, WorkflowRun } from "../../entities/v1/workflow_run_pb";
+import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { ActionRequest, ActionResponse, FlowState, NodeTimeout } from "../../entities/v1/flow_state_pb";
 
 /**
@@ -577,6 +578,157 @@ export declare type GetRunRequest = Message<"novam.workflows.v1.GetRunRequest"> 
 export declare const GetRunRequestSchema: GenMessage<GetRunRequest>;
 
 /**
+ * @generated from message novam.workflows.v1.ListRunsRequest
+ */
+export declare type ListRunsRequest = Message<"novam.workflows.v1.ListRunsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string workflow_id = 2;
+   */
+  workflowId: string;
+
+  /**
+   * UNSPECIFIED for all
+   *
+   * @generated from field: novam.entities.v1.RunStatus status = 3;
+   */
+  status: RunStatus;
+
+  /**
+   * @generated from field: string subject_id = 4;
+   */
+  subjectId: string;
+
+  /**
+   * @generated from field: bool include_test = 5;
+   */
+  includeTest: boolean;
+
+  /**
+   * @generated from field: novam.common.v1.PageRequest page = 6;
+   */
+  page?: PageRequest;
+};
+
+/**
+ * Describes the message novam.workflows.v1.ListRunsRequest.
+ * Use `create(ListRunsRequestSchema)` to create a new message.
+ */
+export declare const ListRunsRequestSchema: GenMessage<ListRunsRequest>;
+
+/**
+ * @generated from message novam.workflows.v1.ListRunsResponse
+ */
+export declare type ListRunsResponse = Message<"novam.workflows.v1.ListRunsResponse"> & {
+  /**
+   * @generated from field: repeated novam.entities.v1.WorkflowRun runs = 1;
+   */
+  runs: WorkflowRun[];
+
+  /**
+   * @generated from field: novam.common.v1.PageResponse page = 2;
+   */
+  page?: PageResponse;
+};
+
+/**
+ * Describes the message novam.workflows.v1.ListRunsResponse.
+ * Use `create(ListRunsResponseSchema)` to create a new message.
+ */
+export declare const ListRunsResponseSchema: GenMessage<ListRunsResponse>;
+
+/**
+ * @generated from message novam.workflows.v1.GetFlowStatsRequest
+ */
+export declare type GetFlowStatsRequest = Message<"novam.workflows.v1.GetFlowStatsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string workflow_id = 2;
+   */
+  workflowId: string;
+
+  /**
+   * Only runs on this published version; empty for every version.
+   *
+   * @generated from field: string snapshot_id = 3;
+   */
+  snapshotId: string;
+
+  /**
+   * Only runs started since then; unset for the last 30 days.
+   *
+   * @generated from field: google.protobuf.Timestamp since = 4;
+   */
+  since?: Timestamp;
+};
+
+/**
+ * Describes the message novam.workflows.v1.GetFlowStatsRequest.
+ * Use `create(GetFlowStatsRequestSchema)` to create a new message.
+ */
+export declare const GetFlowStatsRequestSchema: GenMessage<GetFlowStatsRequest>;
+
+/**
+ * @generated from message novam.workflows.v1.FlowStepStats
+ */
+export declare type FlowStepStats = Message<"novam.workflows.v1.FlowStepStats"> & {
+  /**
+   * @generated from field: string node_id = 1;
+   */
+  nodeId: string;
+
+  /**
+   * @generated from field: int32 reached = 2;
+   */
+  reached: number;
+
+  /**
+   * @generated from field: int32 here = 3;
+   */
+  here: number;
+
+  /**
+   * @generated from field: int32 failed = 4;
+   */
+  failed: number;
+};
+
+/**
+ * Describes the message novam.workflows.v1.FlowStepStats.
+ * Use `create(FlowStepStatsSchema)` to create a new message.
+ */
+export declare const FlowStepStatsSchema: GenMessage<FlowStepStats>;
+
+/**
+ * @generated from message novam.workflows.v1.GetFlowStatsResponse
+ */
+export declare type GetFlowStatsResponse = Message<"novam.workflows.v1.GetFlowStatsResponse"> & {
+  /**
+   * @generated from field: int32 runs = 1;
+   */
+  runs: number;
+
+  /**
+   * @generated from field: repeated novam.workflows.v1.FlowStepStats steps = 2;
+   */
+  steps: FlowStepStats[];
+};
+
+/**
+ * Describes the message novam.workflows.v1.GetFlowStatsResponse.
+ * Use `create(GetFlowStatsResponseSchema)` to create a new message.
+ */
+export declare const GetFlowStatsResponseSchema: GenMessage<GetFlowStatsResponse>;
+
+/**
  * @generated from message novam.workflows.v1.GetRunResponse
  */
 export declare type GetRunResponse = Message<"novam.workflows.v1.GetRunResponse"> & {
@@ -890,6 +1042,27 @@ export declare const WorkflowsService: GenService<{
     methodKind: "unary";
     input: typeof GetRunRequestSchema;
     output: typeof GetRunResponseSchema;
+  },
+  /**
+   * A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
+   * left out unless asked for. Each run's steps come from GetRun.
+   *
+   * @generated from rpc novam.workflows.v1.WorkflowsService.ListRuns
+   */
+  listRuns: {
+    methodKind: "unary";
+    input: typeof ListRunsRequestSchema;
+    output: typeof ListRunsResponseSchema;
+  },
+  /**
+   * For each step of a workflow: how many runs reached it, are on it now and failed there (test runs left out).
+   *
+   * @generated from rpc novam.workflows.v1.WorkflowsService.GetFlowStats
+   */
+  getFlowStats: {
+    methodKind: "unary";
+    input: typeof GetFlowStatsRequestSchema;
+    output: typeof GetFlowStatsResponseSchema;
   },
   /**
    * Process-style execution (one node per call, client-driven)

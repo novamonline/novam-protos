@@ -5,6 +5,7 @@ package novam.data.v1;
 import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "novam/common/v1/common.proto";
+import "novam/common/v1/pagination.proto";
 import "novam/entities/v1/flow_definition.proto";
 import "novam/entities/v1/flow_state.proto";
 
@@ -41,6 +42,16 @@ service FlowStoreService {
   // Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
   // a client, so the event can wake them.
   rpc ListWaitingRuns(ListWaitingRunsRequest) returns (ListWaitingRunsResponse);
+  // A flow's runs, newest first, optionally only those with a status or about a subject (the client of the
+  // record that started them, else that record). Test runs are left out unless asked for.
+  rpc ListFlowInstances(ListFlowInstancesRequest) returns (ListFlowInstancesResponse);
+  // Per step of a flow, since a time: how many runs reached it, are on it now, and failed there. Test runs
+  // are left out.
+  rpc GetFlowStepStats(GetFlowStepStatsRequest) returns (GetFlowStepStatsResponse);
+  // Enrolls a subject in a flow under its re-enrollment rule, atomically: "once" allows one enrollment ever,
+  // "cooldown" one per cooldown_hours since the last. Enrolling again with the same run_id is allowed, so a
+  // redelivered event can still start the run it enrolled.
+  rpc RecordEnrollment(RecordEnrollmentRequest) returns (RecordEnrollmentResponse);
 }
 
 // FlowInstance is one run of a flow definition.
@@ -93,6 +104,63 @@ message ListWaitingRunsRequest {
 
 message ListWaitingRunsResponse {
   repeated FlowInstance instances = 1;
+}
+
+message ListFlowInstancesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string flow_definition_id = 2;
+  // pending, running, waiting, succeeded, failed or cancelled; empty for all.
+  string status = 3;
+  string subject_id = 4;
+  bool include_test = 5;
+  novam.common.v1.PageRequest page = 6;
+}
+
+message ListFlowInstancesResponse {
+  repeated FlowInstance instances = 1;
+  novam.common.v1.PageResponse page = 2;
+}
+
+message GetFlowStepStatsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string flow_definition_id = 2;
+  // Only runs on this published version; empty for every version.
+  string snapshot_id = 3;
+  // Only runs started since then; unset for the last 30 days.
+  google.protobuf.Timestamp since = 4;
+}
+
+message FlowStepStat {
+  string node_id = 1;
+  int32 reached = 2; // runs that reached the step
+  int32 here = 3; // runs on the step now (pending, running or waiting there)
+  int32 failed = 4; // times the step failed
+}
+
+message GetFlowStepStatsResponse {
+  int32 runs = 1; // runs counted
+  repeated FlowStepStat steps = 2;
+}
+
+message RecordEnrollmentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string flow_definition_id = 2;
+  string subject_id = 3;
+  // The run this enrollment would start.
+  string run_id = 4;
+  // once or cooldown.
+  string policy = 5;
+  // For cooldown: hours before the subject may enroll again (720 when unset).
+  double cooldown_hours = 6;
+}
+
+message RecordEnrollmentResponse {
+  // True when the run may start; false when the rule refused it.
+  bool enrolled = 1;
+  // The run of the enrollment in force (this one when enrolled).
+  string run_id = 2;
+  google.protobuf.Timestamp enrolled_at = 3;
+  int32 count = 4; // times the subject has enrolled in this flow
 }
 
 message GetFlowDefinitionResponse {

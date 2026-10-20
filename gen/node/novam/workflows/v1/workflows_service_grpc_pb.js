@@ -3,6 +3,7 @@
 'use strict';
 var grpc = require('grpc');
 var novam_workflows_v1_workflows_service_pb = require('../../../novam/workflows/v1/workflows_service_pb.js');
+var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 var novam_common_v1_common_pb = require('../../../novam/common/v1/common_pb.js');
 var novam_common_v1_pagination_pb = require('../../../novam/common/v1/pagination_pb.js');
 var novam_entities_v1_flow_definition_pb = require('../../../novam/entities/v1/flow_definition_pb.js');
@@ -143,6 +144,28 @@ function deserialize_novam_workflows_v1_GetFlowDefinitionResponse(buffer_arg) {
   return novam_workflows_v1_workflows_service_pb.GetFlowDefinitionResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_workflows_v1_GetFlowStatsRequest(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.GetFlowStatsRequest)) {
+    throw new Error('Expected argument of type novam.workflows.v1.GetFlowStatsRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_GetFlowStatsRequest(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.GetFlowStatsRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_GetFlowStatsResponse(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.GetFlowStatsResponse)) {
+    throw new Error('Expected argument of type novam.workflows.v1.GetFlowStatsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_GetFlowStatsResponse(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.GetFlowStatsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_workflows_v1_GetFlowUIDataRequest(arg) {
   if (!(arg instanceof novam_workflows_v1_workflows_service_pb.GetFlowUIDataRequest)) {
     throw new Error('Expected argument of type novam.workflows.v1.GetFlowUIDataRequest');
@@ -229,6 +252,28 @@ function serialize_novam_workflows_v1_ListFlowNodesResponse(arg) {
 
 function deserialize_novam_workflows_v1_ListFlowNodesResponse(buffer_arg) {
   return novam_workflows_v1_workflows_service_pb.ListFlowNodesResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_ListRunsRequest(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.ListRunsRequest)) {
+    throw new Error('Expected argument of type novam.workflows.v1.ListRunsRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_ListRunsRequest(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.ListRunsRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_workflows_v1_ListRunsResponse(arg) {
+  if (!(arg instanceof novam_workflows_v1_workflows_service_pb.ListRunsResponse)) {
+    throw new Error('Expected argument of type novam.workflows.v1.ListRunsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_workflows_v1_ListRunsResponse(buffer_arg) {
+  return novam_workflows_v1_workflows_service_pb.ListRunsResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
 function serialize_novam_workflows_v1_ProcessRequest(arg) {
@@ -480,6 +525,31 @@ startRun: {
     requestDeserialize: deserialize_novam_workflows_v1_GetRunRequest,
     responseSerialize: serialize_novam_workflows_v1_GetRunResponse,
     responseDeserialize: deserialize_novam_workflows_v1_GetRunResponse,
+  },
+  // A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
+// left out unless asked for. Each run's steps come from GetRun.
+listRuns: {
+    path: '/novam.workflows.v1.WorkflowsService/ListRuns',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_workflows_v1_workflows_service_pb.ListRunsRequest,
+    responseType: novam_workflows_v1_workflows_service_pb.ListRunsResponse,
+    requestSerialize: serialize_novam_workflows_v1_ListRunsRequest,
+    requestDeserialize: deserialize_novam_workflows_v1_ListRunsRequest,
+    responseSerialize: serialize_novam_workflows_v1_ListRunsResponse,
+    responseDeserialize: deserialize_novam_workflows_v1_ListRunsResponse,
+  },
+  // For each step of a workflow: how many runs reached it, are on it now and failed there (test runs left out).
+getFlowStats: {
+    path: '/novam.workflows.v1.WorkflowsService/GetFlowStats',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_workflows_v1_workflows_service_pb.GetFlowStatsRequest,
+    responseType: novam_workflows_v1_workflows_service_pb.GetFlowStatsResponse,
+    requestSerialize: serialize_novam_workflows_v1_GetFlowStatsRequest,
+    requestDeserialize: deserialize_novam_workflows_v1_GetFlowStatsRequest,
+    responseSerialize: serialize_novam_workflows_v1_GetFlowStatsResponse,
+    responseDeserialize: deserialize_novam_workflows_v1_GetFlowStatsResponse,
   },
   // Process-style execution (one node per call, client-driven)
 process: {

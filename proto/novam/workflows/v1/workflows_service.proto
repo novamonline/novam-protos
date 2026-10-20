@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package novam.workflows.v1;
 
+import "google/protobuf/timestamp.proto";
 import "novam/common/v1/common.proto";
 import "novam/common/v1/pagination.proto"; // PageRequest, PageResponse
 import "novam/entities/v1/flow_definition.proto";
@@ -31,6 +32,11 @@ service WorkflowsService {
   rpc StartRun(StartRunRequest) returns (StartRunResponse);
   rpc CancelRun(CancelRunRequest) returns (CancelRunResponse);
   rpc GetRun(GetRunRequest) returns (GetRunResponse);
+  // A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
+  // left out unless asked for. Each run's steps come from GetRun.
+  rpc ListRuns(ListRunsRequest) returns (ListRunsResponse);
+  // For each step of a workflow: how many runs reached it, are on it now and failed there (test runs left out).
+  rpc GetFlowStats(GetFlowStatsRequest) returns (GetFlowStatsResponse);
   // Process-style execution (one node per call, client-driven)
   rpc Process(ProcessRequest) returns (ProcessResponse);
   rpc CreateFlow(CreateFlowRequest) returns (CreateFlowResponse);
@@ -167,6 +173,41 @@ message CancelRunResponse {
 message GetRunRequest {
   string run_id = 1;
   novam.common.v1.RequestMetadata metadata = 2;
+}
+
+message ListRunsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string workflow_id = 2;
+  novam.entities.v1.RunStatus status = 3; // UNSPECIFIED for all
+  string subject_id = 4;
+  bool include_test = 5;
+  novam.common.v1.PageRequest page = 6;
+}
+
+message ListRunsResponse {
+  repeated novam.entities.v1.WorkflowRun runs = 1;
+  novam.common.v1.PageResponse page = 2;
+}
+
+message GetFlowStatsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string workflow_id = 2;
+  // Only runs on this published version; empty for every version.
+  string snapshot_id = 3;
+  // Only runs started since then; unset for the last 30 days.
+  google.protobuf.Timestamp since = 4;
+}
+
+message FlowStepStats {
+  string node_id = 1;
+  int32 reached = 2;
+  int32 here = 3;
+  int32 failed = 4;
+}
+
+message GetFlowStatsResponse {
+  int32 runs = 1;
+  repeated FlowStepStats steps = 2;
 }
 
 message GetRunResponse {

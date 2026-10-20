@@ -6,6 +6,7 @@ import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegen
 import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { RequestMetadata } from "../../common/v1/common_pb";
+import type { PageRequest, PageResponse } from "../../common/v1/pagination_pb";
 import type { FlowDefinition, FlowDefinitionEdge, FlowDefinitionNode } from "../../entities/v1/flow_definition_pb";
 import type { FlowState } from "../../entities/v1/flow_state_pb";
 
@@ -234,6 +235,249 @@ export declare type ListWaitingRunsResponse = Message<"novam.data.v1.ListWaiting
  * Use `create(ListWaitingRunsResponseSchema)` to create a new message.
  */
 export declare const ListWaitingRunsResponseSchema: GenMessage<ListWaitingRunsResponse>;
+
+/**
+ * @generated from message novam.data.v1.ListFlowInstancesRequest
+ */
+export declare type ListFlowInstancesRequest = Message<"novam.data.v1.ListFlowInstancesRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string flow_definition_id = 2;
+   */
+  flowDefinitionId: string;
+
+  /**
+   * pending, running, waiting, succeeded, failed or cancelled; empty for all.
+   *
+   * @generated from field: string status = 3;
+   */
+  status: string;
+
+  /**
+   * @generated from field: string subject_id = 4;
+   */
+  subjectId: string;
+
+  /**
+   * @generated from field: bool include_test = 5;
+   */
+  includeTest: boolean;
+
+  /**
+   * @generated from field: novam.common.v1.PageRequest page = 6;
+   */
+  page?: PageRequest;
+};
+
+/**
+ * Describes the message novam.data.v1.ListFlowInstancesRequest.
+ * Use `create(ListFlowInstancesRequestSchema)` to create a new message.
+ */
+export declare const ListFlowInstancesRequestSchema: GenMessage<ListFlowInstancesRequest>;
+
+/**
+ * @generated from message novam.data.v1.ListFlowInstancesResponse
+ */
+export declare type ListFlowInstancesResponse = Message<"novam.data.v1.ListFlowInstancesResponse"> & {
+  /**
+   * @generated from field: repeated novam.data.v1.FlowInstance instances = 1;
+   */
+  instances: FlowInstance[];
+
+  /**
+   * @generated from field: novam.common.v1.PageResponse page = 2;
+   */
+  page?: PageResponse;
+};
+
+/**
+ * Describes the message novam.data.v1.ListFlowInstancesResponse.
+ * Use `create(ListFlowInstancesResponseSchema)` to create a new message.
+ */
+export declare const ListFlowInstancesResponseSchema: GenMessage<ListFlowInstancesResponse>;
+
+/**
+ * @generated from message novam.data.v1.GetFlowStepStatsRequest
+ */
+export declare type GetFlowStepStatsRequest = Message<"novam.data.v1.GetFlowStepStatsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string flow_definition_id = 2;
+   */
+  flowDefinitionId: string;
+
+  /**
+   * Only runs on this published version; empty for every version.
+   *
+   * @generated from field: string snapshot_id = 3;
+   */
+  snapshotId: string;
+
+  /**
+   * Only runs started since then; unset for the last 30 days.
+   *
+   * @generated from field: google.protobuf.Timestamp since = 4;
+   */
+  since?: Timestamp;
+};
+
+/**
+ * Describes the message novam.data.v1.GetFlowStepStatsRequest.
+ * Use `create(GetFlowStepStatsRequestSchema)` to create a new message.
+ */
+export declare const GetFlowStepStatsRequestSchema: GenMessage<GetFlowStepStatsRequest>;
+
+/**
+ * @generated from message novam.data.v1.FlowStepStat
+ */
+export declare type FlowStepStat = Message<"novam.data.v1.FlowStepStat"> & {
+  /**
+   * @generated from field: string node_id = 1;
+   */
+  nodeId: string;
+
+  /**
+   * runs that reached the step
+   *
+   * @generated from field: int32 reached = 2;
+   */
+  reached: number;
+
+  /**
+   * runs on the step now (pending, running or waiting there)
+   *
+   * @generated from field: int32 here = 3;
+   */
+  here: number;
+
+  /**
+   * times the step failed
+   *
+   * @generated from field: int32 failed = 4;
+   */
+  failed: number;
+};
+
+/**
+ * Describes the message novam.data.v1.FlowStepStat.
+ * Use `create(FlowStepStatSchema)` to create a new message.
+ */
+export declare const FlowStepStatSchema: GenMessage<FlowStepStat>;
+
+/**
+ * @generated from message novam.data.v1.GetFlowStepStatsResponse
+ */
+export declare type GetFlowStepStatsResponse = Message<"novam.data.v1.GetFlowStepStatsResponse"> & {
+  /**
+   * runs counted
+   *
+   * @generated from field: int32 runs = 1;
+   */
+  runs: number;
+
+  /**
+   * @generated from field: repeated novam.data.v1.FlowStepStat steps = 2;
+   */
+  steps: FlowStepStat[];
+};
+
+/**
+ * Describes the message novam.data.v1.GetFlowStepStatsResponse.
+ * Use `create(GetFlowStepStatsResponseSchema)` to create a new message.
+ */
+export declare const GetFlowStepStatsResponseSchema: GenMessage<GetFlowStepStatsResponse>;
+
+/**
+ * @generated from message novam.data.v1.RecordEnrollmentRequest
+ */
+export declare type RecordEnrollmentRequest = Message<"novam.data.v1.RecordEnrollmentRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string flow_definition_id = 2;
+   */
+  flowDefinitionId: string;
+
+  /**
+   * @generated from field: string subject_id = 3;
+   */
+  subjectId: string;
+
+  /**
+   * The run this enrollment would start.
+   *
+   * @generated from field: string run_id = 4;
+   */
+  runId: string;
+
+  /**
+   * once or cooldown.
+   *
+   * @generated from field: string policy = 5;
+   */
+  policy: string;
+
+  /**
+   * For cooldown: hours before the subject may enroll again (720 when unset).
+   *
+   * @generated from field: double cooldown_hours = 6;
+   */
+  cooldownHours: number;
+};
+
+/**
+ * Describes the message novam.data.v1.RecordEnrollmentRequest.
+ * Use `create(RecordEnrollmentRequestSchema)` to create a new message.
+ */
+export declare const RecordEnrollmentRequestSchema: GenMessage<RecordEnrollmentRequest>;
+
+/**
+ * @generated from message novam.data.v1.RecordEnrollmentResponse
+ */
+export declare type RecordEnrollmentResponse = Message<"novam.data.v1.RecordEnrollmentResponse"> & {
+  /**
+   * True when the run may start; false when the rule refused it.
+   *
+   * @generated from field: bool enrolled = 1;
+   */
+  enrolled: boolean;
+
+  /**
+   * The run of the enrollment in force (this one when enrolled).
+   *
+   * @generated from field: string run_id = 2;
+   */
+  runId: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp enrolled_at = 3;
+   */
+  enrolledAt?: Timestamp;
+
+  /**
+   * times the subject has enrolled in this flow
+   *
+   * @generated from field: int32 count = 4;
+   */
+  count: number;
+};
+
+/**
+ * Describes the message novam.data.v1.RecordEnrollmentResponse.
+ * Use `create(RecordEnrollmentResponseSchema)` to create a new message.
+ */
+export declare const RecordEnrollmentResponseSchema: GenMessage<RecordEnrollmentResponse>;
 
 /**
  * @generated from message novam.data.v1.GetFlowDefinitionResponse
@@ -745,6 +989,40 @@ export declare const FlowStoreService: GenService<{
     methodKind: "unary";
     input: typeof ListWaitingRunsRequestSchema;
     output: typeof ListWaitingRunsResponseSchema;
+  },
+  /**
+   * A flow's runs, newest first, optionally only those with a status or about a subject (the client of the
+   * record that started them, else that record). Test runs are left out unless asked for.
+   *
+   * @generated from rpc novam.data.v1.FlowStoreService.ListFlowInstances
+   */
+  listFlowInstances: {
+    methodKind: "unary";
+    input: typeof ListFlowInstancesRequestSchema;
+    output: typeof ListFlowInstancesResponseSchema;
+  },
+  /**
+   * Per step of a flow, since a time: how many runs reached it, are on it now, and failed there. Test runs
+   * are left out.
+   *
+   * @generated from rpc novam.data.v1.FlowStoreService.GetFlowStepStats
+   */
+  getFlowStepStats: {
+    methodKind: "unary";
+    input: typeof GetFlowStepStatsRequestSchema;
+    output: typeof GetFlowStepStatsResponseSchema;
+  },
+  /**
+   * Enrolls a subject in a flow under its re-enrollment rule, atomically: "once" allows one enrollment ever,
+   * "cooldown" one per cooldown_hours since the last. Enrolling again with the same run_id is allowed, so a
+   * redelivered event can still start the run it enrolled.
+   *
+   * @generated from rpc novam.data.v1.FlowStoreService.RecordEnrollment
+   */
+  recordEnrollment: {
+    methodKind: "unary";
+    input: typeof RecordEnrollmentRequestSchema;
+    output: typeof RecordEnrollmentResponseSchema;
   },
 }>;
 
