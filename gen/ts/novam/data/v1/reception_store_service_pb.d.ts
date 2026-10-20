@@ -143,6 +143,13 @@ export declare type GetBusinessResponse = Message<"novam.data.v1.GetBusinessResp
    * @generated from field: string greeting = 7;
    */
   greeting: string;
+
+  /**
+   * The name the agent goes by with clients, e.g. Yang; empty for none.
+   *
+   * @generated from field: string assistant_name = 8;
+   */
+  assistantName: string;
 };
 
 /**
@@ -389,6 +396,94 @@ export declare type HandOffResponse = Message<"novam.data.v1.HandOffResponse"> &
 export declare const HandOffResponseSchema: GenMessage<HandOffResponse>;
 
 /**
+ * @generated from message novam.data.v1.ListClientVisitsRequest
+ */
+export declare type ListClientVisitsRequest = Message<"novam.data.v1.ListClientVisitsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string thread_id = 2;
+   */
+  threadId: string;
+};
+
+/**
+ * Describes the message novam.data.v1.ListClientVisitsRequest.
+ * Use `create(ListClientVisitsRequestSchema)` to create a new message.
+ */
+export declare const ListClientVisitsRequestSchema: GenMessage<ListClientVisitsRequest>;
+
+/**
+ * @generated from message novam.data.v1.ClientVisit
+ */
+export declare type ClientVisit = Message<"novam.data.v1.ClientVisit"> & {
+  /**
+   * @generated from field: string title = 1;
+   */
+  title: string;
+
+  /**
+   * start, end and how to say it
+   *
+   * @generated from field: novam.data.v1.OpenTime when = 2;
+   */
+  when?: OpenTime;
+
+  /**
+   * scheduled, or held when the owner hasn't confirmed it yet
+   *
+   * @generated from field: string status = 3;
+   */
+  status: string;
+};
+
+/**
+ * Describes the message novam.data.v1.ClientVisit.
+ * Use `create(ClientVisitSchema)` to create a new message.
+ */
+export declare const ClientVisitSchema: GenMessage<ClientVisit>;
+
+/**
+ * @generated from message novam.data.v1.ListClientVisitsResponse
+ */
+export declare type ListClientVisitsResponse = Message<"novam.data.v1.ListClientVisitsResponse"> & {
+  /**
+   * False for a visitor who isn't signed in: nothing below is filled.
+   *
+   * @generated from field: bool signed_in = 1;
+   */
+  signedIn: boolean;
+
+  /**
+   * @generated from field: string first_name = 2;
+   */
+  firstName: string;
+
+  /**
+   * upcoming, soonest first
+   *
+   * @generated from field: repeated novam.data.v1.ClientVisit visits = 3;
+   */
+  visits: ClientVisit[];
+
+  /**
+   * on sent and overdue invoices
+   *
+   * @generated from field: double amount_due = 4;
+   */
+  amountDue: number;
+};
+
+/**
+ * Describes the message novam.data.v1.ListClientVisitsResponse.
+ * Use `create(ListClientVisitsResponseSchema)` to create a new message.
+ */
+export declare const ListClientVisitsResponseSchema: GenMessage<ListClientVisitsResponse>;
+
+/**
  * ReceptionStoreService is what the Reception agent may do while it chats with a business's visitor: read the
  * business's services and hours, find open times, hold one on the chat's Front Desk thread, note the visitor's
  * contact details and pass the chat to the owner. Every call is about one thread, `thread_id`, scoped to
@@ -443,6 +538,17 @@ export declare const ReceptionStoreService: GenService<{
     methodKind: "unary";
     input: typeof HandOffRequestSchema;
     output: typeof HandOffResponseSchema;
+  },
+  /**
+   * The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
+   * agent can never read another client's records.
+   *
+   * @generated from rpc novam.data.v1.ReceptionStoreService.ListClientVisits
+   */
+  listClientVisits: {
+    methodKind: "unary";
+    input: typeof ListClientVisitsRequestSchema;
+    output: typeof ListClientVisitsResponseSchema;
   },
 }>;
 

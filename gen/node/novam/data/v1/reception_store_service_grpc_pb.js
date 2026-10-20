@@ -72,6 +72,28 @@ function deserialize_novam_data_v1_HoldTimeResponse(buffer_arg) {
   return novam_data_v1_reception_store_service_pb.HoldTimeResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_data_v1_ListClientVisitsRequest(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.ListClientVisitsRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.ListClientVisitsRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListClientVisitsRequest(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.ListClientVisitsRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_ListClientVisitsResponse(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.ListClientVisitsResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.ListClientVisitsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListClientVisitsResponse(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.ListClientVisitsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_data_v1_ListOpenTimesRequest(arg) {
   if (!(arg instanceof novam_data_v1_reception_store_service_pb.ListOpenTimesRequest)) {
     throw new Error('Expected argument of type novam.data.v1.ListOpenTimesRequest');
@@ -180,6 +202,19 @@ handOff: {
     requestDeserialize: deserialize_novam_data_v1_HandOffRequest,
     responseSerialize: serialize_novam_data_v1_HandOffResponse,
     responseDeserialize: deserialize_novam_data_v1_HandOffResponse,
+  },
+  // The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
+// agent can never read another client's records.
+listClientVisits: {
+    path: '/novam.data.v1.ReceptionStoreService/ListClientVisits',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_reception_store_service_pb.ListClientVisitsRequest,
+    responseType: novam_data_v1_reception_store_service_pb.ListClientVisitsResponse,
+    requestSerialize: serialize_novam_data_v1_ListClientVisitsRequest,
+    requestDeserialize: deserialize_novam_data_v1_ListClientVisitsRequest,
+    responseSerialize: serialize_novam_data_v1_ListClientVisitsResponse,
+    responseDeserialize: deserialize_novam_data_v1_ListClientVisitsResponse,
   },
 };
 

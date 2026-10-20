@@ -21,6 +21,9 @@ service ReceptionStoreService {
   rpc SaveContact(SaveContactRequest) returns (SaveContactResponse);
   // Passes the chat to the owner with a summary; the thread then waits for them in Front Desk.
   rpc HandOff(HandOffRequest) returns (HandOffResponse);
+  // The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
+  // agent can never read another client's records.
+  rpc ListClientVisits(ListClientVisitsRequest) returns (ListClientVisitsResponse);
 }
 
 message GetBusinessRequest {
@@ -51,6 +54,8 @@ message GetBusinessResponse {
   repeated OpeningHours hours = 6;
   // How the owner wants the agent to say hello; empty for the default.
   string greeting = 7;
+  // The name the agent goes by with clients, e.g. Yang; empty for none.
+  string assistant_name = 8;
 }
 
 message ListOpenTimesRequest {
@@ -104,3 +109,22 @@ message HandOffRequest {
 }
 
 message HandOffResponse {}
+
+message ListClientVisitsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+}
+
+message ClientVisit {
+  string title = 1;
+  OpenTime when = 2; // start, end and how to say it
+  string status = 3; // scheduled, or held when the owner hasn't confirmed it yet
+}
+
+message ListClientVisitsResponse {
+  // False for a visitor who isn't signed in: nothing below is filled.
+  bool signed_in = 1;
+  string first_name = 2;
+  repeated ClientVisit visits = 3; // upcoming, soonest first
+  double amount_due = 4; // on sent and overdue invoices
+}

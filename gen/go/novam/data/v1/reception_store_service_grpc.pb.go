@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ReceptionStoreService_GetBusiness_FullMethodName   = "/novam.data.v1.ReceptionStoreService/GetBusiness"
-	ReceptionStoreService_ListOpenTimes_FullMethodName = "/novam.data.v1.ReceptionStoreService/ListOpenTimes"
-	ReceptionStoreService_HoldTime_FullMethodName      = "/novam.data.v1.ReceptionStoreService/HoldTime"
-	ReceptionStoreService_SaveContact_FullMethodName   = "/novam.data.v1.ReceptionStoreService/SaveContact"
-	ReceptionStoreService_HandOff_FullMethodName       = "/novam.data.v1.ReceptionStoreService/HandOff"
+	ReceptionStoreService_GetBusiness_FullMethodName      = "/novam.data.v1.ReceptionStoreService/GetBusiness"
+	ReceptionStoreService_ListOpenTimes_FullMethodName    = "/novam.data.v1.ReceptionStoreService/ListOpenTimes"
+	ReceptionStoreService_HoldTime_FullMethodName         = "/novam.data.v1.ReceptionStoreService/HoldTime"
+	ReceptionStoreService_SaveContact_FullMethodName      = "/novam.data.v1.ReceptionStoreService/SaveContact"
+	ReceptionStoreService_HandOff_FullMethodName          = "/novam.data.v1.ReceptionStoreService/HandOff"
+	ReceptionStoreService_ListClientVisits_FullMethodName = "/novam.data.v1.ReceptionStoreService/ListClientVisits"
 )
 
 // ReceptionStoreServiceClient is the client API for ReceptionStoreService service.
@@ -44,6 +45,9 @@ type ReceptionStoreServiceClient interface {
 	SaveContact(ctx context.Context, in *SaveContactRequest, opts ...grpc.CallOption) (*SaveContactResponse, error)
 	// Passes the chat to the owner with a summary; the thread then waits for them in Front Desk.
 	HandOff(ctx context.Context, in *HandOffRequest, opts ...grpc.CallOption) (*HandOffResponse, error)
+	// The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
+	// agent can never read another client's records.
+	ListClientVisits(ctx context.Context, in *ListClientVisitsRequest, opts ...grpc.CallOption) (*ListClientVisitsResponse, error)
 }
 
 type receptionStoreServiceClient struct {
@@ -104,6 +108,16 @@ func (c *receptionStoreServiceClient) HandOff(ctx context.Context, in *HandOffRe
 	return out, nil
 }
 
+func (c *receptionStoreServiceClient) ListClientVisits(ctx context.Context, in *ListClientVisitsRequest, opts ...grpc.CallOption) (*ListClientVisitsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListClientVisitsResponse)
+	err := c.cc.Invoke(ctx, ReceptionStoreService_ListClientVisits_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReceptionStoreServiceServer is the server API for ReceptionStoreService service.
 // All implementations must embed UnimplementedReceptionStoreServiceServer
 // for forward compatibility.
@@ -122,6 +136,9 @@ type ReceptionStoreServiceServer interface {
 	SaveContact(context.Context, *SaveContactRequest) (*SaveContactResponse, error)
 	// Passes the chat to the owner with a summary; the thread then waits for them in Front Desk.
 	HandOff(context.Context, *HandOffRequest) (*HandOffResponse, error)
+	// The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
+	// agent can never read another client's records.
+	ListClientVisits(context.Context, *ListClientVisitsRequest) (*ListClientVisitsResponse, error)
 	mustEmbedUnimplementedReceptionStoreServiceServer()
 }
 
@@ -146,6 +163,9 @@ func (UnimplementedReceptionStoreServiceServer) SaveContact(context.Context, *Sa
 }
 func (UnimplementedReceptionStoreServiceServer) HandOff(context.Context, *HandOffRequest) (*HandOffResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method HandOff not implemented")
+}
+func (UnimplementedReceptionStoreServiceServer) ListClientVisits(context.Context, *ListClientVisitsRequest) (*ListClientVisitsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListClientVisits not implemented")
 }
 func (UnimplementedReceptionStoreServiceServer) mustEmbedUnimplementedReceptionStoreServiceServer() {}
 func (UnimplementedReceptionStoreServiceServer) testEmbeddedByValue()                               {}
@@ -258,6 +278,24 @@ func _ReceptionStoreService_HandOff_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReceptionStoreService_ListClientVisits_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListClientVisitsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReceptionStoreServiceServer).ListClientVisits(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReceptionStoreService_ListClientVisits_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReceptionStoreServiceServer).ListClientVisits(ctx, req.(*ListClientVisitsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReceptionStoreService_ServiceDesc is the grpc.ServiceDesc for ReceptionStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -284,6 +322,10 @@ var ReceptionStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "HandOff",
 			Handler:    _ReceptionStoreService_HandOff_Handler,
+		},
+		{
+			MethodName: "ListClientVisits",
+			Handler:    _ReceptionStoreService_ListClientVisits_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
