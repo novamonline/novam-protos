@@ -50,6 +50,28 @@ function deserialize_novam_ai_v1_SummarizeResponse(buffer_arg) {
   return novam_ai_v1_ai_service_pb.SummarizeResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_ai_v1_TalkRequest(arg) {
+  if (!(arg instanceof novam_ai_v1_ai_service_pb.TalkRequest)) {
+    throw new Error('Expected argument of type novam.ai.v1.TalkRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_ai_v1_TalkRequest(buffer_arg) {
+  return novam_ai_v1_ai_service_pb.TalkRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_ai_v1_TalkResponse(arg) {
+  if (!(arg instanceof novam_ai_v1_ai_service_pb.TalkResponse)) {
+    throw new Error('Expected argument of type novam.ai.v1.TalkResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_ai_v1_TalkResponse(buffer_arg) {
+  return novam_ai_v1_ai_service_pb.TalkResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 // AIService provides chat and summarization.
 var AIServiceService = exports.AIServiceService = {
@@ -74,6 +96,19 @@ var AIServiceService = exports.AIServiceService = {
     requestDeserialize: deserialize_novam_ai_v1_SummarizeRequest,
     responseSerialize: serialize_novam_ai_v1_SummarizeResponse,
     responseDeserialize: deserialize_novam_ai_v1_SummarizeResponse,
+  },
+  // A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
+// first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
+talk: {
+    path: '/novam.ai.v1.AIService/Talk',
+    requestStream: true,
+    responseStream: true,
+    requestType: novam_ai_v1_ai_service_pb.TalkRequest,
+    responseType: novam_ai_v1_ai_service_pb.TalkResponse,
+    requestSerialize: serialize_novam_ai_v1_TalkRequest,
+    requestDeserialize: deserialize_novam_ai_v1_TalkRequest,
+    responseSerialize: serialize_novam_ai_v1_TalkResponse,
+    responseDeserialize: deserialize_novam_ai_v1_TalkResponse,
   },
 };
 

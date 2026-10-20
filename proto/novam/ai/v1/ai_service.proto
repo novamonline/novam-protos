@@ -11,6 +11,43 @@ option go_package = "github.com/novamonline/novam-protos/gen/go/novam/ai/v1;aiv1
 service AIService {
   rpc Chat(ChatRequest) returns (ChatResponse);
   rpc Summarize(SummarizeRequest) returns (SummarizeResponse);
+  // A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
+  // first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
+  rpc Talk(stream TalkRequest) returns (stream TalkResponse);
+}
+
+message TalkRequest {
+  oneof event {
+    TalkStart start = 1;
+    // The visitor's voice: 16 kHz, 16-bit, mono PCM, little-endian.
+    bytes audio = 2;
+    // The visitor pressed the talk button: a turn begins.
+    bool turn_start = 3;
+    // The visitor let go: the turn is over and the agent answers.
+    bool turn_end = 4;
+  }
+}
+
+message TalkStart {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+  // The business's model choice; unset uses the service's default.
+  ModelChoice model = 3;
+  // The conversation so far (typed or spoken), so a chat can carry on by voice.
+  repeated novam.entities.v1.ChatMessage history = 4;
+}
+
+message TalkResponse {
+  oneof event {
+    // The agent's voice: 24 kHz, 16-bit, mono PCM, little-endian.
+    bytes audio = 1;
+    // What the visitor said in the turn that just ended.
+    string heard = 2;
+    // What the agent said in its answer.
+    string said = 3;
+    // The agent finished answering; the visitor can talk again.
+    bool turn_done = 4;
+  }
 }
 
 message ChatRequest {

@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	AIService_Chat_FullMethodName      = "/novam.ai.v1.AIService/Chat"
 	AIService_Summarize_FullMethodName = "/novam.ai.v1.AIService/Summarize"
+	AIService_Talk_FullMethodName      = "/novam.ai.v1.AIService/Talk"
 )
 
 // AIServiceClient is the client API for AIService service.
@@ -31,6 +32,9 @@ const (
 type AIServiceClient interface {
 	Chat(ctx context.Context, in *ChatRequest, opts ...grpc.CallOption) (*ChatResponse, error)
 	Summarize(ctx context.Context, in *SummarizeRequest, opts ...grpc.CallOption) (*SummarizeResponse, error)
+	// A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
+	// first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
+	Talk(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TalkRequest, TalkResponse], error)
 }
 
 type aIServiceClient struct {
@@ -61,6 +65,19 @@ func (c *aIServiceClient) Summarize(ctx context.Context, in *SummarizeRequest, o
 	return out, nil
 }
 
+func (c *aIServiceClient) Talk(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TalkRequest, TalkResponse], error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	stream, err := c.cc.NewStream(ctx, &AIService_ServiceDesc.Streams[0], AIService_Talk_FullMethodName, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &grpc.GenericClientStream[TalkRequest, TalkResponse]{ClientStream: stream}
+	return x, nil
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type AIService_TalkClient = grpc.BidiStreamingClient[TalkRequest, TalkResponse]
+
 // AIServiceServer is the server API for AIService service.
 // All implementations must embed UnimplementedAIServiceServer
 // for forward compatibility.
@@ -69,6 +86,9 @@ func (c *aIServiceClient) Summarize(ctx context.Context, in *SummarizeRequest, o
 type AIServiceServer interface {
 	Chat(context.Context, *ChatRequest) (*ChatResponse, error)
 	Summarize(context.Context, *SummarizeRequest) (*SummarizeResponse, error)
+	// A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
+	// first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
+	Talk(grpc.BidiStreamingServer[TalkRequest, TalkResponse]) error
 	mustEmbedUnimplementedAIServiceServer()
 }
 
@@ -84,6 +104,9 @@ func (UnimplementedAIServiceServer) Chat(context.Context, *ChatRequest) (*ChatRe
 }
 func (UnimplementedAIServiceServer) Summarize(context.Context, *SummarizeRequest) (*SummarizeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Summarize not implemented")
+}
+func (UnimplementedAIServiceServer) Talk(grpc.BidiStreamingServer[TalkRequest, TalkResponse]) error {
+	return status.Error(codes.Unimplemented, "method Talk not implemented")
 }
 func (UnimplementedAIServiceServer) mustEmbedUnimplementedAIServiceServer() {}
 func (UnimplementedAIServiceServer) testEmbeddedByValue()                   {}
@@ -142,6 +165,13 @@ func _AIService_Summarize_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AIService_Talk_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(AIServiceServer).Talk(&grpc.GenericServerStream[TalkRequest, TalkResponse]{ServerStream: stream})
+}
+
+// This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
+type AIService_TalkServer = grpc.BidiStreamingServer[TalkRequest, TalkResponse]
+
 // AIService_ServiceDesc is the grpc.ServiceDesc for AIService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -158,6 +188,13 @@ var AIService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AIService_Summarize_Handler,
 		},
 	},
-	Streams:  []grpc.StreamDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "Talk",
+			Handler:       _AIService_Talk_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
 	Metadata: "novam/ai/v1/ai_service.proto",
 }

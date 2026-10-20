@@ -4,13 +4,142 @@
 
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
-import type { ChatMessage, ChatResponse as ChatResponse$1 } from "../../entities/v1/ai_pb";
 import type { RequestMetadata } from "../../common/v1/common_pb";
+import type { ChatMessage, ChatResponse as ChatResponse$1 } from "../../entities/v1/ai_pb";
 
 /**
  * Describes the file novam/ai/v1/ai_service.proto.
  */
 export declare const file_novam_ai_v1_ai_service: GenFile;
+
+/**
+ * @generated from message novam.ai.v1.TalkRequest
+ */
+export declare type TalkRequest = Message<"novam.ai.v1.TalkRequest"> & {
+  /**
+   * @generated from oneof novam.ai.v1.TalkRequest.event
+   */
+  event: {
+    /**
+     * @generated from field: novam.ai.v1.TalkStart start = 1;
+     */
+    value: TalkStart;
+    case: "start";
+  } | {
+    /**
+     * The visitor's voice: 16 kHz, 16-bit, mono PCM, little-endian.
+     *
+     * @generated from field: bytes audio = 2;
+     */
+    value: Uint8Array;
+    case: "audio";
+  } | {
+    /**
+     * The visitor pressed the talk button: a turn begins.
+     *
+     * @generated from field: bool turn_start = 3;
+     */
+    value: boolean;
+    case: "turnStart";
+  } | {
+    /**
+     * The visitor let go: the turn is over and the agent answers.
+     *
+     * @generated from field: bool turn_end = 4;
+     */
+    value: boolean;
+    case: "turnEnd";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message novam.ai.v1.TalkRequest.
+ * Use `create(TalkRequestSchema)` to create a new message.
+ */
+export declare const TalkRequestSchema: GenMessage<TalkRequest>;
+
+/**
+ * @generated from message novam.ai.v1.TalkStart
+ */
+export declare type TalkStart = Message<"novam.ai.v1.TalkStart"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string thread_id = 2;
+   */
+  threadId: string;
+
+  /**
+   * The business's model choice; unset uses the service's default.
+   *
+   * @generated from field: novam.ai.v1.ModelChoice model = 3;
+   */
+  model?: ModelChoice;
+
+  /**
+   * The conversation so far (typed or spoken), so a chat can carry on by voice.
+   *
+   * @generated from field: repeated novam.entities.v1.ChatMessage history = 4;
+   */
+  history: ChatMessage[];
+};
+
+/**
+ * Describes the message novam.ai.v1.TalkStart.
+ * Use `create(TalkStartSchema)` to create a new message.
+ */
+export declare const TalkStartSchema: GenMessage<TalkStart>;
+
+/**
+ * @generated from message novam.ai.v1.TalkResponse
+ */
+export declare type TalkResponse = Message<"novam.ai.v1.TalkResponse"> & {
+  /**
+   * @generated from oneof novam.ai.v1.TalkResponse.event
+   */
+  event: {
+    /**
+     * The agent's voice: 24 kHz, 16-bit, mono PCM, little-endian.
+     *
+     * @generated from field: bytes audio = 1;
+     */
+    value: Uint8Array;
+    case: "audio";
+  } | {
+    /**
+     * What the visitor said in the turn that just ended.
+     *
+     * @generated from field: string heard = 2;
+     */
+    value: string;
+    case: "heard";
+  } | {
+    /**
+     * What the agent said in its answer.
+     *
+     * @generated from field: string said = 3;
+     */
+    value: string;
+    case: "said";
+  } | {
+    /**
+     * The agent finished answering; the visitor can talk again.
+     *
+     * @generated from field: bool turn_done = 4;
+     */
+    value: boolean;
+    case: "turnDone";
+  } | { case: undefined; value?: undefined };
+};
+
+/**
+ * Describes the message novam.ai.v1.TalkResponse.
+ * Use `create(TalkResponseSchema)` to create a new message.
+ */
+export declare const TalkResponseSchema: GenMessage<TalkResponse>;
 
 /**
  * @generated from message novam.ai.v1.ChatRequest
@@ -273,6 +402,17 @@ export declare const AIService: GenService<{
     methodKind: "unary";
     input: typeof SummarizeRequestSchema;
     output: typeof SummarizeResponseSchema;
+  },
+  /**
+   * A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
+   * first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
+   *
+   * @generated from rpc novam.ai.v1.AIService.Talk
+   */
+  talk: {
+    methodKind: "bidi_streaming";
+    input: typeof TalkRequestSchema;
+    output: typeof TalkResponseSchema;
   },
 }>;
 
