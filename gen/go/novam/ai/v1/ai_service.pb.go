@@ -23,12 +23,122 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// ChatAgent is which agent answers a chat.
+type ChatAgent int32
+
+const (
+	ChatAgent_CHAT_AGENT_UNSPECIFIED ChatAgent = 0
+	// The assistant in the admin: explains Novam Pro and answers from the business's records.
+	ChatAgent_CHAT_AGENT_ASSISTANT ChatAgent = 1
+	// The Reception agent: talks to a business's clients and only holds times.
+	ChatAgent_CHAT_AGENT_RECEPTION ChatAgent = 2
+)
+
+// Enum value maps for ChatAgent.
+var (
+	ChatAgent_name = map[int32]string{
+		0: "CHAT_AGENT_UNSPECIFIED",
+		1: "CHAT_AGENT_ASSISTANT",
+		2: "CHAT_AGENT_RECEPTION",
+	}
+	ChatAgent_value = map[string]int32{
+		"CHAT_AGENT_UNSPECIFIED": 0,
+		"CHAT_AGENT_ASSISTANT":   1,
+		"CHAT_AGENT_RECEPTION":   2,
+	}
+)
+
+func (x ChatAgent) Enum() *ChatAgent {
+	p := new(ChatAgent)
+	*p = x
+	return p
+}
+
+func (x ChatAgent) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ChatAgent) Descriptor() protoreflect.EnumDescriptor {
+	return file_novam_ai_v1_ai_service_proto_enumTypes[0].Descriptor()
+}
+
+func (ChatAgent) Type() protoreflect.EnumType {
+	return &file_novam_ai_v1_ai_service_proto_enumTypes[0]
+}
+
+func (x ChatAgent) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ChatAgent.Descriptor instead.
+func (ChatAgent) EnumDescriptor() ([]byte, []int) {
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{0}
+}
+
+// ChatSource says what an assistant reply drew on.
+type ChatSource int32
+
+const (
+	ChatSource_CHAT_SOURCE_UNSPECIFIED ChatSource = 0
+	// How Novam Pro works; no business records were read.
+	ChatSource_CHAT_SOURCE_GUIDE ChatSource = 1
+	// At least one of the business's records was read.
+	ChatSource_CHAT_SOURCE_RECORDS ChatSource = 2
+)
+
+// Enum value maps for ChatSource.
+var (
+	ChatSource_name = map[int32]string{
+		0: "CHAT_SOURCE_UNSPECIFIED",
+		1: "CHAT_SOURCE_GUIDE",
+		2: "CHAT_SOURCE_RECORDS",
+	}
+	ChatSource_value = map[string]int32{
+		"CHAT_SOURCE_UNSPECIFIED": 0,
+		"CHAT_SOURCE_GUIDE":       1,
+		"CHAT_SOURCE_RECORDS":     2,
+	}
+)
+
+func (x ChatSource) Enum() *ChatSource {
+	p := new(ChatSource)
+	*p = x
+	return p
+}
+
+func (x ChatSource) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ChatSource) Descriptor() protoreflect.EnumDescriptor {
+	return file_novam_ai_v1_ai_service_proto_enumTypes[1].Descriptor()
+}
+
+func (ChatSource) Type() protoreflect.EnumType {
+	return &file_novam_ai_v1_ai_service_proto_enumTypes[1]
+}
+
+func (x ChatSource) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ChatSource.Descriptor instead.
+func (ChatSource) EnumDescriptor() ([]byte, []int) {
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{1}
+}
+
 type ChatRequest struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
 	Messages []*v1.ChatMessage      `protobuf:"bytes,1,rep,name=messages,proto3" json:"messages,omitempty"`
 	Metadata *v11.RequestMetadata   `protobuf:"bytes,2,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	// The business's model choice; unset uses the service's default model and key.
-	Model         *ModelChoice `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`
+	Model *ModelChoice `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`
+	// The admin screen the user is on, e.g. /automation/agents; empty when unknown.
+	Route string `protobuf:"bytes,4,opt,name=route,proto3" json:"route,omitempty"`
+	// Which agent answers; unspecified is the admin assistant.
+	Agent ChatAgent `protobuf:"varint,5,opt,name=agent,proto3,enum=novam.ai.v1.ChatAgent" json:"agent,omitempty"`
+	// For the Reception agent: the Front Desk thread the chat belongs to.
+	ThreadId      string `protobuf:"bytes,6,opt,name=thread_id,json=threadId,proto3" json:"thread_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -84,6 +194,90 @@ func (x *ChatRequest) GetModel() *ModelChoice {
 	return nil
 }
 
+func (x *ChatRequest) GetRoute() string {
+	if x != nil {
+		return x.Route
+	}
+	return ""
+}
+
+func (x *ChatRequest) GetAgent() ChatAgent {
+	if x != nil {
+		return x.Agent
+	}
+	return ChatAgent_CHAT_AGENT_UNSPECIFIED
+}
+
+func (x *ChatRequest) GetThreadId() string {
+	if x != nil {
+		return x.ThreadId
+	}
+	return ""
+}
+
+// ChatAction is a screen the reply offers to open.
+type ChatAction struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Label string                 `protobuf:"bytes,1,opt,name=label,proto3" json:"label,omitempty"`
+	// An admin route from the product map, e.g. /automation/agents.
+	Route string `protobuf:"bytes,2,opt,name=route,proto3" json:"route,omitempty"`
+	// A part of that screen to highlight, e.g. web-chat; empty for none.
+	Spotlight     string `protobuf:"bytes,3,opt,name=spotlight,proto3" json:"spotlight,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ChatAction) Reset() {
+	*x = ChatAction{}
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ChatAction) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ChatAction) ProtoMessage() {}
+
+func (x *ChatAction) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ChatAction.ProtoReflect.Descriptor instead.
+func (*ChatAction) Descriptor() ([]byte, []int) {
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ChatAction) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *ChatAction) GetRoute() string {
+	if x != nil {
+		return x.Route
+	}
+	return ""
+}
+
+func (x *ChatAction) GetSpotlight() string {
+	if x != nil {
+		return x.Spotlight
+	}
+	return ""
+}
+
 // ModelChoice is which model answers, and whose key pays for it.
 type ModelChoice struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
@@ -97,7 +291,7 @@ type ModelChoice struct {
 
 func (x *ModelChoice) Reset() {
 	*x = ModelChoice{}
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -109,7 +303,7 @@ func (x *ModelChoice) String() string {
 func (*ModelChoice) ProtoMessage() {}
 
 func (x *ModelChoice) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[1]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -122,7 +316,7 @@ func (x *ModelChoice) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ModelChoice.ProtoReflect.Descriptor instead.
 func (*ModelChoice) Descriptor() ([]byte, []int) {
-	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{1}
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *ModelChoice) GetProvider() string {
@@ -149,13 +343,15 @@ func (x *ModelChoice) GetApiKey() string {
 type ChatResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Response      *v1.ChatResponse       `protobuf:"bytes,1,opt,name=response,proto3" json:"response,omitempty"`
+	Source        ChatSource             `protobuf:"varint,2,opt,name=source,proto3,enum=novam.ai.v1.ChatSource" json:"source,omitempty"`
+	Actions       []*ChatAction          `protobuf:"bytes,3,rep,name=actions,proto3" json:"actions,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *ChatResponse) Reset() {
 	*x = ChatResponse{}
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -167,7 +363,7 @@ func (x *ChatResponse) String() string {
 func (*ChatResponse) ProtoMessage() {}
 
 func (x *ChatResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[2]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -180,12 +376,26 @@ func (x *ChatResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChatResponse.ProtoReflect.Descriptor instead.
 func (*ChatResponse) Descriptor() ([]byte, []int) {
-	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{2}
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *ChatResponse) GetResponse() *v1.ChatResponse {
 	if x != nil {
 		return x.Response
+	}
+	return nil
+}
+
+func (x *ChatResponse) GetSource() ChatSource {
+	if x != nil {
+		return x.Source
+	}
+	return ChatSource_CHAT_SOURCE_UNSPECIFIED
+}
+
+func (x *ChatResponse) GetActions() []*ChatAction {
+	if x != nil {
+		return x.Actions
 	}
 	return nil
 }
@@ -200,7 +410,7 @@ type SummarizeRequest struct {
 
 func (x *SummarizeRequest) Reset() {
 	*x = SummarizeRequest{}
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -212,7 +422,7 @@ func (x *SummarizeRequest) String() string {
 func (*SummarizeRequest) ProtoMessage() {}
 
 func (x *SummarizeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[3]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -225,7 +435,7 @@ func (x *SummarizeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SummarizeRequest.ProtoReflect.Descriptor instead.
 func (*SummarizeRequest) Descriptor() ([]byte, []int) {
-	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{3}
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *SummarizeRequest) GetText() string {
@@ -251,7 +461,7 @@ type SummarizeResponse struct {
 
 func (x *SummarizeResponse) Reset() {
 	*x = SummarizeResponse{}
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[4]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -263,7 +473,7 @@ func (x *SummarizeResponse) String() string {
 func (*SummarizeResponse) ProtoMessage() {}
 
 func (x *SummarizeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[4]
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -276,7 +486,7 @@ func (x *SummarizeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SummarizeResponse.ProtoReflect.Descriptor instead.
 func (*SummarizeResponse) Descriptor() ([]byte, []int) {
-	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{4}
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *SummarizeResponse) GetSummary() string {
@@ -290,22 +500,41 @@ var File_novam_ai_v1_ai_service_proto protoreflect.FileDescriptor
 
 const file_novam_ai_v1_ai_service_proto_rawDesc = "" +
 	"\n" +
-	"\x1cnovam/ai/v1/ai_service.proto\x12\vnovam.ai.v1\x1a\x1cnovam/common/v1/common.proto\x1a\x1anovam/entities/v1/ai.proto\"\xb7\x01\n" +
+	"\x1cnovam/ai/v1/ai_service.proto\x12\vnovam.ai.v1\x1a\x1cnovam/common/v1/common.proto\x1a\x1anovam/entities/v1/ai.proto\"\x98\x02\n" +
 	"\vChatRequest\x12:\n" +
 	"\bmessages\x18\x01 \x03(\v2\x1e.novam.entities.v1.ChatMessageR\bmessages\x12<\n" +
 	"\bmetadata\x18\x02 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12.\n" +
-	"\x05model\x18\x03 \x01(\v2\x18.novam.ai.v1.ModelChoiceR\x05model\"X\n" +
+	"\x05model\x18\x03 \x01(\v2\x18.novam.ai.v1.ModelChoiceR\x05model\x12\x14\n" +
+	"\x05route\x18\x04 \x01(\tR\x05route\x12,\n" +
+	"\x05agent\x18\x05 \x01(\x0e2\x16.novam.ai.v1.ChatAgentR\x05agent\x12\x1b\n" +
+	"\tthread_id\x18\x06 \x01(\tR\bthreadId\"V\n" +
+	"\n" +
+	"ChatAction\x12\x14\n" +
+	"\x05label\x18\x01 \x01(\tR\x05label\x12\x14\n" +
+	"\x05route\x18\x02 \x01(\tR\x05route\x12\x1c\n" +
+	"\tspotlight\x18\x03 \x01(\tR\tspotlight\"X\n" +
 	"\vModelChoice\x12\x1a\n" +
 	"\bprovider\x18\x01 \x01(\tR\bprovider\x12\x14\n" +
 	"\x05model\x18\x02 \x01(\tR\x05model\x12\x17\n" +
-	"\aapi_key\x18\x03 \x01(\tR\x06apiKey\"K\n" +
+	"\aapi_key\x18\x03 \x01(\tR\x06apiKey\"\xaf\x01\n" +
 	"\fChatResponse\x12;\n" +
-	"\bresponse\x18\x01 \x01(\v2\x1f.novam.entities.v1.ChatResponseR\bresponse\"d\n" +
+	"\bresponse\x18\x01 \x01(\v2\x1f.novam.entities.v1.ChatResponseR\bresponse\x12/\n" +
+	"\x06source\x18\x02 \x01(\x0e2\x17.novam.ai.v1.ChatSourceR\x06source\x121\n" +
+	"\aactions\x18\x03 \x03(\v2\x17.novam.ai.v1.ChatActionR\aactions\"d\n" +
 	"\x10SummarizeRequest\x12\x12\n" +
 	"\x04text\x18\x01 \x01(\tR\x04text\x12<\n" +
 	"\bmetadata\x18\x02 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"-\n" +
 	"\x11SummarizeResponse\x12\x18\n" +
-	"\asummary\x18\x01 \x01(\tR\asummary2\x94\x01\n" +
+	"\asummary\x18\x01 \x01(\tR\asummary*[\n" +
+	"\tChatAgent\x12\x1a\n" +
+	"\x16CHAT_AGENT_UNSPECIFIED\x10\x00\x12\x18\n" +
+	"\x14CHAT_AGENT_ASSISTANT\x10\x01\x12\x18\n" +
+	"\x14CHAT_AGENT_RECEPTION\x10\x02*Y\n" +
+	"\n" +
+	"ChatSource\x12\x1b\n" +
+	"\x17CHAT_SOURCE_UNSPECIFIED\x10\x00\x12\x15\n" +
+	"\x11CHAT_SOURCE_GUIDE\x10\x01\x12\x17\n" +
+	"\x13CHAT_SOURCE_RECORDS\x10\x022\x94\x01\n" +
 	"\tAIService\x12;\n" +
 	"\x04Chat\x12\x18.novam.ai.v1.ChatRequest\x1a\x19.novam.ai.v1.ChatResponse\x12J\n" +
 	"\tSummarize\x12\x1d.novam.ai.v1.SummarizeRequest\x1a\x1e.novam.ai.v1.SummarizeResponseB=Z;github.com/novamonline/novam-protos/gen/go/novam/ai/v1;aiv1b\x06proto3"
@@ -322,32 +551,39 @@ func file_novam_ai_v1_ai_service_proto_rawDescGZIP() []byte {
 	return file_novam_ai_v1_ai_service_proto_rawDescData
 }
 
-var file_novam_ai_v1_ai_service_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_novam_ai_v1_ai_service_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_novam_ai_v1_ai_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_novam_ai_v1_ai_service_proto_goTypes = []any{
-	(*ChatRequest)(nil),         // 0: novam.ai.v1.ChatRequest
-	(*ModelChoice)(nil),         // 1: novam.ai.v1.ModelChoice
-	(*ChatResponse)(nil),        // 2: novam.ai.v1.ChatResponse
-	(*SummarizeRequest)(nil),    // 3: novam.ai.v1.SummarizeRequest
-	(*SummarizeResponse)(nil),   // 4: novam.ai.v1.SummarizeResponse
-	(*v1.ChatMessage)(nil),      // 5: novam.entities.v1.ChatMessage
-	(*v11.RequestMetadata)(nil), // 6: novam.common.v1.RequestMetadata
-	(*v1.ChatResponse)(nil),     // 7: novam.entities.v1.ChatResponse
+	(ChatAgent)(0),              // 0: novam.ai.v1.ChatAgent
+	(ChatSource)(0),             // 1: novam.ai.v1.ChatSource
+	(*ChatRequest)(nil),         // 2: novam.ai.v1.ChatRequest
+	(*ChatAction)(nil),          // 3: novam.ai.v1.ChatAction
+	(*ModelChoice)(nil),         // 4: novam.ai.v1.ModelChoice
+	(*ChatResponse)(nil),        // 5: novam.ai.v1.ChatResponse
+	(*SummarizeRequest)(nil),    // 6: novam.ai.v1.SummarizeRequest
+	(*SummarizeResponse)(nil),   // 7: novam.ai.v1.SummarizeResponse
+	(*v1.ChatMessage)(nil),      // 8: novam.entities.v1.ChatMessage
+	(*v11.RequestMetadata)(nil), // 9: novam.common.v1.RequestMetadata
+	(*v1.ChatResponse)(nil),     // 10: novam.entities.v1.ChatResponse
 }
 var file_novam_ai_v1_ai_service_proto_depIdxs = []int32{
-	5, // 0: novam.ai.v1.ChatRequest.messages:type_name -> novam.entities.v1.ChatMessage
-	6, // 1: novam.ai.v1.ChatRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	1, // 2: novam.ai.v1.ChatRequest.model:type_name -> novam.ai.v1.ModelChoice
-	7, // 3: novam.ai.v1.ChatResponse.response:type_name -> novam.entities.v1.ChatResponse
-	6, // 4: novam.ai.v1.SummarizeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0, // 5: novam.ai.v1.AIService.Chat:input_type -> novam.ai.v1.ChatRequest
-	3, // 6: novam.ai.v1.AIService.Summarize:input_type -> novam.ai.v1.SummarizeRequest
-	2, // 7: novam.ai.v1.AIService.Chat:output_type -> novam.ai.v1.ChatResponse
-	4, // 8: novam.ai.v1.AIService.Summarize:output_type -> novam.ai.v1.SummarizeResponse
-	7, // [7:9] is the sub-list for method output_type
-	5, // [5:7] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	8,  // 0: novam.ai.v1.ChatRequest.messages:type_name -> novam.entities.v1.ChatMessage
+	9,  // 1: novam.ai.v1.ChatRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	4,  // 2: novam.ai.v1.ChatRequest.model:type_name -> novam.ai.v1.ModelChoice
+	0,  // 3: novam.ai.v1.ChatRequest.agent:type_name -> novam.ai.v1.ChatAgent
+	10, // 4: novam.ai.v1.ChatResponse.response:type_name -> novam.entities.v1.ChatResponse
+	1,  // 5: novam.ai.v1.ChatResponse.source:type_name -> novam.ai.v1.ChatSource
+	3,  // 6: novam.ai.v1.ChatResponse.actions:type_name -> novam.ai.v1.ChatAction
+	9,  // 7: novam.ai.v1.SummarizeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	2,  // 8: novam.ai.v1.AIService.Chat:input_type -> novam.ai.v1.ChatRequest
+	6,  // 9: novam.ai.v1.AIService.Summarize:input_type -> novam.ai.v1.SummarizeRequest
+	5,  // 10: novam.ai.v1.AIService.Chat:output_type -> novam.ai.v1.ChatResponse
+	7,  // 11: novam.ai.v1.AIService.Summarize:output_type -> novam.ai.v1.SummarizeResponse
+	10, // [10:12] is the sub-list for method output_type
+	8,  // [8:10] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_novam_ai_v1_ai_service_proto_init() }
@@ -360,13 +596,14 @@ func file_novam_ai_v1_ai_service_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_ai_v1_ai_service_proto_rawDesc), len(file_novam_ai_v1_ai_service_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   5,
+			NumEnums:      2,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
 		GoTypes:           file_novam_ai_v1_ai_service_proto_goTypes,
 		DependencyIndexes: file_novam_ai_v1_ai_service_proto_depIdxs,
+		EnumInfos:         file_novam_ai_v1_ai_service_proto_enumTypes,
 		MessageInfos:      file_novam_ai_v1_ai_service_proto_msgTypes,
 	}.Build()
 	File_novam_ai_v1_ai_service_proto = out.File

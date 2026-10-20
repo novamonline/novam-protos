@@ -18,6 +18,39 @@ message ChatRequest {
   novam.common.v1.RequestMetadata metadata = 2;
   // The business's model choice; unset uses the service's default model and key.
   ModelChoice model = 3;
+  // The admin screen the user is on, e.g. /automation/agents; empty when unknown.
+  string route = 4;
+  // Which agent answers; unspecified is the admin assistant.
+  ChatAgent agent = 5;
+  // For the Reception agent: the Front Desk thread the chat belongs to.
+  string thread_id = 6;
+}
+
+// ChatAgent is which agent answers a chat.
+enum ChatAgent {
+  CHAT_AGENT_UNSPECIFIED = 0;
+  // The assistant in the admin: explains Novam Pro and answers from the business's records.
+  CHAT_AGENT_ASSISTANT = 1;
+  // The Reception agent: talks to a business's clients and only holds times.
+  CHAT_AGENT_RECEPTION = 2;
+}
+
+// ChatSource says what an assistant reply drew on.
+enum ChatSource {
+  CHAT_SOURCE_UNSPECIFIED = 0;
+  // How Novam Pro works; no business records were read.
+  CHAT_SOURCE_GUIDE = 1;
+  // At least one of the business's records was read.
+  CHAT_SOURCE_RECORDS = 2;
+}
+
+// ChatAction is a screen the reply offers to open.
+message ChatAction {
+  string label = 1;
+  // An admin route from the product map, e.g. /automation/agents.
+  string route = 2;
+  // A part of that screen to highlight, e.g. web-chat; empty for none.
+  string spotlight = 3;
 }
 
 // ModelChoice is which model answers, and whose key pays for it.
@@ -30,6 +63,8 @@ message ModelChoice {
 
 message ChatResponse {
   novam.entities.v1.ChatResponse response = 1;
+  ChatSource source = 2;
+  repeated ChatAction actions = 3;
 }
 
 message SummarizeRequest {

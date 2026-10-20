@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package novam.data.v1;
+
+import "google/protobuf/timestamp.proto";
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1";
+
+// ReceptionStoreService is what the Reception agent may do while it chats with a business's visitor: read the
+// business's services and hours, find open times, hold one on the chat's Front Desk thread, note the visitor's
+// contact details and pass the chat to the owner. Every call is about one thread, `thread_id`, scoped to
+// `metadata.tenant_context.org_id`; nothing here books, charges or reads other clients. Called with the
+// engine's credential, like BusinessStoreService.
+service ReceptionStoreService {
+  rpc GetBusiness(GetBusinessRequest) returns (GetBusinessResponse);
+  // Free times from the business's hours, leaving out appointments and times other chats hold.
+  rpc ListOpenTimes(ListOpenTimesRequest) returns (ListOpenTimesResponse);
+  // Holds an open time on the thread for the owner to confirm; a later hold replaces it.
+  rpc HoldTime(HoldTimeRequest) returns (HoldTimeResponse);
+  rpc SaveContact(SaveContactRequest) returns (SaveContactResponse);
+  // Passes the chat to the owner with a summary; the thread then waits for them in Front Desk.
+  rpc HandOff(HandOffRequest) returns (HandOffResponse);
+}
+
+message GetBusinessRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+}
+
+message Service {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  double price = 4; // in the business's currency; 0 when not listed
+  int32 duration_minutes = 5; // 0 when not set
+}
+
+message OpeningHours {
+  int32 day = 1; // 0 is Sunday
+  string open = 2; // HH:MM in the business's time zone
+  string close = 3;
+}
+
+message GetBusinessResponse {
+  string name = 1;
+  string owner_first_name = 2;
+  string description = 3;
+  string time_zone = 4;
+  repeated Service services = 5;
+  repeated OpeningHours hours = 6;
+  // How the owner wants the agent to say hello; empty for the default.
+  string greeting = 7;
+}
+
+message ListOpenTimesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+  // A service from GetBusiness; its length sets each time's length. Empty means one hour.
+  string service_id = 3;
+  // Look from this day on, YYYY-MM-DD in the business's time zone; empty means today.
+  string from_date = 4;
+  int32 limit = 5; // at most 20; default 6
+}
+
+message OpenTime {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+  string label = 3; // e.g. "Thu, Oct 22 at 2:00 PM", in the business's time zone
+}
+
+message ListOpenTimesResponse {
+  repeated OpenTime times = 1;
+}
+
+message HoldTimeRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+  string service_id = 3; // empty when the visitor didn't pick one
+  google.protobuf.Timestamp start = 4; // one of ListOpenTimes' starts
+  string notes = 5; // what the visitor said about the job, e.g. the address or the size of the home
+}
+
+message HoldTimeResponse {
+  OpenTime held = 1;
+  string title = 2;
+}
+
+message SaveContactRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+  string name = 3;
+  string phone = 4;
+  string email = 5;
+}
+
+message SaveContactResponse {}
+
+message HandOffRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+  // What the visitor wants, in a sentence or two, for the owner.
+  string summary = 3;
+}
+
+message HandOffResponse {}

@@ -2,7 +2,7 @@
 // @generated from file novam/ai/v1/ai_service.proto (package novam.ai.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 import type { ChatMessage, ChatResponse as ChatResponse$1 } from "../../entities/v1/ai_pb";
 import type { RequestMetadata } from "../../common/v1/common_pb";
@@ -32,6 +32,27 @@ export declare type ChatRequest = Message<"novam.ai.v1.ChatRequest"> & {
    * @generated from field: novam.ai.v1.ModelChoice model = 3;
    */
   model?: ModelChoice;
+
+  /**
+   * The admin screen the user is on, e.g. /automation/agents; empty when unknown.
+   *
+   * @generated from field: string route = 4;
+   */
+  route: string;
+
+  /**
+   * Which agent answers; unspecified is the admin assistant.
+   *
+   * @generated from field: novam.ai.v1.ChatAgent agent = 5;
+   */
+  agent: ChatAgent;
+
+  /**
+   * For the Reception agent: the Front Desk thread the chat belongs to.
+   *
+   * @generated from field: string thread_id = 6;
+   */
+  threadId: string;
 };
 
 /**
@@ -39,6 +60,38 @@ export declare type ChatRequest = Message<"novam.ai.v1.ChatRequest"> & {
  * Use `create(ChatRequestSchema)` to create a new message.
  */
 export declare const ChatRequestSchema: GenMessage<ChatRequest>;
+
+/**
+ * ChatAction is a screen the reply offers to open.
+ *
+ * @generated from message novam.ai.v1.ChatAction
+ */
+export declare type ChatAction = Message<"novam.ai.v1.ChatAction"> & {
+  /**
+   * @generated from field: string label = 1;
+   */
+  label: string;
+
+  /**
+   * An admin route from the product map, e.g. /automation/agents.
+   *
+   * @generated from field: string route = 2;
+   */
+  route: string;
+
+  /**
+   * A part of that screen to highlight, e.g. web-chat; empty for none.
+   *
+   * @generated from field: string spotlight = 3;
+   */
+  spotlight: string;
+};
+
+/**
+ * Describes the message novam.ai.v1.ChatAction.
+ * Use `create(ChatActionSchema)` to create a new message.
+ */
+export declare const ChatActionSchema: GenMessage<ChatAction>;
 
 /**
  * ModelChoice is which model answers, and whose key pays for it.
@@ -82,6 +135,16 @@ export declare type ChatResponse = Message<"novam.ai.v1.ChatResponse"> & {
    * @generated from field: novam.entities.v1.ChatResponse response = 1;
    */
   response?: ChatResponse$1;
+
+  /**
+   * @generated from field: novam.ai.v1.ChatSource source = 2;
+   */
+  source: ChatSource;
+
+  /**
+   * @generated from field: repeated novam.ai.v1.ChatAction actions = 3;
+   */
+  actions: ChatAction[];
 };
 
 /**
@@ -126,6 +189,68 @@ export declare type SummarizeResponse = Message<"novam.ai.v1.SummarizeResponse">
  * Use `create(SummarizeResponseSchema)` to create a new message.
  */
 export declare const SummarizeResponseSchema: GenMessage<SummarizeResponse>;
+
+/**
+ * ChatAgent is which agent answers a chat.
+ *
+ * @generated from enum novam.ai.v1.ChatAgent
+ */
+export enum ChatAgent {
+  /**
+   * @generated from enum value: CHAT_AGENT_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * The assistant in the admin: explains Novam Pro and answers from the business's records.
+   *
+   * @generated from enum value: CHAT_AGENT_ASSISTANT = 1;
+   */
+  ASSISTANT = 1,
+
+  /**
+   * The Reception agent: talks to a business's clients and only holds times.
+   *
+   * @generated from enum value: CHAT_AGENT_RECEPTION = 2;
+   */
+  RECEPTION = 2,
+}
+
+/**
+ * Describes the enum novam.ai.v1.ChatAgent.
+ */
+export declare const ChatAgentSchema: GenEnum<ChatAgent>;
+
+/**
+ * ChatSource says what an assistant reply drew on.
+ *
+ * @generated from enum novam.ai.v1.ChatSource
+ */
+export enum ChatSource {
+  /**
+   * @generated from enum value: CHAT_SOURCE_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * How Novam Pro works; no business records were read.
+   *
+   * @generated from enum value: CHAT_SOURCE_GUIDE = 1;
+   */
+  GUIDE = 1,
+
+  /**
+   * At least one of the business's records was read.
+   *
+   * @generated from enum value: CHAT_SOURCE_RECORDS = 2;
+   */
+  RECORDS = 2,
+}
+
+/**
+ * Describes the enum novam.ai.v1.ChatSource.
+ */
+export declare const ChatSourceSchema: GenEnum<ChatSource>;
 
 /**
  * AIService provides chat and summarization.
