@@ -38,6 +38,9 @@ service FlowStoreService {
   rpc SaveRunStep(SaveRunStepRequest) returns (SaveRunStepResponse);
   // A run's steps in sequence order.
   rpc ListRunSteps(ListRunStepsRequest) returns (ListRunStepsResponse);
+  // Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
+  // a client, so the event can wake them.
+  rpc ListWaitingRuns(ListWaitingRunsRequest) returns (ListWaitingRunsResponse);
 }
 
 // FlowInstance is one run of a flow definition.
@@ -55,6 +58,8 @@ message FlowInstance {
   google.protobuf.Timestamp wake_at = 10;
   // The user the run acts for: whoever started it, or the flow's owner for triggered runs.
   string user_id = 11;
+  // The published version of the flow the run follows, fixed when it starts; empty follows the draft.
+  string snapshot_id = 12;
 }
 
 // RunStep is one node execution within a run. A node that runs more than once (a loop) has one step per pass.
@@ -74,6 +79,20 @@ message RunStep {
 message GetFlowDefinitionRequest {
   novam.common.v1.RequestMetadata metadata = 1;
   string flow_definition_id = 2;
+  // A published version's nodes and edges instead of the draft's; empty is the draft.
+  string snapshot_id = 3;
+}
+
+message ListWaitingRunsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The event the runs wait for, e.g. message.created.
+  string event = 2;
+  // What the event must be about, e.g. the client whose reply the run waits for.
+  string subject_id = 3;
+}
+
+message ListWaitingRunsResponse {
+  repeated FlowInstance instances = 1;
 }
 
 message GetFlowDefinitionResponse {

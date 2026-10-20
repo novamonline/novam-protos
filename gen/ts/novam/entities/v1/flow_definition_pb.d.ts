@@ -63,6 +63,21 @@ export declare type FlowDefinition = Message<"novam.entities.v1.FlowDefinition">
    * @generated from field: novam.entities.v1.FlowTrigger trigger = 9;
    */
   trigger?: FlowTrigger;
+
+  /**
+   * The version new runs follow. Each publish freezes the draft as a new snapshot; runs already going keep the
+   * snapshot they started on. Empty means nothing is published and runs follow the draft.
+   *
+   * @generated from field: string published_snapshot_id = 10;
+   */
+  publishedSnapshotId: string;
+
+  /**
+   * The published version's number, 1 for the first publish; 0 when nothing is published.
+   *
+   * @generated from field: int32 published_version = 11;
+   */
+  publishedVersion: number;
 };
 
 /**

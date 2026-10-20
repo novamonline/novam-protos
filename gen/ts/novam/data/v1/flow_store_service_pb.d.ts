@@ -82,6 +82,13 @@ export declare type FlowInstance = Message<"novam.data.v1.FlowInstance"> & {
    * @generated from field: string user_id = 11;
    */
   userId: string;
+
+  /**
+   * The published version of the flow the run follows, fixed when it starts; empty follows the draft.
+   *
+   * @generated from field: string snapshot_id = 12;
+   */
+  snapshotId: string;
 };
 
 /**
@@ -167,6 +174,13 @@ export declare type GetFlowDefinitionRequest = Message<"novam.data.v1.GetFlowDef
    * @generated from field: string flow_definition_id = 2;
    */
   flowDefinitionId: string;
+
+  /**
+   * A published version's nodes and edges instead of the draft's; empty is the draft.
+   *
+   * @generated from field: string snapshot_id = 3;
+   */
+  snapshotId: string;
 };
 
 /**
@@ -174,6 +188,52 @@ export declare type GetFlowDefinitionRequest = Message<"novam.data.v1.GetFlowDef
  * Use `create(GetFlowDefinitionRequestSchema)` to create a new message.
  */
 export declare const GetFlowDefinitionRequestSchema: GenMessage<GetFlowDefinitionRequest>;
+
+/**
+ * @generated from message novam.data.v1.ListWaitingRunsRequest
+ */
+export declare type ListWaitingRunsRequest = Message<"novam.data.v1.ListWaitingRunsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * The event the runs wait for, e.g. message.created.
+   *
+   * @generated from field: string event = 2;
+   */
+  event: string;
+
+  /**
+   * What the event must be about, e.g. the client whose reply the run waits for.
+   *
+   * @generated from field: string subject_id = 3;
+   */
+  subjectId: string;
+};
+
+/**
+ * Describes the message novam.data.v1.ListWaitingRunsRequest.
+ * Use `create(ListWaitingRunsRequestSchema)` to create a new message.
+ */
+export declare const ListWaitingRunsRequestSchema: GenMessage<ListWaitingRunsRequest>;
+
+/**
+ * @generated from message novam.data.v1.ListWaitingRunsResponse
+ */
+export declare type ListWaitingRunsResponse = Message<"novam.data.v1.ListWaitingRunsResponse"> & {
+  /**
+   * @generated from field: repeated novam.data.v1.FlowInstance instances = 1;
+   */
+  instances: FlowInstance[];
+};
+
+/**
+ * Describes the message novam.data.v1.ListWaitingRunsResponse.
+ * Use `create(ListWaitingRunsResponseSchema)` to create a new message.
+ */
+export declare const ListWaitingRunsResponseSchema: GenMessage<ListWaitingRunsResponse>;
 
 /**
  * @generated from message novam.data.v1.GetFlowDefinitionResponse
@@ -674,6 +734,17 @@ export declare const FlowStoreService: GenService<{
     methodKind: "unary";
     input: typeof ListRunStepsRequestSchema;
     output: typeof ListRunStepsResponseSchema;
+  },
+  /**
+   * Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
+   * a client, so the event can wake them.
+   *
+   * @generated from rpc novam.data.v1.FlowStoreService.ListWaitingRuns
+   */
+  listWaitingRuns: {
+    methodKind: "unary";
+    input: typeof ListWaitingRunsRequestSchema;
+    output: typeof ListWaitingRunsResponseSchema;
   },
 }>;
 

@@ -29,6 +29,7 @@ const (
 	FlowStoreService_ClaimDueFlowInstances_FullMethodName        = "/novam.data.v1.FlowStoreService/ClaimDueFlowInstances"
 	FlowStoreService_SaveRunStep_FullMethodName                  = "/novam.data.v1.FlowStoreService/SaveRunStep"
 	FlowStoreService_ListRunSteps_FullMethodName                 = "/novam.data.v1.FlowStoreService/ListRunSteps"
+	FlowStoreService_ListWaitingRuns_FullMethodName              = "/novam.data.v1.FlowStoreService/ListWaitingRuns"
 )
 
 // FlowStoreServiceClient is the client API for FlowStoreService service.
@@ -63,6 +64,9 @@ type FlowStoreServiceClient interface {
 	SaveRunStep(ctx context.Context, in *SaveRunStepRequest, opts ...grpc.CallOption) (*SaveRunStepResponse, error)
 	// A run's steps in sequence order.
 	ListRunSteps(ctx context.Context, in *ListRunStepsRequest, opts ...grpc.CallOption) (*ListRunStepsResponse, error)
+	// Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
+	// a client, so the event can wake them.
+	ListWaitingRuns(ctx context.Context, in *ListWaitingRunsRequest, opts ...grpc.CallOption) (*ListWaitingRunsResponse, error)
 }
 
 type flowStoreServiceClient struct {
@@ -173,6 +177,16 @@ func (c *flowStoreServiceClient) ListRunSteps(ctx context.Context, in *ListRunSt
 	return out, nil
 }
 
+func (c *flowStoreServiceClient) ListWaitingRuns(ctx context.Context, in *ListWaitingRunsRequest, opts ...grpc.CallOption) (*ListWaitingRunsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListWaitingRunsResponse)
+	err := c.cc.Invoke(ctx, FlowStoreService_ListWaitingRuns_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FlowStoreServiceServer is the server API for FlowStoreService service.
 // All implementations must embed UnimplementedFlowStoreServiceServer
 // for forward compatibility.
@@ -205,6 +219,9 @@ type FlowStoreServiceServer interface {
 	SaveRunStep(context.Context, *SaveRunStepRequest) (*SaveRunStepResponse, error)
 	// A run's steps in sequence order.
 	ListRunSteps(context.Context, *ListRunStepsRequest) (*ListRunStepsResponse, error)
+	// Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
+	// a client, so the event can wake them.
+	ListWaitingRuns(context.Context, *ListWaitingRunsRequest) (*ListWaitingRunsResponse, error)
 	mustEmbedUnimplementedFlowStoreServiceServer()
 }
 
@@ -244,6 +261,9 @@ func (UnimplementedFlowStoreServiceServer) SaveRunStep(context.Context, *SaveRun
 }
 func (UnimplementedFlowStoreServiceServer) ListRunSteps(context.Context, *ListRunStepsRequest) (*ListRunStepsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListRunSteps not implemented")
+}
+func (UnimplementedFlowStoreServiceServer) ListWaitingRuns(context.Context, *ListWaitingRunsRequest) (*ListWaitingRunsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListWaitingRuns not implemented")
 }
 func (UnimplementedFlowStoreServiceServer) mustEmbedUnimplementedFlowStoreServiceServer() {}
 func (UnimplementedFlowStoreServiceServer) testEmbeddedByValue()                          {}
@@ -446,6 +466,24 @@ func _FlowStoreService_ListRunSteps_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FlowStoreService_ListWaitingRuns_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListWaitingRunsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FlowStoreServiceServer).ListWaitingRuns(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FlowStoreService_ListWaitingRuns_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FlowStoreServiceServer).ListWaitingRuns(ctx, req.(*ListWaitingRunsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FlowStoreService_ServiceDesc is the grpc.ServiceDesc for FlowStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -492,6 +530,10 @@ var FlowStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListRunSteps",
 			Handler:    _FlowStoreService_ListRunSteps_Handler,
+		},
+		{
+			MethodName: "ListWaitingRuns",
+			Handler:    _FlowStoreService_ListWaitingRuns_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -42,6 +42,8 @@ type FlowNode struct {
 	// JSON Schema of the data the step adds to the run, readable by later steps as steps.<node_id>.output.
 	OutputsSchema *structpb.Struct      `protobuf:"bytes,10,opt,name=outputs_schema,json=outputsSchema,proto3" json:"outputs_schema,omitempty"`
 	Capabilities  *FlowNodeCapabilities `protobuf:"bytes,11,opt,name=capabilities,proto3" json:"capabilities,omitempty"`
+	// Bumped when a kind changes in a way saved workflows notice; adding settings or outputs does not bump it.
+	Version       int32 `protobuf:"varint,12,opt,name=version,proto3" json:"version,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -151,6 +153,13 @@ func (x *FlowNode) GetCapabilities() *FlowNodeCapabilities {
 		return x.Capabilities
 	}
 	return nil
+}
+
+func (x *FlowNode) GetVersion() int32 {
+	if x != nil {
+		return x.Version
+	}
+	return 0
 }
 
 // FlowNodeExit is one way out of a step; an edge leaving the step names it in FlowDefinitionEdge.exit.
@@ -292,7 +301,7 @@ var File_novam_entities_v1_flow_node_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_flow_node_proto_rawDesc = "" +
 	"\n" +
-	"!novam/entities/v1/flow_node.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\x91\x04\n" +
+	"!novam/entities/v1/flow_node.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xab\x04\n" +
 	"\bFlowNode\x12\x12\n" +
 	"\x04kind\x18\x01 \x01(\tR\x04kind\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12 \n" +
@@ -307,7 +316,8 @@ const file_novam_entities_v1_flow_node_proto_rawDesc = "" +
 	"\x05exits\x18\t \x03(\v2\x1f.novam.entities.v1.FlowNodeExitR\x05exits\x12>\n" +
 	"\x0eoutputs_schema\x18\n" +
 	" \x01(\v2\x17.google.protobuf.StructR\routputsSchema\x12K\n" +
-	"\fcapabilities\x18\v \x01(\v2'.novam.entities.v1.FlowNodeCapabilitiesR\fcapabilities\"P\n" +
+	"\fcapabilities\x18\v \x01(\v2'.novam.entities.v1.FlowNodeCapabilitiesR\fcapabilities\x12\x18\n" +
+	"\aversion\x18\f \x01(\x05R\aversion\"P\n" +
 	"\fFlowNodeExit\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12\x18\n" +

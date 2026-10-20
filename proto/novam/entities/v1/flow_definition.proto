@@ -19,6 +19,11 @@ message FlowDefinition {
   google.protobuf.Timestamp updated_at = 8;
   // What starts this flow's runs. Unset means runs start only through StartRun.
   FlowTrigger trigger = 9;
+  // The version new runs follow. Each publish freezes the draft as a new snapshot; runs already going keep the
+  // snapshot they started on. Empty means nothing is published and runs follow the draft.
+  string published_snapshot_id = 10;
+  // The published version's number, 1 for the first publish; 0 when nothing is published.
+  int32 published_version = 11;
 }
 
 // FlowTrigger is what starts a flow's runs, as the workflow builder saved it.

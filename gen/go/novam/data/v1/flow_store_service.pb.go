@@ -40,7 +40,9 @@ type FlowInstance struct {
 	// When a waiting run is due to resume; unset unless status is waiting.
 	WakeAt *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=wake_at,json=wakeAt,proto3" json:"wake_at,omitempty"`
 	// The user the run acts for: whoever started it, or the flow's owner for triggered runs.
-	UserId        string `protobuf:"bytes,11,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	UserId string `protobuf:"bytes,11,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	// The published version of the flow the run follows, fixed when it starts; empty follows the draft.
+	SnapshotId    string `protobuf:"bytes,12,opt,name=snapshot_id,json=snapshotId,proto3" json:"snapshot_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -148,6 +150,13 @@ func (x *FlowInstance) GetWakeAt() *timestamppb.Timestamp {
 func (x *FlowInstance) GetUserId() string {
 	if x != nil {
 		return x.UserId
+	}
+	return ""
+}
+
+func (x *FlowInstance) GetSnapshotId() string {
+	if x != nil {
+		return x.SnapshotId
 	}
 	return ""
 }
@@ -266,8 +275,10 @@ type GetFlowDefinitionRequest struct {
 	state            protoimpl.MessageState `protogen:"open.v1"`
 	Metadata         *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	FlowDefinitionId string                 `protobuf:"bytes,2,opt,name=flow_definition_id,json=flowDefinitionId,proto3" json:"flow_definition_id,omitempty"`
-	unknownFields    protoimpl.UnknownFields
-	sizeCache        protoimpl.SizeCache
+	// A published version's nodes and edges instead of the draft's; empty is the draft.
+	SnapshotId    string `protobuf:"bytes,3,opt,name=snapshot_id,json=snapshotId,proto3" json:"snapshot_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GetFlowDefinitionRequest) Reset() {
@@ -314,6 +325,119 @@ func (x *GetFlowDefinitionRequest) GetFlowDefinitionId() string {
 	return ""
 }
 
+func (x *GetFlowDefinitionRequest) GetSnapshotId() string {
+	if x != nil {
+		return x.SnapshotId
+	}
+	return ""
+}
+
+type ListWaitingRunsRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// The event the runs wait for, e.g. message.created.
+	Event string `protobuf:"bytes,2,opt,name=event,proto3" json:"event,omitempty"`
+	// What the event must be about, e.g. the client whose reply the run waits for.
+	SubjectId     string `protobuf:"bytes,3,opt,name=subject_id,json=subjectId,proto3" json:"subject_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListWaitingRunsRequest) Reset() {
+	*x = ListWaitingRunsRequest{}
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWaitingRunsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWaitingRunsRequest) ProtoMessage() {}
+
+func (x *ListWaitingRunsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWaitingRunsRequest.ProtoReflect.Descriptor instead.
+func (*ListWaitingRunsRequest) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ListWaitingRunsRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ListWaitingRunsRequest) GetEvent() string {
+	if x != nil {
+		return x.Event
+	}
+	return ""
+}
+
+func (x *ListWaitingRunsRequest) GetSubjectId() string {
+	if x != nil {
+		return x.SubjectId
+	}
+	return ""
+}
+
+type ListWaitingRunsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Instances     []*FlowInstance        `protobuf:"bytes,1,rep,name=instances,proto3" json:"instances,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListWaitingRunsResponse) Reset() {
+	*x = ListWaitingRunsResponse{}
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListWaitingRunsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListWaitingRunsResponse) ProtoMessage() {}
+
+func (x *ListWaitingRunsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListWaitingRunsResponse.ProtoReflect.Descriptor instead.
+func (*ListWaitingRunsResponse) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListWaitingRunsResponse) GetInstances() []*FlowInstance {
+	if x != nil {
+		return x.Instances
+	}
+	return nil
+}
+
 type GetFlowDefinitionResponse struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	Definition    *v11.FlowDefinition       `protobuf:"bytes,1,opt,name=definition,proto3" json:"definition,omitempty"`
@@ -325,7 +449,7 @@ type GetFlowDefinitionResponse struct {
 
 func (x *GetFlowDefinitionResponse) Reset() {
 	*x = GetFlowDefinitionResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[3]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -337,7 +461,7 @@ func (x *GetFlowDefinitionResponse) String() string {
 func (*GetFlowDefinitionResponse) ProtoMessage() {}
 
 func (x *GetFlowDefinitionResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[3]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -350,7 +474,7 @@ func (x *GetFlowDefinitionResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFlowDefinitionResponse.ProtoReflect.Descriptor instead.
 func (*GetFlowDefinitionResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{3}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GetFlowDefinitionResponse) GetDefinition() *v11.FlowDefinition {
@@ -384,7 +508,7 @@ type GetFlowInstanceRequest struct {
 
 func (x *GetFlowInstanceRequest) Reset() {
 	*x = GetFlowInstanceRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[4]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -396,7 +520,7 @@ func (x *GetFlowInstanceRequest) String() string {
 func (*GetFlowInstanceRequest) ProtoMessage() {}
 
 func (x *GetFlowInstanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[4]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -409,7 +533,7 @@ func (x *GetFlowInstanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFlowInstanceRequest.ProtoReflect.Descriptor instead.
 func (*GetFlowInstanceRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{4}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GetFlowInstanceRequest) GetMetadata() *v1.RequestMetadata {
@@ -435,7 +559,7 @@ type GetFlowInstanceResponse struct {
 
 func (x *GetFlowInstanceResponse) Reset() {
 	*x = GetFlowInstanceResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[5]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -447,7 +571,7 @@ func (x *GetFlowInstanceResponse) String() string {
 func (*GetFlowInstanceResponse) ProtoMessage() {}
 
 func (x *GetFlowInstanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[5]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -460,7 +584,7 @@ func (x *GetFlowInstanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFlowInstanceResponse.ProtoReflect.Descriptor instead.
 func (*GetFlowInstanceResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{5}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GetFlowInstanceResponse) GetInstance() *FlowInstance {
@@ -480,7 +604,7 @@ type SaveFlowInstanceRequest struct {
 
 func (x *SaveFlowInstanceRequest) Reset() {
 	*x = SaveFlowInstanceRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[6]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -492,7 +616,7 @@ func (x *SaveFlowInstanceRequest) String() string {
 func (*SaveFlowInstanceRequest) ProtoMessage() {}
 
 func (x *SaveFlowInstanceRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[6]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -505,7 +629,7 @@ func (x *SaveFlowInstanceRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveFlowInstanceRequest.ProtoReflect.Descriptor instead.
 func (*SaveFlowInstanceRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{6}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *SaveFlowInstanceRequest) GetMetadata() *v1.RequestMetadata {
@@ -531,7 +655,7 @@ type SaveFlowInstanceResponse struct {
 
 func (x *SaveFlowInstanceResponse) Reset() {
 	*x = SaveFlowInstanceResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[7]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -543,7 +667,7 @@ func (x *SaveFlowInstanceResponse) String() string {
 func (*SaveFlowInstanceResponse) ProtoMessage() {}
 
 func (x *SaveFlowInstanceResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[7]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -556,7 +680,7 @@ func (x *SaveFlowInstanceResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveFlowInstanceResponse.ProtoReflect.Descriptor instead.
 func (*SaveFlowInstanceResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{7}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *SaveFlowInstanceResponse) GetInstance() *FlowInstance {
@@ -576,7 +700,7 @@ type GetFlowStateRequest struct {
 
 func (x *GetFlowStateRequest) Reset() {
 	*x = GetFlowStateRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[8]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -588,7 +712,7 @@ func (x *GetFlowStateRequest) String() string {
 func (*GetFlowStateRequest) ProtoMessage() {}
 
 func (x *GetFlowStateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[8]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -601,7 +725,7 @@ func (x *GetFlowStateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFlowStateRequest.ProtoReflect.Descriptor instead.
 func (*GetFlowStateRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{8}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GetFlowStateRequest) GetMetadata() *v1.RequestMetadata {
@@ -627,7 +751,7 @@ type GetFlowStateResponse struct {
 
 func (x *GetFlowStateResponse) Reset() {
 	*x = GetFlowStateResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[9]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -639,7 +763,7 @@ func (x *GetFlowStateResponse) String() string {
 func (*GetFlowStateResponse) ProtoMessage() {}
 
 func (x *GetFlowStateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[9]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -652,7 +776,7 @@ func (x *GetFlowStateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetFlowStateResponse.ProtoReflect.Descriptor instead.
 func (*GetFlowStateResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{9}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *GetFlowStateResponse) GetState() *v11.FlowState {
@@ -672,7 +796,7 @@ type SaveFlowStateRequest struct {
 
 func (x *SaveFlowStateRequest) Reset() {
 	*x = SaveFlowStateRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[10]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -684,7 +808,7 @@ func (x *SaveFlowStateRequest) String() string {
 func (*SaveFlowStateRequest) ProtoMessage() {}
 
 func (x *SaveFlowStateRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[10]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -697,7 +821,7 @@ func (x *SaveFlowStateRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveFlowStateRequest.ProtoReflect.Descriptor instead.
 func (*SaveFlowStateRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{10}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *SaveFlowStateRequest) GetMetadata() *v1.RequestMetadata {
@@ -723,7 +847,7 @@ type SaveFlowStateResponse struct {
 
 func (x *SaveFlowStateResponse) Reset() {
 	*x = SaveFlowStateResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[11]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -735,7 +859,7 @@ func (x *SaveFlowStateResponse) String() string {
 func (*SaveFlowStateResponse) ProtoMessage() {}
 
 func (x *SaveFlowStateResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[11]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -748,7 +872,7 @@ func (x *SaveFlowStateResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveFlowStateResponse.ProtoReflect.Descriptor instead.
 func (*SaveFlowStateResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{11}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *SaveFlowStateResponse) GetState() *v11.FlowState {
@@ -769,7 +893,7 @@ type ListFlowDefinitionsForEventRequest struct {
 
 func (x *ListFlowDefinitionsForEventRequest) Reset() {
 	*x = ListFlowDefinitionsForEventRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[12]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -781,7 +905,7 @@ func (x *ListFlowDefinitionsForEventRequest) String() string {
 func (*ListFlowDefinitionsForEventRequest) ProtoMessage() {}
 
 func (x *ListFlowDefinitionsForEventRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[12]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -794,7 +918,7 @@ func (x *ListFlowDefinitionsForEventRequest) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use ListFlowDefinitionsForEventRequest.ProtoReflect.Descriptor instead.
 func (*ListFlowDefinitionsForEventRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{12}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *ListFlowDefinitionsForEventRequest) GetMetadata() *v1.RequestMetadata {
@@ -827,7 +951,7 @@ type ListFlowDefinitionsForEventResponse struct {
 
 func (x *ListFlowDefinitionsForEventResponse) Reset() {
 	*x = ListFlowDefinitionsForEventResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[13]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -839,7 +963,7 @@ func (x *ListFlowDefinitionsForEventResponse) String() string {
 func (*ListFlowDefinitionsForEventResponse) ProtoMessage() {}
 
 func (x *ListFlowDefinitionsForEventResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[13]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -852,7 +976,7 @@ func (x *ListFlowDefinitionsForEventResponse) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use ListFlowDefinitionsForEventResponse.ProtoReflect.Descriptor instead.
 func (*ListFlowDefinitionsForEventResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{13}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *ListFlowDefinitionsForEventResponse) GetDefinitions() []*v11.FlowDefinition {
@@ -873,7 +997,7 @@ type ListScheduledFlowDefinitionsRequest struct {
 
 func (x *ListScheduledFlowDefinitionsRequest) Reset() {
 	*x = ListScheduledFlowDefinitionsRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[14]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -885,7 +1009,7 @@ func (x *ListScheduledFlowDefinitionsRequest) String() string {
 func (*ListScheduledFlowDefinitionsRequest) ProtoMessage() {}
 
 func (x *ListScheduledFlowDefinitionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[14]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -898,7 +1022,7 @@ func (x *ListScheduledFlowDefinitionsRequest) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use ListScheduledFlowDefinitionsRequest.ProtoReflect.Descriptor instead.
 func (*ListScheduledFlowDefinitionsRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{14}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *ListScheduledFlowDefinitionsRequest) GetMetadata() *v1.RequestMetadata {
@@ -932,7 +1056,7 @@ type ListScheduledFlowDefinitionsResponse struct {
 
 func (x *ListScheduledFlowDefinitionsResponse) Reset() {
 	*x = ListScheduledFlowDefinitionsResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[15]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -944,7 +1068,7 @@ func (x *ListScheduledFlowDefinitionsResponse) String() string {
 func (*ListScheduledFlowDefinitionsResponse) ProtoMessage() {}
 
 func (x *ListScheduledFlowDefinitionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[15]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -957,7 +1081,7 @@ func (x *ListScheduledFlowDefinitionsResponse) ProtoReflect() protoreflect.Messa
 
 // Deprecated: Use ListScheduledFlowDefinitionsResponse.ProtoReflect.Descriptor instead.
 func (*ListScheduledFlowDefinitionsResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{15}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *ListScheduledFlowDefinitionsResponse) GetDefinitions() []*v11.FlowDefinition {
@@ -986,7 +1110,7 @@ type ClaimDueFlowInstancesRequest struct {
 
 func (x *ClaimDueFlowInstancesRequest) Reset() {
 	*x = ClaimDueFlowInstancesRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[16]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -998,7 +1122,7 @@ func (x *ClaimDueFlowInstancesRequest) String() string {
 func (*ClaimDueFlowInstancesRequest) ProtoMessage() {}
 
 func (x *ClaimDueFlowInstancesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[16]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1011,7 +1135,7 @@ func (x *ClaimDueFlowInstancesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimDueFlowInstancesRequest.ProtoReflect.Descriptor instead.
 func (*ClaimDueFlowInstancesRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{16}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *ClaimDueFlowInstancesRequest) GetMetadata() *v1.RequestMetadata {
@@ -1051,7 +1175,7 @@ type ClaimDueFlowInstancesResponse struct {
 
 func (x *ClaimDueFlowInstancesResponse) Reset() {
 	*x = ClaimDueFlowInstancesResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[17]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1063,7 +1187,7 @@ func (x *ClaimDueFlowInstancesResponse) String() string {
 func (*ClaimDueFlowInstancesResponse) ProtoMessage() {}
 
 func (x *ClaimDueFlowInstancesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[17]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1076,7 +1200,7 @@ func (x *ClaimDueFlowInstancesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ClaimDueFlowInstancesResponse.ProtoReflect.Descriptor instead.
 func (*ClaimDueFlowInstancesResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{17}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *ClaimDueFlowInstancesResponse) GetInstances() []*FlowInstance {
@@ -1096,7 +1220,7 @@ type SaveRunStepRequest struct {
 
 func (x *SaveRunStepRequest) Reset() {
 	*x = SaveRunStepRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[18]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1108,7 +1232,7 @@ func (x *SaveRunStepRequest) String() string {
 func (*SaveRunStepRequest) ProtoMessage() {}
 
 func (x *SaveRunStepRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[18]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1121,7 +1245,7 @@ func (x *SaveRunStepRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveRunStepRequest.ProtoReflect.Descriptor instead.
 func (*SaveRunStepRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{18}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *SaveRunStepRequest) GetMetadata() *v1.RequestMetadata {
@@ -1147,7 +1271,7 @@ type SaveRunStepResponse struct {
 
 func (x *SaveRunStepResponse) Reset() {
 	*x = SaveRunStepResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[19]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1159,7 +1283,7 @@ func (x *SaveRunStepResponse) String() string {
 func (*SaveRunStepResponse) ProtoMessage() {}
 
 func (x *SaveRunStepResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[19]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1172,7 +1296,7 @@ func (x *SaveRunStepResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SaveRunStepResponse.ProtoReflect.Descriptor instead.
 func (*SaveRunStepResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{19}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *SaveRunStepResponse) GetStep() *RunStep {
@@ -1192,7 +1316,7 @@ type ListRunStepsRequest struct {
 
 func (x *ListRunStepsRequest) Reset() {
 	*x = ListRunStepsRequest{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[20]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1204,7 +1328,7 @@ func (x *ListRunStepsRequest) String() string {
 func (*ListRunStepsRequest) ProtoMessage() {}
 
 func (x *ListRunStepsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[20]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1217,7 +1341,7 @@ func (x *ListRunStepsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRunStepsRequest.ProtoReflect.Descriptor instead.
 func (*ListRunStepsRequest) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{20}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ListRunStepsRequest) GetMetadata() *v1.RequestMetadata {
@@ -1243,7 +1367,7 @@ type ListRunStepsResponse struct {
 
 func (x *ListRunStepsResponse) Reset() {
 	*x = ListRunStepsResponse{}
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[21]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1255,7 +1379,7 @@ func (x *ListRunStepsResponse) String() string {
 func (*ListRunStepsResponse) ProtoMessage() {}
 
 func (x *ListRunStepsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[21]
+	mi := &file_novam_data_v1_flow_store_service_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1268,7 +1392,7 @@ func (x *ListRunStepsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListRunStepsResponse.ProtoReflect.Descriptor instead.
 func (*ListRunStepsResponse) Descriptor() ([]byte, []int) {
-	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{21}
+	return file_novam_data_v1_flow_store_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *ListRunStepsResponse) GetSteps() []*RunStep {
@@ -1282,7 +1406,7 @@ var File_novam_data_v1_flow_store_service_proto protoreflect.FileDescriptor
 
 const file_novam_data_v1_flow_store_service_proto_rawDesc = "" +
 	"\n" +
-	"&novam/data/v1/flow_store_service.proto\x12\rnovam.data.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cnovam/common/v1/common.proto\x1a'novam/entities/v1/flow_definition.proto\x1a\"novam/entities/v1/flow_state.proto\"\xc5\x03\n" +
+	"&novam/data/v1/flow_store_service.proto\x12\rnovam.data.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cnovam/common/v1/common.proto\x1a'novam/entities/v1/flow_definition.proto\x1a\"novam/entities/v1/flow_state.proto\"\xe6\x03\n" +
 	"\fFlowInstance\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12,\n" +
 	"\x12flow_definition_id\x18\x02 \x01(\tR\x10flowDefinitionId\x12\x15\n" +
@@ -1297,7 +1421,9 @@ const file_novam_data_v1_flow_store_service_proto_rawDesc = "" +
 	"\rerror_message\x18\t \x01(\tR\ferrorMessage\x123\n" +
 	"\awake_at\x18\n" +
 	" \x01(\v2\x1a.google.protobuf.TimestampR\x06wakeAt\x12\x17\n" +
-	"\auser_id\x18\v \x01(\tR\x06userId\"\xeb\x02\n" +
+	"\auser_id\x18\v \x01(\tR\x06userId\x12\x1f\n" +
+	"\vsnapshot_id\x18\f \x01(\tR\n" +
+	"snapshotId\"\xeb\x02\n" +
 	"\aRunStep\x12(\n" +
 	"\x10flow_instance_id\x18\x01 \x01(\tR\x0eflowInstanceId\x12\x1a\n" +
 	"\bsequence\x18\x02 \x01(\x05R\bsequence\x12\x17\n" +
@@ -1309,10 +1435,19 @@ const file_novam_data_v1_flow_store_service_proto_rawDesc = "" +
 	"\n" +
 	"started_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12;\n" +
 	"\vfinished_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\n" +
-	"finishedAt\"\x86\x01\n" +
+	"finishedAt\"\xa7\x01\n" +
 	"\x18GetFlowDefinitionRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12,\n" +
-	"\x12flow_definition_id\x18\x02 \x01(\tR\x10flowDefinitionId\"\xd8\x01\n" +
+	"\x12flow_definition_id\x18\x02 \x01(\tR\x10flowDefinitionId\x12\x1f\n" +
+	"\vsnapshot_id\x18\x03 \x01(\tR\n" +
+	"snapshotId\"\x8b\x01\n" +
+	"\x16ListWaitingRunsRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x14\n" +
+	"\x05event\x18\x02 \x01(\tR\x05event\x12\x1d\n" +
+	"\n" +
+	"subject_id\x18\x03 \x01(\tR\tsubjectId\"T\n" +
+	"\x17ListWaitingRunsResponse\x129\n" +
+	"\tinstances\x18\x01 \x03(\v2\x1b.novam.data.v1.FlowInstanceR\tinstances\"\xd8\x01\n" +
 	"\x19GetFlowDefinitionResponse\x12A\n" +
 	"\n" +
 	"definition\x18\x01 \x01(\v2!.novam.entities.v1.FlowDefinitionR\n" +
@@ -1369,7 +1504,7 @@ const file_novam_data_v1_flow_store_service_proto_rawDesc = "" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12(\n" +
 	"\x10flow_instance_id\x18\x02 \x01(\tR\x0eflowInstanceId\"D\n" +
 	"\x14ListRunStepsResponse\x12,\n" +
-	"\x05steps\x18\x01 \x03(\v2\x16.novam.data.v1.RunStepR\x05steps2\xaa\b\n" +
+	"\x05steps\x18\x01 \x03(\v2\x16.novam.data.v1.RunStepR\x05steps2\x8c\t\n" +
 	"\x10FlowStoreService\x12f\n" +
 	"\x11GetFlowDefinition\x12'.novam.data.v1.GetFlowDefinitionRequest\x1a(.novam.data.v1.GetFlowDefinitionResponse\x12`\n" +
 	"\x0fGetFlowInstance\x12%.novam.data.v1.GetFlowInstanceRequest\x1a&.novam.data.v1.GetFlowInstanceResponse\x12c\n" +
@@ -1380,7 +1515,8 @@ const file_novam_data_v1_flow_store_service_proto_rawDesc = "" +
 	"\x1cListScheduledFlowDefinitions\x122.novam.data.v1.ListScheduledFlowDefinitionsRequest\x1a3.novam.data.v1.ListScheduledFlowDefinitionsResponse\x12r\n" +
 	"\x15ClaimDueFlowInstances\x12+.novam.data.v1.ClaimDueFlowInstancesRequest\x1a,.novam.data.v1.ClaimDueFlowInstancesResponse\x12T\n" +
 	"\vSaveRunStep\x12!.novam.data.v1.SaveRunStepRequest\x1a\".novam.data.v1.SaveRunStepResponse\x12W\n" +
-	"\fListRunSteps\x12\".novam.data.v1.ListRunStepsRequest\x1a#.novam.data.v1.ListRunStepsResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
+	"\fListRunSteps\x12\".novam.data.v1.ListRunStepsRequest\x1a#.novam.data.v1.ListRunStepsResponse\x12`\n" +
+	"\x0fListWaitingRuns\x12%.novam.data.v1.ListWaitingRunsRequest\x1a&.novam.data.v1.ListWaitingRunsResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
 
 var (
 	file_novam_data_v1_flow_store_service_proto_rawDescOnce sync.Once
@@ -1394,97 +1530,103 @@ func file_novam_data_v1_flow_store_service_proto_rawDescGZIP() []byte {
 	return file_novam_data_v1_flow_store_service_proto_rawDescData
 }
 
-var file_novam_data_v1_flow_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_novam_data_v1_flow_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_novam_data_v1_flow_store_service_proto_goTypes = []any{
 	(*FlowInstance)(nil),                         // 0: novam.data.v1.FlowInstance
 	(*RunStep)(nil),                              // 1: novam.data.v1.RunStep
 	(*GetFlowDefinitionRequest)(nil),             // 2: novam.data.v1.GetFlowDefinitionRequest
-	(*GetFlowDefinitionResponse)(nil),            // 3: novam.data.v1.GetFlowDefinitionResponse
-	(*GetFlowInstanceRequest)(nil),               // 4: novam.data.v1.GetFlowInstanceRequest
-	(*GetFlowInstanceResponse)(nil),              // 5: novam.data.v1.GetFlowInstanceResponse
-	(*SaveFlowInstanceRequest)(nil),              // 6: novam.data.v1.SaveFlowInstanceRequest
-	(*SaveFlowInstanceResponse)(nil),             // 7: novam.data.v1.SaveFlowInstanceResponse
-	(*GetFlowStateRequest)(nil),                  // 8: novam.data.v1.GetFlowStateRequest
-	(*GetFlowStateResponse)(nil),                 // 9: novam.data.v1.GetFlowStateResponse
-	(*SaveFlowStateRequest)(nil),                 // 10: novam.data.v1.SaveFlowStateRequest
-	(*SaveFlowStateResponse)(nil),                // 11: novam.data.v1.SaveFlowStateResponse
-	(*ListFlowDefinitionsForEventRequest)(nil),   // 12: novam.data.v1.ListFlowDefinitionsForEventRequest
-	(*ListFlowDefinitionsForEventResponse)(nil),  // 13: novam.data.v1.ListFlowDefinitionsForEventResponse
-	(*ListScheduledFlowDefinitionsRequest)(nil),  // 14: novam.data.v1.ListScheduledFlowDefinitionsRequest
-	(*ListScheduledFlowDefinitionsResponse)(nil), // 15: novam.data.v1.ListScheduledFlowDefinitionsResponse
-	(*ClaimDueFlowInstancesRequest)(nil),         // 16: novam.data.v1.ClaimDueFlowInstancesRequest
-	(*ClaimDueFlowInstancesResponse)(nil),        // 17: novam.data.v1.ClaimDueFlowInstancesResponse
-	(*SaveRunStepRequest)(nil),                   // 18: novam.data.v1.SaveRunStepRequest
-	(*SaveRunStepResponse)(nil),                  // 19: novam.data.v1.SaveRunStepResponse
-	(*ListRunStepsRequest)(nil),                  // 20: novam.data.v1.ListRunStepsRequest
-	(*ListRunStepsResponse)(nil),                 // 21: novam.data.v1.ListRunStepsResponse
-	(*structpb.Struct)(nil),                      // 22: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil),                // 23: google.protobuf.Timestamp
-	(*v1.RequestMetadata)(nil),                   // 24: novam.common.v1.RequestMetadata
-	(*v11.FlowDefinition)(nil),                   // 25: novam.entities.v1.FlowDefinition
-	(*v11.FlowDefinitionNode)(nil),               // 26: novam.entities.v1.FlowDefinitionNode
-	(*v11.FlowDefinitionEdge)(nil),               // 27: novam.entities.v1.FlowDefinitionEdge
-	(*v11.FlowState)(nil),                        // 28: novam.entities.v1.FlowState
+	(*ListWaitingRunsRequest)(nil),               // 3: novam.data.v1.ListWaitingRunsRequest
+	(*ListWaitingRunsResponse)(nil),              // 4: novam.data.v1.ListWaitingRunsResponse
+	(*GetFlowDefinitionResponse)(nil),            // 5: novam.data.v1.GetFlowDefinitionResponse
+	(*GetFlowInstanceRequest)(nil),               // 6: novam.data.v1.GetFlowInstanceRequest
+	(*GetFlowInstanceResponse)(nil),              // 7: novam.data.v1.GetFlowInstanceResponse
+	(*SaveFlowInstanceRequest)(nil),              // 8: novam.data.v1.SaveFlowInstanceRequest
+	(*SaveFlowInstanceResponse)(nil),             // 9: novam.data.v1.SaveFlowInstanceResponse
+	(*GetFlowStateRequest)(nil),                  // 10: novam.data.v1.GetFlowStateRequest
+	(*GetFlowStateResponse)(nil),                 // 11: novam.data.v1.GetFlowStateResponse
+	(*SaveFlowStateRequest)(nil),                 // 12: novam.data.v1.SaveFlowStateRequest
+	(*SaveFlowStateResponse)(nil),                // 13: novam.data.v1.SaveFlowStateResponse
+	(*ListFlowDefinitionsForEventRequest)(nil),   // 14: novam.data.v1.ListFlowDefinitionsForEventRequest
+	(*ListFlowDefinitionsForEventResponse)(nil),  // 15: novam.data.v1.ListFlowDefinitionsForEventResponse
+	(*ListScheduledFlowDefinitionsRequest)(nil),  // 16: novam.data.v1.ListScheduledFlowDefinitionsRequest
+	(*ListScheduledFlowDefinitionsResponse)(nil), // 17: novam.data.v1.ListScheduledFlowDefinitionsResponse
+	(*ClaimDueFlowInstancesRequest)(nil),         // 18: novam.data.v1.ClaimDueFlowInstancesRequest
+	(*ClaimDueFlowInstancesResponse)(nil),        // 19: novam.data.v1.ClaimDueFlowInstancesResponse
+	(*SaveRunStepRequest)(nil),                   // 20: novam.data.v1.SaveRunStepRequest
+	(*SaveRunStepResponse)(nil),                  // 21: novam.data.v1.SaveRunStepResponse
+	(*ListRunStepsRequest)(nil),                  // 22: novam.data.v1.ListRunStepsRequest
+	(*ListRunStepsResponse)(nil),                 // 23: novam.data.v1.ListRunStepsResponse
+	(*structpb.Struct)(nil),                      // 24: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil),                // 25: google.protobuf.Timestamp
+	(*v1.RequestMetadata)(nil),                   // 26: novam.common.v1.RequestMetadata
+	(*v11.FlowDefinition)(nil),                   // 27: novam.entities.v1.FlowDefinition
+	(*v11.FlowDefinitionNode)(nil),               // 28: novam.entities.v1.FlowDefinitionNode
+	(*v11.FlowDefinitionEdge)(nil),               // 29: novam.entities.v1.FlowDefinitionEdge
+	(*v11.FlowState)(nil),                        // 30: novam.entities.v1.FlowState
 }
 var file_novam_data_v1_flow_store_service_proto_depIdxs = []int32{
-	22, // 0: novam.data.v1.FlowInstance.variables:type_name -> google.protobuf.Struct
-	23, // 1: novam.data.v1.FlowInstance.started_at:type_name -> google.protobuf.Timestamp
-	23, // 2: novam.data.v1.FlowInstance.finished_at:type_name -> google.protobuf.Timestamp
-	23, // 3: novam.data.v1.FlowInstance.wake_at:type_name -> google.protobuf.Timestamp
-	22, // 4: novam.data.v1.RunStep.output:type_name -> google.protobuf.Struct
-	23, // 5: novam.data.v1.RunStep.started_at:type_name -> google.protobuf.Timestamp
-	23, // 6: novam.data.v1.RunStep.finished_at:type_name -> google.protobuf.Timestamp
-	24, // 7: novam.data.v1.GetFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	25, // 8: novam.data.v1.GetFlowDefinitionResponse.definition:type_name -> novam.entities.v1.FlowDefinition
-	26, // 9: novam.data.v1.GetFlowDefinitionResponse.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
-	27, // 10: novam.data.v1.GetFlowDefinitionResponse.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
-	24, // 11: novam.data.v1.GetFlowInstanceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 12: novam.data.v1.GetFlowInstanceResponse.instance:type_name -> novam.data.v1.FlowInstance
-	24, // 13: novam.data.v1.SaveFlowInstanceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 14: novam.data.v1.SaveFlowInstanceRequest.instance:type_name -> novam.data.v1.FlowInstance
-	0,  // 15: novam.data.v1.SaveFlowInstanceResponse.instance:type_name -> novam.data.v1.FlowInstance
-	24, // 16: novam.data.v1.GetFlowStateRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	28, // 17: novam.data.v1.GetFlowStateResponse.state:type_name -> novam.entities.v1.FlowState
-	24, // 18: novam.data.v1.SaveFlowStateRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	28, // 19: novam.data.v1.SaveFlowStateRequest.state:type_name -> novam.entities.v1.FlowState
-	28, // 20: novam.data.v1.SaveFlowStateResponse.state:type_name -> novam.entities.v1.FlowState
-	24, // 21: novam.data.v1.ListFlowDefinitionsForEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	25, // 22: novam.data.v1.ListFlowDefinitionsForEventResponse.definitions:type_name -> novam.entities.v1.FlowDefinition
-	24, // 23: novam.data.v1.ListScheduledFlowDefinitionsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	25, // 24: novam.data.v1.ListScheduledFlowDefinitionsResponse.definitions:type_name -> novam.entities.v1.FlowDefinition
-	24, // 25: novam.data.v1.ClaimDueFlowInstancesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	23, // 26: novam.data.v1.ClaimDueFlowInstancesRequest.now:type_name -> google.protobuf.Timestamp
-	0,  // 27: novam.data.v1.ClaimDueFlowInstancesResponse.instances:type_name -> novam.data.v1.FlowInstance
-	24, // 28: novam.data.v1.SaveRunStepRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	1,  // 29: novam.data.v1.SaveRunStepRequest.step:type_name -> novam.data.v1.RunStep
-	1,  // 30: novam.data.v1.SaveRunStepResponse.step:type_name -> novam.data.v1.RunStep
-	24, // 31: novam.data.v1.ListRunStepsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	1,  // 32: novam.data.v1.ListRunStepsResponse.steps:type_name -> novam.data.v1.RunStep
-	2,  // 33: novam.data.v1.FlowStoreService.GetFlowDefinition:input_type -> novam.data.v1.GetFlowDefinitionRequest
-	4,  // 34: novam.data.v1.FlowStoreService.GetFlowInstance:input_type -> novam.data.v1.GetFlowInstanceRequest
-	6,  // 35: novam.data.v1.FlowStoreService.SaveFlowInstance:input_type -> novam.data.v1.SaveFlowInstanceRequest
-	8,  // 36: novam.data.v1.FlowStoreService.GetFlowState:input_type -> novam.data.v1.GetFlowStateRequest
-	10, // 37: novam.data.v1.FlowStoreService.SaveFlowState:input_type -> novam.data.v1.SaveFlowStateRequest
-	12, // 38: novam.data.v1.FlowStoreService.ListFlowDefinitionsForEvent:input_type -> novam.data.v1.ListFlowDefinitionsForEventRequest
-	14, // 39: novam.data.v1.FlowStoreService.ListScheduledFlowDefinitions:input_type -> novam.data.v1.ListScheduledFlowDefinitionsRequest
-	16, // 40: novam.data.v1.FlowStoreService.ClaimDueFlowInstances:input_type -> novam.data.v1.ClaimDueFlowInstancesRequest
-	18, // 41: novam.data.v1.FlowStoreService.SaveRunStep:input_type -> novam.data.v1.SaveRunStepRequest
-	20, // 42: novam.data.v1.FlowStoreService.ListRunSteps:input_type -> novam.data.v1.ListRunStepsRequest
-	3,  // 43: novam.data.v1.FlowStoreService.GetFlowDefinition:output_type -> novam.data.v1.GetFlowDefinitionResponse
-	5,  // 44: novam.data.v1.FlowStoreService.GetFlowInstance:output_type -> novam.data.v1.GetFlowInstanceResponse
-	7,  // 45: novam.data.v1.FlowStoreService.SaveFlowInstance:output_type -> novam.data.v1.SaveFlowInstanceResponse
-	9,  // 46: novam.data.v1.FlowStoreService.GetFlowState:output_type -> novam.data.v1.GetFlowStateResponse
-	11, // 47: novam.data.v1.FlowStoreService.SaveFlowState:output_type -> novam.data.v1.SaveFlowStateResponse
-	13, // 48: novam.data.v1.FlowStoreService.ListFlowDefinitionsForEvent:output_type -> novam.data.v1.ListFlowDefinitionsForEventResponse
-	15, // 49: novam.data.v1.FlowStoreService.ListScheduledFlowDefinitions:output_type -> novam.data.v1.ListScheduledFlowDefinitionsResponse
-	17, // 50: novam.data.v1.FlowStoreService.ClaimDueFlowInstances:output_type -> novam.data.v1.ClaimDueFlowInstancesResponse
-	19, // 51: novam.data.v1.FlowStoreService.SaveRunStep:output_type -> novam.data.v1.SaveRunStepResponse
-	21, // 52: novam.data.v1.FlowStoreService.ListRunSteps:output_type -> novam.data.v1.ListRunStepsResponse
-	43, // [43:53] is the sub-list for method output_type
-	33, // [33:43] is the sub-list for method input_type
-	33, // [33:33] is the sub-list for extension type_name
-	33, // [33:33] is the sub-list for extension extendee
-	0,  // [0:33] is the sub-list for field type_name
+	24, // 0: novam.data.v1.FlowInstance.variables:type_name -> google.protobuf.Struct
+	25, // 1: novam.data.v1.FlowInstance.started_at:type_name -> google.protobuf.Timestamp
+	25, // 2: novam.data.v1.FlowInstance.finished_at:type_name -> google.protobuf.Timestamp
+	25, // 3: novam.data.v1.FlowInstance.wake_at:type_name -> google.protobuf.Timestamp
+	24, // 4: novam.data.v1.RunStep.output:type_name -> google.protobuf.Struct
+	25, // 5: novam.data.v1.RunStep.started_at:type_name -> google.protobuf.Timestamp
+	25, // 6: novam.data.v1.RunStep.finished_at:type_name -> google.protobuf.Timestamp
+	26, // 7: novam.data.v1.GetFlowDefinitionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	26, // 8: novam.data.v1.ListWaitingRunsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 9: novam.data.v1.ListWaitingRunsResponse.instances:type_name -> novam.data.v1.FlowInstance
+	27, // 10: novam.data.v1.GetFlowDefinitionResponse.definition:type_name -> novam.entities.v1.FlowDefinition
+	28, // 11: novam.data.v1.GetFlowDefinitionResponse.nodes:type_name -> novam.entities.v1.FlowDefinitionNode
+	29, // 12: novam.data.v1.GetFlowDefinitionResponse.edges:type_name -> novam.entities.v1.FlowDefinitionEdge
+	26, // 13: novam.data.v1.GetFlowInstanceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 14: novam.data.v1.GetFlowInstanceResponse.instance:type_name -> novam.data.v1.FlowInstance
+	26, // 15: novam.data.v1.SaveFlowInstanceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 16: novam.data.v1.SaveFlowInstanceRequest.instance:type_name -> novam.data.v1.FlowInstance
+	0,  // 17: novam.data.v1.SaveFlowInstanceResponse.instance:type_name -> novam.data.v1.FlowInstance
+	26, // 18: novam.data.v1.GetFlowStateRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	30, // 19: novam.data.v1.GetFlowStateResponse.state:type_name -> novam.entities.v1.FlowState
+	26, // 20: novam.data.v1.SaveFlowStateRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	30, // 21: novam.data.v1.SaveFlowStateRequest.state:type_name -> novam.entities.v1.FlowState
+	30, // 22: novam.data.v1.SaveFlowStateResponse.state:type_name -> novam.entities.v1.FlowState
+	26, // 23: novam.data.v1.ListFlowDefinitionsForEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	27, // 24: novam.data.v1.ListFlowDefinitionsForEventResponse.definitions:type_name -> novam.entities.v1.FlowDefinition
+	26, // 25: novam.data.v1.ListScheduledFlowDefinitionsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	27, // 26: novam.data.v1.ListScheduledFlowDefinitionsResponse.definitions:type_name -> novam.entities.v1.FlowDefinition
+	26, // 27: novam.data.v1.ClaimDueFlowInstancesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	25, // 28: novam.data.v1.ClaimDueFlowInstancesRequest.now:type_name -> google.protobuf.Timestamp
+	0,  // 29: novam.data.v1.ClaimDueFlowInstancesResponse.instances:type_name -> novam.data.v1.FlowInstance
+	26, // 30: novam.data.v1.SaveRunStepRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	1,  // 31: novam.data.v1.SaveRunStepRequest.step:type_name -> novam.data.v1.RunStep
+	1,  // 32: novam.data.v1.SaveRunStepResponse.step:type_name -> novam.data.v1.RunStep
+	26, // 33: novam.data.v1.ListRunStepsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	1,  // 34: novam.data.v1.ListRunStepsResponse.steps:type_name -> novam.data.v1.RunStep
+	2,  // 35: novam.data.v1.FlowStoreService.GetFlowDefinition:input_type -> novam.data.v1.GetFlowDefinitionRequest
+	6,  // 36: novam.data.v1.FlowStoreService.GetFlowInstance:input_type -> novam.data.v1.GetFlowInstanceRequest
+	8,  // 37: novam.data.v1.FlowStoreService.SaveFlowInstance:input_type -> novam.data.v1.SaveFlowInstanceRequest
+	10, // 38: novam.data.v1.FlowStoreService.GetFlowState:input_type -> novam.data.v1.GetFlowStateRequest
+	12, // 39: novam.data.v1.FlowStoreService.SaveFlowState:input_type -> novam.data.v1.SaveFlowStateRequest
+	14, // 40: novam.data.v1.FlowStoreService.ListFlowDefinitionsForEvent:input_type -> novam.data.v1.ListFlowDefinitionsForEventRequest
+	16, // 41: novam.data.v1.FlowStoreService.ListScheduledFlowDefinitions:input_type -> novam.data.v1.ListScheduledFlowDefinitionsRequest
+	18, // 42: novam.data.v1.FlowStoreService.ClaimDueFlowInstances:input_type -> novam.data.v1.ClaimDueFlowInstancesRequest
+	20, // 43: novam.data.v1.FlowStoreService.SaveRunStep:input_type -> novam.data.v1.SaveRunStepRequest
+	22, // 44: novam.data.v1.FlowStoreService.ListRunSteps:input_type -> novam.data.v1.ListRunStepsRequest
+	3,  // 45: novam.data.v1.FlowStoreService.ListWaitingRuns:input_type -> novam.data.v1.ListWaitingRunsRequest
+	5,  // 46: novam.data.v1.FlowStoreService.GetFlowDefinition:output_type -> novam.data.v1.GetFlowDefinitionResponse
+	7,  // 47: novam.data.v1.FlowStoreService.GetFlowInstance:output_type -> novam.data.v1.GetFlowInstanceResponse
+	9,  // 48: novam.data.v1.FlowStoreService.SaveFlowInstance:output_type -> novam.data.v1.SaveFlowInstanceResponse
+	11, // 49: novam.data.v1.FlowStoreService.GetFlowState:output_type -> novam.data.v1.GetFlowStateResponse
+	13, // 50: novam.data.v1.FlowStoreService.SaveFlowState:output_type -> novam.data.v1.SaveFlowStateResponse
+	15, // 51: novam.data.v1.FlowStoreService.ListFlowDefinitionsForEvent:output_type -> novam.data.v1.ListFlowDefinitionsForEventResponse
+	17, // 52: novam.data.v1.FlowStoreService.ListScheduledFlowDefinitions:output_type -> novam.data.v1.ListScheduledFlowDefinitionsResponse
+	19, // 53: novam.data.v1.FlowStoreService.ClaimDueFlowInstances:output_type -> novam.data.v1.ClaimDueFlowInstancesResponse
+	21, // 54: novam.data.v1.FlowStoreService.SaveRunStep:output_type -> novam.data.v1.SaveRunStepResponse
+	23, // 55: novam.data.v1.FlowStoreService.ListRunSteps:output_type -> novam.data.v1.ListRunStepsResponse
+	4,  // 56: novam.data.v1.FlowStoreService.ListWaitingRuns:output_type -> novam.data.v1.ListWaitingRunsResponse
+	46, // [46:57] is the sub-list for method output_type
+	35, // [35:46] is the sub-list for method input_type
+	35, // [35:35] is the sub-list for extension type_name
+	35, // [35:35] is the sub-list for extension extendee
+	0,  // [0:35] is the sub-list for field type_name
 }
 
 func init() { file_novam_data_v1_flow_store_service_proto_init() }
@@ -1498,7 +1640,7 @@ func file_novam_data_v1_flow_store_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_data_v1_flow_store_service_proto_rawDesc), len(file_novam_data_v1_flow_store_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

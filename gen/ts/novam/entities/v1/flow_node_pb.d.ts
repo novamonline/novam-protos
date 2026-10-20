@@ -79,6 +79,13 @@ export declare type FlowNode = Message<"novam.entities.v1.FlowNode"> & {
    * @generated from field: novam.entities.v1.FlowNodeCapabilities capabilities = 11;
    */
   capabilities?: FlowNodeCapabilities;
+
+  /**
+   * Bumped when a kind changes in a way saved workflows notice; adding settings or outputs does not bump it.
+   *
+   * @generated from field: int32 version = 12;
+   */
+  version: number;
 };
 
 /**

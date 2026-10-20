@@ -82,3 +82,20 @@ message ReminderRuleEvent {
   ChangeType change = 1;
   ReminderRule rule = 2;
 }
+
+// A text or chat message between the business and a client, such as a reply to a reminder. Workflows wait
+// for these (wait_for_event); the conversation itself stays in novam-data.
+message Message {
+  string id = 1;
+  string org_id = 2;
+  string client_id = 3;
+  string channel = 4; // sms, chat
+  string direction = 5; // inbound, outbound
+  string body = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+message MessageEvent {
+  ChangeType change = 1;
+  Message message = 2;
+}

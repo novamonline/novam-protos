@@ -35,9 +35,14 @@ type FlowDefinition struct {
 	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	// What starts this flow's runs. Unset means runs start only through StartRun.
-	Trigger       *FlowTrigger `protobuf:"bytes,9,opt,name=trigger,proto3" json:"trigger,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	Trigger *FlowTrigger `protobuf:"bytes,9,opt,name=trigger,proto3" json:"trigger,omitempty"`
+	// The version new runs follow. Each publish freezes the draft as a new snapshot; runs already going keep the
+	// snapshot they started on. Empty means nothing is published and runs follow the draft.
+	PublishedSnapshotId string `protobuf:"bytes,10,opt,name=published_snapshot_id,json=publishedSnapshotId,proto3" json:"published_snapshot_id,omitempty"`
+	// The published version's number, 1 for the first publish; 0 when nothing is published.
+	PublishedVersion int32 `protobuf:"varint,11,opt,name=published_version,json=publishedVersion,proto3" json:"published_version,omitempty"`
+	unknownFields    protoimpl.UnknownFields
+	sizeCache        protoimpl.SizeCache
 }
 
 func (x *FlowDefinition) Reset() {
@@ -131,6 +136,20 @@ func (x *FlowDefinition) GetTrigger() *FlowTrigger {
 		return x.Trigger
 	}
 	return nil
+}
+
+func (x *FlowDefinition) GetPublishedSnapshotId() string {
+	if x != nil {
+		return x.PublishedSnapshotId
+	}
+	return ""
+}
+
+func (x *FlowDefinition) GetPublishedVersion() int32 {
+	if x != nil {
+		return x.PublishedVersion
+	}
+	return 0
 }
 
 // FlowTrigger is what starts a flow's runs, as the workflow builder saved it.
@@ -406,7 +425,7 @@ var File_novam_entities_v1_flow_definition_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
 	"\n" +
-	"'novam/entities/v1/flow_definition.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xdb\x02\n" +
+	"'novam/entities/v1/flow_definition.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"\xbc\x03\n" +
 	"\x0eFlowDefinition\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x12\n" +
@@ -418,7 +437,10 @@ const file_novam_entities_v1_flow_definition_proto_rawDesc = "" +
 	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x128\n" +
-	"\atrigger\x18\t \x01(\v2\x1e.novam.entities.v1.FlowTriggerR\atrigger\"l\n" +
+	"\atrigger\x18\t \x01(\v2\x1e.novam.entities.v1.FlowTriggerR\atrigger\x122\n" +
+	"\x15published_snapshot_id\x18\n" +
+	" \x01(\tR\x13publishedSnapshotId\x12+\n" +
+	"\x11published_version\x18\v \x01(\x05R\x10publishedVersion\"l\n" +
 	"\vFlowTrigger\x12\x12\n" +
 	"\x04type\x18\x01 \x01(\tR\x04type\x12/\n" +
 	"\x06config\x18\x02 \x01(\v2\x17.google.protobuf.StructR\x06config\x12\x18\n" +

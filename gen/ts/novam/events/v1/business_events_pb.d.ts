@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { Message as Message$1 } from "@bufbuild/protobuf";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 
 /**
@@ -14,7 +14,7 @@ export declare const file_novam_events_v1_business_events: GenFile;
 /**
  * @generated from message novam.events.v1.Appointment
  */
-export declare type Appointment = Message<"novam.events.v1.Appointment"> & {
+export declare type Appointment = Message$1<"novam.events.v1.Appointment"> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -62,7 +62,7 @@ export declare const AppointmentSchema: GenMessage<Appointment>;
 /**
  * @generated from message novam.events.v1.AppointmentEvent
  */
-export declare type AppointmentEvent = Message<"novam.events.v1.AppointmentEvent"> & {
+export declare type AppointmentEvent = Message$1<"novam.events.v1.AppointmentEvent"> & {
   /**
    * @generated from field: novam.events.v1.ChangeType change = 1;
    */
@@ -83,7 +83,7 @@ export declare const AppointmentEventSchema: GenMessage<AppointmentEvent>;
 /**
  * @generated from message novam.events.v1.ClientInvoice
  */
-export declare type ClientInvoice = Message<"novam.events.v1.ClientInvoice"> & {
+export declare type ClientInvoice = Message$1<"novam.events.v1.ClientInvoice"> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -140,7 +140,7 @@ export declare const ClientInvoiceSchema: GenMessage<ClientInvoice>;
 /**
  * @generated from message novam.events.v1.ClientInvoiceEvent
  */
-export declare type ClientInvoiceEvent = Message<"novam.events.v1.ClientInvoiceEvent"> & {
+export declare type ClientInvoiceEvent = Message$1<"novam.events.v1.ClientInvoiceEvent"> & {
   /**
    * @generated from field: novam.events.v1.ChangeType change = 1;
    */
@@ -163,7 +163,7 @@ export declare const ClientInvoiceEventSchema: GenMessage<ClientInvoiceEvent>;
  *
  * @generated from message novam.events.v1.Client
  */
-export declare type Client = Message<"novam.events.v1.Client"> & {
+export declare type Client = Message$1<"novam.events.v1.Client"> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -189,7 +189,7 @@ export declare const ClientSchema: GenMessage<Client>;
 /**
  * @generated from message novam.events.v1.ClientEvent
  */
-export declare type ClientEvent = Message<"novam.events.v1.ClientEvent"> & {
+export declare type ClientEvent = Message$1<"novam.events.v1.ClientEvent"> & {
   /**
    * @generated from field: novam.events.v1.ChangeType change = 1;
    */
@@ -210,7 +210,7 @@ export declare const ClientEventSchema: GenMessage<ClientEvent>;
 /**
  * @generated from message novam.events.v1.ReminderRule
  */
-export declare type ReminderRule = Message<"novam.events.v1.ReminderRule"> & {
+export declare type ReminderRule = Message$1<"novam.events.v1.ReminderRule"> & {
   /**
    * @generated from field: string id = 1;
    */
@@ -257,7 +257,7 @@ export declare const ReminderRuleSchema: GenMessage<ReminderRule>;
 /**
  * @generated from message novam.events.v1.ReminderRuleEvent
  */
-export declare type ReminderRuleEvent = Message<"novam.events.v1.ReminderRuleEvent"> & {
+export declare type ReminderRuleEvent = Message$1<"novam.events.v1.ReminderRuleEvent"> & {
   /**
    * @generated from field: novam.events.v1.ChangeType change = 1;
    */
@@ -274,6 +274,80 @@ export declare type ReminderRuleEvent = Message<"novam.events.v1.ReminderRuleEve
  * Use `create(ReminderRuleEventSchema)` to create a new message.
  */
 export declare const ReminderRuleEventSchema: GenMessage<ReminderRuleEvent>;
+
+/**
+ * A text or chat message between the business and a client, such as a reply to a reminder. Workflows wait
+ * for these (wait_for_event); the conversation itself stays in novam-data.
+ *
+ * @generated from message novam.events.v1.Message
+ */
+export declare type Message = Message$1<"novam.events.v1.Message"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string org_id = 2;
+   */
+  orgId: string;
+
+  /**
+   * @generated from field: string client_id = 3;
+   */
+  clientId: string;
+
+  /**
+   * sms, chat
+   *
+   * @generated from field: string channel = 4;
+   */
+  channel: string;
+
+  /**
+   * inbound, outbound
+   *
+   * @generated from field: string direction = 5;
+   */
+  direction: string;
+
+  /**
+   * @generated from field: string body = 6;
+   */
+  body: string;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp created_at = 7;
+   */
+  createdAt?: Timestamp;
+};
+
+/**
+ * Describes the message novam.events.v1.Message.
+ * Use `create(MessageSchema)` to create a new message.
+ */
+export declare const MessageSchema: GenMessage<Message>;
+
+/**
+ * @generated from message novam.events.v1.MessageEvent
+ */
+export declare type MessageEvent = Message$1<"novam.events.v1.MessageEvent"> & {
+  /**
+   * @generated from field: novam.events.v1.ChangeType change = 1;
+   */
+  change: ChangeType;
+
+  /**
+   * @generated from field: novam.events.v1.Message message = 2;
+   */
+  message?: Message;
+};
+
+/**
+ * Describes the message novam.events.v1.MessageEvent.
+ * Use `create(MessageEventSchema)` to create a new message.
+ */
+export declare const MessageEventSchema: GenMessage<MessageEvent>;
 
 /**
  * What happened to the entity.

@@ -163,6 +163,28 @@ function deserialize_novam_data_v1_ListScheduledFlowDefinitionsResponse(buffer_a
   return novam_data_v1_flow_store_service_pb.ListScheduledFlowDefinitionsResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_data_v1_ListWaitingRunsRequest(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.ListWaitingRunsRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.ListWaitingRunsRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListWaitingRunsRequest(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.ListWaitingRunsRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_ListWaitingRunsResponse(arg) {
+  if (!(arg instanceof novam_data_v1_flow_store_service_pb.ListWaitingRunsResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.ListWaitingRunsResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_ListWaitingRunsResponse(buffer_arg) {
+  return novam_data_v1_flow_store_service_pb.ListWaitingRunsResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_data_v1_SaveFlowInstanceRequest(arg) {
   if (!(arg instanceof novam_data_v1_flow_store_service_pb.SaveFlowInstanceRequest)) {
     throw new Error('Expected argument of type novam.data.v1.SaveFlowInstanceRequest');
@@ -357,6 +379,19 @@ listRunSteps: {
     requestDeserialize: deserialize_novam_data_v1_ListRunStepsRequest,
     responseSerialize: serialize_novam_data_v1_ListRunStepsResponse,
     responseDeserialize: deserialize_novam_data_v1_ListRunStepsResponse,
+  },
+  // Runs parked on a step that waits for an event (wait_for_event) about a subject, such as a reply text from
+// a client, so the event can wake them.
+listWaitingRuns: {
+    path: '/novam.data.v1.FlowStoreService/ListWaitingRuns',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_flow_store_service_pb.ListWaitingRunsRequest,
+    responseType: novam_data_v1_flow_store_service_pb.ListWaitingRunsResponse,
+    requestSerialize: serialize_novam_data_v1_ListWaitingRunsRequest,
+    requestDeserialize: deserialize_novam_data_v1_ListWaitingRunsRequest,
+    responseSerialize: serialize_novam_data_v1_ListWaitingRunsResponse,
+    responseDeserialize: deserialize_novam_data_v1_ListWaitingRunsResponse,
   },
 };
 

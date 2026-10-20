@@ -25,6 +25,8 @@ message FlowNode {
   // JSON Schema of the data the step adds to the run, readable by later steps as steps.<node_id>.output.
   google.protobuf.Struct outputs_schema = 10;
   FlowNodeCapabilities capabilities = 11;
+  // Bumped when a kind changes in a way saved workflows notice; adding settings or outputs does not bump it.
+  int32 version = 12;
 }
 
 // FlowNodeExit is one way out of a step; an edge leaving the step names it in FlowDefinitionEdge.exit.
