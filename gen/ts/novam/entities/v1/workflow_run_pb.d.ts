@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { ErrorDetails } from "../../common/v1/errors_pb";
 
@@ -49,6 +49,41 @@ export declare type WorkflowRun = Message<"novam.entities.v1.WorkflowRun"> & {
    * @generated from field: novam.common.v1.ErrorDetails error = 6;
    */
   error?: ErrorDetails;
+
+  /**
+   * The step the run is on (waiting or running there); empty once it has finished.
+   *
+   * @generated from field: string current_node_id = 7;
+   */
+  currentNodeId: string;
+
+  /**
+   * The published version (snapshot) the run follows; empty for the draft.
+   *
+   * @generated from field: string snapshot_id = 8;
+   */
+  snapshotId: string;
+
+  /**
+   * A test run: steps with side effects reported what they would do, and waits were skipped.
+   *
+   * @generated from field: bool test = 9;
+   */
+  test: boolean;
+
+  /**
+   * Who the run is about: the client of the record that started it, else that record's id.
+   *
+   * @generated from field: string subject_id = 10;
+   */
+  subjectId: string;
+
+  /**
+   * The steps the run went through, in order (GetRun only).
+   *
+   * @generated from field: repeated novam.entities.v1.WorkflowRunStep steps = 11;
+   */
+  steps: WorkflowRunStep[];
 };
 
 /**
@@ -56,6 +91,65 @@ export declare type WorkflowRun = Message<"novam.entities.v1.WorkflowRun"> & {
  * Use `create(WorkflowRunSchema)` to create a new message.
  */
 export declare const WorkflowRunSchema: GenMessage<WorkflowRun>;
+
+/**
+ * WorkflowRunStep is one step of a run: a node it ran, and what came of it.
+ *
+ * @generated from message novam.entities.v1.WorkflowRunStep
+ */
+export declare type WorkflowRunStep = Message<"novam.entities.v1.WorkflowRunStep"> & {
+  /**
+   * 1-based order within the run
+   *
+   * @generated from field: int32 sequence = 1;
+   */
+  sequence: number;
+
+  /**
+   * @generated from field: string node_id = 2;
+   */
+  nodeId: string;
+
+  /**
+   * @generated from field: string node_kind = 3;
+   */
+  nodeKind: string;
+
+  /**
+   * running, succeeded, failed, skipped
+   *
+   * @generated from field: string status = 4;
+   */
+  status: string;
+
+  /**
+   * @generated from field: string error_message = 5;
+   */
+  errorMessage: string;
+
+  /**
+   * readable by later steps as steps.<node_id>.output
+   *
+   * @generated from field: google.protobuf.Struct output = 6;
+   */
+  output?: JsonObject;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp started_at = 7;
+   */
+  startedAt?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp finished_at = 8;
+   */
+  finishedAt?: Timestamp;
+};
+
+/**
+ * Describes the message novam.entities.v1.WorkflowRunStep.
+ * Use `create(WorkflowRunStepSchema)` to create a new message.
+ */
+export declare const WorkflowRunStepSchema: GenMessage<WorkflowRunStep>;
 
 /**
  * RunStatus is the status of a workflow run.

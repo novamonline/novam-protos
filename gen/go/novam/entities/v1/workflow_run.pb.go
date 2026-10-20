@@ -10,6 +10,7 @@ import (
 	v1 "github.com/novamonline/novam-protos/gen/go/novam/common/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
@@ -88,13 +89,23 @@ func (RunStatus) EnumDescriptor() ([]byte, []int) {
 
 // WorkflowRun represents a single execution of a workflow.
 type WorkflowRun struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	WorkflowId    string                 `protobuf:"bytes,2,opt,name=workflow_id,json=workflowId,proto3" json:"workflow_id,omitempty"`
-	Status        RunStatus              `protobuf:"varint,3,opt,name=status,proto3,enum=novam.entities.v1.RunStatus" json:"status,omitempty"`
-	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
-	FinishedAt    *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=finished_at,json=finishedAt,proto3" json:"finished_at,omitempty"`
-	Error         *v1.ErrorDetails       `protobuf:"bytes,6,opt,name=error,proto3" json:"error,omitempty"` // Set when status is FAILED.
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Id         string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	WorkflowId string                 `protobuf:"bytes,2,opt,name=workflow_id,json=workflowId,proto3" json:"workflow_id,omitempty"`
+	Status     RunStatus              `protobuf:"varint,3,opt,name=status,proto3,enum=novam.entities.v1.RunStatus" json:"status,omitempty"`
+	StartedAt  *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	FinishedAt *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=finished_at,json=finishedAt,proto3" json:"finished_at,omitempty"`
+	Error      *v1.ErrorDetails       `protobuf:"bytes,6,opt,name=error,proto3" json:"error,omitempty"` // Set when status is FAILED.
+	// The step the run is on (waiting or running there); empty once it has finished.
+	CurrentNodeId string `protobuf:"bytes,7,opt,name=current_node_id,json=currentNodeId,proto3" json:"current_node_id,omitempty"`
+	// The published version (snapshot) the run follows; empty for the draft.
+	SnapshotId string `protobuf:"bytes,8,opt,name=snapshot_id,json=snapshotId,proto3" json:"snapshot_id,omitempty"`
+	// A test run: steps with side effects reported what they would do, and waits were skipped.
+	Test bool `protobuf:"varint,9,opt,name=test,proto3" json:"test,omitempty"`
+	// Who the run is about: the client of the record that started it, else that record's id.
+	SubjectId string `protobuf:"bytes,10,opt,name=subject_id,json=subjectId,proto3" json:"subject_id,omitempty"`
+	// The steps the run went through, in order (GetRun only).
+	Steps         []*WorkflowRunStep `protobuf:"bytes,11,rep,name=steps,proto3" json:"steps,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -171,11 +182,147 @@ func (x *WorkflowRun) GetError() *v1.ErrorDetails {
 	return nil
 }
 
+func (x *WorkflowRun) GetCurrentNodeId() string {
+	if x != nil {
+		return x.CurrentNodeId
+	}
+	return ""
+}
+
+func (x *WorkflowRun) GetSnapshotId() string {
+	if x != nil {
+		return x.SnapshotId
+	}
+	return ""
+}
+
+func (x *WorkflowRun) GetTest() bool {
+	if x != nil {
+		return x.Test
+	}
+	return false
+}
+
+func (x *WorkflowRun) GetSubjectId() string {
+	if x != nil {
+		return x.SubjectId
+	}
+	return ""
+}
+
+func (x *WorkflowRun) GetSteps() []*WorkflowRunStep {
+	if x != nil {
+		return x.Steps
+	}
+	return nil
+}
+
+// WorkflowRunStep is one step of a run: a node it ran, and what came of it.
+type WorkflowRunStep struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Sequence      int32                  `protobuf:"varint,1,opt,name=sequence,proto3" json:"sequence,omitempty"` // 1-based order within the run
+	NodeId        string                 `protobuf:"bytes,2,opt,name=node_id,json=nodeId,proto3" json:"node_id,omitempty"`
+	NodeKind      string                 `protobuf:"bytes,3,opt,name=node_kind,json=nodeKind,proto3" json:"node_kind,omitempty"`
+	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"` // running, succeeded, failed, skipped
+	ErrorMessage  string                 `protobuf:"bytes,5,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`
+	Output        *structpb.Struct       `protobuf:"bytes,6,opt,name=output,proto3" json:"output,omitempty"` // readable by later steps as steps.<node_id>.output
+	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	FinishedAt    *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=finished_at,json=finishedAt,proto3" json:"finished_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WorkflowRunStep) Reset() {
+	*x = WorkflowRunStep{}
+	mi := &file_novam_entities_v1_workflow_run_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WorkflowRunStep) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WorkflowRunStep) ProtoMessage() {}
+
+func (x *WorkflowRunStep) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_entities_v1_workflow_run_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WorkflowRunStep.ProtoReflect.Descriptor instead.
+func (*WorkflowRunStep) Descriptor() ([]byte, []int) {
+	return file_novam_entities_v1_workflow_run_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *WorkflowRunStep) GetSequence() int32 {
+	if x != nil {
+		return x.Sequence
+	}
+	return 0
+}
+
+func (x *WorkflowRunStep) GetNodeId() string {
+	if x != nil {
+		return x.NodeId
+	}
+	return ""
+}
+
+func (x *WorkflowRunStep) GetNodeKind() string {
+	if x != nil {
+		return x.NodeKind
+	}
+	return ""
+}
+
+func (x *WorkflowRunStep) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *WorkflowRunStep) GetErrorMessage() string {
+	if x != nil {
+		return x.ErrorMessage
+	}
+	return ""
+}
+
+func (x *WorkflowRunStep) GetOutput() *structpb.Struct {
+	if x != nil {
+		return x.Output
+	}
+	return nil
+}
+
+func (x *WorkflowRunStep) GetStartedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.StartedAt
+	}
+	return nil
+}
+
+func (x *WorkflowRunStep) GetFinishedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.FinishedAt
+	}
+	return nil
+}
+
 var File_novam_entities_v1_workflow_run_proto protoreflect.FileDescriptor
 
 const file_novam_entities_v1_workflow_run_proto_rawDesc = "" +
 	"\n" +
-	"$novam/entities/v1/workflow_run.proto\x12\x11novam.entities.v1\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cnovam/common/v1/errors.proto\"\xa1\x02\n" +
+	"$novam/entities/v1/workflow_run.proto\x12\x11novam.entities.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cnovam/common/v1/errors.proto\"\xd7\x03\n" +
 	"\vWorkflowRun\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x1f\n" +
 	"\vworkflow_id\x18\x02 \x01(\tR\n" +
@@ -185,7 +332,26 @@ const file_novam_entities_v1_workflow_run_proto_rawDesc = "" +
 	"started_at\x18\x04 \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12;\n" +
 	"\vfinished_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\n" +
 	"finishedAt\x123\n" +
-	"\x05error\x18\x06 \x01(\v2\x1d.novam.common.v1.ErrorDetailsR\x05error*\xba\x01\n" +
+	"\x05error\x18\x06 \x01(\v2\x1d.novam.common.v1.ErrorDetailsR\x05error\x12&\n" +
+	"\x0fcurrent_node_id\x18\a \x01(\tR\rcurrentNodeId\x12\x1f\n" +
+	"\vsnapshot_id\x18\b \x01(\tR\n" +
+	"snapshotId\x12\x12\n" +
+	"\x04test\x18\t \x01(\bR\x04test\x12\x1d\n" +
+	"\n" +
+	"subject_id\x18\n" +
+	" \x01(\tR\tsubjectId\x128\n" +
+	"\x05steps\x18\v \x03(\v2\".novam.entities.v1.WorkflowRunStepR\x05steps\"\xc9\x02\n" +
+	"\x0fWorkflowRunStep\x12\x1a\n" +
+	"\bsequence\x18\x01 \x01(\x05R\bsequence\x12\x17\n" +
+	"\anode_id\x18\x02 \x01(\tR\x06nodeId\x12\x1b\n" +
+	"\tnode_kind\x18\x03 \x01(\tR\bnodeKind\x12\x16\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\x12#\n" +
+	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\x12/\n" +
+	"\x06output\x18\x06 \x01(\v2\x17.google.protobuf.StructR\x06output\x129\n" +
+	"\n" +
+	"started_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x12;\n" +
+	"\vfinished_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\n" +
+	"finishedAt*\xba\x01\n" +
 	"\tRunStatus\x12\x1a\n" +
 	"\x16RUN_STATUS_UNSPECIFIED\x10\x00\x12\x16\n" +
 	"\x12RUN_STATUS_PENDING\x10\x01\x12\x16\n" +
@@ -208,23 +374,29 @@ func file_novam_entities_v1_workflow_run_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_entities_v1_workflow_run_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_entities_v1_workflow_run_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_novam_entities_v1_workflow_run_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_novam_entities_v1_workflow_run_proto_goTypes = []any{
 	(RunStatus)(0),                // 0: novam.entities.v1.RunStatus
 	(*WorkflowRun)(nil),           // 1: novam.entities.v1.WorkflowRun
-	(*timestamppb.Timestamp)(nil), // 2: google.protobuf.Timestamp
-	(*v1.ErrorDetails)(nil),       // 3: novam.common.v1.ErrorDetails
+	(*WorkflowRunStep)(nil),       // 2: novam.entities.v1.WorkflowRunStep
+	(*timestamppb.Timestamp)(nil), // 3: google.protobuf.Timestamp
+	(*v1.ErrorDetails)(nil),       // 4: novam.common.v1.ErrorDetails
+	(*structpb.Struct)(nil),       // 5: google.protobuf.Struct
 }
 var file_novam_entities_v1_workflow_run_proto_depIdxs = []int32{
 	0, // 0: novam.entities.v1.WorkflowRun.status:type_name -> novam.entities.v1.RunStatus
-	2, // 1: novam.entities.v1.WorkflowRun.started_at:type_name -> google.protobuf.Timestamp
-	2, // 2: novam.entities.v1.WorkflowRun.finished_at:type_name -> google.protobuf.Timestamp
-	3, // 3: novam.entities.v1.WorkflowRun.error:type_name -> novam.common.v1.ErrorDetails
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	3, // 1: novam.entities.v1.WorkflowRun.started_at:type_name -> google.protobuf.Timestamp
+	3, // 2: novam.entities.v1.WorkflowRun.finished_at:type_name -> google.protobuf.Timestamp
+	4, // 3: novam.entities.v1.WorkflowRun.error:type_name -> novam.common.v1.ErrorDetails
+	2, // 4: novam.entities.v1.WorkflowRun.steps:type_name -> novam.entities.v1.WorkflowRunStep
+	5, // 5: novam.entities.v1.WorkflowRunStep.output:type_name -> google.protobuf.Struct
+	3, // 6: novam.entities.v1.WorkflowRunStep.started_at:type_name -> google.protobuf.Timestamp
+	3, // 7: novam.entities.v1.WorkflowRunStep.finished_at:type_name -> google.protobuf.Timestamp
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_novam_entities_v1_workflow_run_proto_init() }
@@ -238,7 +410,7 @@ func file_novam_entities_v1_workflow_run_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_entities_v1_workflow_run_proto_rawDesc), len(file_novam_entities_v1_workflow_run_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
