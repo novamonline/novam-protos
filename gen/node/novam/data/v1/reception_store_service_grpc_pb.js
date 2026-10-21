@@ -203,8 +203,8 @@ handOff: {
     responseSerialize: serialize_novam_data_v1_HandOffResponse,
     responseDeserialize: deserialize_novam_data_v1_HandOffResponse,
   },
-  // The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
-// agent can never read another client's records.
+  // The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
+// visitor who isn't signed in, so the agent can never read another client's records.
 listClientVisits: {
     path: '/novam.data.v1.ReceptionStoreService/ListClientVisits',
     requestStream: false,

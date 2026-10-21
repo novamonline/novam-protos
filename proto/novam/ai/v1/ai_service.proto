@@ -35,6 +35,8 @@ message TalkStart {
   ModelChoice model = 3;
   // The conversation so far (typed or spoken), so a chat can carry on by voice.
   repeated novam.entities.v1.ChatMessage history = 4;
+  // One of Gemini Live's prebuilt voices, e.g. Kore; empty uses the model's default voice.
+  string voice_name = 5;
 }
 
 message TalkResponse {

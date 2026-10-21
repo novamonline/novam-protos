@@ -85,6 +85,13 @@ export declare type TalkStart = Message<"novam.ai.v1.TalkStart"> & {
    * @generated from field: repeated novam.entities.v1.ChatMessage history = 4;
    */
   history: ChatMessage[];
+
+  /**
+   * One of Gemini Live's prebuilt voices, e.g. Kore; empty uses the model's default voice.
+   *
+   * @generated from field: string voice_name = 5;
+   */
+  voiceName: string;
 };
 
 /**
