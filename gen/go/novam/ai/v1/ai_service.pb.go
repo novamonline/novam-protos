@@ -251,7 +251,9 @@ type TalkStart struct {
 	// The business's model choice; unset uses the service's default.
 	Model *ModelChoice `protobuf:"bytes,3,opt,name=model,proto3" json:"model,omitempty"`
 	// The conversation so far (typed or spoken), so a chat can carry on by voice.
-	History       []*v11.ChatMessage `protobuf:"bytes,4,rep,name=history,proto3" json:"history,omitempty"`
+	History []*v11.ChatMessage `protobuf:"bytes,4,rep,name=history,proto3" json:"history,omitempty"`
+	// One of Gemini Live's prebuilt voices, e.g. Kore; empty uses the model's default voice.
+	VoiceName     string `protobuf:"bytes,5,opt,name=voice_name,json=voiceName,proto3" json:"voice_name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -312,6 +314,13 @@ func (x *TalkStart) GetHistory() []*v11.ChatMessage {
 		return x.History
 	}
 	return nil
+}
+
+func (x *TalkStart) GetVoiceName() string {
+	if x != nil {
+		return x.VoiceName
+	}
+	return ""
 }
 
 type TalkResponse struct {
@@ -812,12 +821,14 @@ const file_novam_ai_v1_ai_service_proto_rawDesc = "" +
 	"\n" +
 	"turn_start\x18\x03 \x01(\bH\x00R\tturnStart\x12\x1b\n" +
 	"\bturn_end\x18\x04 \x01(\bH\x00R\aturnEndB\a\n" +
-	"\x05event\"\xd0\x01\n" +
+	"\x05event\"\xef\x01\n" +
 	"\tTalkStart\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1b\n" +
 	"\tthread_id\x18\x02 \x01(\tR\bthreadId\x12.\n" +
 	"\x05model\x18\x03 \x01(\v2\x18.novam.ai.v1.ModelChoiceR\x05model\x128\n" +
-	"\ahistory\x18\x04 \x03(\v2\x1e.novam.entities.v1.ChatMessageR\ahistory\"|\n" +
+	"\ahistory\x18\x04 \x03(\v2\x1e.novam.entities.v1.ChatMessageR\ahistory\x12\x1d\n" +
+	"\n" +
+	"voice_name\x18\x05 \x01(\tR\tvoiceName\"|\n" +
 	"\fTalkResponse\x12\x16\n" +
 	"\x05audio\x18\x01 \x01(\fH\x00R\x05audio\x12\x16\n" +
 	"\x05heard\x18\x02 \x01(\tH\x00R\x05heard\x12\x14\n" +
