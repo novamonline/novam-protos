@@ -45,8 +45,8 @@ type ReceptionStoreServiceClient interface {
 	SaveContact(ctx context.Context, in *SaveContactRequest, opts ...grpc.CallOption) (*SaveContactResponse, error)
 	// Passes the chat to the owner with a summary; the thread then waits for them in Front Desk.
 	HandOff(ctx context.Context, in *HandOffRequest, opts ...grpc.CallOption) (*HandOffResponse, error)
-	// The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
-	// agent can never read another client's records.
+	// The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
+	// visitor who isn't signed in, so the agent can never read another client's records.
 	ListClientVisits(ctx context.Context, in *ListClientVisitsRequest, opts ...grpc.CallOption) (*ListClientVisitsResponse, error)
 }
 
@@ -136,8 +136,8 @@ type ReceptionStoreServiceServer interface {
 	SaveContact(context.Context, *SaveContactRequest) (*SaveContactResponse, error)
 	// Passes the chat to the owner with a summary; the thread then waits for them in Front Desk.
 	HandOff(context.Context, *HandOffRequest) (*HandOffResponse, error)
-	// The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
-	// agent can never read another client's records.
+	// The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
+	// visitor who isn't signed in, so the agent can never read another client's records.
 	ListClientVisits(context.Context, *ListClientVisitsRequest) (*ListClientVisitsResponse, error)
 	mustEmbedUnimplementedReceptionStoreServiceServer()
 }

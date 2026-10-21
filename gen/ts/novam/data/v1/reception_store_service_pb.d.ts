@@ -475,6 +475,11 @@ export declare type ListClientVisitsResponse = Message<"novam.data.v1.ListClient
    * @generated from field: double amount_due = 4;
    */
   amountDue: number;
+
+  /**
+   * @generated from field: novam.data.v1.ClientRewards rewards = 5;
+   */
+  rewards?: ClientRewards;
 };
 
 /**
@@ -482,6 +487,101 @@ export declare type ListClientVisitsResponse = Message<"novam.data.v1.ListClient
  * Use `create(ListClientVisitsResponseSchema)` to create a new message.
  */
 export declare const ListClientVisitsResponseSchema: GenMessage<ListClientVisitsResponse>;
+
+/**
+ * What the client's pass holds at this business. A waiting reward or a booked code comes off their next bill;
+ * nothing here is a discount the agent can apply.
+ *
+ * @generated from message novam.data.v1.ClientRewards
+ */
+export declare type ClientRewards = Message<"novam.data.v1.ClientRewards"> & {
+  /**
+   * false when the business runs no stamp card: the stamp fields are empty
+   *
+   * @generated from field: bool has_stamp_card = 1;
+   */
+  hasStampCard: boolean;
+
+  /**
+   * stamps toward the next reward
+   *
+   * @generated from field: int32 stamps = 2;
+   */
+  stamps: number;
+
+  /**
+   * paid visits a full card takes
+   *
+   * @generated from field: int32 stamps_needed = 3;
+   */
+  stampsNeeded: number;
+
+  /**
+   * what a full card earns, e.g. "Free oven clean"
+   *
+   * @generated from field: string reward = 4;
+   */
+  reward: string;
+
+  /**
+   * a reward earned and waiting for the next bill; empty for none
+   *
+   * @generated from field: string reward_ready = 5;
+   */
+  rewardReady: string;
+
+  /**
+   * codes the client saved and hasn't used, oldest first
+   *
+   * @generated from field: repeated novam.data.v1.SavedCode saved_codes = 6;
+   */
+  savedCodes: SavedCode[];
+};
+
+/**
+ * Describes the message novam.data.v1.ClientRewards.
+ * Use `create(ClientRewardsSchema)` to create a new message.
+ */
+export declare const ClientRewardsSchema: GenMessage<ClientRewards>;
+
+/**
+ * @generated from message novam.data.v1.SavedCode
+ */
+export declare type SavedCode = Message<"novam.data.v1.SavedCode"> & {
+  /**
+   * e.g. FALL15
+   *
+   * @generated from field: string code = 1;
+   */
+  code: string;
+
+  /**
+   * what it gives, e.g. "15% off Deep clean"
+   *
+   * @generated from field: string label = 2;
+   */
+  label: string;
+
+  /**
+   * last day, e.g. "Oct 31", in the business's time zone; empty when it doesn't end
+   *
+   * @generated from field: string ends = 3;
+   */
+  ends: string;
+
+  /**
+   * booked with, so it comes off the next bill
+   *
+   * @generated from field: bool booked = 4;
+   */
+  booked: boolean;
+};
+
+/**
+ * Describes the message novam.data.v1.SavedCode.
+ * Use `create(SavedCodeSchema)` to create a new message.
+ */
+export declare const SavedCodeSchema: GenMessage<SavedCode>;
 
 /**
  * ReceptionStoreService is what the Reception agent may do while it chats with a business's visitor: read the
@@ -540,8 +640,8 @@ export declare const ReceptionStoreService: GenService<{
     output: typeof HandOffResponseSchema;
   },
   /**
-   * The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
-   * agent can never read another client's records.
+   * The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
+   * visitor who isn't signed in, so the agent can never read another client's records.
    *
    * @generated from rpc novam.data.v1.ReceptionStoreService.ListClientVisits
    */

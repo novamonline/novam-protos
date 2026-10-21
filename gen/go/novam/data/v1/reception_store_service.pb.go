@@ -951,6 +951,7 @@ type ListClientVisitsResponse struct {
 	FirstName     string         `protobuf:"bytes,2,opt,name=first_name,json=firstName,proto3" json:"first_name,omitempty"`
 	Visits        []*ClientVisit `protobuf:"bytes,3,rep,name=visits,proto3" json:"visits,omitempty"`                          // upcoming, soonest first
 	AmountDue     float64        `protobuf:"fixed64,4,opt,name=amount_due,json=amountDue,proto3" json:"amount_due,omitempty"` // on sent and overdue invoices
+	Rewards       *ClientRewards `protobuf:"bytes,5,opt,name=rewards,proto3" json:"rewards,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1011,6 +1012,167 @@ func (x *ListClientVisitsResponse) GetAmountDue() float64 {
 		return x.AmountDue
 	}
 	return 0
+}
+
+func (x *ListClientVisitsResponse) GetRewards() *ClientRewards {
+	if x != nil {
+		return x.Rewards
+	}
+	return nil
+}
+
+// What the client's pass holds at this business. A waiting reward or a booked code comes off their next bill;
+// nothing here is a discount the agent can apply.
+type ClientRewards struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	HasStampCard  bool                   `protobuf:"varint,1,opt,name=has_stamp_card,json=hasStampCard,proto3" json:"has_stamp_card,omitempty"` // false when the business runs no stamp card: the stamp fields are empty
+	Stamps        int32                  `protobuf:"varint,2,opt,name=stamps,proto3" json:"stamps,omitempty"`                                   // stamps toward the next reward
+	StampsNeeded  int32                  `protobuf:"varint,3,opt,name=stamps_needed,json=stampsNeeded,proto3" json:"stamps_needed,omitempty"`   // paid visits a full card takes
+	Reward        string                 `protobuf:"bytes,4,opt,name=reward,proto3" json:"reward,omitempty"`                                    // what a full card earns, e.g. "Free oven clean"
+	RewardReady   string                 `protobuf:"bytes,5,opt,name=reward_ready,json=rewardReady,proto3" json:"reward_ready,omitempty"`       // a reward earned and waiting for the next bill; empty for none
+	SavedCodes    []*SavedCode           `protobuf:"bytes,6,rep,name=saved_codes,json=savedCodes,proto3" json:"saved_codes,omitempty"`          // codes the client saved and hasn't used, oldest first
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClientRewards) Reset() {
+	*x = ClientRewards{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientRewards) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientRewards) ProtoMessage() {}
+
+func (x *ClientRewards) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientRewards.ProtoReflect.Descriptor instead.
+func (*ClientRewards) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *ClientRewards) GetHasStampCard() bool {
+	if x != nil {
+		return x.HasStampCard
+	}
+	return false
+}
+
+func (x *ClientRewards) GetStamps() int32 {
+	if x != nil {
+		return x.Stamps
+	}
+	return 0
+}
+
+func (x *ClientRewards) GetStampsNeeded() int32 {
+	if x != nil {
+		return x.StampsNeeded
+	}
+	return 0
+}
+
+func (x *ClientRewards) GetReward() string {
+	if x != nil {
+		return x.Reward
+	}
+	return ""
+}
+
+func (x *ClientRewards) GetRewardReady() string {
+	if x != nil {
+		return x.RewardReady
+	}
+	return ""
+}
+
+func (x *ClientRewards) GetSavedCodes() []*SavedCode {
+	if x != nil {
+		return x.SavedCodes
+	}
+	return nil
+}
+
+type SavedCode struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Code          string                 `protobuf:"bytes,1,opt,name=code,proto3" json:"code,omitempty"`      // e.g. FALL15
+	Label         string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`    // what it gives, e.g. "15% off Deep clean"
+	Ends          string                 `protobuf:"bytes,3,opt,name=ends,proto3" json:"ends,omitempty"`      // last day, e.g. "Oct 31", in the business's time zone; empty when it doesn't end
+	Booked        bool                   `protobuf:"varint,4,opt,name=booked,proto3" json:"booked,omitempty"` // booked with, so it comes off the next bill
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SavedCode) Reset() {
+	*x = SavedCode{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SavedCode) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SavedCode) ProtoMessage() {}
+
+func (x *SavedCode) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SavedCode.ProtoReflect.Descriptor instead.
+func (*SavedCode) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *SavedCode) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *SavedCode) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *SavedCode) GetEnds() string {
+	if x != nil {
+		return x.Ends
+	}
+	return ""
+}
+
+func (x *SavedCode) GetBooked() bool {
+	if x != nil {
+		return x.Booked
+	}
+	return false
 }
 
 var File_novam_data_v1_reception_store_service_proto protoreflect.FileDescriptor
@@ -1081,14 +1243,28 @@ const file_novam_data_v1_reception_store_service_proto_rawDesc = "" +
 	"\vClientVisit\x12\x14\n" +
 	"\x05title\x18\x01 \x01(\tR\x05title\x12+\n" +
 	"\x04when\x18\x02 \x01(\v2\x17.novam.data.v1.OpenTimeR\x04when\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\tR\x06status\"\xa9\x01\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\"\xe1\x01\n" +
 	"\x18ListClientVisitsResponse\x12\x1b\n" +
 	"\tsigned_in\x18\x01 \x01(\bR\bsignedIn\x12\x1d\n" +
 	"\n" +
 	"first_name\x18\x02 \x01(\tR\tfirstName\x122\n" +
 	"\x06visits\x18\x03 \x03(\v2\x1a.novam.data.v1.ClientVisitR\x06visits\x12\x1d\n" +
 	"\n" +
-	"amount_due\x18\x04 \x01(\x01R\tamountDue2\x9b\x04\n" +
+	"amount_due\x18\x04 \x01(\x01R\tamountDue\x126\n" +
+	"\arewards\x18\x05 \x01(\v2\x1c.novam.data.v1.ClientRewardsR\arewards\"\xe8\x01\n" +
+	"\rClientRewards\x12$\n" +
+	"\x0ehas_stamp_card\x18\x01 \x01(\bR\fhasStampCard\x12\x16\n" +
+	"\x06stamps\x18\x02 \x01(\x05R\x06stamps\x12#\n" +
+	"\rstamps_needed\x18\x03 \x01(\x05R\fstampsNeeded\x12\x16\n" +
+	"\x06reward\x18\x04 \x01(\tR\x06reward\x12!\n" +
+	"\freward_ready\x18\x05 \x01(\tR\vrewardReady\x129\n" +
+	"\vsaved_codes\x18\x06 \x03(\v2\x18.novam.data.v1.SavedCodeR\n" +
+	"savedCodes\"a\n" +
+	"\tSavedCode\x12\x12\n" +
+	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
+	"\x05label\x18\x02 \x01(\tR\x05label\x12\x12\n" +
+	"\x04ends\x18\x03 \x01(\tR\x04ends\x12\x16\n" +
+	"\x06booked\x18\x04 \x01(\bR\x06booked2\x9b\x04\n" +
 	"\x15ReceptionStoreService\x12T\n" +
 	"\vGetBusiness\x12!.novam.data.v1.GetBusinessRequest\x1a\".novam.data.v1.GetBusinessResponse\x12Z\n" +
 	"\rListOpenTimes\x12#.novam.data.v1.ListOpenTimesRequest\x1a$.novam.data.v1.ListOpenTimesResponse\x12K\n" +
@@ -1109,7 +1285,7 @@ func file_novam_data_v1_reception_store_service_proto_rawDescGZIP() []byte {
 	return file_novam_data_v1_reception_store_service_proto_rawDescData
 }
 
-var file_novam_data_v1_reception_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_novam_data_v1_reception_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_novam_data_v1_reception_store_service_proto_goTypes = []any{
 	(*GetBusinessRequest)(nil),       // 0: novam.data.v1.GetBusinessRequest
 	(*Service)(nil),                  // 1: novam.data.v1.Service
@@ -1127,42 +1303,46 @@ var file_novam_data_v1_reception_store_service_proto_goTypes = []any{
 	(*ListClientVisitsRequest)(nil),  // 13: novam.data.v1.ListClientVisitsRequest
 	(*ClientVisit)(nil),              // 14: novam.data.v1.ClientVisit
 	(*ListClientVisitsResponse)(nil), // 15: novam.data.v1.ListClientVisitsResponse
-	(*v1.RequestMetadata)(nil),       // 16: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),    // 17: google.protobuf.Timestamp
+	(*ClientRewards)(nil),            // 16: novam.data.v1.ClientRewards
+	(*SavedCode)(nil),                // 17: novam.data.v1.SavedCode
+	(*v1.RequestMetadata)(nil),       // 18: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),    // 19: google.protobuf.Timestamp
 }
 var file_novam_data_v1_reception_store_service_proto_depIdxs = []int32{
-	16, // 0: novam.data.v1.GetBusinessRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 0: novam.data.v1.GetBusinessRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	1,  // 1: novam.data.v1.GetBusinessResponse.services:type_name -> novam.data.v1.Service
 	2,  // 2: novam.data.v1.GetBusinessResponse.hours:type_name -> novam.data.v1.OpeningHours
-	16, // 3: novam.data.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	17, // 4: novam.data.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
-	17, // 5: novam.data.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
+	18, // 3: novam.data.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	19, // 4: novam.data.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
+	19, // 5: novam.data.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
 	5,  // 6: novam.data.v1.ListOpenTimesResponse.times:type_name -> novam.data.v1.OpenTime
-	16, // 7: novam.data.v1.HoldTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	17, // 8: novam.data.v1.HoldTimeRequest.start:type_name -> google.protobuf.Timestamp
+	18, // 7: novam.data.v1.HoldTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	19, // 8: novam.data.v1.HoldTimeRequest.start:type_name -> google.protobuf.Timestamp
 	5,  // 9: novam.data.v1.HoldTimeResponse.held:type_name -> novam.data.v1.OpenTime
-	16, // 10: novam.data.v1.SaveContactRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	16, // 11: novam.data.v1.HandOffRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	16, // 12: novam.data.v1.ListClientVisitsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 10: novam.data.v1.SaveContactRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 11: novam.data.v1.HandOffRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 12: novam.data.v1.ListClientVisitsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	5,  // 13: novam.data.v1.ClientVisit.when:type_name -> novam.data.v1.OpenTime
 	14, // 14: novam.data.v1.ListClientVisitsResponse.visits:type_name -> novam.data.v1.ClientVisit
-	0,  // 15: novam.data.v1.ReceptionStoreService.GetBusiness:input_type -> novam.data.v1.GetBusinessRequest
-	4,  // 16: novam.data.v1.ReceptionStoreService.ListOpenTimes:input_type -> novam.data.v1.ListOpenTimesRequest
-	7,  // 17: novam.data.v1.ReceptionStoreService.HoldTime:input_type -> novam.data.v1.HoldTimeRequest
-	9,  // 18: novam.data.v1.ReceptionStoreService.SaveContact:input_type -> novam.data.v1.SaveContactRequest
-	11, // 19: novam.data.v1.ReceptionStoreService.HandOff:input_type -> novam.data.v1.HandOffRequest
-	13, // 20: novam.data.v1.ReceptionStoreService.ListClientVisits:input_type -> novam.data.v1.ListClientVisitsRequest
-	3,  // 21: novam.data.v1.ReceptionStoreService.GetBusiness:output_type -> novam.data.v1.GetBusinessResponse
-	6,  // 22: novam.data.v1.ReceptionStoreService.ListOpenTimes:output_type -> novam.data.v1.ListOpenTimesResponse
-	8,  // 23: novam.data.v1.ReceptionStoreService.HoldTime:output_type -> novam.data.v1.HoldTimeResponse
-	10, // 24: novam.data.v1.ReceptionStoreService.SaveContact:output_type -> novam.data.v1.SaveContactResponse
-	12, // 25: novam.data.v1.ReceptionStoreService.HandOff:output_type -> novam.data.v1.HandOffResponse
-	15, // 26: novam.data.v1.ReceptionStoreService.ListClientVisits:output_type -> novam.data.v1.ListClientVisitsResponse
-	21, // [21:27] is the sub-list for method output_type
-	15, // [15:21] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	16, // 15: novam.data.v1.ListClientVisitsResponse.rewards:type_name -> novam.data.v1.ClientRewards
+	17, // 16: novam.data.v1.ClientRewards.saved_codes:type_name -> novam.data.v1.SavedCode
+	0,  // 17: novam.data.v1.ReceptionStoreService.GetBusiness:input_type -> novam.data.v1.GetBusinessRequest
+	4,  // 18: novam.data.v1.ReceptionStoreService.ListOpenTimes:input_type -> novam.data.v1.ListOpenTimesRequest
+	7,  // 19: novam.data.v1.ReceptionStoreService.HoldTime:input_type -> novam.data.v1.HoldTimeRequest
+	9,  // 20: novam.data.v1.ReceptionStoreService.SaveContact:input_type -> novam.data.v1.SaveContactRequest
+	11, // 21: novam.data.v1.ReceptionStoreService.HandOff:input_type -> novam.data.v1.HandOffRequest
+	13, // 22: novam.data.v1.ReceptionStoreService.ListClientVisits:input_type -> novam.data.v1.ListClientVisitsRequest
+	3,  // 23: novam.data.v1.ReceptionStoreService.GetBusiness:output_type -> novam.data.v1.GetBusinessResponse
+	6,  // 24: novam.data.v1.ReceptionStoreService.ListOpenTimes:output_type -> novam.data.v1.ListOpenTimesResponse
+	8,  // 25: novam.data.v1.ReceptionStoreService.HoldTime:output_type -> novam.data.v1.HoldTimeResponse
+	10, // 26: novam.data.v1.ReceptionStoreService.SaveContact:output_type -> novam.data.v1.SaveContactResponse
+	12, // 27: novam.data.v1.ReceptionStoreService.HandOff:output_type -> novam.data.v1.HandOffResponse
+	15, // 28: novam.data.v1.ReceptionStoreService.ListClientVisits:output_type -> novam.data.v1.ListClientVisitsResponse
+	23, // [23:29] is the sub-list for method output_type
+	17, // [17:23] is the sub-list for method input_type
+	17, // [17:17] is the sub-list for extension type_name
+	17, // [17:17] is the sub-list for extension extendee
+	0,  // [0:17] is the sub-list for field type_name
 }
 
 func init() { file_novam_data_v1_reception_store_service_proto_init() }
@@ -1176,7 +1356,7 @@ func file_novam_data_v1_reception_store_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_data_v1_reception_store_service_proto_rawDesc), len(file_novam_data_v1_reception_store_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   16,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

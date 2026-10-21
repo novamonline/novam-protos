@@ -21,8 +21,8 @@ service ReceptionStoreService {
   rpc SaveContact(SaveContactRequest) returns (SaveContactResponse);
   // Passes the chat to the owner with a summary; the thread then waits for them in Front Desk.
   rpc HandOff(HandOffRequest) returns (HandOffResponse);
-  // The chat's own client's upcoming visits and what they owe. Empty for a visitor who isn't signed in, so the
-  // agent can never read another client's records.
+  // The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
+  // visitor who isn't signed in, so the agent can never read another client's records.
   rpc ListClientVisits(ListClientVisitsRequest) returns (ListClientVisitsResponse);
 }
 
@@ -127,4 +127,23 @@ message ListClientVisitsResponse {
   string first_name = 2;
   repeated ClientVisit visits = 3; // upcoming, soonest first
   double amount_due = 4; // on sent and overdue invoices
+  ClientRewards rewards = 5;
+}
+
+// What the client's pass holds at this business. A waiting reward or a booked code comes off their next bill;
+// nothing here is a discount the agent can apply.
+message ClientRewards {
+  bool has_stamp_card = 1; // false when the business runs no stamp card: the stamp fields are empty
+  int32 stamps = 2; // stamps toward the next reward
+  int32 stamps_needed = 3; // paid visits a full card takes
+  string reward = 4; // what a full card earns, e.g. "Free oven clean"
+  string reward_ready = 5; // a reward earned and waiting for the next bill; empty for none
+  repeated SavedCode saved_codes = 6; // codes the client saved and hasn't used, oldest first
+}
+
+message SavedCode {
+  string code = 1; // e.g. FALL15
+  string label = 2; // what it gives, e.g. "15% off Deep clean"
+  string ends = 3; // last day, e.g. "Oct 31", in the business's time zone; empty when it doesn't end
+  bool booked = 4; // booked with, so it comes off the next bill
 }
