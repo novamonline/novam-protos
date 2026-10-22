@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	AIService_Chat_FullMethodName      = "/novam.ai.v1.AIService/Chat"
 	AIService_Summarize_FullMethodName = "/novam.ai.v1.AIService/Summarize"
+	AIService_Advise_FullMethodName    = "/novam.ai.v1.AIService/Advise"
 	AIService_Talk_FullMethodName      = "/novam.ai.v1.AIService/Talk"
 )
 
@@ -28,10 +29,13 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
-// AIService provides chat and summarization.
+// AIService provides chat, summarization and one-off written advice.
 type AIServiceClient interface {
 	Chat(ctx context.Context, in *ChatRequest, opts ...grpc.CallOption) (*ChatResponse, error)
 	Summarize(ctx context.Context, in *SummarizeRequest, opts ...grpc.CallOption) (*SummarizeResponse, error)
+	// One piece of written advice from a prompt that carries its own facts, on the model tier the job needs.
+	// Stateless and tool-free: the caller gathers the numbers, the model only writes.
+	Advise(ctx context.Context, in *AdviseRequest, opts ...grpc.CallOption) (*AdviseResponse, error)
 	// A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
 	// first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
 	Talk(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TalkRequest, TalkResponse], error)
@@ -65,6 +69,16 @@ func (c *aIServiceClient) Summarize(ctx context.Context, in *SummarizeRequest, o
 	return out, nil
 }
 
+func (c *aIServiceClient) Advise(ctx context.Context, in *AdviseRequest, opts ...grpc.CallOption) (*AdviseResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdviseResponse)
+	err := c.cc.Invoke(ctx, AIService_Advise_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *aIServiceClient) Talk(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TalkRequest, TalkResponse], error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	stream, err := c.cc.NewStream(ctx, &AIService_ServiceDesc.Streams[0], AIService_Talk_FullMethodName, cOpts...)
@@ -82,10 +96,13 @@ type AIService_TalkClient = grpc.BidiStreamingClient[TalkRequest, TalkResponse]
 // All implementations must embed UnimplementedAIServiceServer
 // for forward compatibility.
 //
-// AIService provides chat and summarization.
+// AIService provides chat, summarization and one-off written advice.
 type AIServiceServer interface {
 	Chat(context.Context, *ChatRequest) (*ChatResponse, error)
 	Summarize(context.Context, *SummarizeRequest) (*SummarizeResponse, error)
+	// One piece of written advice from a prompt that carries its own facts, on the model tier the job needs.
+	// Stateless and tool-free: the caller gathers the numbers, the model only writes.
+	Advise(context.Context, *AdviseRequest) (*AdviseResponse, error)
 	// A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
 	// first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
 	Talk(grpc.BidiStreamingServer[TalkRequest, TalkResponse]) error
@@ -104,6 +121,9 @@ func (UnimplementedAIServiceServer) Chat(context.Context, *ChatRequest) (*ChatRe
 }
 func (UnimplementedAIServiceServer) Summarize(context.Context, *SummarizeRequest) (*SummarizeResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Summarize not implemented")
+}
+func (UnimplementedAIServiceServer) Advise(context.Context, *AdviseRequest) (*AdviseResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method Advise not implemented")
 }
 func (UnimplementedAIServiceServer) Talk(grpc.BidiStreamingServer[TalkRequest, TalkResponse]) error {
 	return status.Error(codes.Unimplemented, "method Talk not implemented")
@@ -165,6 +185,24 @@ func _AIService_Summarize_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AIService_Advise_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdviseRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AIServiceServer).Advise(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AIService_Advise_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AIServiceServer).Advise(ctx, req.(*AdviseRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AIService_Talk_Handler(srv interface{}, stream grpc.ServerStream) error {
 	return srv.(AIServiceServer).Talk(&grpc.GenericServerStream[TalkRequest, TalkResponse]{ServerStream: stream})
 }
@@ -186,6 +224,10 @@ var AIService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Summarize",
 			Handler:    _AIService_Summarize_Handler,
+		},
+		{
+			MethodName: "Advise",
+			Handler:    _AIService_Advise_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{

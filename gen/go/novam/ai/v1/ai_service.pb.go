@@ -127,6 +127,60 @@ func (ChatSource) EnumDescriptor() ([]byte, []int) {
 	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{1}
 }
 
+// How much model a job needs: fast for one-liners and sorting, standard for drafts and questions, deep for heavy
+// reasoning such as planning how to close a goal's gap.
+type ModelTier int32
+
+const (
+	ModelTier_MODEL_TIER_UNSPECIFIED ModelTier = 0
+	ModelTier_MODEL_TIER_FAST        ModelTier = 1
+	ModelTier_MODEL_TIER_STANDARD    ModelTier = 2
+	ModelTier_MODEL_TIER_DEEP        ModelTier = 3
+)
+
+// Enum value maps for ModelTier.
+var (
+	ModelTier_name = map[int32]string{
+		0: "MODEL_TIER_UNSPECIFIED",
+		1: "MODEL_TIER_FAST",
+		2: "MODEL_TIER_STANDARD",
+		3: "MODEL_TIER_DEEP",
+	}
+	ModelTier_value = map[string]int32{
+		"MODEL_TIER_UNSPECIFIED": 0,
+		"MODEL_TIER_FAST":        1,
+		"MODEL_TIER_STANDARD":    2,
+		"MODEL_TIER_DEEP":        3,
+	}
+)
+
+func (x ModelTier) Enum() *ModelTier {
+	p := new(ModelTier)
+	*p = x
+	return p
+}
+
+func (x ModelTier) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ModelTier) Descriptor() protoreflect.EnumDescriptor {
+	return file_novam_ai_v1_ai_service_proto_enumTypes[2].Descriptor()
+}
+
+func (ModelTier) Type() protoreflect.EnumType {
+	return &file_novam_ai_v1_ai_service_proto_enumTypes[2]
+}
+
+func (x ModelTier) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ModelTier.Descriptor instead.
+func (ModelTier) EnumDescriptor() ([]byte, []int) {
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{2}
+}
+
 type TalkRequest struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// Types that are valid to be assigned to Event:
@@ -810,6 +864,121 @@ func (x *SummarizeResponse) GetSummary() string {
 	return ""
 }
 
+type AdviseRequest struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// What to write, with every fact the advice may use; the model is told not to invent others.
+	Prompt   string              `protobuf:"bytes,1,opt,name=prompt,proto3" json:"prompt,omitempty"`
+	Metadata *v1.RequestMetadata `protobuf:"bytes,2,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Unspecified is standard.
+	Tier ModelTier `protobuf:"varint,3,opt,name=tier,proto3,enum=novam.ai.v1.ModelTier" json:"tier,omitempty"`
+	// The business's model choice; unset uses the service's default provider at the tier.
+	Model         *ModelChoice `protobuf:"bytes,4,opt,name=model,proto3" json:"model,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdviseRequest) Reset() {
+	*x = AdviseRequest{}
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdviseRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdviseRequest) ProtoMessage() {}
+
+func (x *AdviseRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdviseRequest.ProtoReflect.Descriptor instead.
+func (*AdviseRequest) Descriptor() ([]byte, []int) {
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *AdviseRequest) GetPrompt() string {
+	if x != nil {
+		return x.Prompt
+	}
+	return ""
+}
+
+func (x *AdviseRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *AdviseRequest) GetTier() ModelTier {
+	if x != nil {
+		return x.Tier
+	}
+	return ModelTier_MODEL_TIER_UNSPECIFIED
+}
+
+func (x *AdviseRequest) GetModel() *ModelChoice {
+	if x != nil {
+		return x.Model
+	}
+	return nil
+}
+
+type AdviseResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Text          string                 `protobuf:"bytes,1,opt,name=text,proto3" json:"text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdviseResponse) Reset() {
+	*x = AdviseResponse{}
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdviseResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdviseResponse) ProtoMessage() {}
+
+func (x *AdviseResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_ai_v1_ai_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdviseResponse.ProtoReflect.Descriptor instead.
+func (*AdviseResponse) Descriptor() ([]byte, []int) {
+	return file_novam_ai_v1_ai_service_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *AdviseResponse) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
 var File_novam_ai_v1_ai_service_proto protoreflect.FileDescriptor
 
 const file_novam_ai_v1_ai_service_proto_rawDesc = "" +
@@ -859,7 +1028,14 @@ const file_novam_ai_v1_ai_service_proto_rawDesc = "" +
 	"\x04text\x18\x01 \x01(\tR\x04text\x12<\n" +
 	"\bmetadata\x18\x02 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"-\n" +
 	"\x11SummarizeResponse\x12\x18\n" +
-	"\asummary\x18\x01 \x01(\tR\asummary*[\n" +
+	"\asummary\x18\x01 \x01(\tR\asummary\"\xc1\x01\n" +
+	"\rAdviseRequest\x12\x16\n" +
+	"\x06prompt\x18\x01 \x01(\tR\x06prompt\x12<\n" +
+	"\bmetadata\x18\x02 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12*\n" +
+	"\x04tier\x18\x03 \x01(\x0e2\x16.novam.ai.v1.ModelTierR\x04tier\x12.\n" +
+	"\x05model\x18\x04 \x01(\v2\x18.novam.ai.v1.ModelChoiceR\x05model\"$\n" +
+	"\x0eAdviseResponse\x12\x12\n" +
+	"\x04text\x18\x01 \x01(\tR\x04text*[\n" +
 	"\tChatAgent\x12\x1a\n" +
 	"\x16CHAT_AGENT_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14CHAT_AGENT_ASSISTANT\x10\x01\x12\x18\n" +
@@ -868,10 +1044,16 @@ const file_novam_ai_v1_ai_service_proto_rawDesc = "" +
 	"ChatSource\x12\x1b\n" +
 	"\x17CHAT_SOURCE_UNSPECIFIED\x10\x00\x12\x15\n" +
 	"\x11CHAT_SOURCE_GUIDE\x10\x01\x12\x17\n" +
-	"\x13CHAT_SOURCE_RECORDS\x10\x022\xd5\x01\n" +
+	"\x13CHAT_SOURCE_RECORDS\x10\x02*j\n" +
+	"\tModelTier\x12\x1a\n" +
+	"\x16MODEL_TIER_UNSPECIFIED\x10\x00\x12\x13\n" +
+	"\x0fMODEL_TIER_FAST\x10\x01\x12\x17\n" +
+	"\x13MODEL_TIER_STANDARD\x10\x02\x12\x13\n" +
+	"\x0fMODEL_TIER_DEEP\x10\x032\x98\x02\n" +
 	"\tAIService\x12;\n" +
 	"\x04Chat\x12\x18.novam.ai.v1.ChatRequest\x1a\x19.novam.ai.v1.ChatResponse\x12J\n" +
-	"\tSummarize\x12\x1d.novam.ai.v1.SummarizeRequest\x1a\x1e.novam.ai.v1.SummarizeResponse\x12?\n" +
+	"\tSummarize\x12\x1d.novam.ai.v1.SummarizeRequest\x1a\x1e.novam.ai.v1.SummarizeResponse\x12A\n" +
+	"\x06Advise\x12\x1a.novam.ai.v1.AdviseRequest\x1a\x1b.novam.ai.v1.AdviseResponse\x12?\n" +
 	"\x04Talk\x12\x18.novam.ai.v1.TalkRequest\x1a\x19.novam.ai.v1.TalkResponse(\x010\x01B=Z;github.com/novamonline/novam-protos/gen/go/novam/ai/v1;aiv1b\x06proto3"
 
 var (
@@ -886,48 +1068,56 @@ func file_novam_ai_v1_ai_service_proto_rawDescGZIP() []byte {
 	return file_novam_ai_v1_ai_service_proto_rawDescData
 }
 
-var file_novam_ai_v1_ai_service_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
-var file_novam_ai_v1_ai_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_novam_ai_v1_ai_service_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_novam_ai_v1_ai_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_novam_ai_v1_ai_service_proto_goTypes = []any{
 	(ChatAgent)(0),             // 0: novam.ai.v1.ChatAgent
 	(ChatSource)(0),            // 1: novam.ai.v1.ChatSource
-	(*TalkRequest)(nil),        // 2: novam.ai.v1.TalkRequest
-	(*TalkStart)(nil),          // 3: novam.ai.v1.TalkStart
-	(*TalkResponse)(nil),       // 4: novam.ai.v1.TalkResponse
-	(*ChatRequest)(nil),        // 5: novam.ai.v1.ChatRequest
-	(*ChatAction)(nil),         // 6: novam.ai.v1.ChatAction
-	(*ModelChoice)(nil),        // 7: novam.ai.v1.ModelChoice
-	(*ChatResponse)(nil),       // 8: novam.ai.v1.ChatResponse
-	(*SummarizeRequest)(nil),   // 9: novam.ai.v1.SummarizeRequest
-	(*SummarizeResponse)(nil),  // 10: novam.ai.v1.SummarizeResponse
-	(*v1.RequestMetadata)(nil), // 11: novam.common.v1.RequestMetadata
-	(*v11.ChatMessage)(nil),    // 12: novam.entities.v1.ChatMessage
-	(*v11.ChatResponse)(nil),   // 13: novam.entities.v1.ChatResponse
+	(ModelTier)(0),             // 2: novam.ai.v1.ModelTier
+	(*TalkRequest)(nil),        // 3: novam.ai.v1.TalkRequest
+	(*TalkStart)(nil),          // 4: novam.ai.v1.TalkStart
+	(*TalkResponse)(nil),       // 5: novam.ai.v1.TalkResponse
+	(*ChatRequest)(nil),        // 6: novam.ai.v1.ChatRequest
+	(*ChatAction)(nil),         // 7: novam.ai.v1.ChatAction
+	(*ModelChoice)(nil),        // 8: novam.ai.v1.ModelChoice
+	(*ChatResponse)(nil),       // 9: novam.ai.v1.ChatResponse
+	(*SummarizeRequest)(nil),   // 10: novam.ai.v1.SummarizeRequest
+	(*SummarizeResponse)(nil),  // 11: novam.ai.v1.SummarizeResponse
+	(*AdviseRequest)(nil),      // 12: novam.ai.v1.AdviseRequest
+	(*AdviseResponse)(nil),     // 13: novam.ai.v1.AdviseResponse
+	(*v1.RequestMetadata)(nil), // 14: novam.common.v1.RequestMetadata
+	(*v11.ChatMessage)(nil),    // 15: novam.entities.v1.ChatMessage
+	(*v11.ChatResponse)(nil),   // 16: novam.entities.v1.ChatResponse
 }
 var file_novam_ai_v1_ai_service_proto_depIdxs = []int32{
-	3,  // 0: novam.ai.v1.TalkRequest.start:type_name -> novam.ai.v1.TalkStart
-	11, // 1: novam.ai.v1.TalkStart.metadata:type_name -> novam.common.v1.RequestMetadata
-	7,  // 2: novam.ai.v1.TalkStart.model:type_name -> novam.ai.v1.ModelChoice
-	12, // 3: novam.ai.v1.TalkStart.history:type_name -> novam.entities.v1.ChatMessage
-	12, // 4: novam.ai.v1.ChatRequest.messages:type_name -> novam.entities.v1.ChatMessage
-	11, // 5: novam.ai.v1.ChatRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	7,  // 6: novam.ai.v1.ChatRequest.model:type_name -> novam.ai.v1.ModelChoice
+	4,  // 0: novam.ai.v1.TalkRequest.start:type_name -> novam.ai.v1.TalkStart
+	14, // 1: novam.ai.v1.TalkStart.metadata:type_name -> novam.common.v1.RequestMetadata
+	8,  // 2: novam.ai.v1.TalkStart.model:type_name -> novam.ai.v1.ModelChoice
+	15, // 3: novam.ai.v1.TalkStart.history:type_name -> novam.entities.v1.ChatMessage
+	15, // 4: novam.ai.v1.ChatRequest.messages:type_name -> novam.entities.v1.ChatMessage
+	14, // 5: novam.ai.v1.ChatRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	8,  // 6: novam.ai.v1.ChatRequest.model:type_name -> novam.ai.v1.ModelChoice
 	0,  // 7: novam.ai.v1.ChatRequest.agent:type_name -> novam.ai.v1.ChatAgent
-	13, // 8: novam.ai.v1.ChatResponse.response:type_name -> novam.entities.v1.ChatResponse
+	16, // 8: novam.ai.v1.ChatResponse.response:type_name -> novam.entities.v1.ChatResponse
 	1,  // 9: novam.ai.v1.ChatResponse.source:type_name -> novam.ai.v1.ChatSource
-	6,  // 10: novam.ai.v1.ChatResponse.actions:type_name -> novam.ai.v1.ChatAction
-	11, // 11: novam.ai.v1.SummarizeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	5,  // 12: novam.ai.v1.AIService.Chat:input_type -> novam.ai.v1.ChatRequest
-	9,  // 13: novam.ai.v1.AIService.Summarize:input_type -> novam.ai.v1.SummarizeRequest
-	2,  // 14: novam.ai.v1.AIService.Talk:input_type -> novam.ai.v1.TalkRequest
-	8,  // 15: novam.ai.v1.AIService.Chat:output_type -> novam.ai.v1.ChatResponse
-	10, // 16: novam.ai.v1.AIService.Summarize:output_type -> novam.ai.v1.SummarizeResponse
-	4,  // 17: novam.ai.v1.AIService.Talk:output_type -> novam.ai.v1.TalkResponse
-	15, // [15:18] is the sub-list for method output_type
-	12, // [12:15] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	7,  // 10: novam.ai.v1.ChatResponse.actions:type_name -> novam.ai.v1.ChatAction
+	14, // 11: novam.ai.v1.SummarizeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 12: novam.ai.v1.AdviseRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	2,  // 13: novam.ai.v1.AdviseRequest.tier:type_name -> novam.ai.v1.ModelTier
+	8,  // 14: novam.ai.v1.AdviseRequest.model:type_name -> novam.ai.v1.ModelChoice
+	6,  // 15: novam.ai.v1.AIService.Chat:input_type -> novam.ai.v1.ChatRequest
+	10, // 16: novam.ai.v1.AIService.Summarize:input_type -> novam.ai.v1.SummarizeRequest
+	12, // 17: novam.ai.v1.AIService.Advise:input_type -> novam.ai.v1.AdviseRequest
+	3,  // 18: novam.ai.v1.AIService.Talk:input_type -> novam.ai.v1.TalkRequest
+	9,  // 19: novam.ai.v1.AIService.Chat:output_type -> novam.ai.v1.ChatResponse
+	11, // 20: novam.ai.v1.AIService.Summarize:output_type -> novam.ai.v1.SummarizeResponse
+	13, // 21: novam.ai.v1.AIService.Advise:output_type -> novam.ai.v1.AdviseResponse
+	5,  // 22: novam.ai.v1.AIService.Talk:output_type -> novam.ai.v1.TalkResponse
+	19, // [19:23] is the sub-list for method output_type
+	15, // [15:19] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_novam_ai_v1_ai_service_proto_init() }
@@ -952,8 +1142,8 @@ func file_novam_ai_v1_ai_service_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_ai_v1_ai_service_proto_rawDesc), len(file_novam_ai_v1_ai_service_proto_rawDesc)),
-			NumEnums:      2,
-			NumMessages:   9,
+			NumEnums:      3,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

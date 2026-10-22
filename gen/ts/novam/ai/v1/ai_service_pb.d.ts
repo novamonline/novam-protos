@@ -327,6 +327,59 @@ export declare type SummarizeResponse = Message<"novam.ai.v1.SummarizeResponse">
 export declare const SummarizeResponseSchema: GenMessage<SummarizeResponse>;
 
 /**
+ * @generated from message novam.ai.v1.AdviseRequest
+ */
+export declare type AdviseRequest = Message<"novam.ai.v1.AdviseRequest"> & {
+  /**
+   * What to write, with every fact the advice may use; the model is told not to invent others.
+   *
+   * @generated from field: string prompt = 1;
+   */
+  prompt: string;
+
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 2;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * Unspecified is standard.
+   *
+   * @generated from field: novam.ai.v1.ModelTier tier = 3;
+   */
+  tier: ModelTier;
+
+  /**
+   * The business's model choice; unset uses the service's default provider at the tier.
+   *
+   * @generated from field: novam.ai.v1.ModelChoice model = 4;
+   */
+  model?: ModelChoice;
+};
+
+/**
+ * Describes the message novam.ai.v1.AdviseRequest.
+ * Use `create(AdviseRequestSchema)` to create a new message.
+ */
+export declare const AdviseRequestSchema: GenMessage<AdviseRequest>;
+
+/**
+ * @generated from message novam.ai.v1.AdviseResponse
+ */
+export declare type AdviseResponse = Message<"novam.ai.v1.AdviseResponse"> & {
+  /**
+   * @generated from field: string text = 1;
+   */
+  text: string;
+};
+
+/**
+ * Describes the message novam.ai.v1.AdviseResponse.
+ * Use `create(AdviseResponseSchema)` to create a new message.
+ */
+export declare const AdviseResponseSchema: GenMessage<AdviseResponse>;
+
+/**
  * ChatAgent is which agent answers a chat.
  *
  * @generated from enum novam.ai.v1.ChatAgent
@@ -389,7 +442,40 @@ export enum ChatSource {
 export declare const ChatSourceSchema: GenEnum<ChatSource>;
 
 /**
- * AIService provides chat and summarization.
+ * How much model a job needs: fast for one-liners and sorting, standard for drafts and questions, deep for heavy
+ * reasoning such as planning how to close a goal's gap.
+ *
+ * @generated from enum novam.ai.v1.ModelTier
+ */
+export enum ModelTier {
+  /**
+   * @generated from enum value: MODEL_TIER_UNSPECIFIED = 0;
+   */
+  UNSPECIFIED = 0,
+
+  /**
+   * @generated from enum value: MODEL_TIER_FAST = 1;
+   */
+  FAST = 1,
+
+  /**
+   * @generated from enum value: MODEL_TIER_STANDARD = 2;
+   */
+  STANDARD = 2,
+
+  /**
+   * @generated from enum value: MODEL_TIER_DEEP = 3;
+   */
+  DEEP = 3,
+}
+
+/**
+ * Describes the enum novam.ai.v1.ModelTier.
+ */
+export declare const ModelTierSchema: GenEnum<ModelTier>;
+
+/**
+ * AIService provides chat, summarization and one-off written advice.
  *
  * @generated from service novam.ai.v1.AIService
  */
@@ -409,6 +495,17 @@ export declare const AIService: GenService<{
     methodKind: "unary";
     input: typeof SummarizeRequestSchema;
     output: typeof SummarizeResponseSchema;
+  },
+  /**
+   * One piece of written advice from a prompt that carries its own facts, on the model tier the job needs.
+   * Stateless and tool-free: the caller gathers the numbers, the model only writes.
+   *
+   * @generated from rpc novam.ai.v1.AIService.Advise
+   */
+  advise: {
+    methodKind: "unary";
+    input: typeof AdviseRequestSchema;
+    output: typeof AdviseResponseSchema;
   },
   /**
    * A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart

@@ -6,6 +6,28 @@ var novam_ai_v1_ai_service_pb = require('../../../novam/ai/v1/ai_service_pb.js')
 var novam_common_v1_common_pb = require('../../../novam/common/v1/common_pb.js');
 var novam_entities_v1_ai_pb = require('../../../novam/entities/v1/ai_pb.js');
 
+function serialize_novam_ai_v1_AdviseRequest(arg) {
+  if (!(arg instanceof novam_ai_v1_ai_service_pb.AdviseRequest)) {
+    throw new Error('Expected argument of type novam.ai.v1.AdviseRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_ai_v1_AdviseRequest(buffer_arg) {
+  return novam_ai_v1_ai_service_pb.AdviseRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_ai_v1_AdviseResponse(arg) {
+  if (!(arg instanceof novam_ai_v1_ai_service_pb.AdviseResponse)) {
+    throw new Error('Expected argument of type novam.ai.v1.AdviseResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_ai_v1_AdviseResponse(buffer_arg) {
+  return novam_ai_v1_ai_service_pb.AdviseResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_ai_v1_ChatRequest(arg) {
   if (!(arg instanceof novam_ai_v1_ai_service_pb.ChatRequest)) {
     throw new Error('Expected argument of type novam.ai.v1.ChatRequest');
@@ -73,7 +95,7 @@ function deserialize_novam_ai_v1_TalkResponse(buffer_arg) {
 }
 
 
-// AIService provides chat and summarization.
+// AIService provides chat, summarization and one-off written advice.
 var AIServiceService = exports.AIServiceService = {
   chat: {
     path: '/novam.ai.v1.AIService/Chat',
@@ -96,6 +118,19 @@ var AIServiceService = exports.AIServiceService = {
     requestDeserialize: deserialize_novam_ai_v1_SummarizeRequest,
     responseSerialize: serialize_novam_ai_v1_SummarizeResponse,
     responseDeserialize: deserialize_novam_ai_v1_SummarizeResponse,
+  },
+  // One piece of written advice from a prompt that carries its own facts, on the model tier the job needs.
+// Stateless and tool-free: the caller gathers the numbers, the model only writes.
+advise: {
+    path: '/novam.ai.v1.AIService/Advise',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_ai_v1_ai_service_pb.AdviseRequest,
+    responseType: novam_ai_v1_ai_service_pb.AdviseResponse,
+    requestSerialize: serialize_novam_ai_v1_AdviseRequest,
+    requestDeserialize: deserialize_novam_ai_v1_AdviseRequest,
+    responseSerialize: serialize_novam_ai_v1_AdviseResponse,
+    responseDeserialize: deserialize_novam_ai_v1_AdviseResponse,
   },
   // A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
 // first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.

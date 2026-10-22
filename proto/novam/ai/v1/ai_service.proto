@@ -7,10 +7,13 @@ import "novam/entities/v1/ai.proto";
 
 option go_package = "github.com/novamonline/novam-protos/gen/go/novam/ai/v1;aiv1";
 
-// AIService provides chat and summarization.
+// AIService provides chat, summarization and one-off written advice.
 service AIService {
   rpc Chat(ChatRequest) returns (ChatResponse);
   rpc Summarize(SummarizeRequest) returns (SummarizeResponse);
+  // One piece of written advice from a prompt that carries its own facts, on the model tier the job needs.
+  // Stateless and tool-free: the caller gathers the numbers, the model only writes.
+  rpc Advise(AdviseRequest) returns (AdviseResponse);
   // A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
   // first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
   rpc Talk(stream TalkRequest) returns (stream TalkResponse);
@@ -113,4 +116,27 @@ message SummarizeRequest {
 
 message SummarizeResponse {
   string summary = 1;
+}
+
+// How much model a job needs: fast for one-liners and sorting, standard for drafts and questions, deep for heavy
+// reasoning such as planning how to close a goal's gap.
+enum ModelTier {
+  MODEL_TIER_UNSPECIFIED = 0;
+  MODEL_TIER_FAST = 1;
+  MODEL_TIER_STANDARD = 2;
+  MODEL_TIER_DEEP = 3;
+}
+
+message AdviseRequest {
+  // What to write, with every fact the advice may use; the model is told not to invent others.
+  string prompt = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+  // Unspecified is standard.
+  ModelTier tier = 3;
+  // The business's model choice; unset uses the service's default provider at the tier.
+  ModelChoice model = 4;
+}
+
+message AdviseResponse {
+  string text = 1;
 }
