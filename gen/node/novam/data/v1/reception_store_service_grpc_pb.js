@@ -6,6 +6,50 @@ var novam_data_v1_reception_store_service_pb = require('../../../novam/data/v1/r
 var google_protobuf_timestamp_pb = require('google-protobuf/google/protobuf/timestamp_pb.js');
 var novam_common_v1_common_pb = require('../../../novam/common/v1/common_pb.js');
 
+function serialize_novam_data_v1_AddCallTurnRequest(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.AddCallTurnRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.AddCallTurnRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_AddCallTurnRequest(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.AddCallTurnRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_AddCallTurnResponse(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.AddCallTurnResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.AddCallTurnResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_AddCallTurnResponse(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.AddCallTurnResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_EndCallRequest(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.EndCallRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.EndCallRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_EndCallRequest(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.EndCallRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_EndCallResponse(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.EndCallResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.EndCallResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_EndCallResponse(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.EndCallResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_data_v1_GetBusinessRequest(arg) {
   if (!(arg instanceof novam_data_v1_reception_store_service_pb.GetBusinessRequest)) {
     throw new Error('Expected argument of type novam.data.v1.GetBusinessRequest');
@@ -138,6 +182,28 @@ function deserialize_novam_data_v1_SaveContactResponse(buffer_arg) {
   return novam_data_v1_reception_store_service_pb.SaveContactResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_data_v1_StartCallRequest(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.StartCallRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.StartCallRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_StartCallRequest(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.StartCallRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_StartCallResponse(arg) {
+  if (!(arg instanceof novam_data_v1_reception_store_service_pb.StartCallResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.StartCallResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_StartCallResponse(buffer_arg) {
+  return novam_data_v1_reception_store_service_pb.StartCallResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 
 // ReceptionStoreService is what the Reception agent may do while it chats with a business's visitor: read the
 // business's services and hours, find open times, hold one on the chat's Front Desk thread, note the visitor's
@@ -215,6 +281,44 @@ listClientVisits: {
     requestDeserialize: deserialize_novam_data_v1_ListClientVisitsRequest,
     responseSerialize: serialize_novam_data_v1_ListClientVisitsResponse,
     responseDeserialize: deserialize_novam_data_v1_ListClientVisitsResponse,
+  },
+  // Phone calls. When nobody answers the business number, novam-data connects the caller's audio to the engine
+// with a one-time token; the engine trades it here for the call's thread and how to answer. The token works
+// once and only for a few minutes, so a replayed stream gets nothing.
+startCall: {
+    path: '/novam.data.v1.ReceptionStoreService/StartCall',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_reception_store_service_pb.StartCallRequest,
+    responseType: novam_data_v1_reception_store_service_pb.StartCallResponse,
+    requestSerialize: serialize_novam_data_v1_StartCallRequest,
+    requestDeserialize: deserialize_novam_data_v1_StartCallRequest,
+    responseSerialize: serialize_novam_data_v1_StartCallResponse,
+    responseDeserialize: deserialize_novam_data_v1_StartCallResponse,
+  },
+  // One finished turn of the call's transcript, written to its thread as it happens.
+addCallTurn: {
+    path: '/novam.data.v1.ReceptionStoreService/AddCallTurn',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_reception_store_service_pb.AddCallTurnRequest,
+    responseType: novam_data_v1_reception_store_service_pb.AddCallTurnResponse,
+    requestSerialize: serialize_novam_data_v1_AddCallTurnRequest,
+    requestDeserialize: deserialize_novam_data_v1_AddCallTurnRequest,
+    responseSerialize: serialize_novam_data_v1_AddCallTurnResponse,
+    responseDeserialize: deserialize_novam_data_v1_AddCallTurnResponse,
+  },
+  // The call ended: how long the agent talked, which counts toward the plan's agent minutes.
+endCall: {
+    path: '/novam.data.v1.ReceptionStoreService/EndCall',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_reception_store_service_pb.EndCallRequest,
+    responseType: novam_data_v1_reception_store_service_pb.EndCallResponse,
+    requestSerialize: serialize_novam_data_v1_EndCallRequest,
+    requestDeserialize: deserialize_novam_data_v1_EndCallRequest,
+    responseSerialize: serialize_novam_data_v1_EndCallResponse,
+    responseDeserialize: deserialize_novam_data_v1_EndCallResponse,
   },
 };
 

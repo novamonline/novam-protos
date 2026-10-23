@@ -24,6 +24,15 @@ service ReceptionStoreService {
   // The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
   // visitor who isn't signed in, so the agent can never read another client's records.
   rpc ListClientVisits(ListClientVisitsRequest) returns (ListClientVisitsResponse);
+
+  // Phone calls. When nobody answers the business number, novam-data connects the caller's audio to the engine
+  // with a one-time token; the engine trades it here for the call's thread and how to answer. The token works
+  // once and only for a few minutes, so a replayed stream gets nothing.
+  rpc StartCall(StartCallRequest) returns (StartCallResponse);
+  // One finished turn of the call's transcript, written to its thread as it happens.
+  rpc AddCallTurn(AddCallTurnRequest) returns (AddCallTurnResponse);
+  // The call ended: how long the agent talked, which counts toward the plan's agent minutes.
+  rpc EndCall(EndCallRequest) returns (EndCallResponse);
 }
 
 message GetBusinessRequest {
@@ -147,3 +156,45 @@ message SavedCode {
   string ends = 3; // last day, e.g. "Oct 31", in the business's time zone; empty when it doesn't end
   bool booked = 4; // booked with, so it comes off the next bill
 }
+
+message StartCallRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // novam-data's id for the call, from the media stream's parameters.
+  string call_id = 2;
+  string token = 3;
+}
+
+message StartCallResponse {
+  // The call's Front Desk thread; every Reception tool call during the call is about it.
+  string thread_id = 1;
+  // What the agent says first, word for word. It always says it is an automated assistant.
+  string opening = 2;
+  // One of Gemini Live's prebuilt voices; empty for the model's default.
+  string voice_name = 3;
+  // The business's own Gemini key when it chose one; empty to use the engine's.
+  string api_key = 4;
+  // The longest the agent may talk on this call, from what is left of the plan's agent minutes; 0 for no limit
+  // beyond the engine's own.
+  int32 max_seconds = 5;
+}
+
+message AddCallTurnRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+  string call_id = 3;
+  // "caller" or "agent".
+  string speaker = 4;
+  string text = 5;
+}
+
+message AddCallTurnResponse {}
+
+message EndCallRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string thread_id = 2;
+  string call_id = 3;
+  // Seconds from the agent picking up to the call ending.
+  int32 agent_seconds = 4;
+}
+
+message EndCallResponse {}

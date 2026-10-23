@@ -25,6 +25,9 @@ const (
 	ReceptionStoreService_SaveContact_FullMethodName      = "/novam.data.v1.ReceptionStoreService/SaveContact"
 	ReceptionStoreService_HandOff_FullMethodName          = "/novam.data.v1.ReceptionStoreService/HandOff"
 	ReceptionStoreService_ListClientVisits_FullMethodName = "/novam.data.v1.ReceptionStoreService/ListClientVisits"
+	ReceptionStoreService_StartCall_FullMethodName        = "/novam.data.v1.ReceptionStoreService/StartCall"
+	ReceptionStoreService_AddCallTurn_FullMethodName      = "/novam.data.v1.ReceptionStoreService/AddCallTurn"
+	ReceptionStoreService_EndCall_FullMethodName          = "/novam.data.v1.ReceptionStoreService/EndCall"
 )
 
 // ReceptionStoreServiceClient is the client API for ReceptionStoreService service.
@@ -48,6 +51,14 @@ type ReceptionStoreServiceClient interface {
 	// The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
 	// visitor who isn't signed in, so the agent can never read another client's records.
 	ListClientVisits(ctx context.Context, in *ListClientVisitsRequest, opts ...grpc.CallOption) (*ListClientVisitsResponse, error)
+	// Phone calls. When nobody answers the business number, novam-data connects the caller's audio to the engine
+	// with a one-time token; the engine trades it here for the call's thread and how to answer. The token works
+	// once and only for a few minutes, so a replayed stream gets nothing.
+	StartCall(ctx context.Context, in *StartCallRequest, opts ...grpc.CallOption) (*StartCallResponse, error)
+	// One finished turn of the call's transcript, written to its thread as it happens.
+	AddCallTurn(ctx context.Context, in *AddCallTurnRequest, opts ...grpc.CallOption) (*AddCallTurnResponse, error)
+	// The call ended: how long the agent talked, which counts toward the plan's agent minutes.
+	EndCall(ctx context.Context, in *EndCallRequest, opts ...grpc.CallOption) (*EndCallResponse, error)
 }
 
 type receptionStoreServiceClient struct {
@@ -118,6 +129,36 @@ func (c *receptionStoreServiceClient) ListClientVisits(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *receptionStoreServiceClient) StartCall(ctx context.Context, in *StartCallRequest, opts ...grpc.CallOption) (*StartCallResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(StartCallResponse)
+	err := c.cc.Invoke(ctx, ReceptionStoreService_StartCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *receptionStoreServiceClient) AddCallTurn(ctx context.Context, in *AddCallTurnRequest, opts ...grpc.CallOption) (*AddCallTurnResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddCallTurnResponse)
+	err := c.cc.Invoke(ctx, ReceptionStoreService_AddCallTurn_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *receptionStoreServiceClient) EndCall(ctx context.Context, in *EndCallRequest, opts ...grpc.CallOption) (*EndCallResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EndCallResponse)
+	err := c.cc.Invoke(ctx, ReceptionStoreService_EndCall_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ReceptionStoreServiceServer is the server API for ReceptionStoreService service.
 // All implementations must embed UnimplementedReceptionStoreServiceServer
 // for forward compatibility.
@@ -139,6 +180,14 @@ type ReceptionStoreServiceServer interface {
 	// The chat's own client's upcoming visits, what they owe, their stamp card and the codes they saved. Empty for a
 	// visitor who isn't signed in, so the agent can never read another client's records.
 	ListClientVisits(context.Context, *ListClientVisitsRequest) (*ListClientVisitsResponse, error)
+	// Phone calls. When nobody answers the business number, novam-data connects the caller's audio to the engine
+	// with a one-time token; the engine trades it here for the call's thread and how to answer. The token works
+	// once and only for a few minutes, so a replayed stream gets nothing.
+	StartCall(context.Context, *StartCallRequest) (*StartCallResponse, error)
+	// One finished turn of the call's transcript, written to its thread as it happens.
+	AddCallTurn(context.Context, *AddCallTurnRequest) (*AddCallTurnResponse, error)
+	// The call ended: how long the agent talked, which counts toward the plan's agent minutes.
+	EndCall(context.Context, *EndCallRequest) (*EndCallResponse, error)
 	mustEmbedUnimplementedReceptionStoreServiceServer()
 }
 
@@ -166,6 +215,15 @@ func (UnimplementedReceptionStoreServiceServer) HandOff(context.Context, *HandOf
 }
 func (UnimplementedReceptionStoreServiceServer) ListClientVisits(context.Context, *ListClientVisitsRequest) (*ListClientVisitsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ListClientVisits not implemented")
+}
+func (UnimplementedReceptionStoreServiceServer) StartCall(context.Context, *StartCallRequest) (*StartCallResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method StartCall not implemented")
+}
+func (UnimplementedReceptionStoreServiceServer) AddCallTurn(context.Context, *AddCallTurnRequest) (*AddCallTurnResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddCallTurn not implemented")
+}
+func (UnimplementedReceptionStoreServiceServer) EndCall(context.Context, *EndCallRequest) (*EndCallResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method EndCall not implemented")
 }
 func (UnimplementedReceptionStoreServiceServer) mustEmbedUnimplementedReceptionStoreServiceServer() {}
 func (UnimplementedReceptionStoreServiceServer) testEmbeddedByValue()                               {}
@@ -296,6 +354,60 @@ func _ReceptionStoreService_ListClientVisits_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ReceptionStoreService_StartCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartCallRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReceptionStoreServiceServer).StartCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReceptionStoreService_StartCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReceptionStoreServiceServer).StartCall(ctx, req.(*StartCallRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReceptionStoreService_AddCallTurn_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddCallTurnRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReceptionStoreServiceServer).AddCallTurn(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReceptionStoreService_AddCallTurn_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReceptionStoreServiceServer).AddCallTurn(ctx, req.(*AddCallTurnRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ReceptionStoreService_EndCall_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EndCallRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ReceptionStoreServiceServer).EndCall(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ReceptionStoreService_EndCall_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ReceptionStoreServiceServer).EndCall(ctx, req.(*EndCallRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ReceptionStoreService_ServiceDesc is the grpc.ServiceDesc for ReceptionStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -326,6 +438,18 @@ var ReceptionStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListClientVisits",
 			Handler:    _ReceptionStoreService_ListClientVisits_Handler,
+		},
+		{
+			MethodName: "StartCall",
+			Handler:    _ReceptionStoreService_StartCall_Handler,
+		},
+		{
+			MethodName: "AddCallTurn",
+			Handler:    _ReceptionStoreService_AddCallTurn_Handler,
+		},
+		{
+			MethodName: "EndCall",
+			Handler:    _ReceptionStoreService_EndCall_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

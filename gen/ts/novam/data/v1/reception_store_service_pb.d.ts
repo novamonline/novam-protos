@@ -584,6 +584,176 @@ export declare type SavedCode = Message<"novam.data.v1.SavedCode"> & {
 export declare const SavedCodeSchema: GenMessage<SavedCode>;
 
 /**
+ * @generated from message novam.data.v1.StartCallRequest
+ */
+export declare type StartCallRequest = Message<"novam.data.v1.StartCallRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * novam-data's id for the call, from the media stream's parameters.
+   *
+   * @generated from field: string call_id = 2;
+   */
+  callId: string;
+
+  /**
+   * @generated from field: string token = 3;
+   */
+  token: string;
+};
+
+/**
+ * Describes the message novam.data.v1.StartCallRequest.
+ * Use `create(StartCallRequestSchema)` to create a new message.
+ */
+export declare const StartCallRequestSchema: GenMessage<StartCallRequest>;
+
+/**
+ * @generated from message novam.data.v1.StartCallResponse
+ */
+export declare type StartCallResponse = Message<"novam.data.v1.StartCallResponse"> & {
+  /**
+   * The call's Front Desk thread; every Reception tool call during the call is about it.
+   *
+   * @generated from field: string thread_id = 1;
+   */
+  threadId: string;
+
+  /**
+   * What the agent says first, word for word. It always says it is an automated assistant.
+   *
+   * @generated from field: string opening = 2;
+   */
+  opening: string;
+
+  /**
+   * One of Gemini Live's prebuilt voices; empty for the model's default.
+   *
+   * @generated from field: string voice_name = 3;
+   */
+  voiceName: string;
+
+  /**
+   * The business's own Gemini key when it chose one; empty to use the engine's.
+   *
+   * @generated from field: string api_key = 4;
+   */
+  apiKey: string;
+
+  /**
+   * The longest the agent may talk on this call, from what is left of the plan's agent minutes; 0 for no limit
+   * beyond the engine's own.
+   *
+   * @generated from field: int32 max_seconds = 5;
+   */
+  maxSeconds: number;
+};
+
+/**
+ * Describes the message novam.data.v1.StartCallResponse.
+ * Use `create(StartCallResponseSchema)` to create a new message.
+ */
+export declare const StartCallResponseSchema: GenMessage<StartCallResponse>;
+
+/**
+ * @generated from message novam.data.v1.AddCallTurnRequest
+ */
+export declare type AddCallTurnRequest = Message<"novam.data.v1.AddCallTurnRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string thread_id = 2;
+   */
+  threadId: string;
+
+  /**
+   * @generated from field: string call_id = 3;
+   */
+  callId: string;
+
+  /**
+   * "caller" or "agent".
+   *
+   * @generated from field: string speaker = 4;
+   */
+  speaker: string;
+
+  /**
+   * @generated from field: string text = 5;
+   */
+  text: string;
+};
+
+/**
+ * Describes the message novam.data.v1.AddCallTurnRequest.
+ * Use `create(AddCallTurnRequestSchema)` to create a new message.
+ */
+export declare const AddCallTurnRequestSchema: GenMessage<AddCallTurnRequest>;
+
+/**
+ * @generated from message novam.data.v1.AddCallTurnResponse
+ */
+export declare type AddCallTurnResponse = Message<"novam.data.v1.AddCallTurnResponse"> & {
+};
+
+/**
+ * Describes the message novam.data.v1.AddCallTurnResponse.
+ * Use `create(AddCallTurnResponseSchema)` to create a new message.
+ */
+export declare const AddCallTurnResponseSchema: GenMessage<AddCallTurnResponse>;
+
+/**
+ * @generated from message novam.data.v1.EndCallRequest
+ */
+export declare type EndCallRequest = Message<"novam.data.v1.EndCallRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string thread_id = 2;
+   */
+  threadId: string;
+
+  /**
+   * @generated from field: string call_id = 3;
+   */
+  callId: string;
+
+  /**
+   * Seconds from the agent picking up to the call ending.
+   *
+   * @generated from field: int32 agent_seconds = 4;
+   */
+  agentSeconds: number;
+};
+
+/**
+ * Describes the message novam.data.v1.EndCallRequest.
+ * Use `create(EndCallRequestSchema)` to create a new message.
+ */
+export declare const EndCallRequestSchema: GenMessage<EndCallRequest>;
+
+/**
+ * @generated from message novam.data.v1.EndCallResponse
+ */
+export declare type EndCallResponse = Message<"novam.data.v1.EndCallResponse"> & {
+};
+
+/**
+ * Describes the message novam.data.v1.EndCallResponse.
+ * Use `create(EndCallResponseSchema)` to create a new message.
+ */
+export declare const EndCallResponseSchema: GenMessage<EndCallResponse>;
+
+/**
  * ReceptionStoreService is what the Reception agent may do while it chats with a business's visitor: read the
  * business's services and hours, find open times, hold one on the chat's Front Desk thread, note the visitor's
  * contact details and pass the chat to the owner. Every call is about one thread, `thread_id`, scoped to
@@ -649,6 +819,38 @@ export declare const ReceptionStoreService: GenService<{
     methodKind: "unary";
     input: typeof ListClientVisitsRequestSchema;
     output: typeof ListClientVisitsResponseSchema;
+  },
+  /**
+   * Phone calls. When nobody answers the business number, novam-data connects the caller's audio to the engine
+   * with a one-time token; the engine trades it here for the call's thread and how to answer. The token works
+   * once and only for a few minutes, so a replayed stream gets nothing.
+   *
+   * @generated from rpc novam.data.v1.ReceptionStoreService.StartCall
+   */
+  startCall: {
+    methodKind: "unary";
+    input: typeof StartCallRequestSchema;
+    output: typeof StartCallResponseSchema;
+  },
+  /**
+   * One finished turn of the call's transcript, written to its thread as it happens.
+   *
+   * @generated from rpc novam.data.v1.ReceptionStoreService.AddCallTurn
+   */
+  addCallTurn: {
+    methodKind: "unary";
+    input: typeof AddCallTurnRequestSchema;
+    output: typeof AddCallTurnResponseSchema;
+  },
+  /**
+   * The call ended: how long the agent talked, which counts toward the plan's agent minutes.
+   *
+   * @generated from rpc novam.data.v1.ReceptionStoreService.EndCall
+   */
+  endCall: {
+    methodKind: "unary";
+    input: typeof EndCallRequestSchema;
+    output: typeof EndCallResponseSchema;
   },
 }>;
 

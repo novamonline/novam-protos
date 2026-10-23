@@ -1175,6 +1175,367 @@ func (x *SavedCode) GetBooked() bool {
 	return false
 }
 
+type StartCallRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// novam-data's id for the call, from the media stream's parameters.
+	CallId        string `protobuf:"bytes,2,opt,name=call_id,json=callId,proto3" json:"call_id,omitempty"`
+	Token         string `protobuf:"bytes,3,opt,name=token,proto3" json:"token,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StartCallRequest) Reset() {
+	*x = StartCallRequest{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StartCallRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StartCallRequest) ProtoMessage() {}
+
+func (x *StartCallRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StartCallRequest.ProtoReflect.Descriptor instead.
+func (*StartCallRequest) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *StartCallRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *StartCallRequest) GetCallId() string {
+	if x != nil {
+		return x.CallId
+	}
+	return ""
+}
+
+func (x *StartCallRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+type StartCallResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// The call's Front Desk thread; every Reception tool call during the call is about it.
+	ThreadId string `protobuf:"bytes,1,opt,name=thread_id,json=threadId,proto3" json:"thread_id,omitempty"`
+	// What the agent says first, word for word. It always says it is an automated assistant.
+	Opening string `protobuf:"bytes,2,opt,name=opening,proto3" json:"opening,omitempty"`
+	// One of Gemini Live's prebuilt voices; empty for the model's default.
+	VoiceName string `protobuf:"bytes,3,opt,name=voice_name,json=voiceName,proto3" json:"voice_name,omitempty"`
+	// The business's own Gemini key when it chose one; empty to use the engine's.
+	ApiKey string `protobuf:"bytes,4,opt,name=api_key,json=apiKey,proto3" json:"api_key,omitempty"`
+	// The longest the agent may talk on this call, from what is left of the plan's agent minutes; 0 for no limit
+	// beyond the engine's own.
+	MaxSeconds    int32 `protobuf:"varint,5,opt,name=max_seconds,json=maxSeconds,proto3" json:"max_seconds,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StartCallResponse) Reset() {
+	*x = StartCallResponse{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StartCallResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StartCallResponse) ProtoMessage() {}
+
+func (x *StartCallResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StartCallResponse.ProtoReflect.Descriptor instead.
+func (*StartCallResponse) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *StartCallResponse) GetThreadId() string {
+	if x != nil {
+		return x.ThreadId
+	}
+	return ""
+}
+
+func (x *StartCallResponse) GetOpening() string {
+	if x != nil {
+		return x.Opening
+	}
+	return ""
+}
+
+func (x *StartCallResponse) GetVoiceName() string {
+	if x != nil {
+		return x.VoiceName
+	}
+	return ""
+}
+
+func (x *StartCallResponse) GetApiKey() string {
+	if x != nil {
+		return x.ApiKey
+	}
+	return ""
+}
+
+func (x *StartCallResponse) GetMaxSeconds() int32 {
+	if x != nil {
+		return x.MaxSeconds
+	}
+	return 0
+}
+
+type AddCallTurnRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	ThreadId string                 `protobuf:"bytes,2,opt,name=thread_id,json=threadId,proto3" json:"thread_id,omitempty"`
+	CallId   string                 `protobuf:"bytes,3,opt,name=call_id,json=callId,proto3" json:"call_id,omitempty"`
+	// "caller" or "agent".
+	Speaker       string `protobuf:"bytes,4,opt,name=speaker,proto3" json:"speaker,omitempty"`
+	Text          string `protobuf:"bytes,5,opt,name=text,proto3" json:"text,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddCallTurnRequest) Reset() {
+	*x = AddCallTurnRequest{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddCallTurnRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddCallTurnRequest) ProtoMessage() {}
+
+func (x *AddCallTurnRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddCallTurnRequest.ProtoReflect.Descriptor instead.
+func (*AddCallTurnRequest) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *AddCallTurnRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *AddCallTurnRequest) GetThreadId() string {
+	if x != nil {
+		return x.ThreadId
+	}
+	return ""
+}
+
+func (x *AddCallTurnRequest) GetCallId() string {
+	if x != nil {
+		return x.CallId
+	}
+	return ""
+}
+
+func (x *AddCallTurnRequest) GetSpeaker() string {
+	if x != nil {
+		return x.Speaker
+	}
+	return ""
+}
+
+func (x *AddCallTurnRequest) GetText() string {
+	if x != nil {
+		return x.Text
+	}
+	return ""
+}
+
+type AddCallTurnResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddCallTurnResponse) Reset() {
+	*x = AddCallTurnResponse{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddCallTurnResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddCallTurnResponse) ProtoMessage() {}
+
+func (x *AddCallTurnResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddCallTurnResponse.ProtoReflect.Descriptor instead.
+func (*AddCallTurnResponse) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{21}
+}
+
+type EndCallRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	ThreadId string                 `protobuf:"bytes,2,opt,name=thread_id,json=threadId,proto3" json:"thread_id,omitempty"`
+	CallId   string                 `protobuf:"bytes,3,opt,name=call_id,json=callId,proto3" json:"call_id,omitempty"`
+	// Seconds from the agent picking up to the call ending.
+	AgentSeconds  int32 `protobuf:"varint,4,opt,name=agent_seconds,json=agentSeconds,proto3" json:"agent_seconds,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EndCallRequest) Reset() {
+	*x = EndCallRequest{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EndCallRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EndCallRequest) ProtoMessage() {}
+
+func (x *EndCallRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EndCallRequest.ProtoReflect.Descriptor instead.
+func (*EndCallRequest) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *EndCallRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *EndCallRequest) GetThreadId() string {
+	if x != nil {
+		return x.ThreadId
+	}
+	return ""
+}
+
+func (x *EndCallRequest) GetCallId() string {
+	if x != nil {
+		return x.CallId
+	}
+	return ""
+}
+
+func (x *EndCallRequest) GetAgentSeconds() int32 {
+	if x != nil {
+		return x.AgentSeconds
+	}
+	return 0
+}
+
+type EndCallResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *EndCallResponse) Reset() {
+	*x = EndCallResponse{}
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *EndCallResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EndCallResponse) ProtoMessage() {}
+
+func (x *EndCallResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_reception_store_service_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EndCallResponse.ProtoReflect.Descriptor instead.
+func (*EndCallResponse) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_reception_store_service_proto_rawDescGZIP(), []int{23}
+}
+
 var File_novam_data_v1_reception_store_service_proto protoreflect.FileDescriptor
 
 const file_novam_data_v1_reception_store_service_proto_rawDesc = "" +
@@ -1264,14 +1625,42 @@ const file_novam_data_v1_reception_store_service_proto_rawDesc = "" +
 	"\x04code\x18\x01 \x01(\tR\x04code\x12\x14\n" +
 	"\x05label\x18\x02 \x01(\tR\x05label\x12\x12\n" +
 	"\x04ends\x18\x03 \x01(\tR\x04ends\x12\x16\n" +
-	"\x06booked\x18\x04 \x01(\bR\x06booked2\x9b\x04\n" +
+	"\x06booked\x18\x04 \x01(\bR\x06booked\"\x7f\n" +
+	"\x10StartCallRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x17\n" +
+	"\acall_id\x18\x02 \x01(\tR\x06callId\x12\x14\n" +
+	"\x05token\x18\x03 \x01(\tR\x05token\"\xa3\x01\n" +
+	"\x11StartCallResponse\x12\x1b\n" +
+	"\tthread_id\x18\x01 \x01(\tR\bthreadId\x12\x18\n" +
+	"\aopening\x18\x02 \x01(\tR\aopening\x12\x1d\n" +
+	"\n" +
+	"voice_name\x18\x03 \x01(\tR\tvoiceName\x12\x17\n" +
+	"\aapi_key\x18\x04 \x01(\tR\x06apiKey\x12\x1f\n" +
+	"\vmax_seconds\x18\x05 \x01(\x05R\n" +
+	"maxSeconds\"\xb6\x01\n" +
+	"\x12AddCallTurnRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1b\n" +
+	"\tthread_id\x18\x02 \x01(\tR\bthreadId\x12\x17\n" +
+	"\acall_id\x18\x03 \x01(\tR\x06callId\x12\x18\n" +
+	"\aspeaker\x18\x04 \x01(\tR\aspeaker\x12\x12\n" +
+	"\x04text\x18\x05 \x01(\tR\x04text\"\x15\n" +
+	"\x13AddCallTurnResponse\"\xa9\x01\n" +
+	"\x0eEndCallRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1b\n" +
+	"\tthread_id\x18\x02 \x01(\tR\bthreadId\x12\x17\n" +
+	"\acall_id\x18\x03 \x01(\tR\x06callId\x12#\n" +
+	"\ragent_seconds\x18\x04 \x01(\x05R\fagentSeconds\"\x11\n" +
+	"\x0fEndCallResponse2\x8b\x06\n" +
 	"\x15ReceptionStoreService\x12T\n" +
 	"\vGetBusiness\x12!.novam.data.v1.GetBusinessRequest\x1a\".novam.data.v1.GetBusinessResponse\x12Z\n" +
 	"\rListOpenTimes\x12#.novam.data.v1.ListOpenTimesRequest\x1a$.novam.data.v1.ListOpenTimesResponse\x12K\n" +
 	"\bHoldTime\x12\x1e.novam.data.v1.HoldTimeRequest\x1a\x1f.novam.data.v1.HoldTimeResponse\x12T\n" +
 	"\vSaveContact\x12!.novam.data.v1.SaveContactRequest\x1a\".novam.data.v1.SaveContactResponse\x12H\n" +
 	"\aHandOff\x12\x1d.novam.data.v1.HandOffRequest\x1a\x1e.novam.data.v1.HandOffResponse\x12c\n" +
-	"\x10ListClientVisits\x12&.novam.data.v1.ListClientVisitsRequest\x1a'.novam.data.v1.ListClientVisitsResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
+	"\x10ListClientVisits\x12&.novam.data.v1.ListClientVisitsRequest\x1a'.novam.data.v1.ListClientVisitsResponse\x12N\n" +
+	"\tStartCall\x12\x1f.novam.data.v1.StartCallRequest\x1a .novam.data.v1.StartCallResponse\x12T\n" +
+	"\vAddCallTurn\x12!.novam.data.v1.AddCallTurnRequest\x1a\".novam.data.v1.AddCallTurnResponse\x12H\n" +
+	"\aEndCall\x12\x1d.novam.data.v1.EndCallRequest\x1a\x1e.novam.data.v1.EndCallResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
 
 var (
 	file_novam_data_v1_reception_store_service_proto_rawDescOnce sync.Once
@@ -1285,7 +1674,7 @@ func file_novam_data_v1_reception_store_service_proto_rawDescGZIP() []byte {
 	return file_novam_data_v1_reception_store_service_proto_rawDescData
 }
 
-var file_novam_data_v1_reception_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_novam_data_v1_reception_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_novam_data_v1_reception_store_service_proto_goTypes = []any{
 	(*GetBusinessRequest)(nil),       // 0: novam.data.v1.GetBusinessRequest
 	(*Service)(nil),                  // 1: novam.data.v1.Service
@@ -1305,44 +1694,59 @@ var file_novam_data_v1_reception_store_service_proto_goTypes = []any{
 	(*ListClientVisitsResponse)(nil), // 15: novam.data.v1.ListClientVisitsResponse
 	(*ClientRewards)(nil),            // 16: novam.data.v1.ClientRewards
 	(*SavedCode)(nil),                // 17: novam.data.v1.SavedCode
-	(*v1.RequestMetadata)(nil),       // 18: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),    // 19: google.protobuf.Timestamp
+	(*StartCallRequest)(nil),         // 18: novam.data.v1.StartCallRequest
+	(*StartCallResponse)(nil),        // 19: novam.data.v1.StartCallResponse
+	(*AddCallTurnRequest)(nil),       // 20: novam.data.v1.AddCallTurnRequest
+	(*AddCallTurnResponse)(nil),      // 21: novam.data.v1.AddCallTurnResponse
+	(*EndCallRequest)(nil),           // 22: novam.data.v1.EndCallRequest
+	(*EndCallResponse)(nil),          // 23: novam.data.v1.EndCallResponse
+	(*v1.RequestMetadata)(nil),       // 24: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),    // 25: google.protobuf.Timestamp
 }
 var file_novam_data_v1_reception_store_service_proto_depIdxs = []int32{
-	18, // 0: novam.data.v1.GetBusinessRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	24, // 0: novam.data.v1.GetBusinessRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	1,  // 1: novam.data.v1.GetBusinessResponse.services:type_name -> novam.data.v1.Service
 	2,  // 2: novam.data.v1.GetBusinessResponse.hours:type_name -> novam.data.v1.OpeningHours
-	18, // 3: novam.data.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	19, // 4: novam.data.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
-	19, // 5: novam.data.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
+	24, // 3: novam.data.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	25, // 4: novam.data.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
+	25, // 5: novam.data.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
 	5,  // 6: novam.data.v1.ListOpenTimesResponse.times:type_name -> novam.data.v1.OpenTime
-	18, // 7: novam.data.v1.HoldTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	19, // 8: novam.data.v1.HoldTimeRequest.start:type_name -> google.protobuf.Timestamp
+	24, // 7: novam.data.v1.HoldTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	25, // 8: novam.data.v1.HoldTimeRequest.start:type_name -> google.protobuf.Timestamp
 	5,  // 9: novam.data.v1.HoldTimeResponse.held:type_name -> novam.data.v1.OpenTime
-	18, // 10: novam.data.v1.SaveContactRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 11: novam.data.v1.HandOffRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 12: novam.data.v1.ListClientVisitsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	24, // 10: novam.data.v1.SaveContactRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	24, // 11: novam.data.v1.HandOffRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	24, // 12: novam.data.v1.ListClientVisitsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	5,  // 13: novam.data.v1.ClientVisit.when:type_name -> novam.data.v1.OpenTime
 	14, // 14: novam.data.v1.ListClientVisitsResponse.visits:type_name -> novam.data.v1.ClientVisit
 	16, // 15: novam.data.v1.ListClientVisitsResponse.rewards:type_name -> novam.data.v1.ClientRewards
 	17, // 16: novam.data.v1.ClientRewards.saved_codes:type_name -> novam.data.v1.SavedCode
-	0,  // 17: novam.data.v1.ReceptionStoreService.GetBusiness:input_type -> novam.data.v1.GetBusinessRequest
-	4,  // 18: novam.data.v1.ReceptionStoreService.ListOpenTimes:input_type -> novam.data.v1.ListOpenTimesRequest
-	7,  // 19: novam.data.v1.ReceptionStoreService.HoldTime:input_type -> novam.data.v1.HoldTimeRequest
-	9,  // 20: novam.data.v1.ReceptionStoreService.SaveContact:input_type -> novam.data.v1.SaveContactRequest
-	11, // 21: novam.data.v1.ReceptionStoreService.HandOff:input_type -> novam.data.v1.HandOffRequest
-	13, // 22: novam.data.v1.ReceptionStoreService.ListClientVisits:input_type -> novam.data.v1.ListClientVisitsRequest
-	3,  // 23: novam.data.v1.ReceptionStoreService.GetBusiness:output_type -> novam.data.v1.GetBusinessResponse
-	6,  // 24: novam.data.v1.ReceptionStoreService.ListOpenTimes:output_type -> novam.data.v1.ListOpenTimesResponse
-	8,  // 25: novam.data.v1.ReceptionStoreService.HoldTime:output_type -> novam.data.v1.HoldTimeResponse
-	10, // 26: novam.data.v1.ReceptionStoreService.SaveContact:output_type -> novam.data.v1.SaveContactResponse
-	12, // 27: novam.data.v1.ReceptionStoreService.HandOff:output_type -> novam.data.v1.HandOffResponse
-	15, // 28: novam.data.v1.ReceptionStoreService.ListClientVisits:output_type -> novam.data.v1.ListClientVisitsResponse
-	23, // [23:29] is the sub-list for method output_type
-	17, // [17:23] is the sub-list for method input_type
-	17, // [17:17] is the sub-list for extension type_name
-	17, // [17:17] is the sub-list for extension extendee
-	0,  // [0:17] is the sub-list for field type_name
+	24, // 17: novam.data.v1.StartCallRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	24, // 18: novam.data.v1.AddCallTurnRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	24, // 19: novam.data.v1.EndCallRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 20: novam.data.v1.ReceptionStoreService.GetBusiness:input_type -> novam.data.v1.GetBusinessRequest
+	4,  // 21: novam.data.v1.ReceptionStoreService.ListOpenTimes:input_type -> novam.data.v1.ListOpenTimesRequest
+	7,  // 22: novam.data.v1.ReceptionStoreService.HoldTime:input_type -> novam.data.v1.HoldTimeRequest
+	9,  // 23: novam.data.v1.ReceptionStoreService.SaveContact:input_type -> novam.data.v1.SaveContactRequest
+	11, // 24: novam.data.v1.ReceptionStoreService.HandOff:input_type -> novam.data.v1.HandOffRequest
+	13, // 25: novam.data.v1.ReceptionStoreService.ListClientVisits:input_type -> novam.data.v1.ListClientVisitsRequest
+	18, // 26: novam.data.v1.ReceptionStoreService.StartCall:input_type -> novam.data.v1.StartCallRequest
+	20, // 27: novam.data.v1.ReceptionStoreService.AddCallTurn:input_type -> novam.data.v1.AddCallTurnRequest
+	22, // 28: novam.data.v1.ReceptionStoreService.EndCall:input_type -> novam.data.v1.EndCallRequest
+	3,  // 29: novam.data.v1.ReceptionStoreService.GetBusiness:output_type -> novam.data.v1.GetBusinessResponse
+	6,  // 30: novam.data.v1.ReceptionStoreService.ListOpenTimes:output_type -> novam.data.v1.ListOpenTimesResponse
+	8,  // 31: novam.data.v1.ReceptionStoreService.HoldTime:output_type -> novam.data.v1.HoldTimeResponse
+	10, // 32: novam.data.v1.ReceptionStoreService.SaveContact:output_type -> novam.data.v1.SaveContactResponse
+	12, // 33: novam.data.v1.ReceptionStoreService.HandOff:output_type -> novam.data.v1.HandOffResponse
+	15, // 34: novam.data.v1.ReceptionStoreService.ListClientVisits:output_type -> novam.data.v1.ListClientVisitsResponse
+	19, // 35: novam.data.v1.ReceptionStoreService.StartCall:output_type -> novam.data.v1.StartCallResponse
+	21, // 36: novam.data.v1.ReceptionStoreService.AddCallTurn:output_type -> novam.data.v1.AddCallTurnResponse
+	23, // 37: novam.data.v1.ReceptionStoreService.EndCall:output_type -> novam.data.v1.EndCallResponse
+	29, // [29:38] is the sub-list for method output_type
+	20, // [20:29] is the sub-list for method input_type
+	20, // [20:20] is the sub-list for extension type_name
+	20, // [20:20] is the sub-list for extension extendee
+	0,  // [0:20] is the sub-list for field type_name
 }
 
 func init() { file_novam_data_v1_reception_store_service_proto_init() }
@@ -1356,7 +1760,7 @@ func file_novam_data_v1_reception_store_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_data_v1_reception_store_service_proto_rawDesc), len(file_novam_data_v1_reception_store_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
