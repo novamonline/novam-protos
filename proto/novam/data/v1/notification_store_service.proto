@@ -8,30 +8,9 @@ import "novam/events/v1/business_events.proto";
 
 option go_package = "github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1";
 
-// NotificationStoreService is the storage novam-data provides to the notifications service. novam-data owns
-// the data; the service keeps none. It calls this with its own credential (`authorization: Bearer <token>`
-// metadata, a client-credentials token from novam-data's /oauth/token). Calls are scoped to
-// `metadata.tenant_context.org_id`, except ClaimDueNotifications, which spans orgs.
-service NotificationStoreService {
-  // The org's enabled reminder rules.
-  rpc ListReminderRules(ListReminderRulesRequest) returns (ListReminderRulesResponse);
-  // Appointments starting, or invoices due, in a time range. Used to rebuild schedules when rules change.
-  rpc ListReminderTargets(ListReminderTargetsRequest) returns (ListReminderTargetsResponse);
-  // Replaces the scheduled notifications for one target (an appointment or invoice) under one rule.
-  // Already-sent notifications are kept. Sending the same request twice is harmless.
-  rpc ReplaceScheduledNotifications(ReplaceScheduledNotificationsRequest) returns (ReplaceScheduledNotificationsResponse);
-  // Cancels unsent notifications for a target, or for every target of a rule.
-  rpc CancelScheduledNotifications(CancelScheduledNotificationsRequest) returns (CancelScheduledNotificationsResponse);
-  // Atomically leases due, unsent notifications across all orgs, so each is handed to one sender only.
-  // A lease that runs out without a RecordDelivery returns the notification to the queue.
-  rpc ClaimDueNotifications(ClaimDueNotificationsRequest) returns (ClaimDueNotificationsResponse);
-  // Records the outcome of sending a claimed notification.
-  rpc RecordDelivery(RecordDeliveryRequest) returns (RecordDeliveryResponse);
-  // What a sender needs to address a client: contact details, push devices, and the org's name and time zone.
-  rpc GetRecipient(GetRecipientRequest) returns (GetRecipientResponse);
-  // Adds an entry to a person's in-app notification center.
-  rpc CreateInAppNotification(CreateInAppNotificationRequest) returns (CreateInAppNotificationResponse);
-}
+// The shapes the reminders service works in: a notification it plans and sends, how sending went, and what it
+// needs to address a client. The service keeps them in the shared Postgres whose schema novam-data owns (tables
+// scheduled_notifications, reminder_rules, clients, push_subscriptions); there is no RPC for them any more.
 
 // Where a notification goes.
 enum Channel {

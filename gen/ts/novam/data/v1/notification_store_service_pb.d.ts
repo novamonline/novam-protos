@@ -2,7 +2,7 @@
 // @generated from file novam/data/v1/notification_store_service.proto (package novam.data.v1, syntax proto3)
 /* eslint-disable */
 
-import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
+import type { GenEnum, GenFile, GenMessage } from "@bufbuild/protobuf/codegenv2";
 import type { Message } from "@bufbuild/protobuf";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 import type { Appointment, ClientInvoice, ReminderRule } from "../../events/v1/business_events_pb";
@@ -636,97 +636,4 @@ export enum DeliveryStatus {
  * Describes the enum novam.data.v1.DeliveryStatus.
  */
 export declare const DeliveryStatusSchema: GenEnum<DeliveryStatus>;
-
-/**
- * NotificationStoreService is the storage novam-data provides to the notifications service. novam-data owns
- * the data; the service keeps none. It calls this with its own credential (`authorization: Bearer <token>`
- * metadata, a client-credentials token from novam-data's /oauth/token). Calls are scoped to
- * `metadata.tenant_context.org_id`, except ClaimDueNotifications, which spans orgs.
- *
- * @generated from service novam.data.v1.NotificationStoreService
- */
-export declare const NotificationStoreService: GenService<{
-  /**
-   * The org's enabled reminder rules.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.ListReminderRules
-   */
-  listReminderRules: {
-    methodKind: "unary";
-    input: typeof ListReminderRulesRequestSchema;
-    output: typeof ListReminderRulesResponseSchema;
-  },
-  /**
-   * Appointments starting, or invoices due, in a time range. Used to rebuild schedules when rules change.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.ListReminderTargets
-   */
-  listReminderTargets: {
-    methodKind: "unary";
-    input: typeof ListReminderTargetsRequestSchema;
-    output: typeof ListReminderTargetsResponseSchema;
-  },
-  /**
-   * Replaces the scheduled notifications for one target (an appointment or invoice) under one rule.
-   * Already-sent notifications are kept. Sending the same request twice is harmless.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.ReplaceScheduledNotifications
-   */
-  replaceScheduledNotifications: {
-    methodKind: "unary";
-    input: typeof ReplaceScheduledNotificationsRequestSchema;
-    output: typeof ReplaceScheduledNotificationsResponseSchema;
-  },
-  /**
-   * Cancels unsent notifications for a target, or for every target of a rule.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.CancelScheduledNotifications
-   */
-  cancelScheduledNotifications: {
-    methodKind: "unary";
-    input: typeof CancelScheduledNotificationsRequestSchema;
-    output: typeof CancelScheduledNotificationsResponseSchema;
-  },
-  /**
-   * Atomically leases due, unsent notifications across all orgs, so each is handed to one sender only.
-   * A lease that runs out without a RecordDelivery returns the notification to the queue.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.ClaimDueNotifications
-   */
-  claimDueNotifications: {
-    methodKind: "unary";
-    input: typeof ClaimDueNotificationsRequestSchema;
-    output: typeof ClaimDueNotificationsResponseSchema;
-  },
-  /**
-   * Records the outcome of sending a claimed notification.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.RecordDelivery
-   */
-  recordDelivery: {
-    methodKind: "unary";
-    input: typeof RecordDeliveryRequestSchema;
-    output: typeof RecordDeliveryResponseSchema;
-  },
-  /**
-   * What a sender needs to address a client: contact details, push devices, and the org's name and time zone.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.GetRecipient
-   */
-  getRecipient: {
-    methodKind: "unary";
-    input: typeof GetRecipientRequestSchema;
-    output: typeof GetRecipientResponseSchema;
-  },
-  /**
-   * Adds an entry to a person's in-app notification center.
-   *
-   * @generated from rpc novam.data.v1.NotificationStoreService.CreateInAppNotification
-   */
-  createInAppNotification: {
-    methodKind: "unary";
-    input: typeof CreateInAppNotificationRequestSchema;
-    output: typeof CreateInAppNotificationResponseSchema;
-  },
-}>;
 

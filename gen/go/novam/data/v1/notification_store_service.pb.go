@@ -1429,16 +1429,7 @@ const file_novam_data_v1_notification_store_service_proto_rawDesc = "" +
 	"\x1bDELIVERY_STATUS_UNSPECIFIED\x10\x00\x12\x18\n" +
 	"\x14DELIVERY_STATUS_SENT\x10\x01\x12\x1a\n" +
 	"\x16DELIVERY_STATUS_FAILED\x10\x02\x12\x1b\n" +
-	"\x17DELIVERY_STATUS_SKIPPED\x10\x032\xad\a\n" +
-	"\x18NotificationStoreService\x12f\n" +
-	"\x11ListReminderRules\x12'.novam.data.v1.ListReminderRulesRequest\x1a(.novam.data.v1.ListReminderRulesResponse\x12l\n" +
-	"\x13ListReminderTargets\x12).novam.data.v1.ListReminderTargetsRequest\x1a*.novam.data.v1.ListReminderTargetsResponse\x12\x8a\x01\n" +
-	"\x1dReplaceScheduledNotifications\x123.novam.data.v1.ReplaceScheduledNotificationsRequest\x1a4.novam.data.v1.ReplaceScheduledNotificationsResponse\x12\x87\x01\n" +
-	"\x1cCancelScheduledNotifications\x122.novam.data.v1.CancelScheduledNotificationsRequest\x1a3.novam.data.v1.CancelScheduledNotificationsResponse\x12r\n" +
-	"\x15ClaimDueNotifications\x12+.novam.data.v1.ClaimDueNotificationsRequest\x1a,.novam.data.v1.ClaimDueNotificationsResponse\x12]\n" +
-	"\x0eRecordDelivery\x12$.novam.data.v1.RecordDeliveryRequest\x1a%.novam.data.v1.RecordDeliveryResponse\x12W\n" +
-	"\fGetRecipient\x12\".novam.data.v1.GetRecipientRequest\x1a#.novam.data.v1.GetRecipientResponse\x12x\n" +
-	"\x17CreateInAppNotification\x12-.novam.data.v1.CreateInAppNotificationRequest\x1a..novam.data.v1.CreateInAppNotificationResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
+	"\x17DELIVERY_STATUS_SKIPPED\x10\x03BAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
 
 var (
 	file_novam_data_v1_notification_store_service_proto_rawDescOnce sync.Once
@@ -1506,24 +1497,8 @@ var file_novam_data_v1_notification_store_service_proto_depIdxs = []int32{
 	23, // 21: novam.data.v1.GetRecipientRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	15, // 22: novam.data.v1.GetRecipientResponse.devices:type_name -> novam.data.v1.PushDevice
 	23, // 23: novam.data.v1.CreateInAppNotificationRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	3,  // 24: novam.data.v1.NotificationStoreService.ListReminderRules:input_type -> novam.data.v1.ListReminderRulesRequest
-	5,  // 25: novam.data.v1.NotificationStoreService.ListReminderTargets:input_type -> novam.data.v1.ListReminderTargetsRequest
-	7,  // 26: novam.data.v1.NotificationStoreService.ReplaceScheduledNotifications:input_type -> novam.data.v1.ReplaceScheduledNotificationsRequest
-	9,  // 27: novam.data.v1.NotificationStoreService.CancelScheduledNotifications:input_type -> novam.data.v1.CancelScheduledNotificationsRequest
-	11, // 28: novam.data.v1.NotificationStoreService.ClaimDueNotifications:input_type -> novam.data.v1.ClaimDueNotificationsRequest
-	13, // 29: novam.data.v1.NotificationStoreService.RecordDelivery:input_type -> novam.data.v1.RecordDeliveryRequest
-	16, // 30: novam.data.v1.NotificationStoreService.GetRecipient:input_type -> novam.data.v1.GetRecipientRequest
-	18, // 31: novam.data.v1.NotificationStoreService.CreateInAppNotification:input_type -> novam.data.v1.CreateInAppNotificationRequest
-	4,  // 32: novam.data.v1.NotificationStoreService.ListReminderRules:output_type -> novam.data.v1.ListReminderRulesResponse
-	6,  // 33: novam.data.v1.NotificationStoreService.ListReminderTargets:output_type -> novam.data.v1.ListReminderTargetsResponse
-	8,  // 34: novam.data.v1.NotificationStoreService.ReplaceScheduledNotifications:output_type -> novam.data.v1.ReplaceScheduledNotificationsResponse
-	10, // 35: novam.data.v1.NotificationStoreService.CancelScheduledNotifications:output_type -> novam.data.v1.CancelScheduledNotificationsResponse
-	12, // 36: novam.data.v1.NotificationStoreService.ClaimDueNotifications:output_type -> novam.data.v1.ClaimDueNotificationsResponse
-	14, // 37: novam.data.v1.NotificationStoreService.RecordDelivery:output_type -> novam.data.v1.RecordDeliveryResponse
-	17, // 38: novam.data.v1.NotificationStoreService.GetRecipient:output_type -> novam.data.v1.GetRecipientResponse
-	19, // 39: novam.data.v1.NotificationStoreService.CreateInAppNotification:output_type -> novam.data.v1.CreateInAppNotificationResponse
-	32, // [32:40] is the sub-list for method output_type
-	24, // [24:32] is the sub-list for method input_type
+	24, // [24:24] is the sub-list for method output_type
+	24, // [24:24] is the sub-list for method input_type
 	24, // [24:24] is the sub-list for extension type_name
 	24, // [24:24] is the sub-list for extension extendee
 	0,  // [0:24] is the sub-list for field type_name
@@ -1546,7 +1521,7 @@ func file_novam_data_v1_notification_store_service_proto_init() {
 			NumEnums:      2,
 			NumMessages:   18,
 			NumExtensions: 0,
-			NumServices:   1,
+			NumServices:   0,
 		},
 		GoTypes:           file_novam_data_v1_notification_store_service_proto_goTypes,
 		DependencyIndexes: file_novam_data_v1_notification_store_service_proto_depIdxs,
