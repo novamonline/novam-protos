@@ -353,6 +353,57 @@ export declare type CreateInvoiceResponse = Message<"novam.data.v1.CreateInvoice
 export declare const CreateInvoiceResponseSchema: GenMessage<CreateInvoiceResponse>;
 
 /**
+ * @generated from message novam.data.v1.CreateRecordRequest
+ */
+export declare type CreateRecordRequest = Message<"novam.data.v1.CreateRecordRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.data.v1.ActingFor acting_for = 2;
+   */
+  actingFor?: ActingFor;
+
+  /**
+   * collection name as in the REST API, e.g. broadcasts
+   *
+   * @generated from field: string resource = 3;
+   */
+  resource: string;
+
+  /**
+   * the new record's fields
+   *
+   * @generated from field: google.protobuf.Struct fields = 4;
+   */
+  fields?: JsonObject;
+};
+
+/**
+ * Describes the message novam.data.v1.CreateRecordRequest.
+ * Use `create(CreateRecordRequestSchema)` to create a new message.
+ */
+export declare const CreateRecordRequestSchema: GenMessage<CreateRecordRequest>;
+
+/**
+ * @generated from message novam.data.v1.CreateRecordResponse
+ */
+export declare type CreateRecordResponse = Message<"novam.data.v1.CreateRecordResponse"> & {
+  /**
+   * @generated from field: google.protobuf.Struct record = 1;
+   */
+  record?: JsonObject;
+};
+
+/**
+ * Describes the message novam.data.v1.CreateRecordResponse.
+ * Use `create(CreateRecordResponseSchema)` to create a new message.
+ */
+export declare const CreateRecordResponseSchema: GenMessage<CreateRecordResponse>;
+
+/**
  * BusinessStoreService is how workflow steps read and change a business's records. novam-data owns the
  * records and applies its own rules and permissions as `acting_user_id`; the engine keeps none. Called with
  * the engine's credential (`authorization: Bearer <token>` metadata, a client-credentials token from
@@ -409,6 +460,18 @@ export declare const BusinessStoreService: GenService<{
     methodKind: "unary";
     input: typeof CreateInvoiceRequestSchema;
     output: typeof CreateInvoiceResponseSchema;
+  },
+  /**
+   * Creates one record in a collection, through the same resource code as the REST API, so its checks,
+   * plan gating, business events and live updates all apply. Fields the resource doesn't allow are
+   * INVALID_ARGUMENT.
+   *
+   * @generated from rpc novam.data.v1.BusinessStoreService.CreateRecord
+   */
+  createRecord: {
+    methodKind: "unary";
+    input: typeof CreateRecordRequestSchema;
+    output: typeof CreateRecordResponseSchema;
   },
 }>;
 

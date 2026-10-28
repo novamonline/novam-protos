@@ -766,6 +766,137 @@ func (x *MessageEvent) GetMessage() *Message {
 	return nil
 }
 
+// A business's own subscription to Novam: its plan, set when the business subscribes or changes plan. Emitted
+// when novam-data applies a Stripe subscription (lib/planBilling.applySubscriptionState), so workflows can
+// start when a business subscribes or upgrades.
+type Subscription struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrgId         string                 `protobuf:"bytes,2,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
+	Plan          string                 `protobuf:"bytes,3,opt,name=plan,proto3" json:"plan,omitempty"`                                     // launch, pro, team, business, partner
+	Status        string                 `protobuf:"bytes,4,opt,name=status,proto3" json:"status,omitempty"`                                 // active, trialing, past_due
+	PreviousPlan  string                 `protobuf:"bytes,5,opt,name=previous_plan,json=previousPlan,proto3" json:"previous_plan,omitempty"` // the plan before this change; empty for a first subscription
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Subscription) Reset() {
+	*x = Subscription{}
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Subscription) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Subscription) ProtoMessage() {}
+
+func (x *Subscription) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Subscription.ProtoReflect.Descriptor instead.
+func (*Subscription) Descriptor() ([]byte, []int) {
+	return file_novam_events_v1_business_events_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *Subscription) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *Subscription) GetOrgId() string {
+	if x != nil {
+		return x.OrgId
+	}
+	return ""
+}
+
+func (x *Subscription) GetPlan() string {
+	if x != nil {
+		return x.Plan
+	}
+	return ""
+}
+
+func (x *Subscription) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *Subscription) GetPreviousPlan() string {
+	if x != nil {
+		return x.PreviousPlan
+	}
+	return ""
+}
+
+type SubscriptionEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Change        ChangeType             `protobuf:"varint,1,opt,name=change,proto3,enum=novam.events.v1.ChangeType" json:"change,omitempty"`
+	Subscription  *Subscription          `protobuf:"bytes,2,opt,name=subscription,proto3" json:"subscription,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SubscriptionEvent) Reset() {
+	*x = SubscriptionEvent{}
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SubscriptionEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SubscriptionEvent) ProtoMessage() {}
+
+func (x *SubscriptionEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SubscriptionEvent.ProtoReflect.Descriptor instead.
+func (*SubscriptionEvent) Descriptor() ([]byte, []int) {
+	return file_novam_events_v1_business_events_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *SubscriptionEvent) GetChange() ChangeType {
+	if x != nil {
+		return x.Change
+	}
+	return ChangeType_CHANGE_TYPE_UNSPECIFIED
+}
+
+func (x *SubscriptionEvent) GetSubscription() *Subscription {
+	if x != nil {
+		return x.Subscription
+	}
+	return nil
+}
+
 var File_novam_events_v1_business_events_proto protoreflect.FileDescriptor
 
 const file_novam_events_v1_business_events_proto_rawDesc = "" +
@@ -824,7 +955,16 @@ const file_novam_events_v1_business_events_proto_rawDesc = "" +
 	"created_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\"w\n" +
 	"\fMessageEvent\x123\n" +
 	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x122\n" +
-	"\amessage\x18\x02 \x01(\v2\x18.novam.events.v1.MessageR\amessage*t\n" +
+	"\amessage\x18\x02 \x01(\v2\x18.novam.events.v1.MessageR\amessage\"\x86\x01\n" +
+	"\fSubscription\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
+	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x12\n" +
+	"\x04plan\x18\x03 \x01(\tR\x04plan\x12\x16\n" +
+	"\x06status\x18\x04 \x01(\tR\x06status\x12#\n" +
+	"\rprevious_plan\x18\x05 \x01(\tR\fpreviousPlan\"\x8b\x01\n" +
+	"\x11SubscriptionEvent\x123\n" +
+	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x12A\n" +
+	"\fsubscription\x18\x02 \x01(\v2\x1d.novam.events.v1.SubscriptionR\fsubscription*t\n" +
 	"\n" +
 	"ChangeType\x12\x1b\n" +
 	"\x17CHANGE_TYPE_UNSPECIFIED\x10\x00\x12\x17\n" +
@@ -845,7 +985,7 @@ func file_novam_events_v1_business_events_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_events_v1_business_events_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_events_v1_business_events_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
+var file_novam_events_v1_business_events_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_novam_events_v1_business_events_proto_goTypes = []any{
 	(ChangeType)(0),               // 0: novam.events.v1.ChangeType
 	(*Appointment)(nil),           // 1: novam.events.v1.Appointment
@@ -858,11 +998,13 @@ var file_novam_events_v1_business_events_proto_goTypes = []any{
 	(*ReminderRuleEvent)(nil),     // 8: novam.events.v1.ReminderRuleEvent
 	(*Message)(nil),               // 9: novam.events.v1.Message
 	(*MessageEvent)(nil),          // 10: novam.events.v1.MessageEvent
-	(*timestamppb.Timestamp)(nil), // 11: google.protobuf.Timestamp
+	(*Subscription)(nil),          // 11: novam.events.v1.Subscription
+	(*SubscriptionEvent)(nil),     // 12: novam.events.v1.SubscriptionEvent
+	(*timestamppb.Timestamp)(nil), // 13: google.protobuf.Timestamp
 }
 var file_novam_events_v1_business_events_proto_depIdxs = []int32{
-	11, // 0: novam.events.v1.Appointment.start_time:type_name -> google.protobuf.Timestamp
-	11, // 1: novam.events.v1.Appointment.end_time:type_name -> google.protobuf.Timestamp
+	13, // 0: novam.events.v1.Appointment.start_time:type_name -> google.protobuf.Timestamp
+	13, // 1: novam.events.v1.Appointment.end_time:type_name -> google.protobuf.Timestamp
 	0,  // 2: novam.events.v1.AppointmentEvent.change:type_name -> novam.events.v1.ChangeType
 	1,  // 3: novam.events.v1.AppointmentEvent.appointment:type_name -> novam.events.v1.Appointment
 	0,  // 4: novam.events.v1.ClientInvoiceEvent.change:type_name -> novam.events.v1.ChangeType
@@ -871,14 +1013,16 @@ var file_novam_events_v1_business_events_proto_depIdxs = []int32{
 	5,  // 7: novam.events.v1.ClientEvent.client:type_name -> novam.events.v1.Client
 	0,  // 8: novam.events.v1.ReminderRuleEvent.change:type_name -> novam.events.v1.ChangeType
 	7,  // 9: novam.events.v1.ReminderRuleEvent.rule:type_name -> novam.events.v1.ReminderRule
-	11, // 10: novam.events.v1.Message.created_at:type_name -> google.protobuf.Timestamp
+	13, // 10: novam.events.v1.Message.created_at:type_name -> google.protobuf.Timestamp
 	0,  // 11: novam.events.v1.MessageEvent.change:type_name -> novam.events.v1.ChangeType
 	9,  // 12: novam.events.v1.MessageEvent.message:type_name -> novam.events.v1.Message
-	13, // [13:13] is the sub-list for method output_type
-	13, // [13:13] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	0,  // 13: novam.events.v1.SubscriptionEvent.change:type_name -> novam.events.v1.ChangeType
+	11, // 14: novam.events.v1.SubscriptionEvent.subscription:type_name -> novam.events.v1.Subscription
+	15, // [15:15] is the sub-list for method output_type
+	15, // [15:15] is the sub-list for method input_type
+	15, // [15:15] is the sub-list for extension type_name
+	15, // [15:15] is the sub-list for extension extendee
+	0,  // [0:15] is the sub-list for field type_name
 }
 
 func init() { file_novam_events_v1_business_events_proto_init() }
@@ -892,7 +1036,7 @@ func file_novam_events_v1_business_events_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_events_v1_business_events_proto_rawDesc), len(file_novam_events_v1_business_events_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   10,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

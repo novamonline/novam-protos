@@ -350,6 +350,73 @@ export declare type MessageEvent = Message$1<"novam.events.v1.MessageEvent"> & {
 export declare const MessageEventSchema: GenMessage<MessageEvent>;
 
 /**
+ * A business's own subscription to Novam: its plan, set when the business subscribes or changes plan. Emitted
+ * when novam-data applies a Stripe subscription (lib/planBilling.applySubscriptionState), so workflows can
+ * start when a business subscribes or upgrades.
+ *
+ * @generated from message novam.events.v1.Subscription
+ */
+export declare type Subscription = Message$1<"novam.events.v1.Subscription"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string org_id = 2;
+   */
+  orgId: string;
+
+  /**
+   * launch, pro, team, business, partner
+   *
+   * @generated from field: string plan = 3;
+   */
+  plan: string;
+
+  /**
+   * active, trialing, past_due
+   *
+   * @generated from field: string status = 4;
+   */
+  status: string;
+
+  /**
+   * the plan before this change; empty for a first subscription
+   *
+   * @generated from field: string previous_plan = 5;
+   */
+  previousPlan: string;
+};
+
+/**
+ * Describes the message novam.events.v1.Subscription.
+ * Use `create(SubscriptionSchema)` to create a new message.
+ */
+export declare const SubscriptionSchema: GenMessage<Subscription>;
+
+/**
+ * @generated from message novam.events.v1.SubscriptionEvent
+ */
+export declare type SubscriptionEvent = Message$1<"novam.events.v1.SubscriptionEvent"> & {
+  /**
+   * @generated from field: novam.events.v1.ChangeType change = 1;
+   */
+  change: ChangeType;
+
+  /**
+   * @generated from field: novam.events.v1.Subscription subscription = 2;
+   */
+  subscription?: Subscription;
+};
+
+/**
+ * Describes the message novam.events.v1.SubscriptionEvent.
+ * Use `create(SubscriptionEventSchema)` to create a new message.
+ */
+export declare const SubscriptionEventSchema: GenMessage<SubscriptionEvent>;
+
+/**
  * What happened to the entity.
  *
  * @generated from enum novam.events.v1.ChangeType

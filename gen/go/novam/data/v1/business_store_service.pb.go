@@ -731,6 +731,118 @@ func (x *CreateInvoiceResponse) GetInvoice() *v11.ClientInvoice {
 	return nil
 }
 
+type CreateRecordRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	ActingFor     *ActingFor             `protobuf:"bytes,2,opt,name=acting_for,json=actingFor,proto3" json:"acting_for,omitempty"`
+	Resource      string                 `protobuf:"bytes,3,opt,name=resource,proto3" json:"resource,omitempty"` // collection name as in the REST API, e.g. broadcasts
+	Fields        *structpb.Struct       `protobuf:"bytes,4,opt,name=fields,proto3" json:"fields,omitempty"`     // the new record's fields
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecordRequest) Reset() {
+	*x = CreateRecordRequest{}
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecordRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecordRequest) ProtoMessage() {}
+
+func (x *CreateRecordRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecordRequest.ProtoReflect.Descriptor instead.
+func (*CreateRecordRequest) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CreateRecordRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *CreateRecordRequest) GetActingFor() *ActingFor {
+	if x != nil {
+		return x.ActingFor
+	}
+	return nil
+}
+
+func (x *CreateRecordRequest) GetResource() string {
+	if x != nil {
+		return x.Resource
+	}
+	return ""
+}
+
+func (x *CreateRecordRequest) GetFields() *structpb.Struct {
+	if x != nil {
+		return x.Fields
+	}
+	return nil
+}
+
+type CreateRecordResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Record        *structpb.Struct       `protobuf:"bytes,1,opt,name=record,proto3" json:"record,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateRecordResponse) Reset() {
+	*x = CreateRecordResponse{}
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateRecordResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateRecordResponse) ProtoMessage() {}
+
+func (x *CreateRecordResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_data_v1_business_store_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateRecordResponse.ProtoReflect.Descriptor instead.
+func (*CreateRecordResponse) Descriptor() ([]byte, []int) {
+	return file_novam_data_v1_business_store_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *CreateRecordResponse) GetRecord() *structpb.Struct {
+	if x != nil {
+		return x.Record
+	}
+	return nil
+}
+
 var File_novam_data_v1_business_store_service_proto protoreflect.FileDescriptor
 
 const file_novam_data_v1_business_store_service_proto_rawDesc = "" +
@@ -789,14 +901,23 @@ const file_novam_data_v1_business_store_service_proto_rawDesc = "" +
 	"\x0eappointment_id\x18\x04 \x01(\tR\rappointmentId\x12\x16\n" +
 	"\x06status\x18\x05 \x01(\tR\x06status\"Q\n" +
 	"\x15CreateInvoiceResponse\x128\n" +
-	"\ainvoice\x18\x01 \x01(\v2\x1e.novam.events.v1.ClientInvoiceR\ainvoice2\xc4\x03\n" +
+	"\ainvoice\x18\x01 \x01(\v2\x1e.novam.events.v1.ClientInvoiceR\ainvoice\"\xd9\x01\n" +
+	"\x13CreateRecordRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x127\n" +
+	"\n" +
+	"acting_for\x18\x02 \x01(\v2\x18.novam.data.v1.ActingForR\tactingFor\x12\x1a\n" +
+	"\bresource\x18\x03 \x01(\tR\bresource\x12/\n" +
+	"\x06fields\x18\x04 \x01(\v2\x17.google.protobuf.StructR\x06fields\"G\n" +
+	"\x14CreateRecordResponse\x12/\n" +
+	"\x06record\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x06record2\x9d\x04\n" +
 	"\x14BusinessStoreService\x12N\n" +
 	"\tGetRecord\x12\x1f.novam.data.v1.GetRecordRequest\x1a .novam.data.v1.GetRecordResponse\x12T\n" +
 	"\vListRecords\x12!.novam.data.v1.ListRecordsRequest\x1a\".novam.data.v1.ListRecordsResponse\x12W\n" +
 	"\fUpdateRecord\x12\".novam.data.v1.UpdateRecordRequest\x1a#.novam.data.v1.UpdateRecordResponse\x12Q\n" +
 	"\n" +
 	"CreateTask\x12 .novam.data.v1.CreateTaskRequest\x1a!.novam.data.v1.CreateTaskResponse\x12Z\n" +
-	"\rCreateInvoice\x12#.novam.data.v1.CreateInvoiceRequest\x1a$.novam.data.v1.CreateInvoiceResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
+	"\rCreateInvoice\x12#.novam.data.v1.CreateInvoiceRequest\x1a$.novam.data.v1.CreateInvoiceResponse\x12W\n" +
+	"\fCreateRecord\x12\".novam.data.v1.CreateRecordRequest\x1a#.novam.data.v1.CreateRecordResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/data/v1;datav1b\x06proto3"
 
 var (
 	file_novam_data_v1_business_store_service_proto_rawDescOnce sync.Once
@@ -810,7 +931,7 @@ func file_novam_data_v1_business_store_service_proto_rawDescGZIP() []byte {
 	return file_novam_data_v1_business_store_service_proto_rawDescData
 }
 
-var file_novam_data_v1_business_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_novam_data_v1_business_store_service_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_novam_data_v1_business_store_service_proto_goTypes = []any{
 	(*ActingFor)(nil),             // 0: novam.data.v1.ActingFor
 	(*GetRecordRequest)(nil),      // 1: novam.data.v1.GetRecordRequest
@@ -823,46 +944,54 @@ var file_novam_data_v1_business_store_service_proto_goTypes = []any{
 	(*CreateTaskResponse)(nil),    // 8: novam.data.v1.CreateTaskResponse
 	(*CreateInvoiceRequest)(nil),  // 9: novam.data.v1.CreateInvoiceRequest
 	(*CreateInvoiceResponse)(nil), // 10: novam.data.v1.CreateInvoiceResponse
-	(*v1.RequestMetadata)(nil),    // 11: novam.common.v1.RequestMetadata
-	(*structpb.Struct)(nil),       // 12: google.protobuf.Struct
-	(*timestamppb.Timestamp)(nil), // 13: google.protobuf.Timestamp
-	(*v11.ClientInvoice)(nil),     // 14: novam.events.v1.ClientInvoice
+	(*CreateRecordRequest)(nil),   // 11: novam.data.v1.CreateRecordRequest
+	(*CreateRecordResponse)(nil),  // 12: novam.data.v1.CreateRecordResponse
+	(*v1.RequestMetadata)(nil),    // 13: novam.common.v1.RequestMetadata
+	(*structpb.Struct)(nil),       // 14: google.protobuf.Struct
+	(*timestamppb.Timestamp)(nil), // 15: google.protobuf.Timestamp
+	(*v11.ClientInvoice)(nil),     // 16: novam.events.v1.ClientInvoice
 }
 var file_novam_data_v1_business_store_service_proto_depIdxs = []int32{
-	11, // 0: novam.data.v1.GetRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	13, // 0: novam.data.v1.GetRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 1: novam.data.v1.GetRecordRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	12, // 2: novam.data.v1.GetRecordResponse.record:type_name -> google.protobuf.Struct
-	11, // 3: novam.data.v1.ListRecordsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 2: novam.data.v1.GetRecordResponse.record:type_name -> google.protobuf.Struct
+	13, // 3: novam.data.v1.ListRecordsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 4: novam.data.v1.ListRecordsRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	12, // 5: novam.data.v1.ListRecordsRequest.equals:type_name -> google.protobuf.Struct
-	13, // 6: novam.data.v1.ListRecordsRequest.from:type_name -> google.protobuf.Timestamp
-	13, // 7: novam.data.v1.ListRecordsRequest.to:type_name -> google.protobuf.Timestamp
-	12, // 8: novam.data.v1.ListRecordsResponse.records:type_name -> google.protobuf.Struct
-	11, // 9: novam.data.v1.UpdateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 5: novam.data.v1.ListRecordsRequest.equals:type_name -> google.protobuf.Struct
+	15, // 6: novam.data.v1.ListRecordsRequest.from:type_name -> google.protobuf.Timestamp
+	15, // 7: novam.data.v1.ListRecordsRequest.to:type_name -> google.protobuf.Timestamp
+	14, // 8: novam.data.v1.ListRecordsResponse.records:type_name -> google.protobuf.Struct
+	13, // 9: novam.data.v1.UpdateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 10: novam.data.v1.UpdateRecordRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	12, // 11: novam.data.v1.UpdateRecordRequest.fields:type_name -> google.protobuf.Struct
-	12, // 12: novam.data.v1.UpdateRecordResponse.record:type_name -> google.protobuf.Struct
-	11, // 13: novam.data.v1.CreateTaskRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 11: novam.data.v1.UpdateRecordRequest.fields:type_name -> google.protobuf.Struct
+	14, // 12: novam.data.v1.UpdateRecordResponse.record:type_name -> google.protobuf.Struct
+	13, // 13: novam.data.v1.CreateTaskRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 14: novam.data.v1.CreateTaskRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	12, // 15: novam.data.v1.CreateTaskResponse.task:type_name -> google.protobuf.Struct
-	11, // 16: novam.data.v1.CreateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 15: novam.data.v1.CreateTaskResponse.task:type_name -> google.protobuf.Struct
+	13, // 16: novam.data.v1.CreateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 17: novam.data.v1.CreateInvoiceRequest.acting_for:type_name -> novam.data.v1.ActingFor
-	14, // 18: novam.data.v1.CreateInvoiceResponse.invoice:type_name -> novam.events.v1.ClientInvoice
-	1,  // 19: novam.data.v1.BusinessStoreService.GetRecord:input_type -> novam.data.v1.GetRecordRequest
-	3,  // 20: novam.data.v1.BusinessStoreService.ListRecords:input_type -> novam.data.v1.ListRecordsRequest
-	5,  // 21: novam.data.v1.BusinessStoreService.UpdateRecord:input_type -> novam.data.v1.UpdateRecordRequest
-	7,  // 22: novam.data.v1.BusinessStoreService.CreateTask:input_type -> novam.data.v1.CreateTaskRequest
-	9,  // 23: novam.data.v1.BusinessStoreService.CreateInvoice:input_type -> novam.data.v1.CreateInvoiceRequest
-	2,  // 24: novam.data.v1.BusinessStoreService.GetRecord:output_type -> novam.data.v1.GetRecordResponse
-	4,  // 25: novam.data.v1.BusinessStoreService.ListRecords:output_type -> novam.data.v1.ListRecordsResponse
-	6,  // 26: novam.data.v1.BusinessStoreService.UpdateRecord:output_type -> novam.data.v1.UpdateRecordResponse
-	8,  // 27: novam.data.v1.BusinessStoreService.CreateTask:output_type -> novam.data.v1.CreateTaskResponse
-	10, // 28: novam.data.v1.BusinessStoreService.CreateInvoice:output_type -> novam.data.v1.CreateInvoiceResponse
-	24, // [24:29] is the sub-list for method output_type
-	19, // [19:24] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	16, // 18: novam.data.v1.CreateInvoiceResponse.invoice:type_name -> novam.events.v1.ClientInvoice
+	13, // 19: novam.data.v1.CreateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 20: novam.data.v1.CreateRecordRequest.acting_for:type_name -> novam.data.v1.ActingFor
+	14, // 21: novam.data.v1.CreateRecordRequest.fields:type_name -> google.protobuf.Struct
+	14, // 22: novam.data.v1.CreateRecordResponse.record:type_name -> google.protobuf.Struct
+	1,  // 23: novam.data.v1.BusinessStoreService.GetRecord:input_type -> novam.data.v1.GetRecordRequest
+	3,  // 24: novam.data.v1.BusinessStoreService.ListRecords:input_type -> novam.data.v1.ListRecordsRequest
+	5,  // 25: novam.data.v1.BusinessStoreService.UpdateRecord:input_type -> novam.data.v1.UpdateRecordRequest
+	7,  // 26: novam.data.v1.BusinessStoreService.CreateTask:input_type -> novam.data.v1.CreateTaskRequest
+	9,  // 27: novam.data.v1.BusinessStoreService.CreateInvoice:input_type -> novam.data.v1.CreateInvoiceRequest
+	11, // 28: novam.data.v1.BusinessStoreService.CreateRecord:input_type -> novam.data.v1.CreateRecordRequest
+	2,  // 29: novam.data.v1.BusinessStoreService.GetRecord:output_type -> novam.data.v1.GetRecordResponse
+	4,  // 30: novam.data.v1.BusinessStoreService.ListRecords:output_type -> novam.data.v1.ListRecordsResponse
+	6,  // 31: novam.data.v1.BusinessStoreService.UpdateRecord:output_type -> novam.data.v1.UpdateRecordResponse
+	8,  // 32: novam.data.v1.BusinessStoreService.CreateTask:output_type -> novam.data.v1.CreateTaskResponse
+	10, // 33: novam.data.v1.BusinessStoreService.CreateInvoice:output_type -> novam.data.v1.CreateInvoiceResponse
+	12, // 34: novam.data.v1.BusinessStoreService.CreateRecord:output_type -> novam.data.v1.CreateRecordResponse
+	29, // [29:35] is the sub-list for method output_type
+	23, // [23:29] is the sub-list for method input_type
+	23, // [23:23] is the sub-list for extension type_name
+	23, // [23:23] is the sub-list for extension extendee
+	0,  // [0:23] is the sub-list for field type_name
 }
 
 func init() { file_novam_data_v1_business_store_service_proto_init() }
@@ -876,7 +1005,7 @@ func file_novam_data_v1_business_store_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_data_v1_business_store_service_proto_rawDesc), len(file_novam_data_v1_business_store_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

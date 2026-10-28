@@ -99,3 +99,19 @@ message MessageEvent {
   ChangeType change = 1;
   Message message = 2;
 }
+
+// A business's own subscription to Novam: its plan, set when the business subscribes or changes plan. Emitted
+// when novam-data applies a Stripe subscription (lib/planBilling.applySubscriptionState), so workflows can
+// start when a business subscribes or upgrades.
+message Subscription {
+  string id = 1;
+  string org_id = 2;
+  string plan = 3; // launch, pro, team, business, partner
+  string status = 4; // active, trialing, past_due
+  string previous_plan = 5; // the plan before this change; empty for a first subscription
+}
+
+message SubscriptionEvent {
+  ChangeType change = 1;
+  Subscription subscription = 2;
+}

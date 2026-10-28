@@ -25,6 +25,10 @@ service BusinessStoreService {
   rpc UpdateRecord(UpdateRecordRequest) returns (UpdateRecordResponse);
   rpc CreateTask(CreateTaskRequest) returns (CreateTaskResponse);
   rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse);
+  // Creates one record in a collection, through the same resource code as the REST API, so its checks,
+  // plan gating, business events and live updates all apply. Fields the resource doesn't allow are
+  // INVALID_ARGUMENT.
+  rpc CreateRecord(CreateRecordRequest) returns (CreateRecordResponse);
 }
 
 // Who asked for a change, so novam-data can check permissions and say where it came from.
@@ -102,4 +106,15 @@ message CreateInvoiceRequest {
 
 message CreateInvoiceResponse {
   novam.events.v1.ClientInvoice invoice = 1;
+}
+
+message CreateRecordRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ActingFor acting_for = 2;
+  string resource = 3; // collection name as in the REST API, e.g. broadcasts
+  google.protobuf.Struct fields = 4; // the new record's fields
+}
+
+message CreateRecordResponse {
+  google.protobuf.Struct record = 1;
 }

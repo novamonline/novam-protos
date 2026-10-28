@@ -30,6 +30,28 @@ function deserialize_novam_data_v1_CreateInvoiceResponse(buffer_arg) {
   return novam_data_v1_business_store_service_pb.CreateInvoiceResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_data_v1_CreateRecordRequest(arg) {
+  if (!(arg instanceof novam_data_v1_business_store_service_pb.CreateRecordRequest)) {
+    throw new Error('Expected argument of type novam.data.v1.CreateRecordRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_CreateRecordRequest(buffer_arg) {
+  return novam_data_v1_business_store_service_pb.CreateRecordRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_data_v1_CreateRecordResponse(arg) {
+  if (!(arg instanceof novam_data_v1_business_store_service_pb.CreateRecordResponse)) {
+    throw new Error('Expected argument of type novam.data.v1.CreateRecordResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_data_v1_CreateRecordResponse(buffer_arg) {
+  return novam_data_v1_business_store_service_pb.CreateRecordResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_data_v1_CreateTaskRequest(arg) {
   if (!(arg instanceof novam_data_v1_business_store_service_pb.CreateTaskRequest)) {
     throw new Error('Expected argument of type novam.data.v1.CreateTaskRequest');
@@ -184,6 +206,20 @@ updateRecord: {
     requestDeserialize: deserialize_novam_data_v1_CreateInvoiceRequest,
     responseSerialize: serialize_novam_data_v1_CreateInvoiceResponse,
     responseDeserialize: deserialize_novam_data_v1_CreateInvoiceResponse,
+  },
+  // Creates one record in a collection, through the same resource code as the REST API, so its checks,
+// plan gating, business events and live updates all apply. Fields the resource doesn't allow are
+// INVALID_ARGUMENT.
+createRecord: {
+    path: '/novam.data.v1.BusinessStoreService/CreateRecord',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_data_v1_business_store_service_pb.CreateRecordRequest,
+    responseType: novam_data_v1_business_store_service_pb.CreateRecordResponse,
+    requestSerialize: serialize_novam_data_v1_CreateRecordRequest,
+    requestDeserialize: deserialize_novam_data_v1_CreateRecordRequest,
+    responseSerialize: serialize_novam_data_v1_CreateRecordResponse,
+    responseDeserialize: deserialize_novam_data_v1_CreateRecordResponse,
   },
 };
 

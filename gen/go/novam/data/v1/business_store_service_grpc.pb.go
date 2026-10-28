@@ -24,6 +24,7 @@ const (
 	BusinessStoreService_UpdateRecord_FullMethodName  = "/novam.data.v1.BusinessStoreService/UpdateRecord"
 	BusinessStoreService_CreateTask_FullMethodName    = "/novam.data.v1.BusinessStoreService/CreateTask"
 	BusinessStoreService_CreateInvoice_FullMethodName = "/novam.data.v1.BusinessStoreService/CreateInvoice"
+	BusinessStoreService_CreateRecord_FullMethodName  = "/novam.data.v1.BusinessStoreService/CreateRecord"
 )
 
 // BusinessStoreServiceClient is the client API for BusinessStoreService service.
@@ -46,6 +47,10 @@ type BusinessStoreServiceClient interface {
 	UpdateRecord(ctx context.Context, in *UpdateRecordRequest, opts ...grpc.CallOption) (*UpdateRecordResponse, error)
 	CreateTask(ctx context.Context, in *CreateTaskRequest, opts ...grpc.CallOption) (*CreateTaskResponse, error)
 	CreateInvoice(ctx context.Context, in *CreateInvoiceRequest, opts ...grpc.CallOption) (*CreateInvoiceResponse, error)
+	// Creates one record in a collection, through the same resource code as the REST API, so its checks,
+	// plan gating, business events and live updates all apply. Fields the resource doesn't allow are
+	// INVALID_ARGUMENT.
+	CreateRecord(ctx context.Context, in *CreateRecordRequest, opts ...grpc.CallOption) (*CreateRecordResponse, error)
 }
 
 type businessStoreServiceClient struct {
@@ -106,6 +111,16 @@ func (c *businessStoreServiceClient) CreateInvoice(ctx context.Context, in *Crea
 	return out, nil
 }
 
+func (c *businessStoreServiceClient) CreateRecord(ctx context.Context, in *CreateRecordRequest, opts ...grpc.CallOption) (*CreateRecordResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateRecordResponse)
+	err := c.cc.Invoke(ctx, BusinessStoreService_CreateRecord_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BusinessStoreServiceServer is the server API for BusinessStoreService service.
 // All implementations must embed UnimplementedBusinessStoreServiceServer
 // for forward compatibility.
@@ -126,6 +141,10 @@ type BusinessStoreServiceServer interface {
 	UpdateRecord(context.Context, *UpdateRecordRequest) (*UpdateRecordResponse, error)
 	CreateTask(context.Context, *CreateTaskRequest) (*CreateTaskResponse, error)
 	CreateInvoice(context.Context, *CreateInvoiceRequest) (*CreateInvoiceResponse, error)
+	// Creates one record in a collection, through the same resource code as the REST API, so its checks,
+	// plan gating, business events and live updates all apply. Fields the resource doesn't allow are
+	// INVALID_ARGUMENT.
+	CreateRecord(context.Context, *CreateRecordRequest) (*CreateRecordResponse, error)
 	mustEmbedUnimplementedBusinessStoreServiceServer()
 }
 
@@ -150,6 +169,9 @@ func (UnimplementedBusinessStoreServiceServer) CreateTask(context.Context, *Crea
 }
 func (UnimplementedBusinessStoreServiceServer) CreateInvoice(context.Context, *CreateInvoiceRequest) (*CreateInvoiceResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CreateInvoice not implemented")
+}
+func (UnimplementedBusinessStoreServiceServer) CreateRecord(context.Context, *CreateRecordRequest) (*CreateRecordResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CreateRecord not implemented")
 }
 func (UnimplementedBusinessStoreServiceServer) mustEmbedUnimplementedBusinessStoreServiceServer() {}
 func (UnimplementedBusinessStoreServiceServer) testEmbeddedByValue()                              {}
@@ -262,6 +284,24 @@ func _BusinessStoreService_CreateInvoice_Handler(srv interface{}, ctx context.Co
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BusinessStoreService_CreateRecord_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateRecordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BusinessStoreServiceServer).CreateRecord(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BusinessStoreService_CreateRecord_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BusinessStoreServiceServer).CreateRecord(ctx, req.(*CreateRecordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BusinessStoreService_ServiceDesc is the grpc.ServiceDesc for BusinessStoreService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -288,6 +328,10 @@ var BusinessStoreService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CreateInvoice",
 			Handler:    _BusinessStoreService_CreateInvoice_Handler,
+		},
+		{
+			MethodName: "CreateRecord",
+			Handler:    _BusinessStoreService_CreateRecord_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
