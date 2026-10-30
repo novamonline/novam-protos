@@ -1,0 +1,24 @@
+# On a v<version> tag (cut with `make release`), publishes the npm package to GitHub Packages from the
+# committed gen/ts. The Go module needs no publishing: Go fetches gen/go/v<version> straight from this repo.
+name: Release
+on:
+  push:
+    tags: ['v*']
+permissions:
+  contents: read
+  packages: write
+jobs:
+  npm:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          registry-url: https://npm.pkg.github.com
+          scope: '@novamonline'
+      - name: package.json matches the tag
+        run: test "v$(node -p 'require("./package.json").version')" = "$GITHUB_REF_NAME"
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

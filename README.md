@@ -1,62 +1,56 @@
 # NOVAM Protos
 
-Canonical contract repository for the NOVAM platform. Single source of truth for protobuf definitions shared across:
+Canonical contract repository for the NOVAM platform. Single source of truth for the protobuf definitions, and for the code generated from them, shared across:
 
-- **NOVAM Engine** — Go gRPC servers
-- **NOVAM Data** — Node gRPC clients and HTTP mapping layer
+- **NOVAM Engine** — Go gRPC servers and clients
+- **NOVAM Data** — Node gRPC servers and clients
 - **NOVAM Portal** — TypeScript types derived from shared entities
-
-This repo defines shared platform entities, common primitives and metadata models, and service RPC contracts used internally.
 
 ## Design principles
 
 - **Versioned packages** from day one (`v1`, `v2`, etc.)
 - **Shared entities** are separate from service RPC definitions
-- **Stable shared models** for UI and service reuse
-- **Service APIs** can evolve independently
-- **UI** primarily consumes shared entities; **services** consume RPC contracts
+- **Generated code is committed** and released with the protos, so a consumer pins one version of both, and a change of generator shows up as a reviewed diff rather than in a consumer's build
+- **Consumers install a release**; none of them generate code, copy `.proto` files, or need this repo checked out beside them
 
 ## Repository layout
 
 ```
 proto/novam/
-  common/v1/      # TenantContext, RequestMetadata, errors, pagination
-  entities/v1/    # Workflow, WorkflowRun, AI messages
-  workflows/v1/   # WorkflowsService RPCs
-  ai/v1/          # AI service RPCs
+  common/v1/        # TenantContext, RequestMetadata, errors, pagination
+  entities/v1/      # Workflow, WorkflowRun, AI messages
+  workflows/v1/     # WorkflowsService RPCs
+  ai/v1/            # AI service RPCs
+  ...
 gen/
-  go/             # Generated Go (Engine)
-  ts/             # Generated TypeScript (Portal types)
-  node/           # Generated Node gRPC stubs (Data)
-scripts/         # Generation helper
-docs/            # Versioning and usage
+  go/               # Go module github.com/novamonline/novam-protos/gen/go
+  ts/               # protobuf-es output, shipped in the npm package
+package.json        # npm package @novamonline/novam-protos (gen/ts and proto/)
+scripts/            # gen.sh, release.sh
+docs/               # Versioning
 ```
 
-See [gen/README.md](gen/README.md) for which consumer uses which generated output. **Do not edit generated files by hand.**
+**Do not edit anything under `gen/` by hand.**
 
-## Requirements
+## Code generation: Buf only
 
-- [Buf](https://buf.build/docs/installation) CLI (no protoc or local codegen plugins required)
-
-## Code generation: Buf and buf.build only
-
-This repo uses **Buf** for all code generation. Plugins run as **remote plugins on buf.build** (see `buf.gen.yaml`); you do not need to install protoc or any language-specific codegen tools. Run from the repo root:
+Generation uses [Buf](https://buf.build/docs/installation) with remote plugins on buf.build (see `buf.gen.yaml`); protoc and local plugins are not needed. Go is needed for `go mod tidy` on `gen/go`.
 
 ```bash
-make generate
+make gen
 ```
 
-Or run the script directly:
+This formats and lints `proto/`, clears and regenerates `gen/go` and `gen/ts`, and tidies `gen/go/go.mod`. Commit `gen/` with the `.proto` change that produced it; CI (`make check-gen`) fails when they differ.
 
-```bash
-./scripts/gen.sh
-```
+| Plugin | Output |
+|---|---|
+| `buf.build/protocolbuffers/go` | `gen/go` messages |
+| `buf.build/grpc/go` | `gen/go` gRPC stubs |
+| `buf.build/bufbuild/es` | `gen/ts` (ES modules with `.d.ts`) |
 
-This runs `buf format -w`, `buf lint`, and `buf generate`, writing Go, TypeScript, and Node outputs under `gen/`. Generation uses:
+Plugin versions are pinned in `buf.gen.yaml`. Changing one changes the generated code consumers get, so it ships as its own release.
 
-- `buf.build/protocolbuffers/go` → `gen/go`
-- `buf.build/bufbuild/es` → `gen/ts`
-- `buf.build/grpc/node` → `gen/node`
+`gen/go/go.mod` requires the lowest grpc and protobuf versions the generated code works with, so pinning a release never forces a consumer to upgrade them.
 
 ## Lint and breaking changes
 
@@ -65,14 +59,59 @@ make lint       # buf lint
 make breaking   # buf breaking (against main)
 ```
 
-CI (`.github/workflows/buf-ci.yaml`) runs Buf build, lint, format, and breaking on push and pull requests. Optionally, set a `BUF_TOKEN` secret to push the module to the [Buf Schema Registry](https://buf.build) (BSR) as `buf.build/novamonline/novam-protos`.
+## Releasing
 
-## Versioning
+```bash
+make release VERSION=0.2.0
+git push origin HEAD v0.2.0 gen/go/v0.2.0
+```
 
-Additive changes stay in `v1`. Breaking changes get a new package version (e.g. `v2`). Older versions are kept until all consumers migrate. See [docs/versioning.md](docs/versioning.md).
+One version covers every language. `make release` checks that `gen/` is current, sets `package.json`'s version, and tags:
 
-## Consumer integration
+- `v0.2.0`, which the Release workflow publishes as `@novamonline/novam-protos@0.2.0` to GitHub Packages
+- `gen/go/v0.2.0`, the Go module's version (Go only finds tags prefixed with the module's directory)
 
-- **Engine**: `go get github.com/novamonline/novam-protos/gen/go` (or equivalent) and implement workflows and AI gRPC servers.
-- **Data**: Depend on generated Node/TS stubs; run gRPC client to Engine; optional HTTP mapping for Portal.
-- **Portal**: Consume shared entity types from `gen/ts` for consistency.
+See [docs/versioning.md](docs/versioning.md) for what makes a release major, minor or patch.
+
+## Consuming a release
+
+This repository is private, so every consumer needs a GitHub token that can read it.
+
+### Go (novam-engine)
+
+```bash
+go env -w GOPRIVATE=github.com/novamonline/*
+go get github.com/novamonline/novam-protos/gen/go@v0.2.0
+```
+
+Go fetches the module from this repository with git, so git needs credentials for github.com: an SSH key with `git config --global url."git@github.com:".insteadOf "https://github.com/"`, or a token in `~/.netrc`. CI and Docker builds pass a token (contents: read on this repository) as a secret.
+
+To build against an unreleased change, use a `go.work` beside the consumer (`go work init . ../novam-protos/gen/go`). Never commit it, and never add a `replace` to `go.mod`.
+
+### TypeScript and Node (novam-data, portal)
+
+`.yarnrc.yml`:
+
+```yaml
+npmScopes:
+  novamonline:
+    npmRegistryServer: https://npm.pkg.github.com
+    npmAuthToken: ${NPM_GITHUB_TOKEN:-}
+```
+
+```bash
+yarn add @novamonline/novam-protos@0.2.0
+```
+
+`NPM_GITHUB_TOKEN` is a classic personal access token with `read:packages`; in a GitHub Actions workflow of a repository the package grants access to (package settings → Manage Actions access), `GITHUB_TOKEN` works too.
+
+```ts
+import { create } from '@bufbuild/protobuf';
+import { WorkflowSchema } from '@novamonline/novam-protos/novam/entities/v1/workflow_pb.js';
+```
+
+The package also ships the `.proto` files, for loaders that read them at runtime (`@grpc/proto-loader`):
+
+```ts
+const protosDir = path.join(path.dirname(require.resolve('@novamonline/novam-protos/package.json')), 'proto');
+```

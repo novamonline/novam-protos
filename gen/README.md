@@ -1,17 +1,8 @@
 # Generated code
 
-**Do not edit these files by hand.** They are produced by `buf generate` from the `proto/` definitions.
+**Do not edit these files by hand.** `make gen` produces them from `proto/`; commit them with the `.proto` change.
 
-| Directory | Consumer    | Purpose                          |
-|-----------|-------------|-----------------------------------|
-| `go/`     | NOVAM Engine | Go gRPC servers and message types |
-| `ts/`     | NOVAM Portal | TypeScript types and clients      |
-| `node/`   | NOVAM Data   | Node gRPC client stubs            |
-
-After changing any `.proto` file, run from the repo root:
-
-```bash
-make generate
-```
-
-Then commit the updated files under `gen/`.
+| Directory | Released as | Consumers |
+|---|---|---|
+| `go/` | Go module `github.com/novamonline/novam-protos/gen/go`, tag `gen/go/v<version>` | NOVAM Engine |
+| `ts/` | npm package `@novamonline/novam-protos` on GitHub Packages, tag `v<version>` | NOVAM Data, NOVAM Portal |

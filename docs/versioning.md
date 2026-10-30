@@ -25,3 +25,12 @@ NOVAM Proto uses **versioned packages** so that services and clients can evolve 
 ## Tooling
 
 - Use `buf breaking` (e.g. `make breaking`) to detect breaking changes against the main branch before merging.
+
+## Release versions
+
+Package versions (`v1`, `v2`) are about the wire contract. Release versions (`v0.3.0`, tagged by `make release`) are about the generated code a consumer installs, and one release covers every language.
+
+- **Major** (after 1.0; **minor** while 0.x): anything that can break a consumer's build even when the wire contract holds: a changed plugin version or option in `buf.gen.yaml`, a raised minimum in `gen/go/go.mod` or `@bufbuild/protobuf`, a removed or renamed message, field or RPC.
+- **Minor** (after 1.0; **patch** while 0.x): additive changes only: new messages, fields, RPCs, enum values.
+
+Consumers pin an exact release and upgrade deliberately, so a generator change never reaches them unannounced.

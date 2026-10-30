@@ -7,9 +7,9 @@ plugins:
   - remote: buf.build/grpc/go:v1.6.1
     out: gen/go
     opt: paths=source_relative
-  # TypeScript — NOVAM Portal (types) and TS clients
+  # TypeScript — NOVAM Data and Portal (ES modules, with .d.ts)
   - remote: buf.build/bufbuild/es:v2.11.0
     out: gen/ts
-  # Node gRPC — NOVAM Data
-  - remote: buf.build/grpc/node
-    out: gen/node
+    opt:
+      - target=js+dts
+      - import_extension=js

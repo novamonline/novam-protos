@@ -1,4 +1,5 @@
-# Buf CI: lint, format, breaking. Optional BSR push when BUF_TOKEN is set.
+# Buf CI: lint, format, breaking, and a check that the committed gen/ matches proto/.
+# Optional BSR push when BUF_TOKEN is set.
 name: Buf CI
 on:
   push:
@@ -20,3 +21,16 @@ jobs:
           token: ${{ secrets.BUF_TOKEN }}
           # Run push only when token is present (BSR publish)
           push: ${{ secrets.BUF_TOKEN != '' }}
+  generated:
+    name: gen/ is current
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: gen/go/go.mod
+          cache: false
+      - run: make check-gen
