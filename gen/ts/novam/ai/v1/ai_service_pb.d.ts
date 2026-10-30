@@ -92,6 +92,14 @@ export declare type TalkStart = Message<"novam.ai.v1.TalkStart"> & {
    * @generated from field: string voice_name = 5;
    */
   voiceName: string;
+
+  /**
+   * A phone call to the business's number rather than a visitor on its page: the caller's number is already on the
+   * thread, and the turns are found from the caller's voice rather than marked by a button.
+   *
+   * @generated from field: bool phone_call = 6;
+   */
+  phoneCall: boolean;
 };
 
 /**

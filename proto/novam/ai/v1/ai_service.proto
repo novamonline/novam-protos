@@ -40,6 +40,9 @@ message TalkStart {
   repeated novam.entities.v1.ChatMessage history = 4;
   // One of Gemini Live's prebuilt voices, e.g. Kore; empty uses the model's default voice.
   string voice_name = 5;
+  // A phone call to the business's number rather than a visitor on its page: the caller's number is already on the
+  // thread, and the turns are found from the caller's voice rather than marked by a button.
+  bool phone_call = 6;
 }
 
 message TalkResponse {
