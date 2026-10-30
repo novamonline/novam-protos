@@ -1002,8 +1002,10 @@ func (*RecordDeliveryResponse) Descriptor() ([]byte, []int) {
 // A device registered for push notifications.
 type PushDevice struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`
+	Token         string                 `protobuf:"bytes,1,opt,name=token,proto3" json:"token,omitempty"`       // web: the subscription as JSON; ios and android: the device token
 	Platform      string                 `protobuf:"bytes,2,opt,name=platform,proto3" json:"platform,omitempty"` // ios, android, web
+	Id            string                 `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`             // the device's row, to remove it when its push service says it is gone
+	App           string                 `protobuf:"bytes,4,opt,name=app,proto3" json:"app,omitempty"`           // the app the device belongs to: client, admin
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1048,6 +1050,20 @@ func (x *PushDevice) GetToken() string {
 func (x *PushDevice) GetPlatform() string {
 	if x != nil {
 		return x.Platform
+	}
+	return ""
+}
+
+func (x *PushDevice) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *PushDevice) GetApp() string {
+	if x != nil {
+		return x.App
 	}
 	return ""
 }
@@ -1393,11 +1409,13 @@ const file_novam_data_v1_notification_store_service_proto_rawDesc = "" +
 	"\trecipient\x18\x04 \x01(\tR\trecipient\x12#\n" +
 	"\rerror_message\x18\x05 \x01(\tR\ferrorMessage\x12.\n" +
 	"\x13provider_message_id\x18\x06 \x01(\tR\x11providerMessageId\"\x18\n" +
-	"\x16RecordDeliveryResponse\">\n" +
+	"\x16RecordDeliveryResponse\"`\n" +
 	"\n" +
 	"PushDevice\x12\x14\n" +
 	"\x05token\x18\x01 \x01(\tR\x05token\x12\x1a\n" +
-	"\bplatform\x18\x02 \x01(\tR\bplatform\"p\n" +
+	"\bplatform\x18\x02 \x01(\tR\bplatform\x12\x0e\n" +
+	"\x02id\x18\x03 \x01(\tR\x02id\x12\x10\n" +
+	"\x03app\x18\x04 \x01(\tR\x03app\"p\n" +
 	"\x13GetRecipientRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1b\n" +
 	"\tclient_id\x18\x02 \x01(\tR\bclientId\"\xec\x01\n" +

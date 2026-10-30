@@ -414,6 +414,8 @@ export declare const RecordDeliveryResponseSchema: GenMessage<RecordDeliveryResp
  */
 export declare type PushDevice = Message<"novam.data.v1.PushDevice"> & {
   /**
+   * web: the subscription as JSON; ios and android: the device token
+   *
    * @generated from field: string token = 1;
    */
   token: string;
@@ -424,6 +426,20 @@ export declare type PushDevice = Message<"novam.data.v1.PushDevice"> & {
    * @generated from field: string platform = 2;
    */
   platform: string;
+
+  /**
+   * the device's row, to remove it when its push service says it is gone
+   *
+   * @generated from field: string id = 3;
+   */
+  id: string;
+
+  /**
+   * the app the device belongs to: client, admin
+   *
+   * @generated from field: string app = 4;
+   */
+  app: string;
 };
 
 /**

@@ -27,6 +27,28 @@ function deserialize_novam_notifications_v1_ResyncOrgResponse(buffer_arg) {
   return novam_notifications_v1_notifications_service_pb.ResyncOrgResponse.deserializeBinary(new Uint8Array(buffer_arg));
 }
 
+function serialize_novam_notifications_v1_SendPushRequest(arg) {
+  if (!(arg instanceof novam_notifications_v1_notifications_service_pb.SendPushRequest)) {
+    throw new Error('Expected argument of type novam.notifications.v1.SendPushRequest');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_notifications_v1_SendPushRequest(buffer_arg) {
+  return novam_notifications_v1_notifications_service_pb.SendPushRequest.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
+function serialize_novam_notifications_v1_SendPushResponse(arg) {
+  if (!(arg instanceof novam_notifications_v1_notifications_service_pb.SendPushResponse)) {
+    throw new Error('Expected argument of type novam.notifications.v1.SendPushResponse');
+  }
+  return Buffer.from(arg.serializeBinary());
+}
+
+function deserialize_novam_notifications_v1_SendPushResponse(buffer_arg) {
+  return novam_notifications_v1_notifications_service_pb.SendPushResponse.deserializeBinary(new Uint8Array(buffer_arg));
+}
+
 function serialize_novam_notifications_v1_SendTestNotificationRequest(arg) {
   if (!(arg instanceof novam_notifications_v1_notifications_service_pb.SendTestNotificationRequest)) {
     throw new Error('Expected argument of type novam.notifications.v1.SendTestNotificationRequest');
@@ -78,6 +100,19 @@ sendTestNotification: {
     requestDeserialize: deserialize_novam_notifications_v1_SendTestNotificationRequest,
     responseSerialize: serialize_novam_notifications_v1_SendTestNotificationResponse,
     responseDeserialize: deserialize_novam_notifications_v1_SendTestNotificationResponse,
+  },
+  // Sends a push to every device a person has notifications on: browsers, and the iOS and Android apps.
+// novam-data decides whether the person wants it; this only delivers. A device that is gone is removed.
+sendPush: {
+    path: '/novam.notifications.v1.NotificationsService/SendPush',
+    requestStream: false,
+    responseStream: false,
+    requestType: novam_notifications_v1_notifications_service_pb.SendPushRequest,
+    responseType: novam_notifications_v1_notifications_service_pb.SendPushResponse,
+    requestSerialize: serialize_novam_notifications_v1_SendPushRequest,
+    requestDeserialize: deserialize_novam_notifications_v1_SendPushRequest,
+    responseSerialize: serialize_novam_notifications_v1_SendPushResponse,
+    responseDeserialize: deserialize_novam_notifications_v1_SendPushResponse,
   },
 };
 

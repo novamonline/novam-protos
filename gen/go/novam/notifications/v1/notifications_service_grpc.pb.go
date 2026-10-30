@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	NotificationsService_ResyncOrg_FullMethodName            = "/novam.notifications.v1.NotificationsService/ResyncOrg"
 	NotificationsService_SendTestNotification_FullMethodName = "/novam.notifications.v1.NotificationsService/SendTestNotification"
+	NotificationsService_SendPush_FullMethodName             = "/novam.notifications.v1.NotificationsService/SendPush"
 )
 
 // NotificationsServiceClient is the client API for NotificationsService service.
@@ -36,6 +37,9 @@ type NotificationsServiceClient interface {
 	ResyncOrg(ctx context.Context, in *ResyncOrgRequest, opts ...grpc.CallOption) (*ResyncOrgResponse, error)
 	// Sends a sample reminder to the given address or user, so an owner can see what clients will get.
 	SendTestNotification(ctx context.Context, in *SendTestNotificationRequest, opts ...grpc.CallOption) (*SendTestNotificationResponse, error)
+	// Sends a push to every device a person has notifications on: browsers, and the iOS and Android apps.
+	// novam-data decides whether the person wants it; this only delivers. A device that is gone is removed.
+	SendPush(ctx context.Context, in *SendPushRequest, opts ...grpc.CallOption) (*SendPushResponse, error)
 }
 
 type notificationsServiceClient struct {
@@ -66,6 +70,16 @@ func (c *notificationsServiceClient) SendTestNotification(ctx context.Context, i
 	return out, nil
 }
 
+func (c *notificationsServiceClient) SendPush(ctx context.Context, in *SendPushRequest, opts ...grpc.CallOption) (*SendPushResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SendPushResponse)
+	err := c.cc.Invoke(ctx, NotificationsService_SendPush_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // NotificationsServiceServer is the server API for NotificationsService service.
 // All implementations must embed UnimplementedNotificationsServiceServer
 // for forward compatibility.
@@ -79,6 +93,9 @@ type NotificationsServiceServer interface {
 	ResyncOrg(context.Context, *ResyncOrgRequest) (*ResyncOrgResponse, error)
 	// Sends a sample reminder to the given address or user, so an owner can see what clients will get.
 	SendTestNotification(context.Context, *SendTestNotificationRequest) (*SendTestNotificationResponse, error)
+	// Sends a push to every device a person has notifications on: browsers, and the iOS and Android apps.
+	// novam-data decides whether the person wants it; this only delivers. A device that is gone is removed.
+	SendPush(context.Context, *SendPushRequest) (*SendPushResponse, error)
 	mustEmbedUnimplementedNotificationsServiceServer()
 }
 
@@ -94,6 +111,9 @@ func (UnimplementedNotificationsServiceServer) ResyncOrg(context.Context, *Resyn
 }
 func (UnimplementedNotificationsServiceServer) SendTestNotification(context.Context, *SendTestNotificationRequest) (*SendTestNotificationResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SendTestNotification not implemented")
+}
+func (UnimplementedNotificationsServiceServer) SendPush(context.Context, *SendPushRequest) (*SendPushResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SendPush not implemented")
 }
 func (UnimplementedNotificationsServiceServer) mustEmbedUnimplementedNotificationsServiceServer() {}
 func (UnimplementedNotificationsServiceServer) testEmbeddedByValue()                              {}
@@ -152,6 +172,24 @@ func _NotificationsService_SendTestNotification_Handler(srv interface{}, ctx con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _NotificationsService_SendPush_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendPushRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(NotificationsServiceServer).SendPush(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: NotificationsService_SendPush_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(NotificationsServiceServer).SendPush(ctx, req.(*SendPushRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // NotificationsService_ServiceDesc is the grpc.ServiceDesc for NotificationsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -166,6 +204,10 @@ var NotificationsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendTestNotification",
 			Handler:    _NotificationsService_SendTestNotification_Handler,
+		},
+		{
+			MethodName: "SendPush",
+			Handler:    _NotificationsService_SendPush_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -230,6 +230,150 @@ func (x *SendTestNotificationResponse) GetRecipient() string {
 	return ""
 }
 
+type SendPushRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"` // the business it is about, when there is one; may be empty
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Title         string                 `protobuf:"bytes,3,opt,name=title,proto3" json:"title,omitempty"`
+	Body          string                 `protobuf:"bytes,4,opt,name=body,proto3" json:"body,omitempty"`
+	Url           string                 `protobuf:"bytes,5,opt,name=url,proto3" json:"url,omitempty"` // opened on tap: a path in the app the device belongs to, or a full link
+	App           string                 `protobuf:"bytes,6,opt,name=app,proto3" json:"app,omitempty"` // only devices of this app (client, admin); empty for every app
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendPushRequest) Reset() {
+	*x = SendPushRequest{}
+	mi := &file_novam_notifications_v1_notifications_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendPushRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendPushRequest) ProtoMessage() {}
+
+func (x *SendPushRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_notifications_v1_notifications_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendPushRequest.ProtoReflect.Descriptor instead.
+func (*SendPushRequest) Descriptor() ([]byte, []int) {
+	return file_novam_notifications_v1_notifications_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *SendPushRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *SendPushRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *SendPushRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *SendPushRequest) GetBody() string {
+	if x != nil {
+		return x.Body
+	}
+	return ""
+}
+
+func (x *SendPushRequest) GetUrl() string {
+	if x != nil {
+		return x.Url
+	}
+	return ""
+}
+
+func (x *SendPushRequest) GetApp() string {
+	if x != nil {
+		return x.App
+	}
+	return ""
+}
+
+type SendPushResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Devices       int32                  `protobuf:"varint,1,opt,name=devices,proto3" json:"devices,omitempty"` // devices tried
+	Sent          int32                  `protobuf:"varint,2,opt,name=sent,proto3" json:"sent,omitempty"`       // devices that took it
+	Removed       int32                  `protobuf:"varint,3,opt,name=removed,proto3" json:"removed,omitempty"` // devices that were gone and are now removed
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendPushResponse) Reset() {
+	*x = SendPushResponse{}
+	mi := &file_novam_notifications_v1_notifications_service_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendPushResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendPushResponse) ProtoMessage() {}
+
+func (x *SendPushResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_notifications_v1_notifications_service_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendPushResponse.ProtoReflect.Descriptor instead.
+func (*SendPushResponse) Descriptor() ([]byte, []int) {
+	return file_novam_notifications_v1_notifications_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *SendPushResponse) GetDevices() int32 {
+	if x != nil {
+		return x.Devices
+	}
+	return 0
+}
+
+func (x *SendPushResponse) GetSent() int32 {
+	if x != nil {
+		return x.Sent
+	}
+	return 0
+}
+
+func (x *SendPushResponse) GetRemoved() int32 {
+	if x != nil {
+		return x.Removed
+	}
+	return 0
+}
+
 var File_novam_notifications_v1_notifications_service_proto protoreflect.FileDescriptor
 
 const file_novam_notifications_v1_notifications_service_proto_rawDesc = "" +
@@ -246,10 +390,22 @@ const file_novam_notifications_v1_notifications_service_proto_rawDesc = "" +
 	"\auser_id\x18\x04 \x01(\tR\x06userId\"V\n" +
 	"\x1cSendTestNotificationResponse\x12\x18\n" +
 	"\achannel\x18\x01 \x01(\tR\achannel\x12\x1c\n" +
-	"\trecipient\x18\x02 \x01(\tR\trecipient2\xfc\x01\n" +
+	"\trecipient\x18\x02 \x01(\tR\trecipient\"\xb6\x01\n" +
+	"\x0fSendPushRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x14\n" +
+	"\x05title\x18\x03 \x01(\tR\x05title\x12\x12\n" +
+	"\x04body\x18\x04 \x01(\tR\x04body\x12\x10\n" +
+	"\x03url\x18\x05 \x01(\tR\x03url\x12\x10\n" +
+	"\x03app\x18\x06 \x01(\tR\x03app\"Z\n" +
+	"\x10SendPushResponse\x12\x18\n" +
+	"\adevices\x18\x01 \x01(\x05R\adevices\x12\x12\n" +
+	"\x04sent\x18\x02 \x01(\x05R\x04sent\x12\x18\n" +
+	"\aremoved\x18\x03 \x01(\x05R\aremoved2\xdb\x02\n" +
 	"\x14NotificationsService\x12`\n" +
 	"\tResyncOrg\x12(.novam.notifications.v1.ResyncOrgRequest\x1a).novam.notifications.v1.ResyncOrgResponse\x12\x81\x01\n" +
-	"\x14SendTestNotification\x123.novam.notifications.v1.SendTestNotificationRequest\x1a4.novam.notifications.v1.SendTestNotificationResponseBSZQgithub.com/novamonline/novam-protos/gen/go/novam/notifications/v1;notificationsv1b\x06proto3"
+	"\x14SendTestNotification\x123.novam.notifications.v1.SendTestNotificationRequest\x1a4.novam.notifications.v1.SendTestNotificationResponse\x12]\n" +
+	"\bSendPush\x12'.novam.notifications.v1.SendPushRequest\x1a(.novam.notifications.v1.SendPushResponseBSZQgithub.com/novamonline/novam-protos/gen/go/novam/notifications/v1;notificationsv1b\x06proto3"
 
 var (
 	file_novam_notifications_v1_notifications_service_proto_rawDescOnce sync.Once
@@ -263,26 +419,31 @@ func file_novam_notifications_v1_notifications_service_proto_rawDescGZIP() []byt
 	return file_novam_notifications_v1_notifications_service_proto_rawDescData
 }
 
-var file_novam_notifications_v1_notifications_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_novam_notifications_v1_notifications_service_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_novam_notifications_v1_notifications_service_proto_goTypes = []any{
 	(*ResyncOrgRequest)(nil),             // 0: novam.notifications.v1.ResyncOrgRequest
 	(*ResyncOrgResponse)(nil),            // 1: novam.notifications.v1.ResyncOrgResponse
 	(*SendTestNotificationRequest)(nil),  // 2: novam.notifications.v1.SendTestNotificationRequest
 	(*SendTestNotificationResponse)(nil), // 3: novam.notifications.v1.SendTestNotificationResponse
-	(*v1.RequestMetadata)(nil),           // 4: novam.common.v1.RequestMetadata
+	(*SendPushRequest)(nil),              // 4: novam.notifications.v1.SendPushRequest
+	(*SendPushResponse)(nil),             // 5: novam.notifications.v1.SendPushResponse
+	(*v1.RequestMetadata)(nil),           // 6: novam.common.v1.RequestMetadata
 }
 var file_novam_notifications_v1_notifications_service_proto_depIdxs = []int32{
-	4, // 0: novam.notifications.v1.ResyncOrgRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	4, // 1: novam.notifications.v1.SendTestNotificationRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0, // 2: novam.notifications.v1.NotificationsService.ResyncOrg:input_type -> novam.notifications.v1.ResyncOrgRequest
-	2, // 3: novam.notifications.v1.NotificationsService.SendTestNotification:input_type -> novam.notifications.v1.SendTestNotificationRequest
-	1, // 4: novam.notifications.v1.NotificationsService.ResyncOrg:output_type -> novam.notifications.v1.ResyncOrgResponse
-	3, // 5: novam.notifications.v1.NotificationsService.SendTestNotification:output_type -> novam.notifications.v1.SendTestNotificationResponse
-	4, // [4:6] is the sub-list for method output_type
-	2, // [2:4] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	6, // 0: novam.notifications.v1.ResyncOrgRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	6, // 1: novam.notifications.v1.SendTestNotificationRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	6, // 2: novam.notifications.v1.SendPushRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0, // 3: novam.notifications.v1.NotificationsService.ResyncOrg:input_type -> novam.notifications.v1.ResyncOrgRequest
+	2, // 4: novam.notifications.v1.NotificationsService.SendTestNotification:input_type -> novam.notifications.v1.SendTestNotificationRequest
+	4, // 5: novam.notifications.v1.NotificationsService.SendPush:input_type -> novam.notifications.v1.SendPushRequest
+	1, // 6: novam.notifications.v1.NotificationsService.ResyncOrg:output_type -> novam.notifications.v1.ResyncOrgResponse
+	3, // 7: novam.notifications.v1.NotificationsService.SendTestNotification:output_type -> novam.notifications.v1.SendTestNotificationResponse
+	5, // 8: novam.notifications.v1.NotificationsService.SendPush:output_type -> novam.notifications.v1.SendPushResponse
+	6, // [6:9] is the sub-list for method output_type
+	3, // [3:6] is the sub-list for method input_type
+	3, // [3:3] is the sub-list for extension type_name
+	3, // [3:3] is the sub-list for extension extendee
+	0, // [0:3] is the sub-list for field type_name
 }
 
 func init() { file_novam_notifications_v1_notifications_service_proto_init() }
@@ -296,7 +457,7 @@ func file_novam_notifications_v1_notifications_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_notifications_v1_notifications_service_proto_rawDesc), len(file_novam_notifications_v1_notifications_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

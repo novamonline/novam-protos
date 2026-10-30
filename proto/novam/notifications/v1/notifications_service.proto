@@ -15,6 +15,9 @@ service NotificationsService {
   rpc ResyncOrg(ResyncOrgRequest) returns (ResyncOrgResponse);
   // Sends a sample reminder to the given address or user, so an owner can see what clients will get.
   rpc SendTestNotification(SendTestNotificationRequest) returns (SendTestNotificationResponse);
+  // Sends a push to every device a person has notifications on: browsers, and the iOS and Android apps.
+  // novam-data decides whether the person wants it; this only delivers. A device that is gone is removed.
+  rpc SendPush(SendPushRequest) returns (SendPushResponse);
 }
 
 message ResyncOrgRequest {
@@ -35,4 +38,19 @@ message SendTestNotificationRequest {
 message SendTestNotificationResponse {
   string channel = 1;
   string recipient = 2;
+}
+
+message SendPushRequest {
+  novam.common.v1.RequestMetadata metadata = 1; // the business it is about, when there is one; may be empty
+  string user_id = 2;
+  string title = 3;
+  string body = 4;
+  string url = 5; // opened on tap: a path in the app the device belongs to, or a full link
+  string app = 6; // only devices of this app (client, admin); empty for every app
+}
+
+message SendPushResponse {
+  int32 devices = 1; // devices tried
+  int32 sent = 2; // devices that took it
+  int32 removed = 3; // devices that were gone and are now removed
 }

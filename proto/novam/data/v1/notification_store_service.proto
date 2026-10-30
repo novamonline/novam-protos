@@ -123,8 +123,10 @@ message RecordDeliveryResponse {}
 
 // A device registered for push notifications.
 message PushDevice {
-  string token = 1;
+  string token = 1; // web: the subscription as JSON; ios and android: the device token
   string platform = 2; // ios, android, web
+  string id = 3; // the device's row, to remove it when its push service says it is gone
+  string app = 4; // the app the device belongs to: client, admin
 }
 
 message GetRecipientRequest {

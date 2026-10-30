@@ -100,6 +100,85 @@ export declare type SendTestNotificationResponse = Message<"novam.notifications.
 export declare const SendTestNotificationResponseSchema: GenMessage<SendTestNotificationResponse>;
 
 /**
+ * @generated from message novam.notifications.v1.SendPushRequest
+ */
+export declare type SendPushRequest = Message<"novam.notifications.v1.SendPushRequest"> & {
+  /**
+   * the business it is about, when there is one; may be empty
+   *
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string user_id = 2;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string title = 3;
+   */
+  title: string;
+
+  /**
+   * @generated from field: string body = 4;
+   */
+  body: string;
+
+  /**
+   * opened on tap: a path in the app the device belongs to, or a full link
+   *
+   * @generated from field: string url = 5;
+   */
+  url: string;
+
+  /**
+   * only devices of this app (client, admin); empty for every app
+   *
+   * @generated from field: string app = 6;
+   */
+  app: string;
+};
+
+/**
+ * Describes the message novam.notifications.v1.SendPushRequest.
+ * Use `create(SendPushRequestSchema)` to create a new message.
+ */
+export declare const SendPushRequestSchema: GenMessage<SendPushRequest>;
+
+/**
+ * @generated from message novam.notifications.v1.SendPushResponse
+ */
+export declare type SendPushResponse = Message<"novam.notifications.v1.SendPushResponse"> & {
+  /**
+   * devices tried
+   *
+   * @generated from field: int32 devices = 1;
+   */
+  devices: number;
+
+  /**
+   * devices that took it
+   *
+   * @generated from field: int32 sent = 2;
+   */
+  sent: number;
+
+  /**
+   * devices that were gone and are now removed
+   *
+   * @generated from field: int32 removed = 3;
+   */
+  removed: number;
+};
+
+/**
+ * Describes the message novam.notifications.v1.SendPushResponse.
+ * Use `create(SendPushResponseSchema)` to create a new message.
+ */
+export declare const SendPushResponseSchema: GenMessage<SendPushResponse>;
+
+/**
  * NotificationsService runs in novam-engine. It learns about changes from business events on NATS
  * JetStream (novam.events.v1) and sends reminders and alerts by email, push and in-app. novam-data calls
  * it only for the few things events can't express.
@@ -127,6 +206,17 @@ export declare const NotificationsService: GenService<{
     methodKind: "unary";
     input: typeof SendTestNotificationRequestSchema;
     output: typeof SendTestNotificationResponseSchema;
+  },
+  /**
+   * Sends a push to every device a person has notifications on: browsers, and the iOS and Android apps.
+   * novam-data decides whether the person wants it; this only delivers. A device that is gone is removed.
+   *
+   * @generated from rpc novam.notifications.v1.NotificationsService.SendPush
+   */
+  sendPush: {
+    methodKind: "unary";
+    input: typeof SendPushRequestSchema;
+    output: typeof SendPushResponseSchema;
   },
 }>;
 
