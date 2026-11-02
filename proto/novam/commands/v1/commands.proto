@@ -1,0 +1,193 @@
+syntax = "proto3";
+
+package novam.commands.v1;
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "novam/common/v1/errors.proto";
+import "novam/events/v1/business_events.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/commands/v1;commandsv1";
+
+// Commands are how novam-engine asks novam-data to change a business's records without calling it (ADR-0005 in
+// novam-engine). The engine publishes a Command to the JetStream stream NOVAM_COMMANDS; novam-data's worker
+// applies it as `actor` through the code its HTTP routes use, then publishes a CommandResult.
+//
+// Subject: novam.commands.<org_id>.<collection>.<action>, e.g. novam.commands.org-1.appointments.update.
+// Body: the Command, protobuf, content-type "application/protobuf". The NATS header Nats-Msg-Id is the command's
+// `id`, so JetStream drops a repeat published within its duplicate window, and novam-data records each applied
+// id so a redelivery is applied once.
+//
+// Commands on one subject are applied in the order they were published.
+
+message Command {
+  // UUID v7, chosen by the engine before it publishes; the same id is the result's subject.
+  string id = 1;
+  string org_id = 2;
+  Actor actor = 3;
+  // The collection as in the REST API, e.g. clients, appointments, tasks, invoices, frontDeskThreads, calls.
+  string collection = 4;
+  // What to do to it, e.g. create, update, holdTime; the subject's last token.
+  string action = 5;
+  // Where novam-data publishes the result: novam.command-results.<id>.
+  string reply_subject = 6;
+  google.protobuf.Timestamp created_at = 7;
+
+  // One per action; it must match `collection` and `action`.
+  oneof payload {
+    RecordCreate record_create = 10;
+    RecordUpdate record_update = 11;
+    TaskCreate task_create = 12;
+    InvoiceCreate invoice_create = 13;
+    HoldTime hold_time = 14;
+    SaveContact save_contact = 15;
+    HandOff hand_off = 16;
+    CallStart call_start = 17;
+    CallAddTurn call_add_turn = 18;
+    CallEnd call_end = 19;
+  }
+}
+
+// Who the change is made as. novam-data checks permissions and writes the audit trail as this actor.
+message Actor {
+  oneof kind {
+    WorkflowActor workflow = 1;
+    ReceptionActor reception = 2;
+    UserActor user = 3;
+  }
+}
+
+// A step of a workflow run, acting for the user the run belongs to.
+message WorkflowActor {
+  string user_id = 1;
+  string flow_definition_id = 2;
+  string flow_instance_id = 3;
+  string step_id = 4;
+}
+
+// The Reception agent, which may change only the thread its chat or call belongs to.
+message ReceptionActor {
+  string thread_id = 1; // empty for calls.start, which finds the thread
+}
+
+// A signed-in user, through the assistant.
+message UserActor {
+  string user_id = 1;
+}
+
+// <collection>.create for any collection the REST API creates records in, through the same resource code.
+message RecordCreate {
+  google.protobuf.Struct fields = 1;
+}
+
+// <collection>.update: only these fields change. Fields the resource doesn't allow to change are rejected.
+message RecordUpdate {
+  string id = 1;
+  google.protobuf.Struct fields = 2;
+}
+
+// tasks.create.
+message TaskCreate {
+  string title = 1;
+  string notes = 2;
+  string due_date = 3; // YYYY-MM-DD in the org's time zone; empty for no due date
+  string assignee_user_id = 4; // empty leaves it unassigned
+  string client_id = 5; // empty when not about a client
+}
+
+// invoices.create.
+message InvoiceCreate {
+  string client_id = 1;
+  // When set, line items come from the appointment's services and the invoice links to it.
+  string appointment_id = 2;
+  string status = 3; // draft or sent; empty means draft
+}
+
+// frontDeskThreads.holdTime: holds an open time on the thread for the owner to confirm; a later hold replaces it.
+message HoldTime {
+  string thread_id = 1;
+  string service_id = 2; // empty when the visitor didn't pick one
+  google.protobuf.Timestamp start = 3;
+  string notes = 4; // what the visitor said about the job
+}
+
+// frontDeskThreads.saveContact.
+message SaveContact {
+  string thread_id = 1;
+  string name = 2;
+  string phone = 3;
+  string email = 4;
+}
+
+// frontDeskThreads.handOff: passes the chat to the owner; the thread then waits for them in Front Desk.
+message HandOff {
+  string thread_id = 1;
+  string summary = 2; // what the visitor wants, in a sentence or two
+}
+
+// calls.start: trades the call's one-time token for its thread and how to answer.
+message CallStart {
+  string call_id = 1;
+  string token = 2;
+}
+
+// calls.addTurn: one finished turn of the transcript. The engine doesn't wait for its result.
+message CallAddTurn {
+  string thread_id = 1;
+  string call_id = 2;
+  string speaker = 3; // "caller" or "agent"
+  string text = 4;
+}
+
+// calls.end: how long the agent talked, which counts toward the plan's agent minutes.
+message CallEnd {
+  string thread_id = 1;
+  string call_id = 2;
+  int32 agent_seconds = 3;
+}
+
+enum CommandStatus {
+  COMMAND_STATUS_UNSPECIFIED = 0;
+  // Applied; `resource` holds what was written.
+  COMMAND_STATUS_APPLIED = 1;
+  // Not applied, and sending it again won't help: invalid, not found, not permitted. `error` says why.
+  COMMAND_STATUS_REJECTED = 2;
+}
+
+// Published to the command's reply_subject once it is applied or rejected, and kept for a day. A command that
+// fails for a reason that may pass (the database is down) is not acknowledged and gets no result until it is
+// retried.
+message CommandResult {
+  string command_id = 1;
+  CommandStatus status = 2;
+  novam.common.v1.ErrorDetails error = 3; // when rejected
+  google.protobuf.Timestamp applied_at = 4;
+
+  // The resource as written, when applied; unset for actions that return nothing.
+  oneof resource {
+    google.protobuf.Struct record = 10; // record_create, record_update, task_create
+    novam.events.v1.ClientInvoice invoice = 11; // invoice_create
+    HeldTime held_time = 12; // hold_time
+    CallStarted call_started = 13; // call_start
+  }
+}
+
+message HeldTime {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+  string label = 3; // e.g. "Thu, Oct 22 at 2:00 PM", in the business's time zone
+  string title = 4;
+}
+
+message CallStarted {
+  // The call's Front Desk thread; every Reception command during the call is about it.
+  string thread_id = 1;
+  // What the agent says first, word for word. It always says it is an automated assistant.
+  string opening = 2;
+  // One of Gemini Live's prebuilt voices; empty for the model's default.
+  string voice_name = 3;
+  // The business's own Gemini key when it chose one; empty to use the engine's.
+  string api_key = 4;
+  // The longest the agent may talk on this call; 0 for no limit beyond the engine's own.
+  int32 max_seconds = 5;
+}
