@@ -557,6 +557,66 @@ export declare type CancelRunResponse = Message<"novam.workflows.v1.CancelRunRes
 export declare const CancelRunResponseSchema: GenMessage<CancelRunResponse>;
 
 /**
+ * The owner's answer to a run waiting for approval. FAILED_PRECONDITION when the run isn't waiting for one.
+ *
+ * @generated from message novam.workflows.v1.DecideRunRequest
+ */
+export declare type DecideRunRequest = Message<"novam.workflows.v1.DecideRunRequest"> & {
+  /**
+   * @generated from field: string run_id = 1;
+   */
+  runId: string;
+
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 2;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * True to approve, false to decline.
+   *
+   * @generated from field: bool approved = 3;
+   */
+  approved: boolean;
+
+  /**
+   * Why, if they said; later steps can use it.
+   *
+   * @generated from field: string note = 4;
+   */
+  note: string;
+
+  /**
+   * Who decided: users/{id}.
+   *
+   * @generated from field: string decided_by = 5;
+   */
+  decidedBy: string;
+};
+
+/**
+ * Describes the message novam.workflows.v1.DecideRunRequest.
+ * Use `create(DecideRunRequestSchema)` to create a new message.
+ */
+export declare const DecideRunRequestSchema: GenMessage<DecideRunRequest>;
+
+/**
+ * @generated from message novam.workflows.v1.DecideRunResponse
+ */
+export declare type DecideRunResponse = Message<"novam.workflows.v1.DecideRunResponse"> & {
+  /**
+   * @generated from field: novam.entities.v1.WorkflowRun run = 1;
+   */
+  run?: WorkflowRun;
+};
+
+/**
+ * Describes the message novam.workflows.v1.DecideRunResponse.
+ * Use `create(DecideRunResponseSchema)` to create a new message.
+ */
+export declare const DecideRunResponseSchema: GenMessage<DecideRunResponse>;
+
+/**
  * @generated from message novam.workflows.v1.GetRunRequest
  */
 export declare type GetRunRequest = Message<"novam.workflows.v1.GetRunRequest"> & {
@@ -1034,6 +1094,16 @@ export declare const WorkflowsService: GenService<{
     methodKind: "unary";
     input: typeof CancelRunRequestSchema;
     output: typeof CancelRunResponseSchema;
+  },
+  /**
+   * The owner's answer to a run waiting at an "Ask for approval" step: the run carries on by Approved or Declined.
+   *
+   * @generated from rpc novam.workflows.v1.WorkflowsService.DecideRun
+   */
+  decideRun: {
+    methodKind: "unary";
+    input: typeof DecideRunRequestSchema;
+    output: typeof DecideRunResponseSchema;
   },
   /**
    * @generated from rpc novam.workflows.v1.WorkflowsService.GetRun

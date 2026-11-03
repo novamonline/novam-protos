@@ -30,6 +30,7 @@ const (
 	WorkflowsService_ValidateFlowDefinition_FullMethodName = "/novam.workflows.v1.WorkflowsService/ValidateFlowDefinition"
 	WorkflowsService_StartRun_FullMethodName               = "/novam.workflows.v1.WorkflowsService/StartRun"
 	WorkflowsService_CancelRun_FullMethodName              = "/novam.workflows.v1.WorkflowsService/CancelRun"
+	WorkflowsService_DecideRun_FullMethodName              = "/novam.workflows.v1.WorkflowsService/DecideRun"
 	WorkflowsService_GetRun_FullMethodName                 = "/novam.workflows.v1.WorkflowsService/GetRun"
 	WorkflowsService_ListRuns_FullMethodName               = "/novam.workflows.v1.WorkflowsService/ListRuns"
 	WorkflowsService_GetFlowStats_FullMethodName           = "/novam.workflows.v1.WorkflowsService/GetFlowStats"
@@ -60,6 +61,8 @@ type WorkflowsServiceClient interface {
 	// Run lifecycle (workflow_id is flow_definition_id)
 	StartRun(ctx context.Context, in *StartRunRequest, opts ...grpc.CallOption) (*StartRunResponse, error)
 	CancelRun(ctx context.Context, in *CancelRunRequest, opts ...grpc.CallOption) (*CancelRunResponse, error)
+	// The owner's answer to a run waiting at an "Ask for approval" step: the run carries on by Approved or Declined.
+	DecideRun(ctx context.Context, in *DecideRunRequest, opts ...grpc.CallOption) (*DecideRunResponse, error)
 	GetRun(ctx context.Context, in *GetRunRequest, opts ...grpc.CallOption) (*GetRunResponse, error)
 	// A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
 	// left out unless asked for. Each run's steps come from GetRun.
@@ -190,6 +193,16 @@ func (c *workflowsServiceClient) CancelRun(ctx context.Context, in *CancelRunReq
 	return out, nil
 }
 
+func (c *workflowsServiceClient) DecideRun(ctx context.Context, in *DecideRunRequest, opts ...grpc.CallOption) (*DecideRunResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DecideRunResponse)
+	err := c.cc.Invoke(ctx, WorkflowsService_DecideRun_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *workflowsServiceClient) GetRun(ctx context.Context, in *GetRunRequest, opts ...grpc.CallOption) (*GetRunResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetRunResponse)
@@ -272,6 +285,8 @@ type WorkflowsServiceServer interface {
 	// Run lifecycle (workflow_id is flow_definition_id)
 	StartRun(context.Context, *StartRunRequest) (*StartRunResponse, error)
 	CancelRun(context.Context, *CancelRunRequest) (*CancelRunResponse, error)
+	// The owner's answer to a run waiting at an "Ask for approval" step: the run carries on by Approved or Declined.
+	DecideRun(context.Context, *DecideRunRequest) (*DecideRunResponse, error)
 	GetRun(context.Context, *GetRunRequest) (*GetRunResponse, error)
 	// A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
 	// left out unless asked for. Each run's steps come from GetRun.
@@ -324,6 +339,9 @@ func (UnimplementedWorkflowsServiceServer) StartRun(context.Context, *StartRunRe
 }
 func (UnimplementedWorkflowsServiceServer) CancelRun(context.Context, *CancelRunRequest) (*CancelRunResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CancelRun not implemented")
+}
+func (UnimplementedWorkflowsServiceServer) DecideRun(context.Context, *DecideRunRequest) (*DecideRunResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DecideRun not implemented")
 }
 func (UnimplementedWorkflowsServiceServer) GetRun(context.Context, *GetRunRequest) (*GetRunResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetRun not implemented")
@@ -562,6 +580,24 @@ func _WorkflowsService_CancelRun_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkflowsService_DecideRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DecideRunRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkflowsServiceServer).DecideRun(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkflowsService_DecideRun_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkflowsServiceServer).DecideRun(ctx, req.(*DecideRunRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _WorkflowsService_GetRun_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetRunRequest)
 	if err := dec(in); err != nil {
@@ -720,6 +756,10 @@ var WorkflowsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "CancelRun",
 			Handler:    _WorkflowsService_CancelRun_Handler,
+		},
+		{
+			MethodName: "DecideRun",
+			Handler:    _WorkflowsService_DecideRun_Handler,
 		},
 		{
 			MethodName: "GetRun",

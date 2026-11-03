@@ -31,6 +31,8 @@ service WorkflowsService {
   // Run lifecycle (workflow_id is flow_definition_id)
   rpc StartRun(StartRunRequest) returns (StartRunResponse);
   rpc CancelRun(CancelRunRequest) returns (CancelRunResponse);
+  // The owner's answer to a run waiting at an "Ask for approval" step: the run carries on by Approved or Declined.
+  rpc DecideRun(DecideRunRequest) returns (DecideRunResponse);
   rpc GetRun(GetRunRequest) returns (GetRunResponse);
   // A workflow's runs, newest first: optionally only those with a status or about a subject, test runs
   // left out unless asked for. Each run's steps come from GetRun.
@@ -167,6 +169,22 @@ message CancelRunRequest {
 }
 
 message CancelRunResponse {
+  novam.entities.v1.WorkflowRun run = 1;
+}
+
+// The owner's answer to a run waiting for approval. FAILED_PRECONDITION when the run isn't waiting for one.
+message DecideRunRequest {
+  string run_id = 1;
+  novam.common.v1.RequestMetadata metadata = 2;
+  // True to approve, false to decline.
+  bool approved = 3;
+  // Why, if they said; later steps can use it.
+  string note = 4;
+  // Who decided: users/{id}.
+  string decided_by = 5;
+}
+
+message DecideRunResponse {
   novam.entities.v1.WorkflowRun run = 1;
 }
 
