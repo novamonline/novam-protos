@@ -51,6 +51,13 @@ export declare type Appointment = Message$1<"novam.events.v1.Appointment"> & {
    * @generated from field: string status = 7;
    */
   status: string;
+
+  /**
+   * the service booked; empty when none
+   *
+   * @generated from field: string offering_id = 8;
+   */
+  offeringId: string;
 };
 
 /**
@@ -229,7 +236,7 @@ export declare type ReminderRule = Message$1<"novam.events.v1.ReminderRule"> & {
   type: string;
 
   /**
-   * 1_day_before, on_date, 1_day_after, 3_days_after
+   * 2_days_before, 1_day_before, on_date, 1_day_after, 3_days_after, after_visit
    *
    * @generated from field: string when = 4;
    */
@@ -246,6 +253,28 @@ export declare type ReminderRule = Message$1<"novam.events.v1.ReminderRule"> & {
    * @generated from field: bool enabled = 6;
    */
   enabled: boolean;
+
+  /**
+   * The owner's own words, with {{first_name}}, {{name}}, {{business}}, {{when}}, {{service}} and
+   * {{booking_link}} filled in for each client; empty sends the built-in wording.
+   *
+   * @generated from field: string message = 7;
+   */
+  message: string;
+
+  /**
+   * For after_visit: how many days after a visit it goes, when the client has booked nothing since.
+   *
+   * @generated from field: int32 after_days = 8;
+   */
+  afterDays: number;
+
+  /**
+   * The services (offerings) an appointment rule is for; empty means all of them.
+   *
+   * @generated from field: repeated string offering_ids = 9;
+   */
+  offeringIds: string[];
 };
 
 /**

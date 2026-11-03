@@ -142,6 +142,7 @@ message GetRecipientResponse {
   string org_name = 5;
   string org_time_zone = 6; // IANA name, e.g. America/New_York
   string pay_url_base = 7; // where invoice pay links point
+  string booking_url = 8; // the business's public page, where clients book; empty when it has none
 }
 
 message CreateInAppNotificationRequest {

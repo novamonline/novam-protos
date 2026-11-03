@@ -1129,6 +1129,7 @@ type GetRecipientResponse struct {
 	OrgName       string                 `protobuf:"bytes,5,opt,name=org_name,json=orgName,proto3" json:"org_name,omitempty"`
 	OrgTimeZone   string                 `protobuf:"bytes,6,opt,name=org_time_zone,json=orgTimeZone,proto3" json:"org_time_zone,omitempty"` // IANA name, e.g. America/New_York
 	PayUrlBase    string                 `protobuf:"bytes,7,opt,name=pay_url_base,json=payUrlBase,proto3" json:"pay_url_base,omitempty"`    // where invoice pay links point
+	BookingUrl    string                 `protobuf:"bytes,8,opt,name=booking_url,json=bookingUrl,proto3" json:"booking_url,omitempty"`      // the business's public page, where clients book; empty when it has none
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1208,6 +1209,13 @@ func (x *GetRecipientResponse) GetOrgTimeZone() string {
 func (x *GetRecipientResponse) GetPayUrlBase() string {
 	if x != nil {
 		return x.PayUrlBase
+	}
+	return ""
+}
+
+func (x *GetRecipientResponse) GetBookingUrl() string {
+	if x != nil {
+		return x.BookingUrl
 	}
 	return ""
 }
@@ -1418,7 +1426,7 @@ const file_novam_data_v1_notification_store_service_proto_rawDesc = "" +
 	"\x03app\x18\x04 \x01(\tR\x03app\"p\n" +
 	"\x13GetRecipientRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1b\n" +
-	"\tclient_id\x18\x02 \x01(\tR\bclientId\"\xec\x01\n" +
+	"\tclient_id\x18\x02 \x01(\tR\bclientId\"\x8d\x02\n" +
 	"\x14GetRecipientResponse\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05email\x18\x02 \x01(\tR\x05email\x12\x14\n" +
@@ -1427,7 +1435,9 @@ const file_novam_data_v1_notification_store_service_proto_rawDesc = "" +
 	"\borg_name\x18\x05 \x01(\tR\aorgName\x12\"\n" +
 	"\rorg_time_zone\x18\x06 \x01(\tR\vorgTimeZone\x12 \n" +
 	"\fpay_url_base\x18\a \x01(\tR\n" +
-	"payUrlBase\"\xcf\x01\n" +
+	"payUrlBase\x12\x1f\n" +
+	"\vbooking_url\x18\b \x01(\tR\n" +
+	"bookingUrl\"\xcf\x01\n" +
 	"\x1eCreateInAppNotificationRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x17\n" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x12\n" +

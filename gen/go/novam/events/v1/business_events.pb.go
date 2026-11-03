@@ -83,7 +83,8 @@ type Appointment struct {
 	Title         string                 `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`
 	StartTime     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=start_time,json=startTime,proto3" json:"start_time,omitempty"`
 	EndTime       *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=end_time,json=endTime,proto3" json:"end_time,omitempty"`
-	Status        string                 `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"` // scheduled, completed, cancelled, no-show
+	Status        string                 `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`                           // scheduled, completed, cancelled, no-show
+	OfferingId    string                 `protobuf:"bytes,8,opt,name=offering_id,json=offeringId,proto3" json:"offering_id,omitempty"` // the service booked; empty when none
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -163,6 +164,13 @@ func (x *Appointment) GetEndTime() *timestamppb.Timestamp {
 func (x *Appointment) GetStatus() string {
 	if x != nil {
 		return x.Status
+	}
+	return ""
+}
+
+func (x *Appointment) GetOfferingId() string {
+	if x != nil {
+		return x.OfferingId
 	}
 	return ""
 }
@@ -485,13 +493,20 @@ func (x *ClientEvent) GetClient() *Client {
 }
 
 type ReminderRule struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	OrgId         string                 `protobuf:"bytes,2,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
-	Type          string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`       // appointment, invoice
-	When          string                 `protobuf:"bytes,4,opt,name=when,proto3" json:"when,omitempty"`       // 1_day_before, on_date, 1_day_after, 3_days_after
-	Channel       string                 `protobuf:"bytes,5,opt,name=channel,proto3" json:"channel,omitempty"` // email, sms, push
-	Enabled       bool                   `protobuf:"varint,6,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	Id      string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrgId   string                 `protobuf:"bytes,2,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
+	Type    string                 `protobuf:"bytes,3,opt,name=type,proto3" json:"type,omitempty"`       // appointment, invoice
+	When    string                 `protobuf:"bytes,4,opt,name=when,proto3" json:"when,omitempty"`       // 2_days_before, 1_day_before, on_date, 1_day_after, 3_days_after, after_visit
+	Channel string                 `protobuf:"bytes,5,opt,name=channel,proto3" json:"channel,omitempty"` // email, sms, push
+	Enabled bool                   `protobuf:"varint,6,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	// The owner's own words, with {{first_name}}, {{name}}, {{business}}, {{when}}, {{service}} and
+	// {{booking_link}} filled in for each client; empty sends the built-in wording.
+	Message string `protobuf:"bytes,7,opt,name=message,proto3" json:"message,omitempty"`
+	// For after_visit: how many days after a visit it goes, when the client has booked nothing since.
+	AfterDays int32 `protobuf:"varint,8,opt,name=after_days,json=afterDays,proto3" json:"after_days,omitempty"`
+	// The services (offerings) an appointment rule is for; empty means all of them.
+	OfferingIds   []string `protobuf:"bytes,9,rep,name=offering_ids,json=offeringIds,proto3" json:"offering_ids,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -566,6 +581,27 @@ func (x *ReminderRule) GetEnabled() bool {
 		return x.Enabled
 	}
 	return false
+}
+
+func (x *ReminderRule) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *ReminderRule) GetAfterDays() int32 {
+	if x != nil {
+		return x.AfterDays
+	}
+	return 0
+}
+
+func (x *ReminderRule) GetOfferingIds() []string {
+	if x != nil {
+		return x.OfferingIds
+	}
+	return nil
 }
 
 type ReminderRuleEvent struct {
@@ -901,7 +937,7 @@ var File_novam_events_v1_business_events_proto protoreflect.FileDescriptor
 
 const file_novam_events_v1_business_events_proto_rawDesc = "" +
 	"\n" +
-	"%novam/events/v1/business_events.proto\x12\x0fnovam.events.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\xf1\x01\n" +
+	"%novam/events/v1/business_events.proto\x12\x0fnovam.events.v1\x1a\x1fgoogle/protobuf/timestamp.proto\"\x92\x02\n" +
 	"\vAppointment\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x1b\n" +
@@ -910,7 +946,9 @@ const file_novam_events_v1_business_events_proto_rawDesc = "" +
 	"\n" +
 	"start_time\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tstartTime\x125\n" +
 	"\bend_time\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\aendTime\x12\x16\n" +
-	"\x06status\x18\a \x01(\tR\x06status\"\x87\x01\n" +
+	"\x06status\x18\a \x01(\tR\x06status\x12\x1f\n" +
+	"\voffering_id\x18\b \x01(\tR\n" +
+	"offeringId\"\x87\x01\n" +
 	"\x10AppointmentEvent\x123\n" +
 	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x12>\n" +
 	"\vappointment\x18\x02 \x01(\v2\x1c.novam.events.v1.AppointmentR\vappointment\"\xea\x01\n" +
@@ -933,14 +971,18 @@ const file_novam_events_v1_business_events_proto_rawDesc = "" +
 	"\x04name\x18\x03 \x01(\tR\x04name\"s\n" +
 	"\vClientEvent\x123\n" +
 	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x12/\n" +
-	"\x06client\x18\x02 \x01(\v2\x17.novam.events.v1.ClientR\x06client\"\x91\x01\n" +
+	"\x06client\x18\x02 \x01(\v2\x17.novam.events.v1.ClientR\x06client\"\xed\x01\n" +
 	"\fReminderRule\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x12\n" +
 	"\x04type\x18\x03 \x01(\tR\x04type\x12\x12\n" +
 	"\x04when\x18\x04 \x01(\tR\x04when\x12\x18\n" +
 	"\achannel\x18\x05 \x01(\tR\achannel\x12\x18\n" +
-	"\aenabled\x18\x06 \x01(\bR\aenabled\"{\n" +
+	"\aenabled\x18\x06 \x01(\bR\aenabled\x12\x18\n" +
+	"\amessage\x18\a \x01(\tR\amessage\x12\x1d\n" +
+	"\n" +
+	"after_days\x18\b \x01(\x05R\tafterDays\x12!\n" +
+	"\foffering_ids\x18\t \x03(\tR\vofferingIds\"{\n" +
 	"\x11ReminderRuleEvent\x123\n" +
 	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x121\n" +
 	"\x04rule\x18\x02 \x01(\v2\x1d.novam.events.v1.ReminderRuleR\x04rule\"\xd4\x01\n" +

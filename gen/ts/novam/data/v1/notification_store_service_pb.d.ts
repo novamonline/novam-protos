@@ -511,6 +511,13 @@ export declare type GetRecipientResponse = Message<"novam.data.v1.GetRecipientRe
    * @generated from field: string pay_url_base = 7;
    */
   payUrlBase: string;
+
+  /**
+   * the business's public page, where clients book; empty when it has none
+   *
+   * @generated from field: string booking_url = 8;
+   */
+  bookingUrl: string;
 };
 
 /**

@@ -34,6 +34,7 @@ message Appointment {
   google.protobuf.Timestamp start_time = 5;
   google.protobuf.Timestamp end_time = 6;
   string status = 7; // scheduled, completed, cancelled, no-show
+  string offering_id = 8; // the service booked; empty when none
 }
 
 message AppointmentEvent {
@@ -73,9 +74,16 @@ message ReminderRule {
   string id = 1;
   string org_id = 2;
   string type = 3; // appointment, invoice
-  string when = 4; // 1_day_before, on_date, 1_day_after, 3_days_after
+  string when = 4; // 2_days_before, 1_day_before, on_date, 1_day_after, 3_days_after, after_visit
   string channel = 5; // email, sms, push
   bool enabled = 6;
+  // The owner's own words, with {{first_name}}, {{name}}, {{business}}, {{when}}, {{service}} and
+  // {{booking_link}} filled in for each client; empty sends the built-in wording.
+  string message = 7;
+  // For after_visit: how many days after a visit it goes, when the client has booked nothing since.
+  int32 after_days = 8;
+  // The services (offerings) an appointment rule is for; empty means all of them.
+  repeated string offering_ids = 9;
 }
 
 message ReminderRuleEvent {
