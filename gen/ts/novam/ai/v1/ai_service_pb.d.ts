@@ -363,6 +363,13 @@ export declare type AdviseRequest = Message<"novam.ai.v1.AdviseRequest"> & {
    * @generated from field: novam.ai.v1.ModelChoice model = 4;
    */
   model?: ModelChoice;
+
+  /**
+   * Pictures the prompt is about, such as a photo of a price sheet or a notebook page to read; none for text only.
+   *
+   * @generated from field: repeated novam.ai.v1.Image images = 5;
+   */
+  images: Image[];
 };
 
 /**
@@ -370,6 +377,31 @@ export declare type AdviseRequest = Message<"novam.ai.v1.AdviseRequest"> & {
  * Use `create(AdviseRequestSchema)` to create a new message.
  */
 export declare const AdviseRequestSchema: GenMessage<AdviseRequest>;
+
+/**
+ * Image is one picture sent to the model.
+ *
+ * @generated from message novam.ai.v1.Image
+ */
+export declare type Image = Message<"novam.ai.v1.Image"> & {
+  /**
+   * image/jpeg, image/png, image/webp, image/heic or image/heif.
+   *
+   * @generated from field: string mime_type = 1;
+   */
+  mimeType: string;
+
+  /**
+   * @generated from field: bytes data = 2;
+   */
+  data: Uint8Array;
+};
+
+/**
+ * Describes the message novam.ai.v1.Image.
+ * Use `create(ImageSchema)` to create a new message.
+ */
+export declare const ImageSchema: GenMessage<Image>;
 
 /**
  * @generated from message novam.ai.v1.AdviseResponse

@@ -138,6 +138,15 @@ message AdviseRequest {
   ModelTier tier = 3;
   // The business's model choice; unset uses the service's default provider at the tier.
   ModelChoice model = 4;
+  // Pictures the prompt is about, such as a photo of a price sheet or a notebook page to read; none for text only.
+  repeated Image images = 5;
+}
+
+// Image is one picture sent to the model.
+message Image {
+  // image/jpeg, image/png, image/webp, image/heic or image/heif.
+  string mime_type = 1;
+  bytes data = 2;
 }
 
 message AdviseResponse {
