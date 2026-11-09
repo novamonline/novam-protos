@@ -125,6 +125,12 @@ export declare type Command = Message<"novam.commands.v1.Command"> & {
      */
     value: CallEnd;
     case: "callEnd";
+  } | {
+    /**
+     * @generated from field: novam.commands.v1.RunAutomation run_automation = 20;
+     */
+    value: RunAutomation;
+    case: "runAutomation";
   } | { case: undefined; value?: undefined };
 };
 
@@ -540,6 +546,27 @@ export declare type CallEnd = Message<"novam.commands.v1.CallEnd"> & {
 export declare const CallEndSchema: GenMessage<CallEnd>;
 
 /**
+ * automations.run: one of Novam's own automations to run now for the business. kind is one of draft_invoices,
+ * book_appointments, remind_clients, reply_messages, categorize_expenses, match_payments. novam-data does that
+ * automation's work as its own settings and Ask me / On its own say, as its drafter would; the result's
+ * automation_run says how much it made.
+ *
+ * @generated from message novam.commands.v1.RunAutomation
+ */
+export declare type RunAutomation = Message<"novam.commands.v1.RunAutomation"> & {
+  /**
+   * @generated from field: string kind = 1;
+   */
+  kind: string;
+};
+
+/**
+ * Describes the message novam.commands.v1.RunAutomation.
+ * Use `create(RunAutomationSchema)` to create a new message.
+ */
+export declare const RunAutomationSchema: GenMessage<RunAutomation>;
+
+/**
  * Published to the command's reply_subject once it is applied or rejected, and kept for a day. A command that
  * fails for a reason that may pass (the database is down) is not acknowledged and gets no result until it is
  * retried.
@@ -606,6 +633,14 @@ export declare type CommandResult = Message<"novam.commands.v1.CommandResult"> &
      */
     value: CallStarted;
     case: "callStarted";
+  } | {
+    /**
+     * run_automation
+     *
+     * @generated from field: novam.commands.v1.AutomationRun automation_run = 14;
+     */
+    value: AutomationRun;
+    case: "automationRun";
   } | { case: undefined; value?: undefined };
 };
 
@@ -647,6 +682,27 @@ export declare type HeldTime = Message<"novam.commands.v1.HeldTime"> & {
  * Use `create(HeldTimeSchema)` to create a new message.
  */
 export declare const HeldTimeSchema: GenMessage<HeldTime>;
+
+/**
+ * What an automation run did.
+ *
+ * @generated from message novam.commands.v1.AutomationRun
+ */
+export declare type AutomationRun = Message<"novam.commands.v1.AutomationRun"> & {
+  /**
+   * How many things it drafted or did (invoices drafted, texts sent or queued for approval, and so on); 0 when
+   * there was nothing to do.
+   *
+   * @generated from field: int32 made = 1;
+   */
+  made: number;
+};
+
+/**
+ * Describes the message novam.commands.v1.AutomationRun.
+ * Use `create(AutomationRunSchema)` to create a new message.
+ */
+export declare const AutomationRunSchema: GenMessage<AutomationRun>;
 
 /**
  * @generated from message novam.commands.v1.CallStarted

@@ -45,6 +45,7 @@ message Command {
     CallStart call_start = 17;
     CallAddTurn call_add_turn = 18;
     CallEnd call_end = 19;
+    RunAutomation run_automation = 20;
   }
 }
 
@@ -146,6 +147,14 @@ message CallEnd {
   int32 agent_seconds = 3;
 }
 
+// automations.run: one of Novam's own automations to run now for the business. kind is one of draft_invoices,
+// book_appointments, remind_clients, reply_messages, categorize_expenses, match_payments. novam-data does that
+// automation's work as its own settings and Ask me / On its own say, as its drafter would; the result's
+// automation_run says how much it made.
+message RunAutomation {
+  string kind = 1;
+}
+
 enum CommandStatus {
   COMMAND_STATUS_UNSPECIFIED = 0;
   // Applied; `resource` holds what was written.
@@ -169,6 +178,7 @@ message CommandResult {
     novam.events.v1.ClientInvoice invoice = 11; // invoice_create
     HeldTime held_time = 12; // hold_time
     CallStarted call_started = 13; // call_start
+    AutomationRun automation_run = 14; // run_automation
   }
 }
 
@@ -177,6 +187,13 @@ message HeldTime {
   google.protobuf.Timestamp end = 2;
   string label = 3; // e.g. "Thu, Oct 22 at 2:00 PM", in the business's time zone
   string title = 4;
+}
+
+// What an automation run did.
+message AutomationRun {
+  // How many things it drafted or did (invoices drafted, texts sent or queued for approval, and so on); 0 when
+  // there was nothing to do.
+  int32 made = 1;
 }
 
 message CallStarted {
