@@ -1,6 +1,6 @@
 {
   "name": "@novamonline/novam-protos",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "NOVAM contracts: the .proto files and their generated TypeScript (protobuf-es)",
   "type": "module",
   "repository": {
