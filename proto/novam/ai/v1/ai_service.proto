@@ -17,6 +17,22 @@ service AIService {
   // A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
   // first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
   rpc Talk(stream TalkRequest) returns (stream TalkResponse);
+  // The system instructions an agent runs with, so the owner can read them.
+  rpc GetInstructions(GetInstructionsRequest) returns (GetInstructionsResponse);
+}
+
+message GetInstructionsRequest {
+  // Which agent's instructions; unspecified is the admin assistant.
+  ChatAgent agent = 1;
+}
+
+message GetInstructionsResponse {
+  // The instructions for a typed chat.
+  string instruction = 1;
+  // What's added for a spoken conversation; empty when the agent doesn't talk.
+  string spoken_note = 2;
+  // What's added on a phone call; empty when the agent doesn't take calls.
+  string phone_note = 3;
 }
 
 message TalkRequest {

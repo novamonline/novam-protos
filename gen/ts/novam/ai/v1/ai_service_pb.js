@@ -10,91 +10,105 @@ import { file_novam_entities_v1_ai } from "../../entities/v1/ai_pb.js";
  * Describes the file novam/ai/v1/ai_service.proto.
  */
 export const file_novam_ai_v1_ai_service = /*@__PURE__*/
-  fileDesc("Chxub3ZhbS9haS92MS9haV9zZXJ2aWNlLnByb3RvEgtub3ZhbS5haS52MSJ6CgtUYWxrUmVxdWVzdBInCgVzdGFydBgBIAEoCzIWLm5vdmFtLmFpLnYxLlRhbGtTdGFydEgAEg8KBWF1ZGlvGAIgASgMSAASFAoKdHVybl9zdGFydBgDIAEoCEgAEhIKCHR1cm5fZW5kGAQgASgISABCBwoFZXZlbnQi1AEKCVRhbGtTdGFydBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESEQoJdGhyZWFkX2lkGAIgASgJEicKBW1vZGVsGAMgASgLMhgubm92YW0uYWkudjEuTW9kZWxDaG9pY2USLwoHaGlzdG9yeRgEIAMoCzIeLm5vdmFtLmVudGl0aWVzLnYxLkNoYXRNZXNzYWdlEhIKCnZvaWNlX25hbWUYBSABKAkSEgoKcGhvbmVfY2FsbBgGIAEoCCJeCgxUYWxrUmVzcG9uc2USDwoFYXVkaW8YASABKAxIABIPCgVoZWFyZBgCIAEoCUgAEg4KBHNhaWQYAyABKAlIABITCgl0dXJuX2RvbmUYBCABKAhIAEIHCgVldmVudCLlAQoLQ2hhdFJlcXVlc3QSMAoIbWVzc2FnZXMYASADKAsyHi5ub3ZhbS5lbnRpdGllcy52MS5DaGF0TWVzc2FnZRIyCghtZXRhZGF0YRgCIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESJwoFbW9kZWwYAyABKAsyGC5ub3ZhbS5haS52MS5Nb2RlbENob2ljZRINCgVyb3V0ZRgEIAEoCRIlCgVhZ2VudBgFIAEoDjIWLm5vdmFtLmFpLnYxLkNoYXRBZ2VudBIRCgl0aHJlYWRfaWQYBiABKAkiPQoKQ2hhdEFjdGlvbhINCgVsYWJlbBgBIAEoCRINCgVyb3V0ZRgCIAEoCRIRCglzcG90bGlnaHQYAyABKAkiPwoLTW9kZWxDaG9pY2USEAoIcHJvdmlkZXIYASABKAkSDQoFbW9kZWwYAiABKAkSDwoHYXBpX2tleRgDIAEoCSKUAQoMQ2hhdFJlc3BvbnNlEjEKCHJlc3BvbnNlGAEgASgLMh8ubm92YW0uZW50aXRpZXMudjEuQ2hhdFJlc3BvbnNlEicKBnNvdXJjZRgCIAEoDjIXLm5vdmFtLmFpLnYxLkNoYXRTb3VyY2USKAoHYWN0aW9ucxgDIAMoCzIXLm5vdmFtLmFpLnYxLkNoYXRBY3Rpb24iVAoQU3VtbWFyaXplUmVxdWVzdBIMCgR0ZXh0GAEgASgJEjIKCG1ldGFkYXRhGAIgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YSIkChFTdW1tYXJpemVSZXNwb25zZRIPCgdzdW1tYXJ5GAEgASgJIsYBCg1BZHZpc2VSZXF1ZXN0Eg4KBnByb21wdBgBIAEoCRIyCghtZXRhZGF0YRgCIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESJAoEdGllchgDIAEoDjIWLm5vdmFtLmFpLnYxLk1vZGVsVGllchInCgVtb2RlbBgEIAEoCzIYLm5vdmFtLmFpLnYxLk1vZGVsQ2hvaWNlEiIKBmltYWdlcxgFIAMoCzISLm5vdmFtLmFpLnYxLkltYWdlIigKBUltYWdlEhEKCW1pbWVfdHlwZRgBIAEoCRIMCgRkYXRhGAIgASgMIh4KDkFkdmlzZVJlc3BvbnNlEgwKBHRleHQYASABKAkqWwoJQ2hhdEFnZW50EhoKFkNIQVRfQUdFTlRfVU5TUEVDSUZJRUQQABIYChRDSEFUX0FHRU5UX0FTU0lTVEFOVBABEhgKFENIQVRfQUdFTlRfUkVDRVBUSU9OEAIqWQoKQ2hhdFNvdXJjZRIbChdDSEFUX1NPVVJDRV9VTlNQRUNJRklFRBAAEhUKEUNIQVRfU09VUkNFX0dVSURFEAESFwoTQ0hBVF9TT1VSQ0VfUkVDT1JEUxACKmoKCU1vZGVsVGllchIaChZNT0RFTF9USUVSX1VOU1BFQ0lGSUVEEAASEwoPTU9ERUxfVElFUl9GQVNUEAESFwoTTU9ERUxfVElFUl9TVEFOREFSRBACEhMKD01PREVMX1RJRVJfREVFUBADMpgCCglBSVNlcnZpY2USOwoEQ2hhdBIYLm5vdmFtLmFpLnYxLkNoYXRSZXF1ZXN0Ghkubm92YW0uYWkudjEuQ2hhdFJlc3BvbnNlEkoKCVN1bW1hcml6ZRIdLm5vdmFtLmFpLnYxLlN1bW1hcml6ZVJlcXVlc3QaHi5ub3ZhbS5haS52MS5TdW1tYXJpemVSZXNwb25zZRJBCgZBZHZpc2USGi5ub3ZhbS5haS52MS5BZHZpc2VSZXF1ZXN0Ghsubm92YW0uYWkudjEuQWR2aXNlUmVzcG9uc2USPwoEVGFsaxIYLm5vdmFtLmFpLnYxLlRhbGtSZXF1ZXN0Ghkubm92YW0uYWkudjEuVGFsa1Jlc3BvbnNlKAEwAUI9WjtnaXRodWIuY29tL25vdmFtb25saW5lL25vdmFtLXByb3Rvcy9nZW4vZ28vbm92YW0vYWkvdjE7YWl2MWIGcHJvdG8z", [file_novam_common_v1_common, file_novam_entities_v1_ai]);
+  fileDesc("Chxub3ZhbS9haS92MS9haV9zZXJ2aWNlLnByb3RvEgtub3ZhbS5haS52MSI/ChZHZXRJbnN0cnVjdGlvbnNSZXF1ZXN0EiUKBWFnZW50GAEgASgOMhYubm92YW0uYWkudjEuQ2hhdEFnZW50IlcKF0dldEluc3RydWN0aW9uc1Jlc3BvbnNlEhMKC2luc3RydWN0aW9uGAEgASgJEhMKC3Nwb2tlbl9ub3RlGAIgASgJEhIKCnBob25lX25vdGUYAyABKAkiegoLVGFsa1JlcXVlc3QSJwoFc3RhcnQYASABKAsyFi5ub3ZhbS5haS52MS5UYWxrU3RhcnRIABIPCgVhdWRpbxgCIAEoDEgAEhQKCnR1cm5fc3RhcnQYAyABKAhIABISCgh0dXJuX2VuZBgEIAEoCEgAQgcKBWV2ZW50ItQBCglUYWxrU3RhcnQSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhEKCXRocmVhZF9pZBgCIAEoCRInCgVtb2RlbBgDIAEoCzIYLm5vdmFtLmFpLnYxLk1vZGVsQ2hvaWNlEi8KB2hpc3RvcnkYBCADKAsyHi5ub3ZhbS5lbnRpdGllcy52MS5DaGF0TWVzc2FnZRISCgp2b2ljZV9uYW1lGAUgASgJEhIKCnBob25lX2NhbGwYBiABKAgiXgoMVGFsa1Jlc3BvbnNlEg8KBWF1ZGlvGAEgASgMSAASDwoFaGVhcmQYAiABKAlIABIOCgRzYWlkGAMgASgJSAASEwoJdHVybl9kb25lGAQgASgISABCBwoFZXZlbnQi5QEKC0NoYXRSZXF1ZXN0EjAKCG1lc3NhZ2VzGAEgAygLMh4ubm92YW0uZW50aXRpZXMudjEuQ2hhdE1lc3NhZ2USMgoIbWV0YWRhdGEYAiABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEicKBW1vZGVsGAMgASgLMhgubm92YW0uYWkudjEuTW9kZWxDaG9pY2USDQoFcm91dGUYBCABKAkSJQoFYWdlbnQYBSABKA4yFi5ub3ZhbS5haS52MS5DaGF0QWdlbnQSEQoJdGhyZWFkX2lkGAYgASgJIj0KCkNoYXRBY3Rpb24SDQoFbGFiZWwYASABKAkSDQoFcm91dGUYAiABKAkSEQoJc3BvdGxpZ2h0GAMgASgJIj8KC01vZGVsQ2hvaWNlEhAKCHByb3ZpZGVyGAEgASgJEg0KBW1vZGVsGAIgASgJEg8KB2FwaV9rZXkYAyABKAkilAEKDENoYXRSZXNwb25zZRIxCghyZXNwb25zZRgBIAEoCzIfLm5vdmFtLmVudGl0aWVzLnYxLkNoYXRSZXNwb25zZRInCgZzb3VyY2UYAiABKA4yFy5ub3ZhbS5haS52MS5DaGF0U291cmNlEigKB2FjdGlvbnMYAyADKAsyFy5ub3ZhbS5haS52MS5DaGF0QWN0aW9uIlQKEFN1bW1hcml6ZVJlcXVlc3QSDAoEdGV4dBgBIAEoCRIyCghtZXRhZGF0YRgCIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGEiJAoRU3VtbWFyaXplUmVzcG9uc2USDwoHc3VtbWFyeRgBIAEoCSLGAQoNQWR2aXNlUmVxdWVzdBIOCgZwcm9tcHQYASABKAkSMgoIbWV0YWRhdGEYAiABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEiQKBHRpZXIYAyABKA4yFi5ub3ZhbS5haS52MS5Nb2RlbFRpZXISJwoFbW9kZWwYBCABKAsyGC5ub3ZhbS5haS52MS5Nb2RlbENob2ljZRIiCgZpbWFnZXMYBSADKAsyEi5ub3ZhbS5haS52MS5JbWFnZSIoCgVJbWFnZRIRCgltaW1lX3R5cGUYASABKAkSDAoEZGF0YRgCIAEoDCIeCg5BZHZpc2VSZXNwb25zZRIMCgR0ZXh0GAEgASgJKlsKCUNoYXRBZ2VudBIaChZDSEFUX0FHRU5UX1VOU1BFQ0lGSUVEEAASGAoUQ0hBVF9BR0VOVF9BU1NJU1RBTlQQARIYChRDSEFUX0FHRU5UX1JFQ0VQVElPThACKlkKCkNoYXRTb3VyY2USGwoXQ0hBVF9TT1VSQ0VfVU5TUEVDSUZJRUQQABIVChFDSEFUX1NPVVJDRV9HVUlERRABEhcKE0NIQVRfU09VUkNFX1JFQ09SRFMQAipqCglNb2RlbFRpZXISGgoWTU9ERUxfVElFUl9VTlNQRUNJRklFRBAAEhMKD01PREVMX1RJRVJfRkFTVBABEhcKE01PREVMX1RJRVJfU1RBTkRBUkQQAhITCg9NT0RFTF9USUVSX0RFRVAQAzL2AgoJQUlTZXJ2aWNlEjsKBENoYXQSGC5ub3ZhbS5haS52MS5DaGF0UmVxdWVzdBoZLm5vdmFtLmFpLnYxLkNoYXRSZXNwb25zZRJKCglTdW1tYXJpemUSHS5ub3ZhbS5haS52MS5TdW1tYXJpemVSZXF1ZXN0Gh4ubm92YW0uYWkudjEuU3VtbWFyaXplUmVzcG9uc2USQQoGQWR2aXNlEhoubm92YW0uYWkudjEuQWR2aXNlUmVxdWVzdBobLm5vdmFtLmFpLnYxLkFkdmlzZVJlc3BvbnNlEj8KBFRhbGsSGC5ub3ZhbS5haS52MS5UYWxrUmVxdWVzdBoZLm5vdmFtLmFpLnYxLlRhbGtSZXNwb25zZSgBMAESXAoPR2V0SW5zdHJ1Y3Rpb25zEiMubm92YW0uYWkudjEuR2V0SW5zdHJ1Y3Rpb25zUmVxdWVzdBokLm5vdmFtLmFpLnYxLkdldEluc3RydWN0aW9uc1Jlc3BvbnNlQj1aO2dpdGh1Yi5jb20vbm92YW1vbmxpbmUvbm92YW0tcHJvdG9zL2dlbi9nby9ub3ZhbS9haS92MTthaXYxYgZwcm90bzM", [file_novam_common_v1_common, file_novam_entities_v1_ai]);
+
+/**
+ * Describes the message novam.ai.v1.GetInstructionsRequest.
+ * Use `create(GetInstructionsRequestSchema)` to create a new message.
+ */
+export const GetInstructionsRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_ai_v1_ai_service, 0);
+
+/**
+ * Describes the message novam.ai.v1.GetInstructionsResponse.
+ * Use `create(GetInstructionsResponseSchema)` to create a new message.
+ */
+export const GetInstructionsResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_ai_v1_ai_service, 1);
 
 /**
  * Describes the message novam.ai.v1.TalkRequest.
  * Use `create(TalkRequestSchema)` to create a new message.
  */
 export const TalkRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 0);
+  messageDesc(file_novam_ai_v1_ai_service, 2);
 
 /**
  * Describes the message novam.ai.v1.TalkStart.
  * Use `create(TalkStartSchema)` to create a new message.
  */
 export const TalkStartSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 1);
+  messageDesc(file_novam_ai_v1_ai_service, 3);
 
 /**
  * Describes the message novam.ai.v1.TalkResponse.
  * Use `create(TalkResponseSchema)` to create a new message.
  */
 export const TalkResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 2);
+  messageDesc(file_novam_ai_v1_ai_service, 4);
 
 /**
  * Describes the message novam.ai.v1.ChatRequest.
  * Use `create(ChatRequestSchema)` to create a new message.
  */
 export const ChatRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 3);
+  messageDesc(file_novam_ai_v1_ai_service, 5);
 
 /**
  * Describes the message novam.ai.v1.ChatAction.
  * Use `create(ChatActionSchema)` to create a new message.
  */
 export const ChatActionSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 4);
+  messageDesc(file_novam_ai_v1_ai_service, 6);
 
 /**
  * Describes the message novam.ai.v1.ModelChoice.
  * Use `create(ModelChoiceSchema)` to create a new message.
  */
 export const ModelChoiceSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 5);
+  messageDesc(file_novam_ai_v1_ai_service, 7);
 
 /**
  * Describes the message novam.ai.v1.ChatResponse.
  * Use `create(ChatResponseSchema)` to create a new message.
  */
 export const ChatResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 6);
+  messageDesc(file_novam_ai_v1_ai_service, 8);
 
 /**
  * Describes the message novam.ai.v1.SummarizeRequest.
  * Use `create(SummarizeRequestSchema)` to create a new message.
  */
 export const SummarizeRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 7);
+  messageDesc(file_novam_ai_v1_ai_service, 9);
 
 /**
  * Describes the message novam.ai.v1.SummarizeResponse.
  * Use `create(SummarizeResponseSchema)` to create a new message.
  */
 export const SummarizeResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 8);
+  messageDesc(file_novam_ai_v1_ai_service, 10);
 
 /**
  * Describes the message novam.ai.v1.AdviseRequest.
  * Use `create(AdviseRequestSchema)` to create a new message.
  */
 export const AdviseRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 9);
+  messageDesc(file_novam_ai_v1_ai_service, 11);
 
 /**
  * Describes the message novam.ai.v1.Image.
  * Use `create(ImageSchema)` to create a new message.
  */
 export const ImageSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 10);
+  messageDesc(file_novam_ai_v1_ai_service, 12);
 
 /**
  * Describes the message novam.ai.v1.AdviseResponse.
  * Use `create(AdviseResponseSchema)` to create a new message.
  */
 export const AdviseResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_ai_v1_ai_service, 11);
+  messageDesc(file_novam_ai_v1_ai_service, 13);
 
 /**
  * Describes the enum novam.ai.v1.ChatAgent.

@@ -13,6 +13,56 @@ import type { ChatMessage, ChatResponse as ChatResponse$1 } from "../../entities
 export declare const file_novam_ai_v1_ai_service: GenFile;
 
 /**
+ * @generated from message novam.ai.v1.GetInstructionsRequest
+ */
+export declare type GetInstructionsRequest = Message<"novam.ai.v1.GetInstructionsRequest"> & {
+  /**
+   * Which agent's instructions; unspecified is the admin assistant.
+   *
+   * @generated from field: novam.ai.v1.ChatAgent agent = 1;
+   */
+  agent: ChatAgent;
+};
+
+/**
+ * Describes the message novam.ai.v1.GetInstructionsRequest.
+ * Use `create(GetInstructionsRequestSchema)` to create a new message.
+ */
+export declare const GetInstructionsRequestSchema: GenMessage<GetInstructionsRequest>;
+
+/**
+ * @generated from message novam.ai.v1.GetInstructionsResponse
+ */
+export declare type GetInstructionsResponse = Message<"novam.ai.v1.GetInstructionsResponse"> & {
+  /**
+   * The instructions for a typed chat.
+   *
+   * @generated from field: string instruction = 1;
+   */
+  instruction: string;
+
+  /**
+   * What's added for a spoken conversation; empty when the agent doesn't talk.
+   *
+   * @generated from field: string spoken_note = 2;
+   */
+  spokenNote: string;
+
+  /**
+   * What's added on a phone call; empty when the agent doesn't take calls.
+   *
+   * @generated from field: string phone_note = 3;
+   */
+  phoneNote: string;
+};
+
+/**
+ * Describes the message novam.ai.v1.GetInstructionsResponse.
+ * Use `create(GetInstructionsResponseSchema)` to create a new message.
+ */
+export declare const GetInstructionsResponseSchema: GenMessage<GetInstructionsResponse>;
+
+/**
  * @generated from message novam.ai.v1.TalkRequest
  */
 export declare type TalkRequest = Message<"novam.ai.v1.TalkRequest"> & {
@@ -557,6 +607,16 @@ export declare const AIService: GenService<{
     methodKind: "bidi_streaming";
     input: typeof TalkRequestSchema;
     output: typeof TalkResponseSchema;
+  },
+  /**
+   * The system instructions an agent runs with, so the owner can read them.
+   *
+   * @generated from rpc novam.ai.v1.AIService.GetInstructions
+   */
+  getInstructions: {
+    methodKind: "unary";
+    input: typeof GetInstructionsRequestSchema;
+    output: typeof GetInstructionsResponseSchema;
   },
 }>;
 

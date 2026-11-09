@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AIService_Chat_FullMethodName      = "/novam.ai.v1.AIService/Chat"
-	AIService_Summarize_FullMethodName = "/novam.ai.v1.AIService/Summarize"
-	AIService_Advise_FullMethodName    = "/novam.ai.v1.AIService/Advise"
-	AIService_Talk_FullMethodName      = "/novam.ai.v1.AIService/Talk"
+	AIService_Chat_FullMethodName            = "/novam.ai.v1.AIService/Chat"
+	AIService_Summarize_FullMethodName       = "/novam.ai.v1.AIService/Summarize"
+	AIService_Advise_FullMethodName          = "/novam.ai.v1.AIService/Advise"
+	AIService_Talk_FullMethodName            = "/novam.ai.v1.AIService/Talk"
+	AIService_GetInstructions_FullMethodName = "/novam.ai.v1.AIService/GetInstructions"
 )
 
 // AIServiceClient is the client API for AIService service.
@@ -39,6 +40,8 @@ type AIServiceClient interface {
 	// A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
 	// first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
 	Talk(ctx context.Context, opts ...grpc.CallOption) (grpc.BidiStreamingClient[TalkRequest, TalkResponse], error)
+	// The system instructions an agent runs with, so the owner can read them.
+	GetInstructions(ctx context.Context, in *GetInstructionsRequest, opts ...grpc.CallOption) (*GetInstructionsResponse, error)
 }
 
 type aIServiceClient struct {
@@ -92,6 +95,16 @@ func (c *aIServiceClient) Talk(ctx context.Context, opts ...grpc.CallOption) (gr
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type AIService_TalkClient = grpc.BidiStreamingClient[TalkRequest, TalkResponse]
 
+func (c *aIServiceClient) GetInstructions(ctx context.Context, in *GetInstructionsRequest, opts ...grpc.CallOption) (*GetInstructionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetInstructionsResponse)
+	err := c.cc.Invoke(ctx, AIService_GetInstructions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AIServiceServer is the server API for AIService service.
 // All implementations must embed UnimplementedAIServiceServer
 // for forward compatibility.
@@ -106,6 +119,8 @@ type AIServiceServer interface {
 	// A voice conversation with the Reception agent on a chat's Front Desk thread. The caller sends TalkStart
 	// first, then the visitor's audio a turn at a time; the agent answers with audio and a transcript of both sides.
 	Talk(grpc.BidiStreamingServer[TalkRequest, TalkResponse]) error
+	// The system instructions an agent runs with, so the owner can read them.
+	GetInstructions(context.Context, *GetInstructionsRequest) (*GetInstructionsResponse, error)
 	mustEmbedUnimplementedAIServiceServer()
 }
 
@@ -127,6 +142,9 @@ func (UnimplementedAIServiceServer) Advise(context.Context, *AdviseRequest) (*Ad
 }
 func (UnimplementedAIServiceServer) Talk(grpc.BidiStreamingServer[TalkRequest, TalkResponse]) error {
 	return status.Error(codes.Unimplemented, "method Talk not implemented")
+}
+func (UnimplementedAIServiceServer) GetInstructions(context.Context, *GetInstructionsRequest) (*GetInstructionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetInstructions not implemented")
 }
 func (UnimplementedAIServiceServer) mustEmbedUnimplementedAIServiceServer() {}
 func (UnimplementedAIServiceServer) testEmbeddedByValue()                   {}
@@ -210,6 +228,24 @@ func _AIService_Talk_Handler(srv interface{}, stream grpc.ServerStream) error {
 // This type alias is provided for backwards compatibility with existing code that references the prior non-generic stream type by name.
 type AIService_TalkServer = grpc.BidiStreamingServer[TalkRequest, TalkResponse]
 
+func _AIService_GetInstructions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInstructionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AIServiceServer).GetInstructions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AIService_GetInstructions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AIServiceServer).GetInstructions(ctx, req.(*GetInstructionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AIService_ServiceDesc is the grpc.ServiceDesc for AIService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +264,10 @@ var AIService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Advise",
 			Handler:    _AIService_Advise_Handler,
+		},
+		{
+			MethodName: "GetInstructions",
+			Handler:    _AIService_GetInstructions_Handler,
 		},
 	},
 	Streams: []grpc.StreamDesc{
