@@ -12,6 +12,343 @@ import type { RequestMetadata } from "../../common/v1/common_pb.js";
 export declare const file_novam_finance_v1_finance_service: GenFile;
 
 /**
+ * Whose connection, at the business in the call's token: the business's own, or one of its renters' (their contact).
+ *
+ * @generated from message novam.finance.v1.ConnectionHolder
+ */
+export declare type ConnectionHolder = Message<"novam.finance.v1.ConnectionHolder"> & {
+  /**
+   * @generated from field: string renter_contact_id = 1;
+   */
+  renterContactId: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.ConnectionHolder.
+ * Use `create(ConnectionHolderSchema)` to create a new message.
+ */
+export declare const ConnectionHolderSchema: GenMessage<ConnectionHolder>;
+
+/**
+ * @generated from message novam.finance.v1.SaveConnectionRequest
+ */
+export declare type SaveConnectionRequest = Message<"novam.finance.v1.SaveConnectionRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.finance.v1.ConnectionHolder holder = 2;
+   */
+  holder?: ConnectionHolder;
+
+  /**
+   * @generated from field: string provider = 3;
+   */
+  provider: string;
+
+  /**
+   * The credentials as JSON, stored encrypted.
+   *
+   * @generated from field: bytes credentials_json = 4;
+   */
+  credentialsJson: Uint8Array;
+
+  /**
+   * The account's name to show; empty for none.
+   *
+   * @generated from field: string label = 5;
+   */
+  label: string;
+
+  /**
+   * Keep the label the connection has instead of label.
+   *
+   * @generated from field: bool keep_label = 6;
+   */
+  keepLabel: boolean;
+
+  /**
+   * @generated from field: string scopes = 7;
+   */
+  scopes: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.SaveConnectionRequest.
+ * Use `create(SaveConnectionRequestSchema)` to create a new message.
+ */
+export declare const SaveConnectionRequestSchema: GenMessage<SaveConnectionRequest>;
+
+/**
+ * @generated from message novam.finance.v1.SaveConnectionResponse
+ */
+export declare type SaveConnectionResponse = Message<"novam.finance.v1.SaveConnectionResponse"> & {
+};
+
+/**
+ * Describes the message novam.finance.v1.SaveConnectionResponse.
+ * Use `create(SaveConnectionResponseSchema)` to create a new message.
+ */
+export declare const SaveConnectionResponseSchema: GenMessage<SaveConnectionResponse>;
+
+/**
+ * @generated from message novam.finance.v1.UpdateConnectionCredentialsRequest
+ */
+export declare type UpdateConnectionCredentialsRequest = Message<"novam.finance.v1.UpdateConnectionCredentialsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.finance.v1.ConnectionHolder holder = 2;
+   */
+  holder?: ConnectionHolder;
+
+  /**
+   * @generated from field: string provider = 3;
+   */
+  provider: string;
+
+  /**
+   * @generated from field: bytes credentials_json = 4;
+   */
+  credentialsJson: Uint8Array;
+};
+
+/**
+ * Describes the message novam.finance.v1.UpdateConnectionCredentialsRequest.
+ * Use `create(UpdateConnectionCredentialsRequestSchema)` to create a new message.
+ */
+export declare const UpdateConnectionCredentialsRequestSchema: GenMessage<UpdateConnectionCredentialsRequest>;
+
+/**
+ * @generated from message novam.finance.v1.UpdateConnectionCredentialsResponse
+ */
+export declare type UpdateConnectionCredentialsResponse = Message<"novam.finance.v1.UpdateConnectionCredentialsResponse"> & {
+};
+
+/**
+ * Describes the message novam.finance.v1.UpdateConnectionCredentialsResponse.
+ * Use `create(UpdateConnectionCredentialsResponseSchema)` to create a new message.
+ */
+export declare const UpdateConnectionCredentialsResponseSchema: GenMessage<UpdateConnectionCredentialsResponse>;
+
+/**
+ * @generated from message novam.finance.v1.RemoveConnectionRequest
+ */
+export declare type RemoveConnectionRequest = Message<"novam.finance.v1.RemoveConnectionRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.finance.v1.ConnectionHolder holder = 2;
+   */
+  holder?: ConnectionHolder;
+
+  /**
+   * @generated from field: string provider = 3;
+   */
+  provider: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.RemoveConnectionRequest.
+ * Use `create(RemoveConnectionRequestSchema)` to create a new message.
+ */
+export declare const RemoveConnectionRequestSchema: GenMessage<RemoveConnectionRequest>;
+
+/**
+ * @generated from message novam.finance.v1.RemoveConnectionResponse
+ */
+export declare type RemoveConnectionResponse = Message<"novam.finance.v1.RemoveConnectionResponse"> & {
+};
+
+/**
+ * Describes the message novam.finance.v1.RemoveConnectionResponse.
+ * Use `create(RemoveConnectionResponseSchema)` to create a new message.
+ */
+export declare const RemoveConnectionResponseSchema: GenMessage<RemoveConnectionResponse>;
+
+/**
+ * @generated from message novam.finance.v1.GetSquareCredentialsRequest
+ */
+export declare type GetSquareCredentialsRequest = Message<"novam.finance.v1.GetSquareCredentialsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.finance.v1.ConnectionHolder holder = 2;
+   */
+  holder?: ConnectionHolder;
+};
+
+/**
+ * Describes the message novam.finance.v1.GetSquareCredentialsRequest.
+ * Use `create(GetSquareCredentialsRequestSchema)` to create a new message.
+ */
+export declare const GetSquareCredentialsRequestSchema: GenMessage<GetSquareCredentialsRequest>;
+
+/**
+ * @generated from message novam.finance.v1.GetSquareCredentialsResponse
+ */
+export declare type GetSquareCredentialsResponse = Message<"novam.finance.v1.GetSquareCredentialsResponse"> & {
+  /**
+   * False when there is no Square connection, or its token ran out and couldn't be refreshed.
+   *
+   * @generated from field: bool connected = 1;
+   */
+  connected: boolean;
+
+  /**
+   * @generated from field: bytes credentials_json = 2;
+   */
+  credentialsJson: Uint8Array;
+};
+
+/**
+ * Describes the message novam.finance.v1.GetSquareCredentialsResponse.
+ * Use `create(GetSquareCredentialsResponseSchema)` to create a new message.
+ */
+export declare const GetSquareCredentialsResponseSchema: GenMessage<GetSquareCredentialsResponse>;
+
+/**
+ * @generated from message novam.finance.v1.CompleteSquareConnectRequest
+ */
+export declare type CompleteSquareConnectRequest = Message<"novam.finance.v1.CompleteSquareConnectRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.finance.v1.ConnectionHolder holder = 2;
+   */
+  holder?: ConnectionHolder;
+
+  /**
+   * @generated from field: string code = 3;
+   */
+  code: string;
+
+  /**
+   * The redirect URI the authorization was asked with.
+   *
+   * @generated from field: string redirect_uri = 4;
+   */
+  redirectUri: string;
+
+  /**
+   * @generated from field: string scopes = 5;
+   */
+  scopes: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.CompleteSquareConnectRequest.
+ * Use `create(CompleteSquareConnectRequestSchema)` to create a new message.
+ */
+export declare const CompleteSquareConnectRequestSchema: GenMessage<CompleteSquareConnectRequest>;
+
+/**
+ * @generated from message novam.finance.v1.CompleteSquareConnectResponse
+ */
+export declare type CompleteSquareConnectResponse = Message<"novam.finance.v1.CompleteSquareConnectResponse"> & {
+};
+
+/**
+ * Describes the message novam.finance.v1.CompleteSquareConnectResponse.
+ * Use `create(CompleteSquareConnectResponseSchema)` to create a new message.
+ */
+export declare const CompleteSquareConnectResponseSchema: GenMessage<CompleteSquareConnectResponse>;
+
+/**
+ * @generated from message novam.finance.v1.CompletePayPalConnectRequest
+ */
+export declare type CompletePayPalConnectRequest = Message<"novam.finance.v1.CompletePayPalConnectRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: novam.finance.v1.ConnectionHolder holder = 2;
+   */
+  holder?: ConnectionHolder;
+
+  /**
+   * @generated from field: string merchant_id_in_paypal = 3;
+   */
+  merchantIdInPaypal: string;
+
+  /**
+   * The connection link's state, which PayPal keeps as the merchant's tracking id.
+   *
+   * @generated from field: string tracking_id = 4;
+   */
+  trackingId: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.CompletePayPalConnectRequest.
+ * Use `create(CompletePayPalConnectRequestSchema)` to create a new message.
+ */
+export declare const CompletePayPalConnectRequestSchema: GenMessage<CompletePayPalConnectRequest>;
+
+/**
+ * @generated from message novam.finance.v1.CompletePayPalConnectResponse
+ */
+export declare type CompletePayPalConnectResponse = Message<"novam.finance.v1.CompletePayPalConnectResponse"> & {
+};
+
+/**
+ * Describes the message novam.finance.v1.CompletePayPalConnectResponse.
+ * Use `create(CompletePayPalConnectResponseSchema)` to create a new message.
+ */
+export declare const CompletePayPalConnectResponseSchema: GenMessage<CompletePayPalConnectResponse>;
+
+/**
+ * @generated from message novam.finance.v1.DisconnectProcessorRequest
+ */
+export declare type DisconnectProcessorRequest = Message<"novam.finance.v1.DisconnectProcessorRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * stripe, square or paypal.
+   *
+   * @generated from field: string provider = 2;
+   */
+  provider: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.DisconnectProcessorRequest.
+ * Use `create(DisconnectProcessorRequestSchema)` to create a new message.
+ */
+export declare const DisconnectProcessorRequestSchema: GenMessage<DisconnectProcessorRequest>;
+
+/**
+ * @generated from message novam.finance.v1.DisconnectProcessorResponse
+ */
+export declare type DisconnectProcessorResponse = Message<"novam.finance.v1.DisconnectProcessorResponse"> & {
+};
+
+/**
+ * Describes the message novam.finance.v1.DisconnectProcessorResponse.
+ * Use `create(DisconnectProcessorResponseSchema)` to create a new message.
+ */
+export declare const DisconnectProcessorResponseSchema: GenMessage<DisconnectProcessorResponse>;
+
+/**
  * @generated from message novam.finance.v1.FormField
  */
 export declare type FormField = Message<"novam.finance.v1.FormField"> & {
@@ -334,6 +671,8 @@ export declare type VerifyWebhookResponse = Message<"novam.finance.v1.VerifyWebh
 export declare const VerifyWebhookResponseSchema: GenMessage<VerifyWebhookResponse>;
 
 /**
+ * With no credentials given, the engine reads the business's own connection.
+ *
  * @generated from message novam.finance.v1.GetPayoutStatusRequest
  */
 export declare type GetPayoutStatusRequest = Message<"novam.finance.v1.GetPayoutStatusRequest"> & {
@@ -529,9 +868,10 @@ export declare const GetPayoutStatusResponseSchema: GenMessage<GetPayoutStatusRe
 
 /**
  * FinanceService runs in novam-engine's workflows server and makes the calls to card processors (Stripe, Square,
- * PayPal) on a business's own account. novam-data keeps every connection's credentials, refreshes them and does every
- * write; it passes what a call needs and the engine stores nothing. A processor the engine isn't set up for answers
- * UNAVAILABLE, so novam-data makes the call itself.
+ * PayPal) on a business's own account. It also keeps the connections (ADR-0009): it stores a business's or a renter's
+ * credentials, encrypted with ENCRYPTION_KEY as novam-data encrypts them, refreshes Square's tokens and removes a
+ * connection. A processor the engine isn't set up for, or a connection it can't decrypt, answers UNAVAILABLE, so
+ * novam-data does that work itself.
  *
  * @generated from service novam.finance.v1.FinanceService
  */
@@ -590,6 +930,77 @@ export declare const FinanceService: GenService<{
     methodKind: "unary";
     input: typeof VerifyWebhookRequestSchema;
     output: typeof VerifyWebhookResponseSchema;
+  },
+  /**
+   * Stores (or replaces) a connection's credentials, and tells the business's open screens.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.SaveConnection
+   */
+  saveConnection: {
+    methodKind: "unary";
+    input: typeof SaveConnectionRequestSchema;
+    output: typeof SaveConnectionResponseSchema;
+  },
+  /**
+   * Replaces just a connection's credentials, keeping when it was connected.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.UpdateConnectionCredentials
+   */
+  updateConnectionCredentials: {
+    methodKind: "unary";
+    input: typeof UpdateConnectionCredentialsRequestSchema;
+    output: typeof UpdateConnectionCredentialsResponseSchema;
+  },
+  /**
+   * Removes a connection here (not at the processor).
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.RemoveConnection
+   */
+  removeConnection: {
+    methodKind: "unary";
+    input: typeof RemoveConnectionRequestSchema;
+    output: typeof RemoveConnectionResponseSchema;
+  },
+  /**
+   * A Square connection's credentials, refreshed first under the connection's row lock when the access token runs out
+   * within a day, so two callers never both spend its refresh token.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.GetSquareCredentials
+   */
+  getSquareCredentials: {
+    methodKind: "unary";
+    input: typeof GetSquareCredentialsRequestSchema;
+    output: typeof GetSquareCredentialsResponseSchema;
+  },
+  /**
+   * Finishes Square OAuth: trades the code for tokens and stores them with the main location.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.CompleteSquareConnect
+   */
+  completeSquareConnect: {
+    methodKind: "unary";
+    input: typeof CompleteSquareConnectRequestSchema;
+    output: typeof CompleteSquareConnectResponseSchema;
+  },
+  /**
+   * Finishes PayPal onboarding: checks with PayPal that the merchant came from this referral, then stores it.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.CompletePayPalConnect
+   */
+  completePayPalConnect: {
+    methodKind: "unary";
+    input: typeof CompletePayPalConnectRequestSchema;
+    output: typeof CompletePayPalConnectResponseSchema;
+  },
+  /**
+   * Disconnects the business's processor: lets go of Novam's access at Square, then removes the connection.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.DisconnectProcessor
+   */
+  disconnectProcessor: {
+    methodKind: "unary";
+    input: typeof DisconnectProcessorRequestSchema;
+    output: typeof DisconnectProcessorResponseSchema;
   },
 }>;
 

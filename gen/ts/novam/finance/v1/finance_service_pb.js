@@ -9,104 +9,210 @@ import { file_novam_common_v1_common } from "../../common/v1/common_pb.js";
  * Describes the file novam/finance/v1/finance_service.proto.
  */
 export const file_novam_finance_v1_finance_service = /*@__PURE__*/
-  fileDesc("CiZub3ZhbS9maW5hbmNlL3YxL2ZpbmFuY2Vfc2VydmljZS5wcm90bxIQbm92YW0uZmluYW5jZS52MSIoCglGb3JtRmllbGQSDAoEbmFtZRgBIAEoCRINCgV2YWx1ZRgCIAEoCSK4AgoRQ2FsbFN0cmlwZVJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEg4KBm1ldGhvZBgCIAEoCRIMCgRwYXRoGAMgASgJEioKBXF1ZXJ5GAQgAygLMhsubm92YW0uZmluYW5jZS52MS5Gb3JtRmllbGQSKQoEZm9ybRgFIAMoCzIbLm5vdmFtLmZpbmFuY2UudjEuRm9ybUZpZWxkEhEKCWpzb25fYm9keRgGIAEoDBISCgphY2NvdW50X2lkGAcgASgJEhQKDGFjY2Vzc190b2tlbhgIIAEoCRIXCg9pZGVtcG90ZW5jeV9rZXkYCSABKAkSEAoIZmlsZV91cmwYCiABKAkSEgoKdGltZW91dF9tcxgLIAEoBSIyChJDYWxsU3RyaXBlUmVzcG9uc2USDgoGc3RhdHVzGAEgASgFEgwKBGJvZHkYAiABKAwijwEKEUNhbGxTcXVhcmVSZXF1ZXN0EjIKCG1ldGFkYXRhGAEgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YRIOCgZtZXRob2QYAiABKAkSDAoEcGF0aBgDIAEoCRIVCg1hdXRob3JpemF0aW9uGAQgASgJEhEKCWpzb25fYm9keRgFIAEoDCIyChJDYWxsU3F1YXJlUmVzcG9uc2USDgoGc3RhdHVzGAEgASgFEgwKBGJvZHkYAiABKAwioQEKEUNhbGxQYXlQYWxSZXF1ZXN0EjIKCG1ldGFkYXRhGAEgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YRIOCgZtZXRob2QYAiABKAkSDAoEcGF0aBgDIAEoCRIRCglqc29uX2JvZHkYBCABKAwSEwoLYXNfbWVyY2hhbnQYBSABKAkSEgoKcmVxdWVzdF9pZBgGIAEoCSIyChJDYWxsUGF5UGFsUmVzcG9uc2USDgoGc3RhdHVzGAEgASgFEgwKBGJvZHkYAiABKAwirQEKFFZlcmlmeVdlYmhvb2tSZXF1ZXN0EjIKCG1ldGFkYXRhGAEgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YRIRCglwcm9jZXNzb3IYAiABKAkSEAoIcmF3X2JvZHkYAyABKAwSEQoJc2lnbmF0dXJlGAQgASgJEg8KB3NlY3JldHMYBSADKAkSGAoQbm90aWZpY2F0aW9uX3VybBgGIAEoCSImChVWZXJpZnlXZWJob29rUmVzcG9uc2USDQoFdmFsaWQYASABKAgi4QEKFkdldFBheW91dFN0YXR1c1JlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhEKCXByb2Nlc3NvchgCIAEoCRIZChFzdHJpcGVfYWNjb3VudF9pZBgDIAEoCRIUCgxhY2Nlc3NfdG9rZW4YBCABKAkSGgoSc3F1YXJlX2xvY2F0aW9uX2lkGAUgASgJEhcKD3NxdWFyZV9jdXJyZW5jeRgGIAEoCRIaChJwYXlwYWxfbWVyY2hhbnRfaWQYByABKAkiQAoKTmV4dFBheW91dBIOCgZhbW91bnQYASABKAESFAoMYXJyaXZhbF9kYXRlGAIgASgJEgwKBGJhbmsYAyABKAkiRAoMUmVjZW50UGF5b3V0Eg4KBmFtb3VudBgBIAEoARIUCgxhcnJpdmFsX2RhdGUYAiABKAkSDgoGc3RhdHVzGAMgASgJIsUCChdHZXRQYXlvdXRTdGF0dXNSZXNwb25zZRIRCglwcm9jZXNzb3IYASABKAkSEAoIcmVhZGFibGUYAiABKAgSEAoIY3VycmVuY3kYAyABKAkSEgoKb25faXRzX3dheRgEIAEoARISCgpwcm9jZXNzaW5nGAUgASgBEg8KB29uX2hvbGQYBiABKAESFwoKaW5fYWNjb3VudBgHIAEoAUgAiAEBEhMKC2hvbGRfcmVhc29uGAggASgJEhIKCmhvbGRfbmVlZHMYCSADKAkSMQoLbmV4dF9wYXlvdXQYCiABKAsyHC5ub3ZhbS5maW5hbmNlLnYxLk5leHRQYXlvdXQSNgoOcmVjZW50X3BheW91dHMYCyADKAsyHi5ub3ZhbS5maW5hbmNlLnYxLlJlY2VudFBheW91dEINCgtfaW5fYWNjb3VudDLlAwoORmluYW5jZVNlcnZpY2USZgoPR2V0UGF5b3V0U3RhdHVzEigubm92YW0uZmluYW5jZS52MS5HZXRQYXlvdXRTdGF0dXNSZXF1ZXN0Gikubm92YW0uZmluYW5jZS52MS5HZXRQYXlvdXRTdGF0dXNSZXNwb25zZRJXCgpDYWxsU3RyaXBlEiMubm92YW0uZmluYW5jZS52MS5DYWxsU3RyaXBlUmVxdWVzdBokLm5vdmFtLmZpbmFuY2UudjEuQ2FsbFN0cmlwZVJlc3BvbnNlElcKCkNhbGxTcXVhcmUSIy5ub3ZhbS5maW5hbmNlLnYxLkNhbGxTcXVhcmVSZXF1ZXN0GiQubm92YW0uZmluYW5jZS52MS5DYWxsU3F1YXJlUmVzcG9uc2USVwoKQ2FsbFBheVBhbBIjLm5vdmFtLmZpbmFuY2UudjEuQ2FsbFBheVBhbFJlcXVlc3QaJC5ub3ZhbS5maW5hbmNlLnYxLkNhbGxQYXlQYWxSZXNwb25zZRJgCg1WZXJpZnlXZWJob29rEiYubm92YW0uZmluYW5jZS52MS5WZXJpZnlXZWJob29rUmVxdWVzdBonLm5vdmFtLmZpbmFuY2UudjEuVmVyaWZ5V2ViaG9va1Jlc3BvbnNlQkdaRWdpdGh1Yi5jb20vbm92YW1vbmxpbmUvbm92YW0tcHJvdG9zL2dlbi9nby9ub3ZhbS9maW5hbmNlL3YxO2ZpbmFuY2V2MWIGcHJvdG8z", [file_novam_common_v1_common]);
+  fileDesc("CiZub3ZhbS9maW5hbmNlL3YxL2ZpbmFuY2Vfc2VydmljZS5wcm90bxIQbm92YW0uZmluYW5jZS52MSItChBDb25uZWN0aW9uSG9sZGVyEhkKEXJlbnRlcl9jb250YWN0X2lkGAEgASgJIt4BChVTYXZlQ29ubmVjdGlvblJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEjIKBmhvbGRlchgCIAEoCzIiLm5vdmFtLmZpbmFuY2UudjEuQ29ubmVjdGlvbkhvbGRlchIQCghwcm92aWRlchgDIAEoCRIYChBjcmVkZW50aWFsc19qc29uGAQgASgMEg0KBWxhYmVsGAUgASgJEhIKCmtlZXBfbGFiZWwYBiABKAgSDgoGc2NvcGVzGAcgASgJIhgKFlNhdmVDb25uZWN0aW9uUmVzcG9uc2UiuAEKIlVwZGF0ZUNvbm5lY3Rpb25DcmVkZW50aWFsc1JlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEjIKBmhvbGRlchgCIAEoCzIiLm5vdmFtLmZpbmFuY2UudjEuQ29ubmVjdGlvbkhvbGRlchIQCghwcm92aWRlchgDIAEoCRIYChBjcmVkZW50aWFsc19qc29uGAQgASgMIiUKI1VwZGF0ZUNvbm5lY3Rpb25DcmVkZW50aWFsc1Jlc3BvbnNlIpMBChdSZW1vdmVDb25uZWN0aW9uUmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESMgoGaG9sZGVyGAIgASgLMiIubm92YW0uZmluYW5jZS52MS5Db25uZWN0aW9uSG9sZGVyEhAKCHByb3ZpZGVyGAMgASgJIhoKGFJlbW92ZUNvbm5lY3Rpb25SZXNwb25zZSKFAQobR2V0U3F1YXJlQ3JlZGVudGlhbHNSZXF1ZXN0EjIKCG1ldGFkYXRhGAEgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YRIyCgZob2xkZXIYAiABKAsyIi5ub3ZhbS5maW5hbmNlLnYxLkNvbm5lY3Rpb25Ib2xkZXIiSwocR2V0U3F1YXJlQ3JlZGVudGlhbHNSZXNwb25zZRIRCgljb25uZWN0ZWQYASABKAgSGAoQY3JlZGVudGlhbHNfanNvbhgCIAEoDCK6AQocQ29tcGxldGVTcXVhcmVDb25uZWN0UmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESMgoGaG9sZGVyGAIgASgLMiIubm92YW0uZmluYW5jZS52MS5Db25uZWN0aW9uSG9sZGVyEgwKBGNvZGUYAyABKAkSFAoMcmVkaXJlY3RfdXJpGAQgASgJEg4KBnNjb3BlcxgFIAEoCSIfCh1Db21wbGV0ZVNxdWFyZUNvbm5lY3RSZXNwb25zZSK6AQocQ29tcGxldGVQYXlQYWxDb25uZWN0UmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESMgoGaG9sZGVyGAIgASgLMiIubm92YW0uZmluYW5jZS52MS5Db25uZWN0aW9uSG9sZGVyEh0KFW1lcmNoYW50X2lkX2luX3BheXBhbBgDIAEoCRITCgt0cmFja2luZ19pZBgEIAEoCSIfCh1Db21wbGV0ZVBheVBhbENvbm5lY3RSZXNwb25zZSJiChpEaXNjb25uZWN0UHJvY2Vzc29yUmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESEAoIcHJvdmlkZXIYAiABKAkiHQobRGlzY29ubmVjdFByb2Nlc3NvclJlc3BvbnNlIigKCUZvcm1GaWVsZBIMCgRuYW1lGAEgASgJEg0KBXZhbHVlGAIgASgJIrgCChFDYWxsU3RyaXBlUmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESDgoGbWV0aG9kGAIgASgJEgwKBHBhdGgYAyABKAkSKgoFcXVlcnkYBCADKAsyGy5ub3ZhbS5maW5hbmNlLnYxLkZvcm1GaWVsZBIpCgRmb3JtGAUgAygLMhsubm92YW0uZmluYW5jZS52MS5Gb3JtRmllbGQSEQoJanNvbl9ib2R5GAYgASgMEhIKCmFjY291bnRfaWQYByABKAkSFAoMYWNjZXNzX3Rva2VuGAggASgJEhcKD2lkZW1wb3RlbmN5X2tleRgJIAEoCRIQCghmaWxlX3VybBgKIAEoCRISCgp0aW1lb3V0X21zGAsgASgFIjIKEkNhbGxTdHJpcGVSZXNwb25zZRIOCgZzdGF0dXMYASABKAUSDAoEYm9keRgCIAEoDCKPAQoRQ2FsbFNxdWFyZVJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEg4KBm1ldGhvZBgCIAEoCRIMCgRwYXRoGAMgASgJEhUKDWF1dGhvcml6YXRpb24YBCABKAkSEQoJanNvbl9ib2R5GAUgASgMIjIKEkNhbGxTcXVhcmVSZXNwb25zZRIOCgZzdGF0dXMYASABKAUSDAoEYm9keRgCIAEoDCKhAQoRQ2FsbFBheVBhbFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEg4KBm1ldGhvZBgCIAEoCRIMCgRwYXRoGAMgASgJEhEKCWpzb25fYm9keRgEIAEoDBITCgthc19tZXJjaGFudBgFIAEoCRISCgpyZXF1ZXN0X2lkGAYgASgJIjIKEkNhbGxQYXlQYWxSZXNwb25zZRIOCgZzdGF0dXMYASABKAUSDAoEYm9keRgCIAEoDCKtAQoUVmVyaWZ5V2ViaG9va1JlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhEKCXByb2Nlc3NvchgCIAEoCRIQCghyYXdfYm9keRgDIAEoDBIRCglzaWduYXR1cmUYBCABKAkSDwoHc2VjcmV0cxgFIAMoCRIYChBub3RpZmljYXRpb25fdXJsGAYgASgJIiYKFVZlcmlmeVdlYmhvb2tSZXNwb25zZRINCgV2YWxpZBgBIAEoCCLhAQoWR2V0UGF5b3V0U3RhdHVzUmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESEQoJcHJvY2Vzc29yGAIgASgJEhkKEXN0cmlwZV9hY2NvdW50X2lkGAMgASgJEhQKDGFjY2Vzc190b2tlbhgEIAEoCRIaChJzcXVhcmVfbG9jYXRpb25faWQYBSABKAkSFwoPc3F1YXJlX2N1cnJlbmN5GAYgASgJEhoKEnBheXBhbF9tZXJjaGFudF9pZBgHIAEoCSJACgpOZXh0UGF5b3V0Eg4KBmFtb3VudBgBIAEoARIUCgxhcnJpdmFsX2RhdGUYAiABKAkSDAoEYmFuaxgDIAEoCSJECgxSZWNlbnRQYXlvdXQSDgoGYW1vdW50GAEgASgBEhQKDGFycml2YWxfZGF0ZRgCIAEoCRIOCgZzdGF0dXMYAyABKAkixQIKF0dldFBheW91dFN0YXR1c1Jlc3BvbnNlEhEKCXByb2Nlc3NvchgBIAEoCRIQCghyZWFkYWJsZRgCIAEoCBIQCghjdXJyZW5jeRgDIAEoCRISCgpvbl9pdHNfd2F5GAQgASgBEhIKCnByb2Nlc3NpbmcYBSABKAESDwoHb25faG9sZBgGIAEoARIXCgppbl9hY2NvdW50GAcgASgBSACIAQESEwoLaG9sZF9yZWFzb24YCCABKAkSEgoKaG9sZF9uZWVkcxgJIAMoCRIxCgtuZXh0X3BheW91dBgKIAEoCzIcLm5vdmFtLmZpbmFuY2UudjEuTmV4dFBheW91dBI2Cg5yZWNlbnRfcGF5b3V0cxgLIAMoCzIeLm5vdmFtLmZpbmFuY2UudjEuUmVjZW50UGF5b3V0Qg0KC19pbl9hY2NvdW50MqEKCg5GaW5hbmNlU2VydmljZRJmCg9HZXRQYXlvdXRTdGF0dXMSKC5ub3ZhbS5maW5hbmNlLnYxLkdldFBheW91dFN0YXR1c1JlcXVlc3QaKS5ub3ZhbS5maW5hbmNlLnYxLkdldFBheW91dFN0YXR1c1Jlc3BvbnNlElcKCkNhbGxTdHJpcGUSIy5ub3ZhbS5maW5hbmNlLnYxLkNhbGxTdHJpcGVSZXF1ZXN0GiQubm92YW0uZmluYW5jZS52MS5DYWxsU3RyaXBlUmVzcG9uc2USVwoKQ2FsbFNxdWFyZRIjLm5vdmFtLmZpbmFuY2UudjEuQ2FsbFNxdWFyZVJlcXVlc3QaJC5ub3ZhbS5maW5hbmNlLnYxLkNhbGxTcXVhcmVSZXNwb25zZRJXCgpDYWxsUGF5UGFsEiMubm92YW0uZmluYW5jZS52MS5DYWxsUGF5UGFsUmVxdWVzdBokLm5vdmFtLmZpbmFuY2UudjEuQ2FsbFBheVBhbFJlc3BvbnNlEmAKDVZlcmlmeVdlYmhvb2sSJi5ub3ZhbS5maW5hbmNlLnYxLlZlcmlmeVdlYmhvb2tSZXF1ZXN0Gicubm92YW0uZmluYW5jZS52MS5WZXJpZnlXZWJob29rUmVzcG9uc2USYwoOU2F2ZUNvbm5lY3Rpb24SJy5ub3ZhbS5maW5hbmNlLnYxLlNhdmVDb25uZWN0aW9uUmVxdWVzdBooLm5vdmFtLmZpbmFuY2UudjEuU2F2ZUNvbm5lY3Rpb25SZXNwb25zZRKKAQobVXBkYXRlQ29ubmVjdGlvbkNyZWRlbnRpYWxzEjQubm92YW0uZmluYW5jZS52MS5VcGRhdGVDb25uZWN0aW9uQ3JlZGVudGlhbHNSZXF1ZXN0GjUubm92YW0uZmluYW5jZS52MS5VcGRhdGVDb25uZWN0aW9uQ3JlZGVudGlhbHNSZXNwb25zZRJpChBSZW1vdmVDb25uZWN0aW9uEikubm92YW0uZmluYW5jZS52MS5SZW1vdmVDb25uZWN0aW9uUmVxdWVzdBoqLm5vdmFtLmZpbmFuY2UudjEuUmVtb3ZlQ29ubmVjdGlvblJlc3BvbnNlEnUKFEdldFNxdWFyZUNyZWRlbnRpYWxzEi0ubm92YW0uZmluYW5jZS52MS5HZXRTcXVhcmVDcmVkZW50aWFsc1JlcXVlc3QaLi5ub3ZhbS5maW5hbmNlLnYxLkdldFNxdWFyZUNyZWRlbnRpYWxzUmVzcG9uc2USeAoVQ29tcGxldGVTcXVhcmVDb25uZWN0Ei4ubm92YW0uZmluYW5jZS52MS5Db21wbGV0ZVNxdWFyZUNvbm5lY3RSZXF1ZXN0Gi8ubm92YW0uZmluYW5jZS52MS5Db21wbGV0ZVNxdWFyZUNvbm5lY3RSZXNwb25zZRJ4ChVDb21wbGV0ZVBheVBhbENvbm5lY3QSLi5ub3ZhbS5maW5hbmNlLnYxLkNvbXBsZXRlUGF5UGFsQ29ubmVjdFJlcXVlc3QaLy5ub3ZhbS5maW5hbmNlLnYxLkNvbXBsZXRlUGF5UGFsQ29ubmVjdFJlc3BvbnNlEnIKE0Rpc2Nvbm5lY3RQcm9jZXNzb3ISLC5ub3ZhbS5maW5hbmNlLnYxLkRpc2Nvbm5lY3RQcm9jZXNzb3JSZXF1ZXN0Gi0ubm92YW0uZmluYW5jZS52MS5EaXNjb25uZWN0UHJvY2Vzc29yUmVzcG9uc2VCR1pFZ2l0aHViLmNvbS9ub3ZhbW9ubGluZS9ub3ZhbS1wcm90b3MvZ2VuL2dvL25vdmFtL2ZpbmFuY2UvdjE7ZmluYW5jZXYxYgZwcm90bzM", [file_novam_common_v1_common]);
+
+/**
+ * Describes the message novam.finance.v1.ConnectionHolder.
+ * Use `create(ConnectionHolderSchema)` to create a new message.
+ */
+export const ConnectionHolderSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 0);
+
+/**
+ * Describes the message novam.finance.v1.SaveConnectionRequest.
+ * Use `create(SaveConnectionRequestSchema)` to create a new message.
+ */
+export const SaveConnectionRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 1);
+
+/**
+ * Describes the message novam.finance.v1.SaveConnectionResponse.
+ * Use `create(SaveConnectionResponseSchema)` to create a new message.
+ */
+export const SaveConnectionResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 2);
+
+/**
+ * Describes the message novam.finance.v1.UpdateConnectionCredentialsRequest.
+ * Use `create(UpdateConnectionCredentialsRequestSchema)` to create a new message.
+ */
+export const UpdateConnectionCredentialsRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 3);
+
+/**
+ * Describes the message novam.finance.v1.UpdateConnectionCredentialsResponse.
+ * Use `create(UpdateConnectionCredentialsResponseSchema)` to create a new message.
+ */
+export const UpdateConnectionCredentialsResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 4);
+
+/**
+ * Describes the message novam.finance.v1.RemoveConnectionRequest.
+ * Use `create(RemoveConnectionRequestSchema)` to create a new message.
+ */
+export const RemoveConnectionRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 5);
+
+/**
+ * Describes the message novam.finance.v1.RemoveConnectionResponse.
+ * Use `create(RemoveConnectionResponseSchema)` to create a new message.
+ */
+export const RemoveConnectionResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 6);
+
+/**
+ * Describes the message novam.finance.v1.GetSquareCredentialsRequest.
+ * Use `create(GetSquareCredentialsRequestSchema)` to create a new message.
+ */
+export const GetSquareCredentialsRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 7);
+
+/**
+ * Describes the message novam.finance.v1.GetSquareCredentialsResponse.
+ * Use `create(GetSquareCredentialsResponseSchema)` to create a new message.
+ */
+export const GetSquareCredentialsResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 8);
+
+/**
+ * Describes the message novam.finance.v1.CompleteSquareConnectRequest.
+ * Use `create(CompleteSquareConnectRequestSchema)` to create a new message.
+ */
+export const CompleteSquareConnectRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 9);
+
+/**
+ * Describes the message novam.finance.v1.CompleteSquareConnectResponse.
+ * Use `create(CompleteSquareConnectResponseSchema)` to create a new message.
+ */
+export const CompleteSquareConnectResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 10);
+
+/**
+ * Describes the message novam.finance.v1.CompletePayPalConnectRequest.
+ * Use `create(CompletePayPalConnectRequestSchema)` to create a new message.
+ */
+export const CompletePayPalConnectRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 11);
+
+/**
+ * Describes the message novam.finance.v1.CompletePayPalConnectResponse.
+ * Use `create(CompletePayPalConnectResponseSchema)` to create a new message.
+ */
+export const CompletePayPalConnectResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 12);
+
+/**
+ * Describes the message novam.finance.v1.DisconnectProcessorRequest.
+ * Use `create(DisconnectProcessorRequestSchema)` to create a new message.
+ */
+export const DisconnectProcessorRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 13);
+
+/**
+ * Describes the message novam.finance.v1.DisconnectProcessorResponse.
+ * Use `create(DisconnectProcessorResponseSchema)` to create a new message.
+ */
+export const DisconnectProcessorResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_finance_v1_finance_service, 14);
 
 /**
  * Describes the message novam.finance.v1.FormField.
  * Use `create(FormFieldSchema)` to create a new message.
  */
 export const FormFieldSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 0);
+  messageDesc(file_novam_finance_v1_finance_service, 15);
 
 /**
  * Describes the message novam.finance.v1.CallStripeRequest.
  * Use `create(CallStripeRequestSchema)` to create a new message.
  */
 export const CallStripeRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 1);
+  messageDesc(file_novam_finance_v1_finance_service, 16);
 
 /**
  * Describes the message novam.finance.v1.CallStripeResponse.
  * Use `create(CallStripeResponseSchema)` to create a new message.
  */
 export const CallStripeResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 2);
+  messageDesc(file_novam_finance_v1_finance_service, 17);
 
 /**
  * Describes the message novam.finance.v1.CallSquareRequest.
  * Use `create(CallSquareRequestSchema)` to create a new message.
  */
 export const CallSquareRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 3);
+  messageDesc(file_novam_finance_v1_finance_service, 18);
 
 /**
  * Describes the message novam.finance.v1.CallSquareResponse.
  * Use `create(CallSquareResponseSchema)` to create a new message.
  */
 export const CallSquareResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 4);
+  messageDesc(file_novam_finance_v1_finance_service, 19);
 
 /**
  * Describes the message novam.finance.v1.CallPayPalRequest.
  * Use `create(CallPayPalRequestSchema)` to create a new message.
  */
 export const CallPayPalRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 5);
+  messageDesc(file_novam_finance_v1_finance_service, 20);
 
 /**
  * Describes the message novam.finance.v1.CallPayPalResponse.
  * Use `create(CallPayPalResponseSchema)` to create a new message.
  */
 export const CallPayPalResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 6);
+  messageDesc(file_novam_finance_v1_finance_service, 21);
 
 /**
  * Describes the message novam.finance.v1.VerifyWebhookRequest.
  * Use `create(VerifyWebhookRequestSchema)` to create a new message.
  */
 export const VerifyWebhookRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 7);
+  messageDesc(file_novam_finance_v1_finance_service, 22);
 
 /**
  * Describes the message novam.finance.v1.VerifyWebhookResponse.
  * Use `create(VerifyWebhookResponseSchema)` to create a new message.
  */
 export const VerifyWebhookResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 8);
+  messageDesc(file_novam_finance_v1_finance_service, 23);
 
 /**
  * Describes the message novam.finance.v1.GetPayoutStatusRequest.
  * Use `create(GetPayoutStatusRequestSchema)` to create a new message.
  */
 export const GetPayoutStatusRequestSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 9);
+  messageDesc(file_novam_finance_v1_finance_service, 24);
 
 /**
  * Describes the message novam.finance.v1.NextPayout.
  * Use `create(NextPayoutSchema)` to create a new message.
  */
 export const NextPayoutSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 10);
+  messageDesc(file_novam_finance_v1_finance_service, 25);
 
 /**
  * Describes the message novam.finance.v1.RecentPayout.
  * Use `create(RecentPayoutSchema)` to create a new message.
  */
 export const RecentPayoutSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 11);
+  messageDesc(file_novam_finance_v1_finance_service, 26);
 
 /**
  * Describes the message novam.finance.v1.GetPayoutStatusResponse.
  * Use `create(GetPayoutStatusResponseSchema)` to create a new message.
  */
 export const GetPayoutStatusResponseSchema = /*@__PURE__*/
-  messageDesc(file_novam_finance_v1_finance_service, 12);
+  messageDesc(file_novam_finance_v1_finance_service, 27);
 
 /**
  * FinanceService runs in novam-engine's workflows server and makes the calls to card processors (Stripe, Square,
- * PayPal) on a business's own account. novam-data keeps every connection's credentials, refreshes them and does every
- * write; it passes what a call needs and the engine stores nothing. A processor the engine isn't set up for answers
- * UNAVAILABLE, so novam-data makes the call itself.
+ * PayPal) on a business's own account. It also keeps the connections (ADR-0009): it stores a business's or a renter's
+ * credentials, encrypted with ENCRYPTION_KEY as novam-data encrypts them, refreshes Square's tokens and removes a
+ * connection. A processor the engine isn't set up for, or a connection it can't decrypt, answers UNAVAILABLE, so
+ * novam-data does that work itself.
  *
  * @generated from service novam.finance.v1.FinanceService
  */

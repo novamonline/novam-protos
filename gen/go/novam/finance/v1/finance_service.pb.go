@@ -22,6 +22,794 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+// Whose connection, at the business in the call's token: the business's own, or one of its renters' (their contact).
+type ConnectionHolder struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	RenterContactId string                 `protobuf:"bytes,1,opt,name=renter_contact_id,json=renterContactId,proto3" json:"renter_contact_id,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *ConnectionHolder) Reset() {
+	*x = ConnectionHolder{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConnectionHolder) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConnectionHolder) ProtoMessage() {}
+
+func (x *ConnectionHolder) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConnectionHolder.ProtoReflect.Descriptor instead.
+func (*ConnectionHolder) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ConnectionHolder) GetRenterContactId() string {
+	if x != nil {
+		return x.RenterContactId
+	}
+	return ""
+}
+
+type SaveConnectionRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Holder   *ConnectionHolder      `protobuf:"bytes,2,opt,name=holder,proto3" json:"holder,omitempty"`
+	Provider string                 `protobuf:"bytes,3,opt,name=provider,proto3" json:"provider,omitempty"`
+	// The credentials as JSON, stored encrypted.
+	CredentialsJson []byte `protobuf:"bytes,4,opt,name=credentials_json,json=credentialsJson,proto3" json:"credentials_json,omitempty"`
+	// The account's name to show; empty for none.
+	Label string `protobuf:"bytes,5,opt,name=label,proto3" json:"label,omitempty"`
+	// Keep the label the connection has instead of label.
+	KeepLabel     bool   `protobuf:"varint,6,opt,name=keep_label,json=keepLabel,proto3" json:"keep_label,omitempty"`
+	Scopes        string `protobuf:"bytes,7,opt,name=scopes,proto3" json:"scopes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SaveConnectionRequest) Reset() {
+	*x = SaveConnectionRequest{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SaveConnectionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveConnectionRequest) ProtoMessage() {}
+
+func (x *SaveConnectionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveConnectionRequest.ProtoReflect.Descriptor instead.
+func (*SaveConnectionRequest) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *SaveConnectionRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *SaveConnectionRequest) GetHolder() *ConnectionHolder {
+	if x != nil {
+		return x.Holder
+	}
+	return nil
+}
+
+func (x *SaveConnectionRequest) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *SaveConnectionRequest) GetCredentialsJson() []byte {
+	if x != nil {
+		return x.CredentialsJson
+	}
+	return nil
+}
+
+func (x *SaveConnectionRequest) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *SaveConnectionRequest) GetKeepLabel() bool {
+	if x != nil {
+		return x.KeepLabel
+	}
+	return false
+}
+
+func (x *SaveConnectionRequest) GetScopes() string {
+	if x != nil {
+		return x.Scopes
+	}
+	return ""
+}
+
+type SaveConnectionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SaveConnectionResponse) Reset() {
+	*x = SaveConnectionResponse{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SaveConnectionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SaveConnectionResponse) ProtoMessage() {}
+
+func (x *SaveConnectionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SaveConnectionResponse.ProtoReflect.Descriptor instead.
+func (*SaveConnectionResponse) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{2}
+}
+
+type UpdateConnectionCredentialsRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Metadata        *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Holder          *ConnectionHolder      `protobuf:"bytes,2,opt,name=holder,proto3" json:"holder,omitempty"`
+	Provider        string                 `protobuf:"bytes,3,opt,name=provider,proto3" json:"provider,omitempty"`
+	CredentialsJson []byte                 `protobuf:"bytes,4,opt,name=credentials_json,json=credentialsJson,proto3" json:"credentials_json,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *UpdateConnectionCredentialsRequest) Reset() {
+	*x = UpdateConnectionCredentialsRequest{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateConnectionCredentialsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateConnectionCredentialsRequest) ProtoMessage() {}
+
+func (x *UpdateConnectionCredentialsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateConnectionCredentialsRequest.ProtoReflect.Descriptor instead.
+func (*UpdateConnectionCredentialsRequest) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *UpdateConnectionCredentialsRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *UpdateConnectionCredentialsRequest) GetHolder() *ConnectionHolder {
+	if x != nil {
+		return x.Holder
+	}
+	return nil
+}
+
+func (x *UpdateConnectionCredentialsRequest) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *UpdateConnectionCredentialsRequest) GetCredentialsJson() []byte {
+	if x != nil {
+		return x.CredentialsJson
+	}
+	return nil
+}
+
+type UpdateConnectionCredentialsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UpdateConnectionCredentialsResponse) Reset() {
+	*x = UpdateConnectionCredentialsResponse{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UpdateConnectionCredentialsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UpdateConnectionCredentialsResponse) ProtoMessage() {}
+
+func (x *UpdateConnectionCredentialsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UpdateConnectionCredentialsResponse.ProtoReflect.Descriptor instead.
+func (*UpdateConnectionCredentialsResponse) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{4}
+}
+
+type RemoveConnectionRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Holder        *ConnectionHolder      `protobuf:"bytes,2,opt,name=holder,proto3" json:"holder,omitempty"`
+	Provider      string                 `protobuf:"bytes,3,opt,name=provider,proto3" json:"provider,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RemoveConnectionRequest) Reset() {
+	*x = RemoveConnectionRequest{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemoveConnectionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemoveConnectionRequest) ProtoMessage() {}
+
+func (x *RemoveConnectionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemoveConnectionRequest.ProtoReflect.Descriptor instead.
+func (*RemoveConnectionRequest) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *RemoveConnectionRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *RemoveConnectionRequest) GetHolder() *ConnectionHolder {
+	if x != nil {
+		return x.Holder
+	}
+	return nil
+}
+
+func (x *RemoveConnectionRequest) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+type RemoveConnectionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RemoveConnectionResponse) Reset() {
+	*x = RemoveConnectionResponse{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RemoveConnectionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RemoveConnectionResponse) ProtoMessage() {}
+
+func (x *RemoveConnectionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RemoveConnectionResponse.ProtoReflect.Descriptor instead.
+func (*RemoveConnectionResponse) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{6}
+}
+
+type GetSquareCredentialsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Holder        *ConnectionHolder      `protobuf:"bytes,2,opt,name=holder,proto3" json:"holder,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSquareCredentialsRequest) Reset() {
+	*x = GetSquareCredentialsRequest{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSquareCredentialsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSquareCredentialsRequest) ProtoMessage() {}
+
+func (x *GetSquareCredentialsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSquareCredentialsRequest.ProtoReflect.Descriptor instead.
+func (*GetSquareCredentialsRequest) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetSquareCredentialsRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetSquareCredentialsRequest) GetHolder() *ConnectionHolder {
+	if x != nil {
+		return x.Holder
+	}
+	return nil
+}
+
+type GetSquareCredentialsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// False when there is no Square connection, or its token ran out and couldn't be refreshed.
+	Connected       bool   `protobuf:"varint,1,opt,name=connected,proto3" json:"connected,omitempty"`
+	CredentialsJson []byte `protobuf:"bytes,2,opt,name=credentials_json,json=credentialsJson,proto3" json:"credentials_json,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *GetSquareCredentialsResponse) Reset() {
+	*x = GetSquareCredentialsResponse{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSquareCredentialsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSquareCredentialsResponse) ProtoMessage() {}
+
+func (x *GetSquareCredentialsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSquareCredentialsResponse.ProtoReflect.Descriptor instead.
+func (*GetSquareCredentialsResponse) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetSquareCredentialsResponse) GetConnected() bool {
+	if x != nil {
+		return x.Connected
+	}
+	return false
+}
+
+func (x *GetSquareCredentialsResponse) GetCredentialsJson() []byte {
+	if x != nil {
+		return x.CredentialsJson
+	}
+	return nil
+}
+
+type CompleteSquareConnectRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Holder   *ConnectionHolder      `protobuf:"bytes,2,opt,name=holder,proto3" json:"holder,omitempty"`
+	Code     string                 `protobuf:"bytes,3,opt,name=code,proto3" json:"code,omitempty"`
+	// The redirect URI the authorization was asked with.
+	RedirectUri   string `protobuf:"bytes,4,opt,name=redirect_uri,json=redirectUri,proto3" json:"redirect_uri,omitempty"`
+	Scopes        string `protobuf:"bytes,5,opt,name=scopes,proto3" json:"scopes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompleteSquareConnectRequest) Reset() {
+	*x = CompleteSquareConnectRequest{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompleteSquareConnectRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompleteSquareConnectRequest) ProtoMessage() {}
+
+func (x *CompleteSquareConnectRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompleteSquareConnectRequest.ProtoReflect.Descriptor instead.
+func (*CompleteSquareConnectRequest) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *CompleteSquareConnectRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *CompleteSquareConnectRequest) GetHolder() *ConnectionHolder {
+	if x != nil {
+		return x.Holder
+	}
+	return nil
+}
+
+func (x *CompleteSquareConnectRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *CompleteSquareConnectRequest) GetRedirectUri() string {
+	if x != nil {
+		return x.RedirectUri
+	}
+	return ""
+}
+
+func (x *CompleteSquareConnectRequest) GetScopes() string {
+	if x != nil {
+		return x.Scopes
+	}
+	return ""
+}
+
+type CompleteSquareConnectResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompleteSquareConnectResponse) Reset() {
+	*x = CompleteSquareConnectResponse{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompleteSquareConnectResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompleteSquareConnectResponse) ProtoMessage() {}
+
+func (x *CompleteSquareConnectResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompleteSquareConnectResponse.ProtoReflect.Descriptor instead.
+func (*CompleteSquareConnectResponse) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{10}
+}
+
+type CompletePayPalConnectRequest struct {
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Metadata           *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Holder             *ConnectionHolder      `protobuf:"bytes,2,opt,name=holder,proto3" json:"holder,omitempty"`
+	MerchantIdInPaypal string                 `protobuf:"bytes,3,opt,name=merchant_id_in_paypal,json=merchantIdInPaypal,proto3" json:"merchant_id_in_paypal,omitempty"`
+	// The connection link's state, which PayPal keeps as the merchant's tracking id.
+	TrackingId    string `protobuf:"bytes,4,opt,name=tracking_id,json=trackingId,proto3" json:"tracking_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompletePayPalConnectRequest) Reset() {
+	*x = CompletePayPalConnectRequest{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompletePayPalConnectRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompletePayPalConnectRequest) ProtoMessage() {}
+
+func (x *CompletePayPalConnectRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompletePayPalConnectRequest.ProtoReflect.Descriptor instead.
+func (*CompletePayPalConnectRequest) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CompletePayPalConnectRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *CompletePayPalConnectRequest) GetHolder() *ConnectionHolder {
+	if x != nil {
+		return x.Holder
+	}
+	return nil
+}
+
+func (x *CompletePayPalConnectRequest) GetMerchantIdInPaypal() string {
+	if x != nil {
+		return x.MerchantIdInPaypal
+	}
+	return ""
+}
+
+func (x *CompletePayPalConnectRequest) GetTrackingId() string {
+	if x != nil {
+		return x.TrackingId
+	}
+	return ""
+}
+
+type CompletePayPalConnectResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CompletePayPalConnectResponse) Reset() {
+	*x = CompletePayPalConnectResponse{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CompletePayPalConnectResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CompletePayPalConnectResponse) ProtoMessage() {}
+
+func (x *CompletePayPalConnectResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CompletePayPalConnectResponse.ProtoReflect.Descriptor instead.
+func (*CompletePayPalConnectResponse) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{12}
+}
+
+type DisconnectProcessorRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// stripe, square or paypal.
+	Provider      string `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DisconnectProcessorRequest) Reset() {
+	*x = DisconnectProcessorRequest{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DisconnectProcessorRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DisconnectProcessorRequest) ProtoMessage() {}
+
+func (x *DisconnectProcessorRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DisconnectProcessorRequest.ProtoReflect.Descriptor instead.
+func (*DisconnectProcessorRequest) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *DisconnectProcessorRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *DisconnectProcessorRequest) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+type DisconnectProcessorResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DisconnectProcessorResponse) Reset() {
+	*x = DisconnectProcessorResponse{}
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DisconnectProcessorResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DisconnectProcessorResponse) ProtoMessage() {}
+
+func (x *DisconnectProcessorResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DisconnectProcessorResponse.ProtoReflect.Descriptor instead.
+func (*DisconnectProcessorResponse) Descriptor() ([]byte, []int) {
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{14}
+}
+
 type FormField struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -32,7 +820,7 @@ type FormField struct {
 
 func (x *FormField) Reset() {
 	*x = FormField{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[0]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +832,7 @@ func (x *FormField) String() string {
 func (*FormField) ProtoMessage() {}
 
 func (x *FormField) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[0]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +845,7 @@ func (x *FormField) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use FormField.ProtoReflect.Descriptor instead.
 func (*FormField) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{0}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *FormField) GetName() string {
@@ -102,7 +890,7 @@ type CallStripeRequest struct {
 
 func (x *CallStripeRequest) Reset() {
 	*x = CallStripeRequest{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[1]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -114,7 +902,7 @@ func (x *CallStripeRequest) String() string {
 func (*CallStripeRequest) ProtoMessage() {}
 
 func (x *CallStripeRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[1]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -127,7 +915,7 @@ func (x *CallStripeRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallStripeRequest.ProtoReflect.Descriptor instead.
 func (*CallStripeRequest) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{1}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *CallStripeRequest) GetMetadata() *v1.RequestMetadata {
@@ -217,7 +1005,7 @@ type CallStripeResponse struct {
 
 func (x *CallStripeResponse) Reset() {
 	*x = CallStripeResponse{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[2]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -229,7 +1017,7 @@ func (x *CallStripeResponse) String() string {
 func (*CallStripeResponse) ProtoMessage() {}
 
 func (x *CallStripeResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[2]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -242,7 +1030,7 @@ func (x *CallStripeResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallStripeResponse.ProtoReflect.Descriptor instead.
 func (*CallStripeResponse) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{2}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *CallStripeResponse) GetStatus() int32 {
@@ -274,7 +1062,7 @@ type CallSquareRequest struct {
 
 func (x *CallSquareRequest) Reset() {
 	*x = CallSquareRequest{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[3]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -286,7 +1074,7 @@ func (x *CallSquareRequest) String() string {
 func (*CallSquareRequest) ProtoMessage() {}
 
 func (x *CallSquareRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[3]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -299,7 +1087,7 @@ func (x *CallSquareRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallSquareRequest.ProtoReflect.Descriptor instead.
 func (*CallSquareRequest) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{3}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *CallSquareRequest) GetMetadata() *v1.RequestMetadata {
@@ -347,7 +1135,7 @@ type CallSquareResponse struct {
 
 func (x *CallSquareResponse) Reset() {
 	*x = CallSquareResponse{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[4]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -359,7 +1147,7 @@ func (x *CallSquareResponse) String() string {
 func (*CallSquareResponse) ProtoMessage() {}
 
 func (x *CallSquareResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[4]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -372,7 +1160,7 @@ func (x *CallSquareResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallSquareResponse.ProtoReflect.Descriptor instead.
 func (*CallSquareResponse) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{4}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *CallSquareResponse) GetStatus() int32 {
@@ -407,7 +1195,7 @@ type CallPayPalRequest struct {
 
 func (x *CallPayPalRequest) Reset() {
 	*x = CallPayPalRequest{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[5]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -419,7 +1207,7 @@ func (x *CallPayPalRequest) String() string {
 func (*CallPayPalRequest) ProtoMessage() {}
 
 func (x *CallPayPalRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[5]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +1220,7 @@ func (x *CallPayPalRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallPayPalRequest.ProtoReflect.Descriptor instead.
 func (*CallPayPalRequest) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{5}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CallPayPalRequest) GetMetadata() *v1.RequestMetadata {
@@ -487,7 +1275,7 @@ type CallPayPalResponse struct {
 
 func (x *CallPayPalResponse) Reset() {
 	*x = CallPayPalResponse{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[6]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -499,7 +1287,7 @@ func (x *CallPayPalResponse) String() string {
 func (*CallPayPalResponse) ProtoMessage() {}
 
 func (x *CallPayPalResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[6]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -512,7 +1300,7 @@ func (x *CallPayPalResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallPayPalResponse.ProtoReflect.Descriptor instead.
 func (*CallPayPalResponse) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{6}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *CallPayPalResponse) GetStatus() int32 {
@@ -547,7 +1335,7 @@ type VerifyWebhookRequest struct {
 
 func (x *VerifyWebhookRequest) Reset() {
 	*x = VerifyWebhookRequest{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[7]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -559,7 +1347,7 @@ func (x *VerifyWebhookRequest) String() string {
 func (*VerifyWebhookRequest) ProtoMessage() {}
 
 func (x *VerifyWebhookRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[7]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -572,7 +1360,7 @@ func (x *VerifyWebhookRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyWebhookRequest.ProtoReflect.Descriptor instead.
 func (*VerifyWebhookRequest) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{7}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *VerifyWebhookRequest) GetMetadata() *v1.RequestMetadata {
@@ -626,7 +1414,7 @@ type VerifyWebhookResponse struct {
 
 func (x *VerifyWebhookResponse) Reset() {
 	*x = VerifyWebhookResponse{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[8]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -638,7 +1426,7 @@ func (x *VerifyWebhookResponse) String() string {
 func (*VerifyWebhookResponse) ProtoMessage() {}
 
 func (x *VerifyWebhookResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[8]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -651,7 +1439,7 @@ func (x *VerifyWebhookResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use VerifyWebhookResponse.ProtoReflect.Descriptor instead.
 func (*VerifyWebhookResponse) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{8}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *VerifyWebhookResponse) GetValid() bool {
@@ -661,6 +1449,7 @@ func (x *VerifyWebhookResponse) GetValid() bool {
 	return false
 }
 
+// With no credentials given, the engine reads the business's own connection.
 type GetPayoutStatusRequest struct {
 	state    protoimpl.MessageState `protogen:"open.v1"`
 	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
@@ -682,7 +1471,7 @@ type GetPayoutStatusRequest struct {
 
 func (x *GetPayoutStatusRequest) Reset() {
 	*x = GetPayoutStatusRequest{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[9]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -694,7 +1483,7 @@ func (x *GetPayoutStatusRequest) String() string {
 func (*GetPayoutStatusRequest) ProtoMessage() {}
 
 func (x *GetPayoutStatusRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[9]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -707,7 +1496,7 @@ func (x *GetPayoutStatusRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPayoutStatusRequest.ProtoReflect.Descriptor instead.
 func (*GetPayoutStatusRequest) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{9}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetPayoutStatusRequest) GetMetadata() *v1.RequestMetadata {
@@ -772,7 +1561,7 @@ type NextPayout struct {
 
 func (x *NextPayout) Reset() {
 	*x = NextPayout{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[10]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -784,7 +1573,7 @@ func (x *NextPayout) String() string {
 func (*NextPayout) ProtoMessage() {}
 
 func (x *NextPayout) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[10]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -797,7 +1586,7 @@ func (x *NextPayout) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use NextPayout.ProtoReflect.Descriptor instead.
 func (*NextPayout) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{10}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *NextPayout) GetAmount() float64 {
@@ -833,7 +1622,7 @@ type RecentPayout struct {
 
 func (x *RecentPayout) Reset() {
 	*x = RecentPayout{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[11]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -845,7 +1634,7 @@ func (x *RecentPayout) String() string {
 func (*RecentPayout) ProtoMessage() {}
 
 func (x *RecentPayout) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[11]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -858,7 +1647,7 @@ func (x *RecentPayout) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RecentPayout.ProtoReflect.Descriptor instead.
 func (*RecentPayout) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{11}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *RecentPayout) GetAmount() float64 {
@@ -907,7 +1696,7 @@ type GetPayoutStatusResponse struct {
 
 func (x *GetPayoutStatusResponse) Reset() {
 	*x = GetPayoutStatusResponse{}
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[12]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -919,7 +1708,7 @@ func (x *GetPayoutStatusResponse) String() string {
 func (*GetPayoutStatusResponse) ProtoMessage() {}
 
 func (x *GetPayoutStatusResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[12]
+	mi := &file_novam_finance_v1_finance_service_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -932,7 +1721,7 @@ func (x *GetPayoutStatusResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPayoutStatusResponse.ProtoReflect.Descriptor instead.
 func (*GetPayoutStatusResponse) Descriptor() ([]byte, []int) {
-	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{12}
+	return file_novam_finance_v1_finance_service_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *GetPayoutStatusResponse) GetProcessor() string {
@@ -1016,7 +1805,54 @@ var File_novam_finance_v1_finance_service_proto protoreflect.FileDescriptor
 
 const file_novam_finance_v1_finance_service_proto_rawDesc = "" +
 	"\n" +
-	"&novam/finance/v1/finance_service.proto\x12\x10novam.finance.v1\x1a\x1cnovam/common/v1/common.proto\"5\n" +
+	"&novam/finance/v1/finance_service.proto\x12\x10novam.finance.v1\x1a\x1cnovam/common/v1/common.proto\">\n" +
+	"\x10ConnectionHolder\x12*\n" +
+	"\x11renter_contact_id\x18\x01 \x01(\tR\x0frenterContactId\"\xa5\x02\n" +
+	"\x15SaveConnectionRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12:\n" +
+	"\x06holder\x18\x02 \x01(\v2\".novam.finance.v1.ConnectionHolderR\x06holder\x12\x1a\n" +
+	"\bprovider\x18\x03 \x01(\tR\bprovider\x12)\n" +
+	"\x10credentials_json\x18\x04 \x01(\fR\x0fcredentialsJson\x12\x14\n" +
+	"\x05label\x18\x05 \x01(\tR\x05label\x12\x1d\n" +
+	"\n" +
+	"keep_label\x18\x06 \x01(\bR\tkeepLabel\x12\x16\n" +
+	"\x06scopes\x18\a \x01(\tR\x06scopes\"\x18\n" +
+	"\x16SaveConnectionResponse\"\xe5\x01\n" +
+	"\"UpdateConnectionCredentialsRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12:\n" +
+	"\x06holder\x18\x02 \x01(\v2\".novam.finance.v1.ConnectionHolderR\x06holder\x12\x1a\n" +
+	"\bprovider\x18\x03 \x01(\tR\bprovider\x12)\n" +
+	"\x10credentials_json\x18\x04 \x01(\fR\x0fcredentialsJson\"%\n" +
+	"#UpdateConnectionCredentialsResponse\"\xaf\x01\n" +
+	"\x17RemoveConnectionRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12:\n" +
+	"\x06holder\x18\x02 \x01(\v2\".novam.finance.v1.ConnectionHolderR\x06holder\x12\x1a\n" +
+	"\bprovider\x18\x03 \x01(\tR\bprovider\"\x1a\n" +
+	"\x18RemoveConnectionResponse\"\x97\x01\n" +
+	"\x1bGetSquareCredentialsRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12:\n" +
+	"\x06holder\x18\x02 \x01(\v2\".novam.finance.v1.ConnectionHolderR\x06holder\"g\n" +
+	"\x1cGetSquareCredentialsResponse\x12\x1c\n" +
+	"\tconnected\x18\x01 \x01(\bR\tconnected\x12)\n" +
+	"\x10credentials_json\x18\x02 \x01(\fR\x0fcredentialsJson\"\xe7\x01\n" +
+	"\x1cCompleteSquareConnectRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12:\n" +
+	"\x06holder\x18\x02 \x01(\v2\".novam.finance.v1.ConnectionHolderR\x06holder\x12\x12\n" +
+	"\x04code\x18\x03 \x01(\tR\x04code\x12!\n" +
+	"\fredirect_uri\x18\x04 \x01(\tR\vredirectUri\x12\x16\n" +
+	"\x06scopes\x18\x05 \x01(\tR\x06scopes\"\x1f\n" +
+	"\x1dCompleteSquareConnectResponse\"\xec\x01\n" +
+	"\x1cCompletePayPalConnectRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12:\n" +
+	"\x06holder\x18\x02 \x01(\v2\".novam.finance.v1.ConnectionHolderR\x06holder\x121\n" +
+	"\x15merchant_id_in_paypal\x18\x03 \x01(\tR\x12merchantIdInPaypal\x12\x1f\n" +
+	"\vtracking_id\x18\x04 \x01(\tR\n" +
+	"trackingId\"\x1f\n" +
+	"\x1dCompletePayPalConnectResponse\"v\n" +
+	"\x1aDisconnectProcessorRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1a\n" +
+	"\bprovider\x18\x02 \x01(\tR\bprovider\"\x1d\n" +
+	"\x1bDisconnectProcessorResponse\"5\n" +
 	"\tFormField\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x14\n" +
 	"\x05value\x18\x02 \x01(\tR\x05value\"\xa3\x03\n" +
@@ -1105,7 +1941,8 @@ const file_novam_finance_v1_finance_service_proto_rawDesc = "" +
 	" \x01(\v2\x1c.novam.finance.v1.NextPayoutR\n" +
 	"nextPayout\x12E\n" +
 	"\x0erecent_payouts\x18\v \x03(\v2\x1e.novam.finance.v1.RecentPayoutR\rrecentPayoutsB\r\n" +
-	"\v_in_account2\xe5\x03\n" +
+	"\v_in_account2\xa1\n" +
+	"\n" +
 	"\x0eFinanceService\x12f\n" +
 	"\x0fGetPayoutStatus\x12(.novam.finance.v1.GetPayoutStatusRequest\x1a).novam.finance.v1.GetPayoutStatusResponse\x12W\n" +
 	"\n" +
@@ -1114,7 +1951,14 @@ const file_novam_finance_v1_finance_service_proto_rawDesc = "" +
 	"CallSquare\x12#.novam.finance.v1.CallSquareRequest\x1a$.novam.finance.v1.CallSquareResponse\x12W\n" +
 	"\n" +
 	"CallPayPal\x12#.novam.finance.v1.CallPayPalRequest\x1a$.novam.finance.v1.CallPayPalResponse\x12`\n" +
-	"\rVerifyWebhook\x12&.novam.finance.v1.VerifyWebhookRequest\x1a'.novam.finance.v1.VerifyWebhookResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/finance/v1;financev1b\x06proto3"
+	"\rVerifyWebhook\x12&.novam.finance.v1.VerifyWebhookRequest\x1a'.novam.finance.v1.VerifyWebhookResponse\x12c\n" +
+	"\x0eSaveConnection\x12'.novam.finance.v1.SaveConnectionRequest\x1a(.novam.finance.v1.SaveConnectionResponse\x12\x8a\x01\n" +
+	"\x1bUpdateConnectionCredentials\x124.novam.finance.v1.UpdateConnectionCredentialsRequest\x1a5.novam.finance.v1.UpdateConnectionCredentialsResponse\x12i\n" +
+	"\x10RemoveConnection\x12).novam.finance.v1.RemoveConnectionRequest\x1a*.novam.finance.v1.RemoveConnectionResponse\x12u\n" +
+	"\x14GetSquareCredentials\x12-.novam.finance.v1.GetSquareCredentialsRequest\x1a..novam.finance.v1.GetSquareCredentialsResponse\x12x\n" +
+	"\x15CompleteSquareConnect\x12..novam.finance.v1.CompleteSquareConnectRequest\x1a/.novam.finance.v1.CompleteSquareConnectResponse\x12x\n" +
+	"\x15CompletePayPalConnect\x12..novam.finance.v1.CompletePayPalConnectRequest\x1a/.novam.finance.v1.CompletePayPalConnectResponse\x12r\n" +
+	"\x13DisconnectProcessor\x12,.novam.finance.v1.DisconnectProcessorRequest\x1a-.novam.finance.v1.DisconnectProcessorResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/finance/v1;financev1b\x06proto3"
 
 var (
 	file_novam_finance_v1_finance_service_proto_rawDescOnce sync.Once
@@ -1128,48 +1972,90 @@ func file_novam_finance_v1_finance_service_proto_rawDescGZIP() []byte {
 	return file_novam_finance_v1_finance_service_proto_rawDescData
 }
 
-var file_novam_finance_v1_finance_service_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_novam_finance_v1_finance_service_proto_msgTypes = make([]protoimpl.MessageInfo, 28)
 var file_novam_finance_v1_finance_service_proto_goTypes = []any{
-	(*FormField)(nil),               // 0: novam.finance.v1.FormField
-	(*CallStripeRequest)(nil),       // 1: novam.finance.v1.CallStripeRequest
-	(*CallStripeResponse)(nil),      // 2: novam.finance.v1.CallStripeResponse
-	(*CallSquareRequest)(nil),       // 3: novam.finance.v1.CallSquareRequest
-	(*CallSquareResponse)(nil),      // 4: novam.finance.v1.CallSquareResponse
-	(*CallPayPalRequest)(nil),       // 5: novam.finance.v1.CallPayPalRequest
-	(*CallPayPalResponse)(nil),      // 6: novam.finance.v1.CallPayPalResponse
-	(*VerifyWebhookRequest)(nil),    // 7: novam.finance.v1.VerifyWebhookRequest
-	(*VerifyWebhookResponse)(nil),   // 8: novam.finance.v1.VerifyWebhookResponse
-	(*GetPayoutStatusRequest)(nil),  // 9: novam.finance.v1.GetPayoutStatusRequest
-	(*NextPayout)(nil),              // 10: novam.finance.v1.NextPayout
-	(*RecentPayout)(nil),            // 11: novam.finance.v1.RecentPayout
-	(*GetPayoutStatusResponse)(nil), // 12: novam.finance.v1.GetPayoutStatusResponse
-	(*v1.RequestMetadata)(nil),      // 13: novam.common.v1.RequestMetadata
+	(*ConnectionHolder)(nil),                    // 0: novam.finance.v1.ConnectionHolder
+	(*SaveConnectionRequest)(nil),               // 1: novam.finance.v1.SaveConnectionRequest
+	(*SaveConnectionResponse)(nil),              // 2: novam.finance.v1.SaveConnectionResponse
+	(*UpdateConnectionCredentialsRequest)(nil),  // 3: novam.finance.v1.UpdateConnectionCredentialsRequest
+	(*UpdateConnectionCredentialsResponse)(nil), // 4: novam.finance.v1.UpdateConnectionCredentialsResponse
+	(*RemoveConnectionRequest)(nil),             // 5: novam.finance.v1.RemoveConnectionRequest
+	(*RemoveConnectionResponse)(nil),            // 6: novam.finance.v1.RemoveConnectionResponse
+	(*GetSquareCredentialsRequest)(nil),         // 7: novam.finance.v1.GetSquareCredentialsRequest
+	(*GetSquareCredentialsResponse)(nil),        // 8: novam.finance.v1.GetSquareCredentialsResponse
+	(*CompleteSquareConnectRequest)(nil),        // 9: novam.finance.v1.CompleteSquareConnectRequest
+	(*CompleteSquareConnectResponse)(nil),       // 10: novam.finance.v1.CompleteSquareConnectResponse
+	(*CompletePayPalConnectRequest)(nil),        // 11: novam.finance.v1.CompletePayPalConnectRequest
+	(*CompletePayPalConnectResponse)(nil),       // 12: novam.finance.v1.CompletePayPalConnectResponse
+	(*DisconnectProcessorRequest)(nil),          // 13: novam.finance.v1.DisconnectProcessorRequest
+	(*DisconnectProcessorResponse)(nil),         // 14: novam.finance.v1.DisconnectProcessorResponse
+	(*FormField)(nil),                           // 15: novam.finance.v1.FormField
+	(*CallStripeRequest)(nil),                   // 16: novam.finance.v1.CallStripeRequest
+	(*CallStripeResponse)(nil),                  // 17: novam.finance.v1.CallStripeResponse
+	(*CallSquareRequest)(nil),                   // 18: novam.finance.v1.CallSquareRequest
+	(*CallSquareResponse)(nil),                  // 19: novam.finance.v1.CallSquareResponse
+	(*CallPayPalRequest)(nil),                   // 20: novam.finance.v1.CallPayPalRequest
+	(*CallPayPalResponse)(nil),                  // 21: novam.finance.v1.CallPayPalResponse
+	(*VerifyWebhookRequest)(nil),                // 22: novam.finance.v1.VerifyWebhookRequest
+	(*VerifyWebhookResponse)(nil),               // 23: novam.finance.v1.VerifyWebhookResponse
+	(*GetPayoutStatusRequest)(nil),              // 24: novam.finance.v1.GetPayoutStatusRequest
+	(*NextPayout)(nil),                          // 25: novam.finance.v1.NextPayout
+	(*RecentPayout)(nil),                        // 26: novam.finance.v1.RecentPayout
+	(*GetPayoutStatusResponse)(nil),             // 27: novam.finance.v1.GetPayoutStatusResponse
+	(*v1.RequestMetadata)(nil),                  // 28: novam.common.v1.RequestMetadata
 }
 var file_novam_finance_v1_finance_service_proto_depIdxs = []int32{
-	13, // 0: novam.finance.v1.CallStripeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 1: novam.finance.v1.CallStripeRequest.query:type_name -> novam.finance.v1.FormField
-	0,  // 2: novam.finance.v1.CallStripeRequest.form:type_name -> novam.finance.v1.FormField
-	13, // 3: novam.finance.v1.CallSquareRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	13, // 4: novam.finance.v1.CallPayPalRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	13, // 5: novam.finance.v1.VerifyWebhookRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	13, // 6: novam.finance.v1.GetPayoutStatusRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	10, // 7: novam.finance.v1.GetPayoutStatusResponse.next_payout:type_name -> novam.finance.v1.NextPayout
-	11, // 8: novam.finance.v1.GetPayoutStatusResponse.recent_payouts:type_name -> novam.finance.v1.RecentPayout
-	9,  // 9: novam.finance.v1.FinanceService.GetPayoutStatus:input_type -> novam.finance.v1.GetPayoutStatusRequest
-	1,  // 10: novam.finance.v1.FinanceService.CallStripe:input_type -> novam.finance.v1.CallStripeRequest
-	3,  // 11: novam.finance.v1.FinanceService.CallSquare:input_type -> novam.finance.v1.CallSquareRequest
-	5,  // 12: novam.finance.v1.FinanceService.CallPayPal:input_type -> novam.finance.v1.CallPayPalRequest
-	7,  // 13: novam.finance.v1.FinanceService.VerifyWebhook:input_type -> novam.finance.v1.VerifyWebhookRequest
-	12, // 14: novam.finance.v1.FinanceService.GetPayoutStatus:output_type -> novam.finance.v1.GetPayoutStatusResponse
-	2,  // 15: novam.finance.v1.FinanceService.CallStripe:output_type -> novam.finance.v1.CallStripeResponse
-	4,  // 16: novam.finance.v1.FinanceService.CallSquare:output_type -> novam.finance.v1.CallSquareResponse
-	6,  // 17: novam.finance.v1.FinanceService.CallPayPal:output_type -> novam.finance.v1.CallPayPalResponse
-	8,  // 18: novam.finance.v1.FinanceService.VerifyWebhook:output_type -> novam.finance.v1.VerifyWebhookResponse
-	14, // [14:19] is the sub-list for method output_type
-	9,  // [9:14] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	28, // 0: novam.finance.v1.SaveConnectionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 1: novam.finance.v1.SaveConnectionRequest.holder:type_name -> novam.finance.v1.ConnectionHolder
+	28, // 2: novam.finance.v1.UpdateConnectionCredentialsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 3: novam.finance.v1.UpdateConnectionCredentialsRequest.holder:type_name -> novam.finance.v1.ConnectionHolder
+	28, // 4: novam.finance.v1.RemoveConnectionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 5: novam.finance.v1.RemoveConnectionRequest.holder:type_name -> novam.finance.v1.ConnectionHolder
+	28, // 6: novam.finance.v1.GetSquareCredentialsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 7: novam.finance.v1.GetSquareCredentialsRequest.holder:type_name -> novam.finance.v1.ConnectionHolder
+	28, // 8: novam.finance.v1.CompleteSquareConnectRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 9: novam.finance.v1.CompleteSquareConnectRequest.holder:type_name -> novam.finance.v1.ConnectionHolder
+	28, // 10: novam.finance.v1.CompletePayPalConnectRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 11: novam.finance.v1.CompletePayPalConnectRequest.holder:type_name -> novam.finance.v1.ConnectionHolder
+	28, // 12: novam.finance.v1.DisconnectProcessorRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	28, // 13: novam.finance.v1.CallStripeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	15, // 14: novam.finance.v1.CallStripeRequest.query:type_name -> novam.finance.v1.FormField
+	15, // 15: novam.finance.v1.CallStripeRequest.form:type_name -> novam.finance.v1.FormField
+	28, // 16: novam.finance.v1.CallSquareRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	28, // 17: novam.finance.v1.CallPayPalRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	28, // 18: novam.finance.v1.VerifyWebhookRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	28, // 19: novam.finance.v1.GetPayoutStatusRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	25, // 20: novam.finance.v1.GetPayoutStatusResponse.next_payout:type_name -> novam.finance.v1.NextPayout
+	26, // 21: novam.finance.v1.GetPayoutStatusResponse.recent_payouts:type_name -> novam.finance.v1.RecentPayout
+	24, // 22: novam.finance.v1.FinanceService.GetPayoutStatus:input_type -> novam.finance.v1.GetPayoutStatusRequest
+	16, // 23: novam.finance.v1.FinanceService.CallStripe:input_type -> novam.finance.v1.CallStripeRequest
+	18, // 24: novam.finance.v1.FinanceService.CallSquare:input_type -> novam.finance.v1.CallSquareRequest
+	20, // 25: novam.finance.v1.FinanceService.CallPayPal:input_type -> novam.finance.v1.CallPayPalRequest
+	22, // 26: novam.finance.v1.FinanceService.VerifyWebhook:input_type -> novam.finance.v1.VerifyWebhookRequest
+	1,  // 27: novam.finance.v1.FinanceService.SaveConnection:input_type -> novam.finance.v1.SaveConnectionRequest
+	3,  // 28: novam.finance.v1.FinanceService.UpdateConnectionCredentials:input_type -> novam.finance.v1.UpdateConnectionCredentialsRequest
+	5,  // 29: novam.finance.v1.FinanceService.RemoveConnection:input_type -> novam.finance.v1.RemoveConnectionRequest
+	7,  // 30: novam.finance.v1.FinanceService.GetSquareCredentials:input_type -> novam.finance.v1.GetSquareCredentialsRequest
+	9,  // 31: novam.finance.v1.FinanceService.CompleteSquareConnect:input_type -> novam.finance.v1.CompleteSquareConnectRequest
+	11, // 32: novam.finance.v1.FinanceService.CompletePayPalConnect:input_type -> novam.finance.v1.CompletePayPalConnectRequest
+	13, // 33: novam.finance.v1.FinanceService.DisconnectProcessor:input_type -> novam.finance.v1.DisconnectProcessorRequest
+	27, // 34: novam.finance.v1.FinanceService.GetPayoutStatus:output_type -> novam.finance.v1.GetPayoutStatusResponse
+	17, // 35: novam.finance.v1.FinanceService.CallStripe:output_type -> novam.finance.v1.CallStripeResponse
+	19, // 36: novam.finance.v1.FinanceService.CallSquare:output_type -> novam.finance.v1.CallSquareResponse
+	21, // 37: novam.finance.v1.FinanceService.CallPayPal:output_type -> novam.finance.v1.CallPayPalResponse
+	23, // 38: novam.finance.v1.FinanceService.VerifyWebhook:output_type -> novam.finance.v1.VerifyWebhookResponse
+	2,  // 39: novam.finance.v1.FinanceService.SaveConnection:output_type -> novam.finance.v1.SaveConnectionResponse
+	4,  // 40: novam.finance.v1.FinanceService.UpdateConnectionCredentials:output_type -> novam.finance.v1.UpdateConnectionCredentialsResponse
+	6,  // 41: novam.finance.v1.FinanceService.RemoveConnection:output_type -> novam.finance.v1.RemoveConnectionResponse
+	8,  // 42: novam.finance.v1.FinanceService.GetSquareCredentials:output_type -> novam.finance.v1.GetSquareCredentialsResponse
+	10, // 43: novam.finance.v1.FinanceService.CompleteSquareConnect:output_type -> novam.finance.v1.CompleteSquareConnectResponse
+	12, // 44: novam.finance.v1.FinanceService.CompletePayPalConnect:output_type -> novam.finance.v1.CompletePayPalConnectResponse
+	14, // 45: novam.finance.v1.FinanceService.DisconnectProcessor:output_type -> novam.finance.v1.DisconnectProcessorResponse
+	34, // [34:46] is the sub-list for method output_type
+	22, // [22:34] is the sub-list for method input_type
+	22, // [22:22] is the sub-list for extension type_name
+	22, // [22:22] is the sub-list for extension extendee
+	0,  // [0:22] is the sub-list for field type_name
 }
 
 func init() { file_novam_finance_v1_finance_service_proto_init() }
@@ -1177,14 +2063,14 @@ func file_novam_finance_v1_finance_service_proto_init() {
 	if File_novam_finance_v1_finance_service_proto != nil {
 		return
 	}
-	file_novam_finance_v1_finance_service_proto_msgTypes[12].OneofWrappers = []any{}
+	file_novam_finance_v1_finance_service_proto_msgTypes[27].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_finance_v1_finance_service_proto_rawDesc), len(file_novam_finance_v1_finance_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   28,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

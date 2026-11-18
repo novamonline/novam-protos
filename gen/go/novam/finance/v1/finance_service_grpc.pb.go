@@ -19,11 +19,18 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	FinanceService_GetPayoutStatus_FullMethodName = "/novam.finance.v1.FinanceService/GetPayoutStatus"
-	FinanceService_CallStripe_FullMethodName      = "/novam.finance.v1.FinanceService/CallStripe"
-	FinanceService_CallSquare_FullMethodName      = "/novam.finance.v1.FinanceService/CallSquare"
-	FinanceService_CallPayPal_FullMethodName      = "/novam.finance.v1.FinanceService/CallPayPal"
-	FinanceService_VerifyWebhook_FullMethodName   = "/novam.finance.v1.FinanceService/VerifyWebhook"
+	FinanceService_GetPayoutStatus_FullMethodName             = "/novam.finance.v1.FinanceService/GetPayoutStatus"
+	FinanceService_CallStripe_FullMethodName                  = "/novam.finance.v1.FinanceService/CallStripe"
+	FinanceService_CallSquare_FullMethodName                  = "/novam.finance.v1.FinanceService/CallSquare"
+	FinanceService_CallPayPal_FullMethodName                  = "/novam.finance.v1.FinanceService/CallPayPal"
+	FinanceService_VerifyWebhook_FullMethodName               = "/novam.finance.v1.FinanceService/VerifyWebhook"
+	FinanceService_SaveConnection_FullMethodName              = "/novam.finance.v1.FinanceService/SaveConnection"
+	FinanceService_UpdateConnectionCredentials_FullMethodName = "/novam.finance.v1.FinanceService/UpdateConnectionCredentials"
+	FinanceService_RemoveConnection_FullMethodName            = "/novam.finance.v1.FinanceService/RemoveConnection"
+	FinanceService_GetSquareCredentials_FullMethodName        = "/novam.finance.v1.FinanceService/GetSquareCredentials"
+	FinanceService_CompleteSquareConnect_FullMethodName       = "/novam.finance.v1.FinanceService/CompleteSquareConnect"
+	FinanceService_CompletePayPalConnect_FullMethodName       = "/novam.finance.v1.FinanceService/CompletePayPalConnect"
+	FinanceService_DisconnectProcessor_FullMethodName         = "/novam.finance.v1.FinanceService/DisconnectProcessor"
 )
 
 // FinanceServiceClient is the client API for FinanceService service.
@@ -31,9 +38,10 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 //
 // FinanceService runs in novam-engine's workflows server and makes the calls to card processors (Stripe, Square,
-// PayPal) on a business's own account. novam-data keeps every connection's credentials, refreshes them and does every
-// write; it passes what a call needs and the engine stores nothing. A processor the engine isn't set up for answers
-// UNAVAILABLE, so novam-data makes the call itself.
+// PayPal) on a business's own account. It also keeps the connections (ADR-0009): it stores a business's or a renter's
+// credentials, encrypted with ENCRYPTION_KEY as novam-data encrypts them, refreshes Square's tokens and removes a
+// connection. A processor the engine isn't set up for, or a connection it can't decrypt, answers UNAVAILABLE, so
+// novam-data does that work itself.
 type FinanceServiceClient interface {
 	// Where the business's card money is: on its way to the bank, still processing, or on hold, read from its own
 	// processor account. A processor that can't be read just now comes back with readable false.
@@ -50,6 +58,21 @@ type FinanceServiceClient interface {
 	CallPayPal(ctx context.Context, in *CallPayPalRequest, opts ...grpc.CallOption) (*CallPayPalResponse, error)
 	// Whether a Stripe or Square webhook is signed by one of the secrets given, over its raw body.
 	VerifyWebhook(ctx context.Context, in *VerifyWebhookRequest, opts ...grpc.CallOption) (*VerifyWebhookResponse, error)
+	// Stores (or replaces) a connection's credentials, and tells the business's open screens.
+	SaveConnection(ctx context.Context, in *SaveConnectionRequest, opts ...grpc.CallOption) (*SaveConnectionResponse, error)
+	// Replaces just a connection's credentials, keeping when it was connected.
+	UpdateConnectionCredentials(ctx context.Context, in *UpdateConnectionCredentialsRequest, opts ...grpc.CallOption) (*UpdateConnectionCredentialsResponse, error)
+	// Removes a connection here (not at the processor).
+	RemoveConnection(ctx context.Context, in *RemoveConnectionRequest, opts ...grpc.CallOption) (*RemoveConnectionResponse, error)
+	// A Square connection's credentials, refreshed first under the connection's row lock when the access token runs out
+	// within a day, so two callers never both spend its refresh token.
+	GetSquareCredentials(ctx context.Context, in *GetSquareCredentialsRequest, opts ...grpc.CallOption) (*GetSquareCredentialsResponse, error)
+	// Finishes Square OAuth: trades the code for tokens and stores them with the main location.
+	CompleteSquareConnect(ctx context.Context, in *CompleteSquareConnectRequest, opts ...grpc.CallOption) (*CompleteSquareConnectResponse, error)
+	// Finishes PayPal onboarding: checks with PayPal that the merchant came from this referral, then stores it.
+	CompletePayPalConnect(ctx context.Context, in *CompletePayPalConnectRequest, opts ...grpc.CallOption) (*CompletePayPalConnectResponse, error)
+	// Disconnects the business's processor: lets go of Novam's access at Square, then removes the connection.
+	DisconnectProcessor(ctx context.Context, in *DisconnectProcessorRequest, opts ...grpc.CallOption) (*DisconnectProcessorResponse, error)
 }
 
 type financeServiceClient struct {
@@ -110,14 +133,85 @@ func (c *financeServiceClient) VerifyWebhook(ctx context.Context, in *VerifyWebh
 	return out, nil
 }
 
+func (c *financeServiceClient) SaveConnection(ctx context.Context, in *SaveConnectionRequest, opts ...grpc.CallOption) (*SaveConnectionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SaveConnectionResponse)
+	err := c.cc.Invoke(ctx, FinanceService_SaveConnection_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) UpdateConnectionCredentials(ctx context.Context, in *UpdateConnectionCredentialsRequest, opts ...grpc.CallOption) (*UpdateConnectionCredentialsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateConnectionCredentialsResponse)
+	err := c.cc.Invoke(ctx, FinanceService_UpdateConnectionCredentials_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) RemoveConnection(ctx context.Context, in *RemoveConnectionRequest, opts ...grpc.CallOption) (*RemoveConnectionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RemoveConnectionResponse)
+	err := c.cc.Invoke(ctx, FinanceService_RemoveConnection_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) GetSquareCredentials(ctx context.Context, in *GetSquareCredentialsRequest, opts ...grpc.CallOption) (*GetSquareCredentialsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSquareCredentialsResponse)
+	err := c.cc.Invoke(ctx, FinanceService_GetSquareCredentials_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) CompleteSquareConnect(ctx context.Context, in *CompleteSquareConnectRequest, opts ...grpc.CallOption) (*CompleteSquareConnectResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CompleteSquareConnectResponse)
+	err := c.cc.Invoke(ctx, FinanceService_CompleteSquareConnect_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) CompletePayPalConnect(ctx context.Context, in *CompletePayPalConnectRequest, opts ...grpc.CallOption) (*CompletePayPalConnectResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CompletePayPalConnectResponse)
+	err := c.cc.Invoke(ctx, FinanceService_CompletePayPalConnect_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) DisconnectProcessor(ctx context.Context, in *DisconnectProcessorRequest, opts ...grpc.CallOption) (*DisconnectProcessorResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DisconnectProcessorResponse)
+	err := c.cc.Invoke(ctx, FinanceService_DisconnectProcessor_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FinanceServiceServer is the server API for FinanceService service.
 // All implementations must embed UnimplementedFinanceServiceServer
 // for forward compatibility.
 //
 // FinanceService runs in novam-engine's workflows server and makes the calls to card processors (Stripe, Square,
-// PayPal) on a business's own account. novam-data keeps every connection's credentials, refreshes them and does every
-// write; it passes what a call needs and the engine stores nothing. A processor the engine isn't set up for answers
-// UNAVAILABLE, so novam-data makes the call itself.
+// PayPal) on a business's own account. It also keeps the connections (ADR-0009): it stores a business's or a renter's
+// credentials, encrypted with ENCRYPTION_KEY as novam-data encrypts them, refreshes Square's tokens and removes a
+// connection. A processor the engine isn't set up for, or a connection it can't decrypt, answers UNAVAILABLE, so
+// novam-data does that work itself.
 type FinanceServiceServer interface {
 	// Where the business's card money is: on its way to the bank, still processing, or on hold, read from its own
 	// processor account. A processor that can't be read just now comes back with readable false.
@@ -134,6 +228,21 @@ type FinanceServiceServer interface {
 	CallPayPal(context.Context, *CallPayPalRequest) (*CallPayPalResponse, error)
 	// Whether a Stripe or Square webhook is signed by one of the secrets given, over its raw body.
 	VerifyWebhook(context.Context, *VerifyWebhookRequest) (*VerifyWebhookResponse, error)
+	// Stores (or replaces) a connection's credentials, and tells the business's open screens.
+	SaveConnection(context.Context, *SaveConnectionRequest) (*SaveConnectionResponse, error)
+	// Replaces just a connection's credentials, keeping when it was connected.
+	UpdateConnectionCredentials(context.Context, *UpdateConnectionCredentialsRequest) (*UpdateConnectionCredentialsResponse, error)
+	// Removes a connection here (not at the processor).
+	RemoveConnection(context.Context, *RemoveConnectionRequest) (*RemoveConnectionResponse, error)
+	// A Square connection's credentials, refreshed first under the connection's row lock when the access token runs out
+	// within a day, so two callers never both spend its refresh token.
+	GetSquareCredentials(context.Context, *GetSquareCredentialsRequest) (*GetSquareCredentialsResponse, error)
+	// Finishes Square OAuth: trades the code for tokens and stores them with the main location.
+	CompleteSquareConnect(context.Context, *CompleteSquareConnectRequest) (*CompleteSquareConnectResponse, error)
+	// Finishes PayPal onboarding: checks with PayPal that the merchant came from this referral, then stores it.
+	CompletePayPalConnect(context.Context, *CompletePayPalConnectRequest) (*CompletePayPalConnectResponse, error)
+	// Disconnects the business's processor: lets go of Novam's access at Square, then removes the connection.
+	DisconnectProcessor(context.Context, *DisconnectProcessorRequest) (*DisconnectProcessorResponse, error)
 	mustEmbedUnimplementedFinanceServiceServer()
 }
 
@@ -158,6 +267,27 @@ func (UnimplementedFinanceServiceServer) CallPayPal(context.Context, *CallPayPal
 }
 func (UnimplementedFinanceServiceServer) VerifyWebhook(context.Context, *VerifyWebhookRequest) (*VerifyWebhookResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method VerifyWebhook not implemented")
+}
+func (UnimplementedFinanceServiceServer) SaveConnection(context.Context, *SaveConnectionRequest) (*SaveConnectionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SaveConnection not implemented")
+}
+func (UnimplementedFinanceServiceServer) UpdateConnectionCredentials(context.Context, *UpdateConnectionCredentialsRequest) (*UpdateConnectionCredentialsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UpdateConnectionCredentials not implemented")
+}
+func (UnimplementedFinanceServiceServer) RemoveConnection(context.Context, *RemoveConnectionRequest) (*RemoveConnectionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemoveConnection not implemented")
+}
+func (UnimplementedFinanceServiceServer) GetSquareCredentials(context.Context, *GetSquareCredentialsRequest) (*GetSquareCredentialsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSquareCredentials not implemented")
+}
+func (UnimplementedFinanceServiceServer) CompleteSquareConnect(context.Context, *CompleteSquareConnectRequest) (*CompleteSquareConnectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CompleteSquareConnect not implemented")
+}
+func (UnimplementedFinanceServiceServer) CompletePayPalConnect(context.Context, *CompletePayPalConnectRequest) (*CompletePayPalConnectResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CompletePayPalConnect not implemented")
+}
+func (UnimplementedFinanceServiceServer) DisconnectProcessor(context.Context, *DisconnectProcessorRequest) (*DisconnectProcessorResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DisconnectProcessor not implemented")
 }
 func (UnimplementedFinanceServiceServer) mustEmbedUnimplementedFinanceServiceServer() {}
 func (UnimplementedFinanceServiceServer) testEmbeddedByValue()                        {}
@@ -270,6 +400,132 @@ func _FinanceService_VerifyWebhook_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FinanceService_SaveConnection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SaveConnectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).SaveConnection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_SaveConnection_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).SaveConnection(ctx, req.(*SaveConnectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_UpdateConnectionCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateConnectionCredentialsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).UpdateConnectionCredentials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_UpdateConnectionCredentials_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).UpdateConnectionCredentials(ctx, req.(*UpdateConnectionCredentialsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_RemoveConnection_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RemoveConnectionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).RemoveConnection(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_RemoveConnection_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).RemoveConnection(ctx, req.(*RemoveConnectionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_GetSquareCredentials_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSquareCredentialsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).GetSquareCredentials(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_GetSquareCredentials_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).GetSquareCredentials(ctx, req.(*GetSquareCredentialsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_CompleteSquareConnect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompleteSquareConnectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).CompleteSquareConnect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_CompleteSquareConnect_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).CompleteSquareConnect(ctx, req.(*CompleteSquareConnectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_CompletePayPalConnect_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CompletePayPalConnectRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).CompletePayPalConnect(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_CompletePayPalConnect_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).CompletePayPalConnect(ctx, req.(*CompletePayPalConnectRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_DisconnectProcessor_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DisconnectProcessorRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).DisconnectProcessor(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_DisconnectProcessor_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).DisconnectProcessor(ctx, req.(*DisconnectProcessorRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FinanceService_ServiceDesc is the grpc.ServiceDesc for FinanceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -296,6 +552,34 @@ var FinanceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "VerifyWebhook",
 			Handler:    _FinanceService_VerifyWebhook_Handler,
+		},
+		{
+			MethodName: "SaveConnection",
+			Handler:    _FinanceService_SaveConnection_Handler,
+		},
+		{
+			MethodName: "UpdateConnectionCredentials",
+			Handler:    _FinanceService_UpdateConnectionCredentials_Handler,
+		},
+		{
+			MethodName: "RemoveConnection",
+			Handler:    _FinanceService_RemoveConnection_Handler,
+		},
+		{
+			MethodName: "GetSquareCredentials",
+			Handler:    _FinanceService_GetSquareCredentials_Handler,
+		},
+		{
+			MethodName: "CompleteSquareConnect",
+			Handler:    _FinanceService_CompleteSquareConnect_Handler,
+		},
+		{
+			MethodName: "CompletePayPalConnect",
+			Handler:    _FinanceService_CompletePayPalConnect_Handler,
+		},
+		{
+			MethodName: "DisconnectProcessor",
+			Handler:    _FinanceService_DisconnectProcessor_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -7,9 +7,10 @@ import "novam/common/v1/common.proto";
 option go_package = "github.com/novamonline/novam-protos/gen/go/novam/finance/v1;financev1";
 
 // FinanceService runs in novam-engine's workflows server and makes the calls to card processors (Stripe, Square,
-// PayPal) on a business's own account. novam-data keeps every connection's credentials, refreshes them and does every
-// write; it passes what a call needs and the engine stores nothing. A processor the engine isn't set up for answers
-// UNAVAILABLE, so novam-data makes the call itself.
+// PayPal) on a business's own account. It also keeps the connections (ADR-0009): it stores a business's or a renter's
+// credentials, encrypted with ENCRYPTION_KEY as novam-data encrypts them, refreshes Square's tokens and removes a
+// connection. A processor the engine isn't set up for, or a connection it can't decrypt, answers UNAVAILABLE, so
+// novam-data does that work itself.
 service FinanceService {
   // Where the business's card money is: on its way to the bank, still processing, or on hold, read from its own
   // processor account. A processor that can't be read just now comes back with readable false.
@@ -26,7 +27,99 @@ service FinanceService {
   rpc CallPayPal(CallPayPalRequest) returns (CallPayPalResponse);
   // Whether a Stripe or Square webhook is signed by one of the secrets given, over its raw body.
   rpc VerifyWebhook(VerifyWebhookRequest) returns (VerifyWebhookResponse);
+  // Stores (or replaces) a connection's credentials, and tells the business's open screens.
+  rpc SaveConnection(SaveConnectionRequest) returns (SaveConnectionResponse);
+  // Replaces just a connection's credentials, keeping when it was connected.
+  rpc UpdateConnectionCredentials(UpdateConnectionCredentialsRequest) returns (UpdateConnectionCredentialsResponse);
+  // Removes a connection here (not at the processor).
+  rpc RemoveConnection(RemoveConnectionRequest) returns (RemoveConnectionResponse);
+  // A Square connection's credentials, refreshed first under the connection's row lock when the access token runs out
+  // within a day, so two callers never both spend its refresh token.
+  rpc GetSquareCredentials(GetSquareCredentialsRequest) returns (GetSquareCredentialsResponse);
+  // Finishes Square OAuth: trades the code for tokens and stores them with the main location.
+  rpc CompleteSquareConnect(CompleteSquareConnectRequest) returns (CompleteSquareConnectResponse);
+  // Finishes PayPal onboarding: checks with PayPal that the merchant came from this referral, then stores it.
+  rpc CompletePayPalConnect(CompletePayPalConnectRequest) returns (CompletePayPalConnectResponse);
+  // Disconnects the business's processor: lets go of Novam's access at Square, then removes the connection.
+  rpc DisconnectProcessor(DisconnectProcessorRequest) returns (DisconnectProcessorResponse);
 }
+
+// Whose connection, at the business in the call's token: the business's own, or one of its renters' (their contact).
+message ConnectionHolder {
+  string renter_contact_id = 1;
+}
+
+message SaveConnectionRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ConnectionHolder holder = 2;
+  string provider = 3;
+  // The credentials as JSON, stored encrypted.
+  bytes credentials_json = 4;
+  // The account's name to show; empty for none.
+  string label = 5;
+  // Keep the label the connection has instead of label.
+  bool keep_label = 6;
+  string scopes = 7;
+}
+
+message SaveConnectionResponse {}
+
+message UpdateConnectionCredentialsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ConnectionHolder holder = 2;
+  string provider = 3;
+  bytes credentials_json = 4;
+}
+
+message UpdateConnectionCredentialsResponse {}
+
+message RemoveConnectionRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ConnectionHolder holder = 2;
+  string provider = 3;
+}
+
+message RemoveConnectionResponse {}
+
+message GetSquareCredentialsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ConnectionHolder holder = 2;
+}
+
+message GetSquareCredentialsResponse {
+  // False when there is no Square connection, or its token ran out and couldn't be refreshed.
+  bool connected = 1;
+  bytes credentials_json = 2;
+}
+
+message CompleteSquareConnectRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ConnectionHolder holder = 2;
+  string code = 3;
+  // The redirect URI the authorization was asked with.
+  string redirect_uri = 4;
+  string scopes = 5;
+}
+
+message CompleteSquareConnectResponse {}
+
+message CompletePayPalConnectRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ConnectionHolder holder = 2;
+  string merchant_id_in_paypal = 3;
+  // The connection link's state, which PayPal keeps as the merchant's tracking id.
+  string tracking_id = 4;
+}
+
+message CompletePayPalConnectResponse {}
+
+message DisconnectProcessorRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // stripe, square or paypal.
+  string provider = 2;
+}
+
+message DisconnectProcessorResponse {}
 
 message FormField {
   string name = 1;
@@ -111,6 +204,7 @@ message VerifyWebhookResponse {
   bool valid = 1;
 }
 
+// With no credentials given, the engine reads the business's own connection.
 message GetPayoutStatusRequest {
   novam.common.v1.RequestMetadata metadata = 1;
   // stripe, square or paypal.
