@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package novam.connectors.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/connectors/v1;connectorsv1";
+
+// ConnectorsService runs in novam-engine's workflows server. It reaches the hosts businesses name (iCal feeds, their
+// sites, webhook endpoints, data sources), so novam-data, the gateway, never opens a socket to one.
+service ConnectorsService {
+  // One request to a URL a business gave. Only public addresses are reached: every address the host resolves to is
+  // checked, the connection goes only to an address checked as it connects, and each redirect is checked again.
+  // FAILED_PRECONDITION: a private or unresolvable host, a body over max_bytes, too many redirects. INVALID_ARGUMENT:
+  // not an http or https URL. ABORTED: the host couldn't be reached or didn't answer in time.
+  rpc Fetch(FetchRequest) returns (FetchResponse);
+}
+
+message FetchRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string url = 2;
+  // GET when empty.
+  string method = 3;
+  map<string, string> headers = 4;
+  bytes body = 5;
+  // 15 seconds when 0.
+  int32 timeout_ms = 6;
+  // 5 MB when 0.
+  int32 max_bytes = 7;
+  // Answer a redirect as it is instead of following it.
+  bool no_redirects = 8;
+}
+
+message Header {
+  string name = 1;
+  string value = 2;
+}
+
+message FetchResponse {
+  int32 status = 1;
+  // In the order they came; a name may repeat.
+  repeated Header headers = 2;
+  bytes body = 3;
+  // The URL that answered, after any redirects.
+  string url = 4;
+  int32 elapsed_ms = 5;
+}
