@@ -73,4 +73,7 @@ message RunActionRequest {
   google.protobuf.Struct args = 5;
 }
 
-message RunActionResponse {}
+message RunActionResponse {
+  // What the action hands back, for the few that make something only they can tell (a new API key's secret).
+  google.protobuf.Struct result = 1;
+}

@@ -513,7 +513,9 @@ func (x *RunActionRequest) GetArgs() *structpb.Struct {
 }
 
 type RunActionResponse struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// What the action hands back, for the few that make something only they can tell (a new API key's secret).
+	Result        *structpb.Struct `protobuf:"bytes,1,opt,name=result,proto3" json:"result,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -546,6 +548,13 @@ func (x *RunActionResponse) ProtoReflect() protoreflect.Message {
 // Deprecated: Use RunActionResponse.ProtoReflect.Descriptor instead.
 func (*RunActionResponse) Descriptor() ([]byte, []int) {
 	return file_novam_records_v1_records_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *RunActionResponse) GetResult() *structpb.Struct {
+	if x != nil {
+		return x.Result
+	}
+	return nil
 }
 
 var File_novam_records_v1_records_service_proto protoreflect.FileDescriptor
@@ -592,8 +601,9 @@ const file_novam_records_v1_records_service_proto_rawDesc = "" +
 	"collection\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\tR\x02id\x12\x16\n" +
 	"\x06action\x18\x04 \x01(\tR\x06action\x12+\n" +
-	"\x04args\x18\x05 \x01(\v2\x17.google.protobuf.StructR\x04args\"\x13\n" +
-	"\x11RunActionResponse2\xe8\x03\n" +
+	"\x04args\x18\x05 \x01(\v2\x17.google.protobuf.StructR\x04args\"D\n" +
+	"\x11RunActionResponse\x12/\n" +
+	"\x06result\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x06result2\xe8\x03\n" +
 	"\x0eRecordsService\x12]\n" +
 	"\fCreateRecord\x12%.novam.records.v1.CreateRecordRequest\x1a&.novam.records.v1.CreateRecordResponse\x12]\n" +
 	"\fUpdateRecord\x12%.novam.records.v1.UpdateRecordRequest\x1a&.novam.records.v1.UpdateRecordResponse\x12]\n" +
@@ -637,21 +647,22 @@ var file_novam_records_v1_records_service_proto_depIdxs = []int32{
 	10, // 5: novam.records.v1.UndeleteRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	10, // 6: novam.records.v1.RunActionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	11, // 7: novam.records.v1.RunActionRequest.args:type_name -> google.protobuf.Struct
-	0,  // 8: novam.records.v1.RecordsService.CreateRecord:input_type -> novam.records.v1.CreateRecordRequest
-	2,  // 9: novam.records.v1.RecordsService.UpdateRecord:input_type -> novam.records.v1.UpdateRecordRequest
-	4,  // 10: novam.records.v1.RecordsService.DeleteRecord:input_type -> novam.records.v1.DeleteRecordRequest
-	6,  // 11: novam.records.v1.RecordsService.UndeleteRecord:input_type -> novam.records.v1.UndeleteRecordRequest
-	8,  // 12: novam.records.v1.RecordsService.RunAction:input_type -> novam.records.v1.RunActionRequest
-	1,  // 13: novam.records.v1.RecordsService.CreateRecord:output_type -> novam.records.v1.CreateRecordResponse
-	3,  // 14: novam.records.v1.RecordsService.UpdateRecord:output_type -> novam.records.v1.UpdateRecordResponse
-	5,  // 15: novam.records.v1.RecordsService.DeleteRecord:output_type -> novam.records.v1.DeleteRecordResponse
-	7,  // 16: novam.records.v1.RecordsService.UndeleteRecord:output_type -> novam.records.v1.UndeleteRecordResponse
-	9,  // 17: novam.records.v1.RecordsService.RunAction:output_type -> novam.records.v1.RunActionResponse
-	13, // [13:18] is the sub-list for method output_type
-	8,  // [8:13] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	11, // 8: novam.records.v1.RunActionResponse.result:type_name -> google.protobuf.Struct
+	0,  // 9: novam.records.v1.RecordsService.CreateRecord:input_type -> novam.records.v1.CreateRecordRequest
+	2,  // 10: novam.records.v1.RecordsService.UpdateRecord:input_type -> novam.records.v1.UpdateRecordRequest
+	4,  // 11: novam.records.v1.RecordsService.DeleteRecord:input_type -> novam.records.v1.DeleteRecordRequest
+	6,  // 12: novam.records.v1.RecordsService.UndeleteRecord:input_type -> novam.records.v1.UndeleteRecordRequest
+	8,  // 13: novam.records.v1.RecordsService.RunAction:input_type -> novam.records.v1.RunActionRequest
+	1,  // 14: novam.records.v1.RecordsService.CreateRecord:output_type -> novam.records.v1.CreateRecordResponse
+	3,  // 15: novam.records.v1.RecordsService.UpdateRecord:output_type -> novam.records.v1.UpdateRecordResponse
+	5,  // 16: novam.records.v1.RecordsService.DeleteRecord:output_type -> novam.records.v1.DeleteRecordResponse
+	7,  // 17: novam.records.v1.RecordsService.UndeleteRecord:output_type -> novam.records.v1.UndeleteRecordResponse
+	9,  // 18: novam.records.v1.RecordsService.RunAction:output_type -> novam.records.v1.RunActionResponse
+	14, // [14:19] is the sub-list for method output_type
+	9,  // [9:14] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_novam_records_v1_records_service_proto_init() }

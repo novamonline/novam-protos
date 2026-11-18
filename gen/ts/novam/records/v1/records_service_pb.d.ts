@@ -228,6 +228,12 @@ export declare const RunActionRequestSchema: GenMessage<RunActionRequest>;
  * @generated from message novam.records.v1.RunActionResponse
  */
 export declare type RunActionResponse = Message<"novam.records.v1.RunActionResponse"> & {
+  /**
+   * What the action hands back, for the few that make something only they can tell (a new API key's secret).
+   *
+   * @generated from field: google.protobuf.Struct result = 1;
+   */
+  result?: JsonObject;
 };
 
 /**
