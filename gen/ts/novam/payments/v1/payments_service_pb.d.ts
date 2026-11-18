@@ -1110,6 +1110,14 @@ export declare type ApplyStripeEventResponse = Message<"novam.payments.v1.ApplyS
    * @generated from field: string id = 5;
    */
   id: string;
+
+  /**
+   * How a gift card it just made usable reached its recipient: pass, email, text or none. Empty when the engine left
+   * delivering it to novam-data (no mail or text provider here), which then sends it once.
+   *
+   * @generated from field: string delivered = 6;
+   */
+  delivered: string;
 };
 
 /**
@@ -1117,6 +1125,273 @@ export declare type ApplyStripeEventResponse = Message<"novam.payments.v1.ApplyS
  * Use `create(ApplyStripeEventResponseSchema)` to create a new message.
  */
 export declare const ApplyStripeEventResponseSchema: GenMessage<ApplyStripeEventResponse>;
+
+/**
+ * @generated from message novam.payments.v1.ChangePlanRequest
+ */
+export declare type ChangePlanRequest = Message<"novam.payments.v1.ChangePlanRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * launch, pro, team or business.
+   *
+   * @generated from field: string plan = 2;
+   */
+  plan: string;
+
+  /**
+   * monthly or yearly.
+   *
+   * @generated from field: string period = 3;
+   */
+  period: string;
+
+  /**
+   * The signed-in person's email, for a Checkout without a customer yet.
+   *
+   * @generated from field: string email = 4;
+   */
+  email: string;
+
+  /**
+   * Without the plans' Stripe prices, set the plan anyway: a developer's machine (novam-data's NODE_ENV).
+   *
+   * @generated from field: bool allow_unbilled = 5;
+   */
+  allowUnbilled: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.ChangePlanRequest.
+ * Use `create(ChangePlanRequestSchema)` to create a new message.
+ */
+export declare const ChangePlanRequestSchema: GenMessage<ChangePlanRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ChangePlanResponse
+ */
+export declare type ChangePlanResponse = Message<"novam.payments.v1.ChangePlanResponse"> & {
+  /**
+   * @generated from field: string plan = 1;
+   */
+  plan: string;
+
+  /**
+   * The Checkout page for a first paid plan; the plan changes once it's paid.
+   *
+   * @generated from field: string checkout_url = 2;
+   */
+  checkoutUrl: string;
+
+  /**
+   * The plan that takes over later.
+   *
+   * @generated from field: string pending_plan = 3;
+   */
+  pendingPlan: string;
+
+  /**
+   * When pending_plan takes over, RFC 3339; empty when unknown.
+   *
+   * @generated from field: string effective_time = 4;
+   */
+  effectiveTime: string;
+
+  /**
+   * @generated from field: bool billed = 5;
+   */
+  billed: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.ChangePlanResponse.
+ * Use `create(ChangePlanResponseSchema)` to create a new message.
+ */
+export declare const ChangePlanResponseSchema: GenMessage<ChangePlanResponse>;
+
+/**
+ * @generated from message novam.payments.v1.StartPlanCardRequest
+ */
+export declare type StartPlanCardRequest = Message<"novam.payments.v1.StartPlanCardRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string email = 2;
+   */
+  email: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.StartPlanCardRequest.
+ * Use `create(StartPlanCardRequestSchema)` to create a new message.
+ */
+export declare const StartPlanCardRequestSchema: GenMessage<StartPlanCardRequest>;
+
+/**
+ * @generated from message novam.payments.v1.StartPlanCardResponse
+ */
+export declare type StartPlanCardResponse = Message<"novam.payments.v1.StartPlanCardResponse"> & {
+  /**
+   * @generated from field: string checkout_url = 1;
+   */
+  checkoutUrl: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.StartPlanCardResponse.
+ * Use `create(StartPlanCardResponseSchema)` to create a new message.
+ */
+export declare const StartPlanCardResponseSchema: GenMessage<StartPlanCardResponse>;
+
+/**
+ * @generated from message novam.payments.v1.FinishPlanCardRequest
+ */
+export declare type FinishPlanCardRequest = Message<"novam.payments.v1.FinishPlanCardRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string session_id = 2;
+   */
+  sessionId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.FinishPlanCardRequest.
+ * Use `create(FinishPlanCardRequestSchema)` to create a new message.
+ */
+export declare const FinishPlanCardRequestSchema: GenMessage<FinishPlanCardRequest>;
+
+/**
+ * @generated from message novam.payments.v1.FinishPlanCardResponse
+ */
+export declare type FinishPlanCardResponse = Message<"novam.payments.v1.FinishPlanCardResponse"> & {
+  /**
+   * The saved card's id; empty when the session isn't a finished plan card for this business.
+   *
+   * @generated from field: string payment_method = 1;
+   */
+  paymentMethod: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.FinishPlanCardResponse.
+ * Use `create(FinishPlanCardResponseSchema)` to create a new message.
+ */
+export declare const FinishPlanCardResponseSchema: GenMessage<FinishPlanCardResponse>;
+
+/**
+ * @generated from message novam.payments.v1.ResumePlanRequest
+ */
+export declare type ResumePlanRequest = Message<"novam.payments.v1.ResumePlanRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * novam-data already took back the Novam membership's cancel: only the cancel reason is cleared.
+   *
+   * @generated from field: bool membership_resumed = 2;
+   */
+  membershipResumed: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.ResumePlanRequest.
+ * Use `create(ResumePlanRequestSchema)` to create a new message.
+ */
+export declare const ResumePlanRequestSchema: GenMessage<ResumePlanRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ResumePlanResponse
+ */
+export declare type ResumePlanResponse = Message<"novam.payments.v1.ResumePlanResponse"> & {
+  /**
+   * Whether there was a cancel to undo.
+   *
+   * @generated from field: bool resumed = 1;
+   */
+  resumed: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.ResumePlanResponse.
+ * Use `create(ResumePlanResponseSchema)` to create a new message.
+ */
+export declare const ResumePlanResponseSchema: GenMessage<ResumePlanResponse>;
+
+/**
+ * @generated from message novam.payments.v1.CancelPlanNowRequest
+ */
+export declare type CancelPlanNowRequest = Message<"novam.payments.v1.CancelPlanNowRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.payments.v1.CancelPlanNowRequest.
+ * Use `create(CancelPlanNowRequestSchema)` to create a new message.
+ */
+export declare const CancelPlanNowRequestSchema: GenMessage<CancelPlanNowRequest>;
+
+/**
+ * @generated from message novam.payments.v1.CancelPlanNowResponse
+ */
+export declare type CancelPlanNowResponse = Message<"novam.payments.v1.CancelPlanNowResponse"> & {
+  /**
+   * @generated from field: bool cancelled = 1;
+   */
+  cancelled: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.CancelPlanNowResponse.
+ * Use `create(CancelPlanNowResponseSchema)` to create a new message.
+ */
+export declare const CancelPlanNowResponseSchema: GenMessage<CancelPlanNowResponse>;
+
+/**
+ * @generated from message novam.payments.v1.DetachPlanMethodsRequest
+ */
+export declare type DetachPlanMethodsRequest = Message<"novam.payments.v1.DetachPlanMethodsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.payments.v1.DetachPlanMethodsRequest.
+ * Use `create(DetachPlanMethodsRequestSchema)` to create a new message.
+ */
+export declare const DetachPlanMethodsRequestSchema: GenMessage<DetachPlanMethodsRequest>;
+
+/**
+ * @generated from message novam.payments.v1.DetachPlanMethodsResponse
+ */
+export declare type DetachPlanMethodsResponse = Message<"novam.payments.v1.DetachPlanMethodsResponse"> & {
+  /**
+   * @generated from field: int32 detached = 1;
+   */
+  detached: number;
+};
+
+/**
+ * Describes the message novam.payments.v1.DetachPlanMethodsResponse.
+ * Use `create(DetachPlanMethodsResponseSchema)` to create a new message.
+ */
+export declare const DetachPlanMethodsResponseSchema: GenMessage<DetachPlanMethodsResponse>;
 
 /**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
@@ -1316,6 +1591,69 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof ApplyStripeEventRequestSchema;
     output: typeof ApplyStripeEventResponseSchema;
+  },
+  /**
+   * Changes a business's Novam plan billed by a Stripe subscription: a first paid plan starts a subscription Checkout,
+   * a change between paid plans swaps the price (prorated) at once, and Launch cancels at the end of the paid period.
+   * novam-data decides first whether the plan is billed as a Novam membership instead. FAILED_PRECONDITION as
+   * novam-data's own refusals.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ChangePlan
+   */
+  changePlan: {
+    methodKind: "unary";
+    input: typeof ChangePlanRequestSchema;
+    output: typeof ChangePlanResponseSchema;
+  },
+  /**
+   * A Stripe Checkout page that saves a card for the plan, made with the business's plan customer.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.StartPlanCard
+   */
+  startPlanCard: {
+    methodKind: "unary";
+    input: typeof StartPlanCardRequestSchema;
+    output: typeof StartPlanCardResponseSchema;
+  },
+  /**
+   * Makes the card a finished plan-card Checkout saved the default for the plan's bills and its subscription.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.FinishPlanCard
+   */
+  finishPlanCard: {
+    methodKind: "unary";
+    input: typeof FinishPlanCardRequestSchema;
+    output: typeof FinishPlanCardResponseSchema;
+  },
+  /**
+   * Keeps a paid plan that was cancelled for the end of its period.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ResumePlan
+   */
+  resumePlan: {
+    methodKind: "unary";
+    input: typeof ResumePlanRequestSchema;
+    output: typeof ResumePlanResponseSchema;
+  },
+  /**
+   * Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.CancelPlanNow
+   */
+  cancelPlanNow: {
+    methodKind: "unary";
+    input: typeof CancelPlanNowRequestSchema;
+    output: typeof CancelPlanNowResponseSchema;
+  },
+  /**
+   * Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.DetachPlanMethods
+   */
+  detachPlanMethods: {
+    methodKind: "unary";
+    input: typeof DetachPlanMethodsRequestSchema;
+    output: typeof DetachPlanMethodsResponseSchema;
   },
 }>;
 

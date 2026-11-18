@@ -36,6 +36,12 @@ const (
 	PaymentsService_SettleCheckout_FullMethodName    = "/novam.payments.v1.PaymentsService/SettleCheckout"
 	PaymentsService_FailCheckout_FullMethodName      = "/novam.payments.v1.PaymentsService/FailCheckout"
 	PaymentsService_ApplyStripeEvent_FullMethodName  = "/novam.payments.v1.PaymentsService/ApplyStripeEvent"
+	PaymentsService_ChangePlan_FullMethodName        = "/novam.payments.v1.PaymentsService/ChangePlan"
+	PaymentsService_StartPlanCard_FullMethodName     = "/novam.payments.v1.PaymentsService/StartPlanCard"
+	PaymentsService_FinishPlanCard_FullMethodName    = "/novam.payments.v1.PaymentsService/FinishPlanCard"
+	PaymentsService_ResumePlan_FullMethodName        = "/novam.payments.v1.PaymentsService/ResumePlan"
+	PaymentsService_CancelPlanNow_FullMethodName     = "/novam.payments.v1.PaymentsService/CancelPlanNow"
+	PaymentsService_DetachPlanMethods_FullMethodName = "/novam.payments.v1.PaymentsService/DetachPlanMethods"
 )
 
 // PaymentsServiceClient is the client API for PaymentsService service.
@@ -101,6 +107,21 @@ type PaymentsServiceClient interface {
 	// for any other kind, which novam-data applies itself. UNAVAILABLE when the engine lacks what the kind needs (Stripe,
 	// the plans' prices, a filing partner), before anything is written.
 	ApplyStripeEvent(ctx context.Context, in *ApplyStripeEventRequest, opts ...grpc.CallOption) (*ApplyStripeEventResponse, error)
+	// Changes a business's Novam plan billed by a Stripe subscription: a first paid plan starts a subscription Checkout,
+	// a change between paid plans swaps the price (prorated) at once, and Launch cancels at the end of the paid period.
+	// novam-data decides first whether the plan is billed as a Novam membership instead. FAILED_PRECONDITION as
+	// novam-data's own refusals.
+	ChangePlan(ctx context.Context, in *ChangePlanRequest, opts ...grpc.CallOption) (*ChangePlanResponse, error)
+	// A Stripe Checkout page that saves a card for the plan, made with the business's plan customer.
+	StartPlanCard(ctx context.Context, in *StartPlanCardRequest, opts ...grpc.CallOption) (*StartPlanCardResponse, error)
+	// Makes the card a finished plan-card Checkout saved the default for the plan's bills and its subscription.
+	FinishPlanCard(ctx context.Context, in *FinishPlanCardRequest, opts ...grpc.CallOption) (*FinishPlanCardResponse, error)
+	// Keeps a paid plan that was cancelled for the end of its period.
+	ResumePlan(ctx context.Context, in *ResumePlanRequest, opts ...grpc.CallOption) (*ResumePlanResponse, error)
+	// Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
+	CancelPlanNow(ctx context.Context, in *CancelPlanNowRequest, opts ...grpc.CallOption) (*CancelPlanNowResponse, error)
+	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
+	DetachPlanMethods(ctx context.Context, in *DetachPlanMethodsRequest, opts ...grpc.CallOption) (*DetachPlanMethodsResponse, error)
 }
 
 type paymentsServiceClient struct {
@@ -281,6 +302,66 @@ func (c *paymentsServiceClient) ApplyStripeEvent(ctx context.Context, in *ApplyS
 	return out, nil
 }
 
+func (c *paymentsServiceClient) ChangePlan(ctx context.Context, in *ChangePlanRequest, opts ...grpc.CallOption) (*ChangePlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChangePlanResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ChangePlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) StartPlanCard(ctx context.Context, in *StartPlanCardRequest, opts ...grpc.CallOption) (*StartPlanCardResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(StartPlanCardResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_StartPlanCard_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) FinishPlanCard(ctx context.Context, in *FinishPlanCardRequest, opts ...grpc.CallOption) (*FinishPlanCardResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FinishPlanCardResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_FinishPlanCard_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) ResumePlan(ctx context.Context, in *ResumePlanRequest, opts ...grpc.CallOption) (*ResumePlanResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResumePlanResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ResumePlan_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) CancelPlanNow(ctx context.Context, in *CancelPlanNowRequest, opts ...grpc.CallOption) (*CancelPlanNowResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CancelPlanNowResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_CancelPlanNow_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) DetachPlanMethods(ctx context.Context, in *DetachPlanMethodsRequest, opts ...grpc.CallOption) (*DetachPlanMethodsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DetachPlanMethodsResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_DetachPlanMethods_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentsServiceServer is the server API for PaymentsService service.
 // All implementations must embed UnimplementedPaymentsServiceServer
 // for forward compatibility.
@@ -344,6 +425,21 @@ type PaymentsServiceServer interface {
 	// for any other kind, which novam-data applies itself. UNAVAILABLE when the engine lacks what the kind needs (Stripe,
 	// the plans' prices, a filing partner), before anything is written.
 	ApplyStripeEvent(context.Context, *ApplyStripeEventRequest) (*ApplyStripeEventResponse, error)
+	// Changes a business's Novam plan billed by a Stripe subscription: a first paid plan starts a subscription Checkout,
+	// a change between paid plans swaps the price (prorated) at once, and Launch cancels at the end of the paid period.
+	// novam-data decides first whether the plan is billed as a Novam membership instead. FAILED_PRECONDITION as
+	// novam-data's own refusals.
+	ChangePlan(context.Context, *ChangePlanRequest) (*ChangePlanResponse, error)
+	// A Stripe Checkout page that saves a card for the plan, made with the business's plan customer.
+	StartPlanCard(context.Context, *StartPlanCardRequest) (*StartPlanCardResponse, error)
+	// Makes the card a finished plan-card Checkout saved the default for the plan's bills and its subscription.
+	FinishPlanCard(context.Context, *FinishPlanCardRequest) (*FinishPlanCardResponse, error)
+	// Keeps a paid plan that was cancelled for the end of its period.
+	ResumePlan(context.Context, *ResumePlanRequest) (*ResumePlanResponse, error)
+	// Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
+	CancelPlanNow(context.Context, *CancelPlanNowRequest) (*CancelPlanNowResponse, error)
+	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
+	DetachPlanMethods(context.Context, *DetachPlanMethodsRequest) (*DetachPlanMethodsResponse, error)
 	mustEmbedUnimplementedPaymentsServiceServer()
 }
 
@@ -404,6 +500,24 @@ func (UnimplementedPaymentsServiceServer) FailCheckout(context.Context, *FailChe
 }
 func (UnimplementedPaymentsServiceServer) ApplyStripeEvent(context.Context, *ApplyStripeEventRequest) (*ApplyStripeEventResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ApplyStripeEvent not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ChangePlan(context.Context, *ChangePlanRequest) (*ChangePlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ChangePlan not implemented")
+}
+func (UnimplementedPaymentsServiceServer) StartPlanCard(context.Context, *StartPlanCardRequest) (*StartPlanCardResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method StartPlanCard not implemented")
+}
+func (UnimplementedPaymentsServiceServer) FinishPlanCard(context.Context, *FinishPlanCardRequest) (*FinishPlanCardResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FinishPlanCard not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ResumePlan(context.Context, *ResumePlanRequest) (*ResumePlanResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResumePlan not implemented")
+}
+func (UnimplementedPaymentsServiceServer) CancelPlanNow(context.Context, *CancelPlanNowRequest) (*CancelPlanNowResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CancelPlanNow not implemented")
+}
+func (UnimplementedPaymentsServiceServer) DetachPlanMethods(context.Context, *DetachPlanMethodsRequest) (*DetachPlanMethodsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DetachPlanMethods not implemented")
 }
 func (UnimplementedPaymentsServiceServer) mustEmbedUnimplementedPaymentsServiceServer() {}
 func (UnimplementedPaymentsServiceServer) testEmbeddedByValue()                         {}
@@ -732,6 +846,114 @@ func _PaymentsService_ApplyStripeEvent_Handler(srv interface{}, ctx context.Cont
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_ChangePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ChangePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ChangePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ChangePlan(ctx, req.(*ChangePlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_StartPlanCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(StartPlanCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).StartPlanCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_StartPlanCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).StartPlanCard(ctx, req.(*StartPlanCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_FinishPlanCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FinishPlanCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).FinishPlanCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_FinishPlanCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).FinishPlanCard(ctx, req.(*FinishPlanCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_ResumePlan_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResumePlanRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ResumePlan(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ResumePlan_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ResumePlan(ctx, req.(*ResumePlanRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_CancelPlanNow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CancelPlanNowRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).CancelPlanNow(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_CancelPlanNow_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).CancelPlanNow(ctx, req.(*CancelPlanNowRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_DetachPlanMethods_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DetachPlanMethodsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).DetachPlanMethods(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_DetachPlanMethods_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).DetachPlanMethods(ctx, req.(*DetachPlanMethodsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentsService_ServiceDesc is the grpc.ServiceDesc for PaymentsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -806,6 +1028,30 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ApplyStripeEvent",
 			Handler:    _PaymentsService_ApplyStripeEvent_Handler,
+		},
+		{
+			MethodName: "ChangePlan",
+			Handler:    _PaymentsService_ChangePlan_Handler,
+		},
+		{
+			MethodName: "StartPlanCard",
+			Handler:    _PaymentsService_StartPlanCard_Handler,
+		},
+		{
+			MethodName: "FinishPlanCard",
+			Handler:    _PaymentsService_FinishPlanCard_Handler,
+		},
+		{
+			MethodName: "ResumePlan",
+			Handler:    _PaymentsService_ResumePlan_Handler,
+		},
+		{
+			MethodName: "CancelPlanNow",
+			Handler:    _PaymentsService_CancelPlanNow_Handler,
+		},
+		{
+			MethodName: "DetachPlanMethods",
+			Handler:    _PaymentsService_DetachPlanMethods_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

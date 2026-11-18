@@ -67,6 +67,21 @@ service PaymentsService {
   // for any other kind, which novam-data applies itself. UNAVAILABLE when the engine lacks what the kind needs (Stripe,
   // the plans' prices, a filing partner), before anything is written.
   rpc ApplyStripeEvent(ApplyStripeEventRequest) returns (ApplyStripeEventResponse);
+  // Changes a business's Novam plan billed by a Stripe subscription: a first paid plan starts a subscription Checkout,
+  // a change between paid plans swaps the price (prorated) at once, and Launch cancels at the end of the paid period.
+  // novam-data decides first whether the plan is billed as a Novam membership instead. FAILED_PRECONDITION as
+  // novam-data's own refusals.
+  rpc ChangePlan(ChangePlanRequest) returns (ChangePlanResponse);
+  // A Stripe Checkout page that saves a card for the plan, made with the business's plan customer.
+  rpc StartPlanCard(StartPlanCardRequest) returns (StartPlanCardResponse);
+  // Makes the card a finished plan-card Checkout saved the default for the plan's bills and its subscription.
+  rpc FinishPlanCard(FinishPlanCardRequest) returns (FinishPlanCardResponse);
+  // Keeps a paid plan that was cancelled for the end of its period.
+  rpc ResumePlan(ResumePlanRequest) returns (ResumePlanResponse);
+  // Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
+  rpc CancelPlanNow(CancelPlanNowRequest) returns (CancelPlanNowResponse);
+  // Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
+  rpc DetachPlanMethods(DetachPlanMethodsRequest) returns (DetachPlanMethodsResponse);
 }
 
 message RecordPaymentRequest {
@@ -340,4 +355,76 @@ message ApplyStripeEventResponse {
   string org_id = 4;
   // The record it was about: the gift card, the filing order.
   string id = 5;
+  // How a gift card it just made usable reached its recipient: pass, email, text or none. Empty when the engine left
+  // delivering it to novam-data (no mail or text provider here), which then sends it once.
+  string delivered = 6;
+}
+
+message ChangePlanRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // launch, pro, team or business.
+  string plan = 2;
+  // monthly or yearly.
+  string period = 3;
+  // The signed-in person's email, for a Checkout without a customer yet.
+  string email = 4;
+  // Without the plans' Stripe prices, set the plan anyway: a developer's machine (novam-data's NODE_ENV).
+  bool allow_unbilled = 5;
+}
+
+message ChangePlanResponse {
+  string plan = 1;
+  // The Checkout page for a first paid plan; the plan changes once it's paid.
+  string checkout_url = 2;
+  // The plan that takes over later.
+  string pending_plan = 3;
+  // When pending_plan takes over, RFC 3339; empty when unknown.
+  string effective_time = 4;
+  bool billed = 5;
+}
+
+message StartPlanCardRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string email = 2;
+}
+
+message StartPlanCardResponse {
+  string checkout_url = 1;
+}
+
+message FinishPlanCardRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string session_id = 2;
+}
+
+message FinishPlanCardResponse {
+  // The saved card's id; empty when the session isn't a finished plan card for this business.
+  string payment_method = 1;
+}
+
+message ResumePlanRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // novam-data already took back the Novam membership's cancel: only the cancel reason is cleared.
+  bool membership_resumed = 2;
+}
+
+message ResumePlanResponse {
+  // Whether there was a cancel to undo.
+  bool resumed = 1;
+}
+
+message CancelPlanNowRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message CancelPlanNowResponse {
+  bool cancelled = 1;
+}
+
+message DetachPlanMethodsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message DetachPlanMethodsResponse {
+  int32 detached = 1;
 }
