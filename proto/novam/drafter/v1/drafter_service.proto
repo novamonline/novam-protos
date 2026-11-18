@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package novam.drafter.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/drafter/v1;drafterv1";
+
+// DrafterService decides the drafter's proposals (ADR-0009): the owner's yes carries one out (sends the message,
+// records the payment…) once, records what happened on it and in the agent action log with a way to undo it; a
+// correction changes it first; a dismissal leaves it undone. novam-data checks who may and the shape of what is sent;
+// a proposal whose kind isn't carried out here yet is UNIMPLEMENTED, for novam-data to do. Each call is for the
+// business in the caller's token.
+service DrafterService {
+  rpc ApproveProposal(ApproveProposalRequest) returns (ApproveProposalResponse);
+  // Merges payload_json into the proposal's payload (a message's detail is its body), keeps rule as a learned rule
+  // when given, then carries it out.
+  rpc CorrectProposal(CorrectProposalRequest) returns (CorrectProposalResponse);
+  rpc DismissProposal(DismissProposalRequest) returns (DismissProposalResponse);
+}
+
+message ApproveProposalRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string proposal_id = 2;
+  // Who decided: the user's id, kept as the proposal's decided_by.
+  string user_id = 3;
+}
+
+message CorrectProposalRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string proposal_id = 2;
+  string user_id = 3;
+  // A JSON object of payload fields to change; empty for none.
+  string payload_json = 4;
+  optional string detail = 5;
+  optional string title = 6;
+  string rule = 7;
+}
+
+message DismissProposalRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string proposal_id = 2;
+  string user_id = 3;
+}
+
+// What became of the proposal: done, failed or dismissed, and what happened or why it failed.
+message ApproveProposalResponse {
+  string status = 1;
+  string result = 2;
+}
+
+message CorrectProposalResponse {
+  string status = 1;
+  string result = 2;
+}
+
+message DismissProposalResponse {
+  string status = 1;
+}
