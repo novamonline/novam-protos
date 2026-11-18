@@ -1,0 +1,84 @@
+syntax = "proto3";
+
+package novam.clients.v1;
+
+import "google/protobuf/struct.proto";
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/clients/v1;clientsv1";
+
+// ClientsService runs in novam-engine's workflows server and writes a business's clients (ADR-0009): the row, its
+// client event, the change feed and what novam-data did after a save, in one transaction. novam-data checks who may
+// make the change and readies the values (names joined, phones tidied, contacts cleaned, the renter's book), then
+// asks here; it reads the client back to answer.
+service ClientsService {
+  // Adds a client, and saves what the request said about the person behind it.
+  rpc CreateClient(CreateClientRequest) returns (CreateClientResponse);
+  // Changes the fields in update_mask. Contacts taken off a business client stop signing in for it, and its account
+  // is unlinked when its email is no longer among them.
+  rpc UpdateClient(UpdateClientRequest) returns (UpdateClientResponse);
+  // Archives a client and cancels its bookings still to come.
+  rpc DeleteClient(DeleteClientRequest) returns (DeleteClientResponse);
+  // Brings an archived client back.
+  rpc UndeleteClient(UndeleteClientRequest) returns (UndeleteClientResponse);
+}
+
+message PostalAddress {
+  string line1 = 1;
+  string line2 = 2;
+  string city = 3;
+  string region = 4;
+  string postal_code = 5;
+  // ISO 3166-1 alpha-2; empty is US.
+  string country = 6;
+}
+
+// What a save says about the person behind a client, each only when the request gave it: their names (kept on
+// their contact while the business may still correct them), and on this business's tie to them, how they found it
+// and who recommended them (a client id; empty clears it).
+message People {
+  optional string first_name = 1;
+  optional string last_name = 2;
+  optional string source = 3;
+  optional string source_detail = 4;
+  optional string recommended_by = 5;
+  // Set when the request gave an address.
+  PostalAddress address = 6;
+}
+
+message CreateClientRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // Chosen by novam-data, so a retried request adds the client once.
+  string client_id = 2;
+  // The client's fields as the REST API names them (display_name, kind, contact_name, contact_role, email, phone,
+  // contacts, pets, company, notes, account, link_time, seen_time, book_owner), ready to store.
+  google.protobuf.Struct client = 3;
+  People people = 4;
+}
+
+message CreateClientResponse {}
+
+message UpdateClientRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string client_id = 2;
+  // The new values of the fields in update_mask, named as in CreateClientRequest.client.
+  google.protobuf.Struct client = 3;
+  repeated string update_mask = 4;
+  People people = 5;
+}
+
+message UpdateClientResponse {}
+
+message DeleteClientRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string client_id = 2;
+}
+
+message DeleteClientResponse {}
+
+message UndeleteClientRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string client_id = 2;
+}
+
+message UndeleteClientResponse {}
