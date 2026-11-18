@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package novam.insights.v1;
 
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "novam/common/v1/common.proto";
 
@@ -36,6 +37,11 @@ service InsightsService {
   rpc Get1099Season(Get1099SeasonRequest) returns (Get1099SeasonResponse);
   // The accountant's .zip for a tax year: summary.pdf and a CSV per part.
   rpc BuildTaxPackage(BuildTaxPackageRequest) returns (BuildTaxPackageResponse);
+  // Money › Accounting's ledger for a tax year: money in, money out, profit, the year's lines newest first, and the
+  // bank lines still to sort when asked.
+  rpc GetLedger(GetLedgerRequest) returns (GetLedgerResponse);
+  // Banking's feed for one account and year: each line with what Novam filed it as, and how far the year is sorted.
+  rpc GetBankFeed(GetBankFeedRequest) returns (GetBankFeedResponse);
 }
 
 message GetFinanceSummaryRequest {
@@ -381,4 +387,27 @@ message BuildTaxPackageResponse {
   bytes zip = 1;
   // The files in it, summary.pdf first.
   repeated string files = 2;
+}
+
+message GetLedgerRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  int32 tax_year = 2;
+  // Include the year's posted bank lines with no category (the owner and its Admins only; novam-data decides).
+  bool with_bank = 3;
+}
+
+message GetLedgerResponse {
+  // As novam-data's ledger: year, money_in, money_out, profit, entries, and to_sort with with_bank.
+  google.protobuf.Struct ledger = 1;
+}
+
+message GetBankFeedRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string account_id = 2;
+  int32 tax_year = 3;
+}
+
+message GetBankFeedResponse {
+  // As novam-data's bankFeed: lines and sorted_through.
+  google.protobuf.Struct feed = 1;
 }

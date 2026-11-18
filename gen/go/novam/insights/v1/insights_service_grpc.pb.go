@@ -30,6 +30,8 @@ const (
 	InsightsService_ListOpenTimes_FullMethodName     = "/novam.insights.v1.InsightsService/ListOpenTimes"
 	InsightsService_Get1099Season_FullMethodName     = "/novam.insights.v1.InsightsService/Get1099Season"
 	InsightsService_BuildTaxPackage_FullMethodName   = "/novam.insights.v1.InsightsService/BuildTaxPackage"
+	InsightsService_GetLedger_FullMethodName         = "/novam.insights.v1.InsightsService/GetLedger"
+	InsightsService_GetBankFeed_FullMethodName       = "/novam.insights.v1.InsightsService/GetBankFeed"
 )
 
 // InsightsServiceClient is the client API for InsightsService service.
@@ -65,6 +67,11 @@ type InsightsServiceClient interface {
 	Get1099Season(ctx context.Context, in *Get1099SeasonRequest, opts ...grpc.CallOption) (*Get1099SeasonResponse, error)
 	// The accountant's .zip for a tax year: summary.pdf and a CSV per part.
 	BuildTaxPackage(ctx context.Context, in *BuildTaxPackageRequest, opts ...grpc.CallOption) (*BuildTaxPackageResponse, error)
+	// Money › Accounting's ledger for a tax year: money in, money out, profit, the year's lines newest first, and the
+	// bank lines still to sort when asked.
+	GetLedger(ctx context.Context, in *GetLedgerRequest, opts ...grpc.CallOption) (*GetLedgerResponse, error)
+	// Banking's feed for one account and year: each line with what Novam filed it as, and how far the year is sorted.
+	GetBankFeed(ctx context.Context, in *GetBankFeedRequest, opts ...grpc.CallOption) (*GetBankFeedResponse, error)
 }
 
 type insightsServiceClient struct {
@@ -185,6 +192,26 @@ func (c *insightsServiceClient) BuildTaxPackage(ctx context.Context, in *BuildTa
 	return out, nil
 }
 
+func (c *insightsServiceClient) GetLedger(ctx context.Context, in *GetLedgerRequest, opts ...grpc.CallOption) (*GetLedgerResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetLedgerResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetLedger_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insightsServiceClient) GetBankFeed(ctx context.Context, in *GetBankFeedRequest, opts ...grpc.CallOption) (*GetBankFeedResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetBankFeedResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetBankFeed_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InsightsServiceServer is the server API for InsightsService service.
 // All implementations must embed UnimplementedInsightsServiceServer
 // for forward compatibility.
@@ -218,6 +245,11 @@ type InsightsServiceServer interface {
 	Get1099Season(context.Context, *Get1099SeasonRequest) (*Get1099SeasonResponse, error)
 	// The accountant's .zip for a tax year: summary.pdf and a CSV per part.
 	BuildTaxPackage(context.Context, *BuildTaxPackageRequest) (*BuildTaxPackageResponse, error)
+	// Money › Accounting's ledger for a tax year: money in, money out, profit, the year's lines newest first, and the
+	// bank lines still to sort when asked.
+	GetLedger(context.Context, *GetLedgerRequest) (*GetLedgerResponse, error)
+	// Banking's feed for one account and year: each line with what Novam filed it as, and how far the year is sorted.
+	GetBankFeed(context.Context, *GetBankFeedRequest) (*GetBankFeedResponse, error)
 	mustEmbedUnimplementedInsightsServiceServer()
 }
 
@@ -260,6 +292,12 @@ func (UnimplementedInsightsServiceServer) Get1099Season(context.Context, *Get109
 }
 func (UnimplementedInsightsServiceServer) BuildTaxPackage(context.Context, *BuildTaxPackageRequest) (*BuildTaxPackageResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method BuildTaxPackage not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetLedger(context.Context, *GetLedgerRequest) (*GetLedgerResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetLedger not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetBankFeed(context.Context, *GetBankFeedRequest) (*GetBankFeedResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetBankFeed not implemented")
 }
 func (UnimplementedInsightsServiceServer) mustEmbedUnimplementedInsightsServiceServer() {}
 func (UnimplementedInsightsServiceServer) testEmbeddedByValue()                         {}
@@ -480,6 +518,42 @@ func _InsightsService_BuildTaxPackage_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InsightsService_GetLedger_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLedgerRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetLedger(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetLedger_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetLedger(ctx, req.(*GetLedgerRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsightsService_GetBankFeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetBankFeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetBankFeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetBankFeed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetBankFeed(ctx, req.(*GetBankFeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InsightsService_ServiceDesc is the grpc.ServiceDesc for InsightsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -530,6 +604,14 @@ var InsightsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "BuildTaxPackage",
 			Handler:    _InsightsService_BuildTaxPackage_Handler,
+		},
+		{
+			MethodName: "GetLedger",
+			Handler:    _InsightsService_GetLedger_Handler,
+		},
+		{
+			MethodName: "GetBankFeed",
+			Handler:    _InsightsService_GetBankFeed_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

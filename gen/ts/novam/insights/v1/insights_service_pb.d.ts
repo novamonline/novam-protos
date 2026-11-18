@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import type { GenEnum, GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { RequestMetadata } from "../../common/v1/common_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 
@@ -1358,6 +1358,96 @@ export declare type BuildTaxPackageResponse = Message<"novam.insights.v1.BuildTa
 export declare const BuildTaxPackageResponseSchema: GenMessage<BuildTaxPackageResponse>;
 
 /**
+ * @generated from message novam.insights.v1.GetLedgerRequest
+ */
+export declare type GetLedgerRequest = Message<"novam.insights.v1.GetLedgerRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: int32 tax_year = 2;
+   */
+  taxYear: number;
+
+  /**
+   * Include the year's posted bank lines with no category (the owner and its Admins only; novam-data decides).
+   *
+   * @generated from field: bool with_bank = 3;
+   */
+  withBank: boolean;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetLedgerRequest.
+ * Use `create(GetLedgerRequestSchema)` to create a new message.
+ */
+export declare const GetLedgerRequestSchema: GenMessage<GetLedgerRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetLedgerResponse
+ */
+export declare type GetLedgerResponse = Message<"novam.insights.v1.GetLedgerResponse"> & {
+  /**
+   * As novam-data's ledger: year, money_in, money_out, profit, entries, and to_sort with with_bank.
+   *
+   * @generated from field: google.protobuf.Struct ledger = 1;
+   */
+  ledger?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetLedgerResponse.
+ * Use `create(GetLedgerResponseSchema)` to create a new message.
+ */
+export declare const GetLedgerResponseSchema: GenMessage<GetLedgerResponse>;
+
+/**
+ * @generated from message novam.insights.v1.GetBankFeedRequest
+ */
+export declare type GetBankFeedRequest = Message<"novam.insights.v1.GetBankFeedRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string account_id = 2;
+   */
+  accountId: string;
+
+  /**
+   * @generated from field: int32 tax_year = 3;
+   */
+  taxYear: number;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetBankFeedRequest.
+ * Use `create(GetBankFeedRequestSchema)` to create a new message.
+ */
+export declare const GetBankFeedRequestSchema: GenMessage<GetBankFeedRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetBankFeedResponse
+ */
+export declare type GetBankFeedResponse = Message<"novam.insights.v1.GetBankFeedResponse"> & {
+  /**
+   * As novam-data's bankFeed: lines and sorted_through.
+   *
+   * @generated from field: google.protobuf.Struct feed = 1;
+   */
+  feed?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetBankFeedResponse.
+ * Use `create(GetBankFeedResponseSchema)` to create a new message.
+ */
+export declare const GetBankFeedResponseSchema: GenMessage<GetBankFeedResponse>;
+
+/**
  * @generated from enum novam.insights.v1.ChartKind
  */
 export enum ChartKind {
@@ -1521,6 +1611,27 @@ export declare const InsightsService: GenService<{
     methodKind: "unary";
     input: typeof BuildTaxPackageRequestSchema;
     output: typeof BuildTaxPackageResponseSchema;
+  },
+  /**
+   * Money › Accounting's ledger for a tax year: money in, money out, profit, the year's lines newest first, and the
+   * bank lines still to sort when asked.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetLedger
+   */
+  getLedger: {
+    methodKind: "unary";
+    input: typeof GetLedgerRequestSchema;
+    output: typeof GetLedgerResponseSchema;
+  },
+  /**
+   * Banking's feed for one account and year: each line with what Novam filed it as, and how far the year is sorted.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetBankFeed
+   */
+  getBankFeed: {
+    methodKind: "unary";
+    input: typeof GetBankFeedRequestSchema;
+    output: typeof GetBankFeedResponseSchema;
   },
 }>;
 
