@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package novam.records.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/records/v1;recordsv1";
+
+// MoneyRecordsService writes the money-side records novam-data's routes check (ADR-0009 step 3): bills, payouts, tax
+// items, gift cards, estimates and their change orders, and helper splits. novam-data validates a write and shapes its
+// columns as its own table maps do; the engine writes them, with what goes with each write, in one transaction, and
+// tells the business's open apps (the change feed). Each call is for the business in the caller's token.
+service MoneyRecordsService {
+  // One row created, updated, soft deleted or brought back. A gift card's creation records its sale; a change order is
+  // numbered under its estimate's lock.
+  rpc WriteRow(WriteRowRequest) returns (WriteRowResponse);
+  // Voids a gift card: nothing left on it can be used or is owed.
+  rpc VoidGiftCard(VoidGiftCardRequest) returns (VoidGiftCardResponse);
+  // Marks a draft helper split paid the way the owner paid it, recording its payout.
+  rpc MarkSplitPaid(MarkSplitPaidRequest) returns (MarkSplitPaidResponse);
+  // Skips a draft helper split: the helper isn't owed for the visit.
+  rpc SkipSplit(SkipSplitRequest) returns (SkipSplitResponse);
+}
+
+enum WriteOp {
+  WRITE_OP_UNSPECIFIED = 0;
+  WRITE_OP_CREATE = 1;
+  WRITE_OP_UPDATE = 2;
+  WRITE_OP_DELETE = 3;
+  WRITE_OP_UNDELETE = 4;
+}
+
+message WriteRowRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The REST collection, e.g. bills, payouts, taxItems, giftCards, estimates, changeOrders, helperSplits.
+  string collection = 2;
+  WriteOp op = 3;
+  string id = 4;
+  // Column values as text, cast to each column's own type; set_null names the columns to clear.
+  map<string, string> values = 5;
+  repeated string set_null = 6;
+  // The resource name the change feed carries, e.g. orgs/{org}/bills/{id}.
+  string resource_name = 7;
+}
+
+message WriteRowResponse {
+  // False when no row was in the state the write needs (not found, already deleted, not deleted).
+  bool written = 1;
+}
+
+message VoidGiftCardRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string id = 2;
+  string reason = 3;
+  string resource_name = 4;
+}
+
+message VoidGiftCardResponse {}
+
+message MarkSplitPaidRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string id = 2;
+  string method = 3;
+  // RFC 3339; now when empty.
+  string paid_time = 4;
+  // The payout's description, e.g. "Deep clean for Jane Lee".
+  string description = 5;
+  string resource_name = 6;
+  string payout_resource_name_prefix = 7;
+}
+
+message MarkSplitPaidResponse {
+  string payout_id = 1;
+}
+
+message SkipSplitRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string id = 2;
+  string resource_name = 3;
+}
+
+message SkipSplitResponse {}
