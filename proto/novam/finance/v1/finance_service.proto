@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package novam.finance.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/finance/v1;financev1";
+
+// FinanceService runs in novam-engine's workflows server and makes the calls to card processors (Stripe, Square,
+// PayPal) on a business's own account. novam-data keeps every connection's credentials, refreshes them and does every
+// write; it passes what a call needs and the engine stores nothing. A processor the engine isn't set up for answers
+// UNAVAILABLE, so novam-data makes the call itself.
+service FinanceService {
+  // Where the business's card money is: on its way to the bank, still processing, or on hold, read from its own
+  // processor account. A processor that can't be read just now comes back with readable false.
+  rpc GetPayoutStatus(GetPayoutStatusRequest) returns (GetPayoutStatusResponse);
+}
+
+message GetPayoutStatusRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // stripe, square or paypal.
+  string processor = 2;
+  // Stripe: the connected account, acted on through the engine's platform key (STRIPE_SECRET_KEY).
+  string stripe_account_id = 3;
+  // Stripe without a connected account id, or Square: the business's own OAuth access token, already fresh.
+  string access_token = 4;
+  // Square: the location payments are taken at, when the connection saved one.
+  string square_location_id = 5;
+  // Square: the account's currency, when the connection saved one.
+  string square_currency = 6;
+  // PayPal: the business's merchant id, read as it allowed Novam to during onboarding.
+  string paypal_merchant_id = 7;
+}
+
+message NextPayout {
+  double amount = 1;
+  // YYYY-MM-DD.
+  string arrival_date = 2;
+  // The bank and the last digits of the account, e.g. "Chase ••6789", when the processor says.
+  string bank = 3;
+}
+
+message RecentPayout {
+  double amount = 1;
+  string arrival_date = 2;
+  // paid, failed or canceled.
+  string status = 3;
+}
+
+message GetPayoutStatusResponse {
+  // stripe, square or paypal.
+  string processor = 1;
+  bool readable = 2;
+  // ISO code, upper case.
+  string currency = 3;
+  // In whole currency units.
+  double on_its_way = 4;
+  double processing = 5;
+  double on_hold = 6;
+  // PayPal: money in the account that moves to the bank only when the owner moves it.
+  optional double in_account = 7;
+  // The processor's reason for a hold, and what it asks for, when payouts are paused.
+  string hold_reason = 8;
+  repeated string hold_needs = 9;
+  NextPayout next_payout = 10;
+  // Stripe: the latest payouts that reached the bank or failed, newest first.
+  repeated RecentPayout recent_payouts = 11;
+}
