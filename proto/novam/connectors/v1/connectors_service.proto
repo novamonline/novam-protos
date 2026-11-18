@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package novam.connectors.v1;
 
+import "google/protobuf/struct.proto";
 import "novam/common/v1/common.proto";
 
 option go_package = "github.com/novamonline/novam-protos/gen/go/novam/connectors/v1;connectorsv1";
@@ -14,6 +15,13 @@ service ConnectorsService {
   // FAILED_PRECONDITION: a private or unresolvable host, a body over max_bytes, too many redirects. INVALID_ARGUMENT:
   // not an http or https URL. ABORTED: the host couldn't be reached or didn't answer in time.
   rpc Fetch(FetchRequest) returns (FetchResponse);
+  // How the marketing site shows in Google search (Search Console), with Novam's own service account.
+  rpc GetSiteSearch(GetSiteSearchRequest) returns (GetSiteSearchResponse);
+  // How fast a marketing page is (PageSpeed Insights). Takes 10 to 40 seconds; callers cache it.
+  rpc GetSiteSpeed(GetSiteSpeedRequest) returns (GetSiteSpeedResponse);
+  // The marketing site's traffic from Novam's Umami. NOT_FOUND: Umami has no such website. PERMISSION_DENIED: it
+  // refused the key or sign-in. ABORTED: it couldn't be reached or failed.
+  rpc GetSiteTraffic(GetSiteTrafficRequest) returns (GetSiteTrafficResponse);
 }
 
 message FetchRequest {
@@ -44,4 +52,44 @@ message FetchResponse {
   // The URL that answered, after any redirects.
   string url = 4;
   int32 elapsed_ms = 5;
+}
+
+// The readers below answer UNAVAILABLE when the engine has no credentials for them, so novam-data reads them itself.
+
+message GetSiteSearchRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // 7d, 28d or 90d.
+  string range = 2;
+}
+
+message GetSiteSearchResponse {
+  // As novam-data's SiteSearch: range, startDate, endDate, totals, queries, pages.
+  google.protobuf.Struct search = 1;
+}
+
+message GetSiteSpeedRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // A path on the marketing site.
+  string path = 2;
+  // mobile or desktop.
+  string strategy = 3;
+}
+
+message GetSiteSpeedResponse {
+  // As novam-data's SiteSpeed: url, strategy, score, field, lab, fetchedAt.
+  google.protobuf.Struct speed = 1;
+}
+
+message GetSiteTrafficRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // today, 7d, 28d or 90d.
+  string range = 2;
+  // IANA zone for today's midnight and hours; UTC when empty.
+  string time_zone = 3;
+}
+
+message GetSiteTrafficResponse {
+  // As novam-data's SiteTraffic: range, from, to, totals, previous, daily, hourly (today), topPages, languages,
+  // referrers, events.
+  google.protobuf.Struct traffic = 1;
 }

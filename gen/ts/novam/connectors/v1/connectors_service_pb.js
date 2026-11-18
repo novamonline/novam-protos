@@ -3,13 +3,14 @@
 /* eslint-disable */
 
 import { fileDesc, messageDesc, serviceDesc } from "@bufbuild/protobuf/codegenv2";
+import { file_google_protobuf_struct } from "@bufbuild/protobuf/wkt";
 import { file_novam_common_v1_common } from "../../common/v1/common_pb.js";
 
 /**
  * Describes the file novam/connectors/v1/connectors_service.proto.
  */
 export const file_novam_connectors_v1_connectors_service = /*@__PURE__*/
-  fileDesc("Cixub3ZhbS9jb25uZWN0b3JzL3YxL2Nvbm5lY3RvcnNfc2VydmljZS5wcm90bxITbm92YW0uY29ubmVjdG9ycy52MSKbAgoMRmV0Y2hSZXF1ZXN0EjIKCG1ldGFkYXRhGAEgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YRILCgN1cmwYAiABKAkSDgoGbWV0aG9kGAMgASgJEj8KB2hlYWRlcnMYBCADKAsyLi5ub3ZhbS5jb25uZWN0b3JzLnYxLkZldGNoUmVxdWVzdC5IZWFkZXJzRW50cnkSDAoEYm9keRgFIAEoDBISCgp0aW1lb3V0X21zGAYgASgFEhEKCW1heF9ieXRlcxgHIAEoBRIUCgxub19yZWRpcmVjdHMYCCABKAgaLgoMSGVhZGVyc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiJQoGSGVhZGVyEgwKBG5hbWUYASABKAkSDQoFdmFsdWUYAiABKAkifAoNRmV0Y2hSZXNwb25zZRIOCgZzdGF0dXMYASABKAUSLAoHaGVhZGVycxgCIAMoCzIbLm5vdmFtLmNvbm5lY3RvcnMudjEuSGVhZGVyEgwKBGJvZHkYAyABKAwSCwoDdXJsGAQgASgJEhIKCmVsYXBzZWRfbXMYBSABKAUyYwoRQ29ubmVjdG9yc1NlcnZpY2USTgoFRmV0Y2gSIS5ub3ZhbS5jb25uZWN0b3JzLnYxLkZldGNoUmVxdWVzdBoiLm5vdmFtLmNvbm5lY3RvcnMudjEuRmV0Y2hSZXNwb25zZUJNWktnaXRodWIuY29tL25vdmFtb25saW5lL25vdmFtLXByb3Rvcy9nZW4vZ28vbm92YW0vY29ubmVjdG9ycy92MTtjb25uZWN0b3JzdjFiBnByb3RvMw", [file_novam_common_v1_common]);
+  fileDesc("Cixub3ZhbS9jb25uZWN0b3JzL3YxL2Nvbm5lY3RvcnNfc2VydmljZS5wcm90bxITbm92YW0uY29ubmVjdG9ycy52MSKbAgoMRmV0Y2hSZXF1ZXN0EjIKCG1ldGFkYXRhGAEgASgLMiAubm92YW0uY29tbW9uLnYxLlJlcXVlc3RNZXRhZGF0YRILCgN1cmwYAiABKAkSDgoGbWV0aG9kGAMgASgJEj8KB2hlYWRlcnMYBCADKAsyLi5ub3ZhbS5jb25uZWN0b3JzLnYxLkZldGNoUmVxdWVzdC5IZWFkZXJzRW50cnkSDAoEYm9keRgFIAEoDBISCgp0aW1lb3V0X21zGAYgASgFEhEKCW1heF9ieXRlcxgHIAEoBRIUCgxub19yZWRpcmVjdHMYCCABKAgaLgoMSGVhZGVyc0VudHJ5EgsKA2tleRgBIAEoCRINCgV2YWx1ZRgCIAEoCToCOAEiJQoGSGVhZGVyEgwKBG5hbWUYASABKAkSDQoFdmFsdWUYAiABKAkifAoNRmV0Y2hSZXNwb25zZRIOCgZzdGF0dXMYASABKAUSLAoHaGVhZGVycxgCIAMoCzIbLm5vdmFtLmNvbm5lY3RvcnMudjEuSGVhZGVyEgwKBGJvZHkYAyABKAwSCwoDdXJsGAQgASgJEhIKCmVsYXBzZWRfbXMYBSABKAUiWQoUR2V0U2l0ZVNlYXJjaFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEg0KBXJhbmdlGAIgASgJIkAKFUdldFNpdGVTZWFyY2hSZXNwb25zZRInCgZzZWFyY2gYASABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0ImkKE0dldFNpdGVTcGVlZFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEgwKBHBhdGgYAiABKAkSEAoIc3RyYXRlZ3kYAyABKAkiPgoUR2V0U2l0ZVNwZWVkUmVzcG9uc2USJgoFc3BlZWQYASABKAsyFy5nb29nbGUucHJvdG9idWYuU3RydWN0Im0KFUdldFNpdGVUcmFmZmljUmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESDQoFcmFuZ2UYAiABKAkSEQoJdGltZV96b25lGAMgASgJIkIKFkdldFNpdGVUcmFmZmljUmVzcG9uc2USKAoHdHJhZmZpYxgBIAEoCzIXLmdvb2dsZS5wcm90b2J1Zi5TdHJ1Y3QymwMKEUNvbm5lY3RvcnNTZXJ2aWNlEk4KBUZldGNoEiEubm92YW0uY29ubmVjdG9ycy52MS5GZXRjaFJlcXVlc3QaIi5ub3ZhbS5jb25uZWN0b3JzLnYxLkZldGNoUmVzcG9uc2USZgoNR2V0U2l0ZVNlYXJjaBIpLm5vdmFtLmNvbm5lY3RvcnMudjEuR2V0U2l0ZVNlYXJjaFJlcXVlc3QaKi5ub3ZhbS5jb25uZWN0b3JzLnYxLkdldFNpdGVTZWFyY2hSZXNwb25zZRJjCgxHZXRTaXRlU3BlZWQSKC5ub3ZhbS5jb25uZWN0b3JzLnYxLkdldFNpdGVTcGVlZFJlcXVlc3QaKS5ub3ZhbS5jb25uZWN0b3JzLnYxLkdldFNpdGVTcGVlZFJlc3BvbnNlEmkKDkdldFNpdGVUcmFmZmljEioubm92YW0uY29ubmVjdG9ycy52MS5HZXRTaXRlVHJhZmZpY1JlcXVlc3QaKy5ub3ZhbS5jb25uZWN0b3JzLnYxLkdldFNpdGVUcmFmZmljUmVzcG9uc2VCTVpLZ2l0aHViLmNvbS9ub3ZhbW9ubGluZS9ub3ZhbS1wcm90b3MvZ2VuL2dvL25vdmFtL2Nvbm5lY3RvcnMvdjE7Y29ubmVjdG9yc3YxYgZwcm90bzM", [file_google_protobuf_struct, file_novam_common_v1_common]);
 
 /**
  * Describes the message novam.connectors.v1.FetchRequest.
@@ -31,6 +32,48 @@ export const HeaderSchema = /*@__PURE__*/
  */
 export const FetchResponseSchema = /*@__PURE__*/
   messageDesc(file_novam_connectors_v1_connectors_service, 2);
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSearchRequest.
+ * Use `create(GetSiteSearchRequestSchema)` to create a new message.
+ */
+export const GetSiteSearchRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_connectors_v1_connectors_service, 3);
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSearchResponse.
+ * Use `create(GetSiteSearchResponseSchema)` to create a new message.
+ */
+export const GetSiteSearchResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_connectors_v1_connectors_service, 4);
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSpeedRequest.
+ * Use `create(GetSiteSpeedRequestSchema)` to create a new message.
+ */
+export const GetSiteSpeedRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_connectors_v1_connectors_service, 5);
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSpeedResponse.
+ * Use `create(GetSiteSpeedResponseSchema)` to create a new message.
+ */
+export const GetSiteSpeedResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_connectors_v1_connectors_service, 6);
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteTrafficRequest.
+ * Use `create(GetSiteTrafficRequestSchema)` to create a new message.
+ */
+export const GetSiteTrafficRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_connectors_v1_connectors_service, 7);
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteTrafficResponse.
+ * Use `create(GetSiteTrafficResponseSchema)` to create a new message.
+ */
+export const GetSiteTrafficResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_connectors_v1_connectors_service, 8);
 
 /**
  * ConnectorsService runs in novam-engine's workflows server. It reaches the hosts businesses name (iCal feeds, their
