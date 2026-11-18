@@ -102,6 +102,14 @@ service PaymentsService {
   rpc SendPartnerStatement(SendPartnerStatementRequest) returns (SendPartnerStatementResponse);
   // Records that an approved statement was paid another way, marking its open Stripe invoice paid outside Stripe first.
   rpc MarkPartnerStatementCollected(MarkPartnerStatementCollectedRequest) returns (MarkPartnerStatementCollectedResponse);
+  // A client buys a gift card in Passes with their default wallet card, for someone else, at a business they are a
+  // client of: a pending card, then a direct charge on the business's account. Paid makes it usable and sends it;
+  // 3-D Secure comes back to finish. A decline leaves nothing behind. NOT_FOUND or FAILED_PRECONDITION with the
+  // reason when it can't be bought; INVALID_ARGUMENT for what was asked.
+  rpc BuyGiftCardWithWallet(BuyGiftCardWithWalletRequest) returns (BuyGiftCardWithWalletResponse);
+  // Back from 3-D Secure (or asked again): what Stripe now says of a wallet gift card's charge. Paid makes it usable
+  // and sends it, once; failed removes it. Safe to repeat.
+  rpc ConfirmWalletGiftCard(ConfirmWalletGiftCardRequest) returns (ConfirmWalletGiftCardResponse);
 }
 
 message RecordPaymentRequest {
@@ -522,4 +530,46 @@ message AddAiByMembershipResponse {
   bool billed = 1;
   // Where the owner pays it.
   string pay_url = 2;
+}
+
+message BuyGiftCardWithWalletRequest {
+  // The business is the token's.
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The buyer, a client of the business with a wallet.
+  string user_id = 2;
+  double amount = 3;
+  string to_name = 4;
+  string to_email = 5;
+  string to_phone = 6;
+  string message = 7;
+}
+
+message BuyGiftCardWithWalletResponse {
+  string gift_card_id = 1;
+  // paid or needs_action.
+  string status = 2;
+  // With needs_action: what the app finishes 3-D Secure with, on this connected account.
+  string client_secret = 3;
+  string stripe_account = 4;
+  // The card was made usable by this call.
+  bool activated = 5;
+  // How it reached its recipient when activated: pass, email, text or none; empty when the engine can't send it, so
+  // novam-data sends it.
+  string delivered = 6;
+}
+
+message ConfirmWalletGiftCardRequest {
+  // Any business: the card says whose it is.
+  novam.common.v1.RequestMetadata metadata = 1;
+  string gift_card_id = 2;
+  // Only the buyer's own card when set.
+  string buyer_user_id = 3;
+}
+
+message ConfirmWalletGiftCardResponse {
+  string gift_card_id = 1;
+  // paid, needs_action or failed.
+  string status = 2;
+  bool activated = 3;
+  string delivered = 4;
 }

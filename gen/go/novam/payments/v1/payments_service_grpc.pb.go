@@ -49,6 +49,8 @@ const (
 	PaymentsService_ApprovePartnerStatements_FullMethodName      = "/novam.payments.v1.PaymentsService/ApprovePartnerStatements"
 	PaymentsService_SendPartnerStatement_FullMethodName          = "/novam.payments.v1.PaymentsService/SendPartnerStatement"
 	PaymentsService_MarkPartnerStatementCollected_FullMethodName = "/novam.payments.v1.PaymentsService/MarkPartnerStatementCollected"
+	PaymentsService_BuyGiftCardWithWallet_FullMethodName         = "/novam.payments.v1.PaymentsService/BuyGiftCardWithWallet"
+	PaymentsService_ConfirmWalletGiftCard_FullMethodName         = "/novam.payments.v1.PaymentsService/ConfirmWalletGiftCard"
 )
 
 // PaymentsServiceClient is the client API for PaymentsService service.
@@ -149,6 +151,14 @@ type PaymentsServiceClient interface {
 	SendPartnerStatement(ctx context.Context, in *SendPartnerStatementRequest, opts ...grpc.CallOption) (*SendPartnerStatementResponse, error)
 	// Records that an approved statement was paid another way, marking its open Stripe invoice paid outside Stripe first.
 	MarkPartnerStatementCollected(ctx context.Context, in *MarkPartnerStatementCollectedRequest, opts ...grpc.CallOption) (*MarkPartnerStatementCollectedResponse, error)
+	// A client buys a gift card in Passes with their default wallet card, for someone else, at a business they are a
+	// client of: a pending card, then a direct charge on the business's account. Paid makes it usable and sends it;
+	// 3-D Secure comes back to finish. A decline leaves nothing behind. NOT_FOUND or FAILED_PRECONDITION with the
+	// reason when it can't be bought; INVALID_ARGUMENT for what was asked.
+	BuyGiftCardWithWallet(ctx context.Context, in *BuyGiftCardWithWalletRequest, opts ...grpc.CallOption) (*BuyGiftCardWithWalletResponse, error)
+	// Back from 3-D Secure (or asked again): what Stripe now says of a wallet gift card's charge. Paid makes it usable
+	// and sends it, once; failed removes it. Safe to repeat.
+	ConfirmWalletGiftCard(ctx context.Context, in *ConfirmWalletGiftCardRequest, opts ...grpc.CallOption) (*ConfirmWalletGiftCardResponse, error)
 }
 
 type paymentsServiceClient struct {
@@ -459,6 +469,26 @@ func (c *paymentsServiceClient) MarkPartnerStatementCollected(ctx context.Contex
 	return out, nil
 }
 
+func (c *paymentsServiceClient) BuyGiftCardWithWallet(ctx context.Context, in *BuyGiftCardWithWalletRequest, opts ...grpc.CallOption) (*BuyGiftCardWithWalletResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BuyGiftCardWithWalletResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_BuyGiftCardWithWallet_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) ConfirmWalletGiftCard(ctx context.Context, in *ConfirmWalletGiftCardRequest, opts ...grpc.CallOption) (*ConfirmWalletGiftCardResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ConfirmWalletGiftCardResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ConfirmWalletGiftCard_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentsServiceServer is the server API for PaymentsService service.
 // All implementations must embed UnimplementedPaymentsServiceServer
 // for forward compatibility.
@@ -557,6 +587,14 @@ type PaymentsServiceServer interface {
 	SendPartnerStatement(context.Context, *SendPartnerStatementRequest) (*SendPartnerStatementResponse, error)
 	// Records that an approved statement was paid another way, marking its open Stripe invoice paid outside Stripe first.
 	MarkPartnerStatementCollected(context.Context, *MarkPartnerStatementCollectedRequest) (*MarkPartnerStatementCollectedResponse, error)
+	// A client buys a gift card in Passes with their default wallet card, for someone else, at a business they are a
+	// client of: a pending card, then a direct charge on the business's account. Paid makes it usable and sends it;
+	// 3-D Secure comes back to finish. A decline leaves nothing behind. NOT_FOUND or FAILED_PRECONDITION with the
+	// reason when it can't be bought; INVALID_ARGUMENT for what was asked.
+	BuyGiftCardWithWallet(context.Context, *BuyGiftCardWithWalletRequest) (*BuyGiftCardWithWalletResponse, error)
+	// Back from 3-D Secure (or asked again): what Stripe now says of a wallet gift card's charge. Paid makes it usable
+	// and sends it, once; failed removes it. Safe to repeat.
+	ConfirmWalletGiftCard(context.Context, *ConfirmWalletGiftCardRequest) (*ConfirmWalletGiftCardResponse, error)
 	mustEmbedUnimplementedPaymentsServiceServer()
 }
 
@@ -656,6 +694,12 @@ func (UnimplementedPaymentsServiceServer) SendPartnerStatement(context.Context, 
 }
 func (UnimplementedPaymentsServiceServer) MarkPartnerStatementCollected(context.Context, *MarkPartnerStatementCollectedRequest) (*MarkPartnerStatementCollectedResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method MarkPartnerStatementCollected not implemented")
+}
+func (UnimplementedPaymentsServiceServer) BuyGiftCardWithWallet(context.Context, *BuyGiftCardWithWalletRequest) (*BuyGiftCardWithWalletResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BuyGiftCardWithWallet not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ConfirmWalletGiftCard(context.Context, *ConfirmWalletGiftCardRequest) (*ConfirmWalletGiftCardResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ConfirmWalletGiftCard not implemented")
 }
 func (UnimplementedPaymentsServiceServer) mustEmbedUnimplementedPaymentsServiceServer() {}
 func (UnimplementedPaymentsServiceServer) testEmbeddedByValue()                         {}
@@ -1218,6 +1262,42 @@ func _PaymentsService_MarkPartnerStatementCollected_Handler(srv interface{}, ctx
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_BuyGiftCardWithWallet_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BuyGiftCardWithWalletRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).BuyGiftCardWithWallet(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_BuyGiftCardWithWallet_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).BuyGiftCardWithWallet(ctx, req.(*BuyGiftCardWithWalletRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_ConfirmWalletGiftCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConfirmWalletGiftCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ConfirmWalletGiftCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ConfirmWalletGiftCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ConfirmWalletGiftCard(ctx, req.(*ConfirmWalletGiftCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentsService_ServiceDesc is the grpc.ServiceDesc for PaymentsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1344,6 +1424,14 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MarkPartnerStatementCollected",
 			Handler:    _PaymentsService_MarkPartnerStatementCollected_Handler,
+		},
+		{
+			MethodName: "BuyGiftCardWithWallet",
+			Handler:    _PaymentsService_BuyGiftCardWithWallet_Handler,
+		},
+		{
+			MethodName: "ConfirmWalletGiftCard",
+			Handler:    _PaymentsService_ConfirmWalletGiftCard_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

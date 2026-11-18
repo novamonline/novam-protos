@@ -1695,6 +1695,169 @@ export declare type AddAiByMembershipResponse = Message<"novam.payments.v1.AddAi
 export declare const AddAiByMembershipResponseSchema: GenMessage<AddAiByMembershipResponse>;
 
 /**
+ * @generated from message novam.payments.v1.BuyGiftCardWithWalletRequest
+ */
+export declare type BuyGiftCardWithWalletRequest = Message<"novam.payments.v1.BuyGiftCardWithWalletRequest"> & {
+  /**
+   * The business is the token's.
+   *
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * The buyer, a client of the business with a wallet.
+   *
+   * @generated from field: string user_id = 2;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: double amount = 3;
+   */
+  amount: number;
+
+  /**
+   * @generated from field: string to_name = 4;
+   */
+  toName: string;
+
+  /**
+   * @generated from field: string to_email = 5;
+   */
+  toEmail: string;
+
+  /**
+   * @generated from field: string to_phone = 6;
+   */
+  toPhone: string;
+
+  /**
+   * @generated from field: string message = 7;
+   */
+  message: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.BuyGiftCardWithWalletRequest.
+ * Use `create(BuyGiftCardWithWalletRequestSchema)` to create a new message.
+ */
+export declare const BuyGiftCardWithWalletRequestSchema: GenMessage<BuyGiftCardWithWalletRequest>;
+
+/**
+ * @generated from message novam.payments.v1.BuyGiftCardWithWalletResponse
+ */
+export declare type BuyGiftCardWithWalletResponse = Message<"novam.payments.v1.BuyGiftCardWithWalletResponse"> & {
+  /**
+   * @generated from field: string gift_card_id = 1;
+   */
+  giftCardId: string;
+
+  /**
+   * paid or needs_action.
+   *
+   * @generated from field: string status = 2;
+   */
+  status: string;
+
+  /**
+   * With needs_action: what the app finishes 3-D Secure with, on this connected account.
+   *
+   * @generated from field: string client_secret = 3;
+   */
+  clientSecret: string;
+
+  /**
+   * @generated from field: string stripe_account = 4;
+   */
+  stripeAccount: string;
+
+  /**
+   * The card was made usable by this call.
+   *
+   * @generated from field: bool activated = 5;
+   */
+  activated: boolean;
+
+  /**
+   * How it reached its recipient when activated: pass, email, text or none; empty when the engine can't send it, so
+   * novam-data sends it.
+   *
+   * @generated from field: string delivered = 6;
+   */
+  delivered: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.BuyGiftCardWithWalletResponse.
+ * Use `create(BuyGiftCardWithWalletResponseSchema)` to create a new message.
+ */
+export declare const BuyGiftCardWithWalletResponseSchema: GenMessage<BuyGiftCardWithWalletResponse>;
+
+/**
+ * @generated from message novam.payments.v1.ConfirmWalletGiftCardRequest
+ */
+export declare type ConfirmWalletGiftCardRequest = Message<"novam.payments.v1.ConfirmWalletGiftCardRequest"> & {
+  /**
+   * Any business: the card says whose it is.
+   *
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string gift_card_id = 2;
+   */
+  giftCardId: string;
+
+  /**
+   * Only the buyer's own card when set.
+   *
+   * @generated from field: string buyer_user_id = 3;
+   */
+  buyerUserId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ConfirmWalletGiftCardRequest.
+ * Use `create(ConfirmWalletGiftCardRequestSchema)` to create a new message.
+ */
+export declare const ConfirmWalletGiftCardRequestSchema: GenMessage<ConfirmWalletGiftCardRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ConfirmWalletGiftCardResponse
+ */
+export declare type ConfirmWalletGiftCardResponse = Message<"novam.payments.v1.ConfirmWalletGiftCardResponse"> & {
+  /**
+   * @generated from field: string gift_card_id = 1;
+   */
+  giftCardId: string;
+
+  /**
+   * paid, needs_action or failed.
+   *
+   * @generated from field: string status = 2;
+   */
+  status: string;
+
+  /**
+   * @generated from field: bool activated = 3;
+   */
+  activated: boolean;
+
+  /**
+   * @generated from field: string delivered = 4;
+   */
+  delivered: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ConfirmWalletGiftCardResponse.
+ * Use `create(ConfirmWalletGiftCardResponseSchema)` to create a new message.
+ */
+export declare const ConfirmWalletGiftCardResponseSchema: GenMessage<ConfirmWalletGiftCardResponse>;
+
+/**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
  * what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
  * sound first, then asks here; it reads the payment back to answer.
@@ -2031,6 +2194,30 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof MarkPartnerStatementCollectedRequestSchema;
     output: typeof MarkPartnerStatementCollectedResponseSchema;
+  },
+  /**
+   * A client buys a gift card in Passes with their default wallet card, for someone else, at a business they are a
+   * client of: a pending card, then a direct charge on the business's account. Paid makes it usable and sends it;
+   * 3-D Secure comes back to finish. A decline leaves nothing behind. NOT_FOUND or FAILED_PRECONDITION with the
+   * reason when it can't be bought; INVALID_ARGUMENT for what was asked.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.BuyGiftCardWithWallet
+   */
+  buyGiftCardWithWallet: {
+    methodKind: "unary";
+    input: typeof BuyGiftCardWithWalletRequestSchema;
+    output: typeof BuyGiftCardWithWalletResponseSchema;
+  },
+  /**
+   * Back from 3-D Secure (or asked again): what Stripe now says of a wallet gift card's charge. Paid makes it usable
+   * and sends it, once; failed removes it. Safe to repeat.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ConfirmWalletGiftCard
+   */
+  confirmWalletGiftCard: {
+    methodKind: "unary";
+    input: typeof ConfirmWalletGiftCardRequestSchema;
+    output: typeof ConfirmWalletGiftCardResponseSchema;
   },
 }>;
 
