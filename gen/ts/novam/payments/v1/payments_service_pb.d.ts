@@ -239,6 +239,13 @@ export declare type FailPaymentResponse = Message<"novam.payments.v1.FailPayment
    * @generated from field: double amount = 4;
    */
   amount: number;
+
+  /**
+   * The invoice it paid is owed again (novam-data's autopay may charge it).
+   *
+   * @generated from field: bool reopened = 5;
+   */
+  reopened: boolean;
 };
 
 /**

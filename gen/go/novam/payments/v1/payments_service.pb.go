@@ -471,8 +471,10 @@ type FailPaymentResponse struct {
 	PaymentId       string  `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
 	ClientInvoiceId string  `protobuf:"bytes,3,opt,name=client_invoice_id,json=clientInvoiceId,proto3" json:"client_invoice_id,omitempty"`
 	Amount          float64 `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
-	unknownFields   protoimpl.UnknownFields
-	sizeCache       protoimpl.SizeCache
+	// The invoice it paid is owed again (novam-data's autopay may charge it).
+	Reopened      bool `protobuf:"varint,5,opt,name=reopened,proto3" json:"reopened,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *FailPaymentResponse) Reset() {
@@ -531,6 +533,13 @@ func (x *FailPaymentResponse) GetAmount() float64 {
 		return x.Amount
 	}
 	return 0
+}
+
+func (x *FailPaymentResponse) GetReopened() bool {
+	if x != nil {
+		return x.Reopened
+	}
+	return false
 }
 
 type RefundPaymentRequest struct {
@@ -1164,13 +1173,14 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\x12FailPaymentRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x127\n" +
 	"\x18stripe_payment_intent_id\x18\x02 \x01(\tR\x15stripePaymentIntentId\x12\x16\n" +
-	"\x06reason\x18\x03 \x01(\tR\x06reason\"\x90\x01\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\"\xac\x01\n" +
 	"\x13FailPaymentResponse\x12\x16\n" +
 	"\x06failed\x18\x01 \x01(\bR\x06failed\x12\x1d\n" +
 	"\n" +
 	"payment_id\x18\x02 \x01(\tR\tpaymentId\x12*\n" +
 	"\x11client_invoice_id\x18\x03 \x01(\tR\x0fclientInvoiceId\x12\x16\n" +
-	"\x06amount\x18\x04 \x01(\x01R\x06amount\"\x82\x02\n" +
+	"\x06amount\x18\x04 \x01(\x01R\x06amount\x12\x1a\n" +
+	"\breopened\x18\x05 \x01(\bR\breopened\"\x82\x02\n" +
 	"\x14RefundPaymentRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1d\n" +
 	"\n" +

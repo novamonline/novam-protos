@@ -94,6 +94,8 @@ message FailPaymentResponse {
   string payment_id = 2;
   string client_invoice_id = 3;
   double amount = 4;
+  // The invoice it paid is owed again (novam-data's autopay may charge it).
+  bool reopened = 5;
 }
 
 message RefundPaymentRequest {
