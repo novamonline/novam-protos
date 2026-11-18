@@ -29,6 +29,11 @@ const (
 	WorkService_VisitCheckedIn_FullMethodName = "/novam.work.v1.WorkService/VisitCheckedIn"
 	WorkService_VisitFinished_FullMethodName  = "/novam.work.v1.WorkService/VisitFinished"
 	WorkService_AtPlace_FullMethodName        = "/novam.work.v1.WorkService/AtPlace"
+	WorkService_PayWeek_FullMethodName        = "/novam.work.v1.WorkService/PayWeek"
+	WorkService_UnpayWeek_FullMethodName      = "/novam.work.v1.WorkService/UnpayWeek"
+	WorkService_SetRate_FullMethodName        = "/novam.work.v1.WorkService/SetRate"
+	WorkService_ClaimDevice_FullMethodName    = "/novam.work.v1.WorkService/ClaimDevice"
+	WorkService_LeaveDevice_FullMethodName    = "/novam.work.v1.WorkService/LeaveDevice"
 )
 
 // WorkServiceClient is the client API for WorkService service.
@@ -63,6 +68,18 @@ type WorkServiceClient interface {
 	VisitFinished(ctx context.Context, in *VisitFinishedRequest, opts ...grpc.CallOption) (*VisitFinishedResponse, error)
 	// The phone says its person got to the business's place or left it (work.autoArrive, work.autoLeave).
 	AtPlace(ctx context.Context, in *AtPlaceRequest, opts ...grpc.CallOption) (*AtPlaceResponse, error)
+	// Pays a week: keeps what each helper had worked and was owed, and keeps each one's draft pay (what isn't paid yet)
+	// up to date for Front Desk to mark paid; a helper owed nothing has no draft.
+	PayWeek(ctx context.Context, in *PayWeekRequest, opts ...grpc.CallOption) (*PayWeekResponse, error)
+	// Takes back paying a week: its drafts go, what was paid stays.
+	UnpayWeek(ctx context.Context, in *UnpayWeekRequest, opts ...grpc.CallOption) (*UnpayWeekResponse, error)
+	// Sets what someone is paid an hour; no rate takes it away.
+	SetRate(ctx context.Context, in *SetRateRequest, opts ...grpc.CallOption) (*SetRateResponse, error)
+	// At work runs on one device at a time: a device claims it (take, or when nobody holds it, it's this one's already,
+	// or the holder's claim lapsed) and renews it; otherwise it hears which device has it.
+	ClaimDevice(ctx context.Context, in *ClaimDeviceRequest, opts ...grpc.CallOption) (*ClaimDeviceResponse, error)
+	// A device done with At work lets go of it, if it still holds it.
+	LeaveDevice(ctx context.Context, in *LeaveDeviceRequest, opts ...grpc.CallOption) (*LeaveDeviceResponse, error)
 }
 
 type workServiceClient struct {
@@ -173,6 +190,56 @@ func (c *workServiceClient) AtPlace(ctx context.Context, in *AtPlaceRequest, opt
 	return out, nil
 }
 
+func (c *workServiceClient) PayWeek(ctx context.Context, in *PayWeekRequest, opts ...grpc.CallOption) (*PayWeekResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PayWeekResponse)
+	err := c.cc.Invoke(ctx, WorkService_PayWeek_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) UnpayWeek(ctx context.Context, in *UnpayWeekRequest, opts ...grpc.CallOption) (*UnpayWeekResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UnpayWeekResponse)
+	err := c.cc.Invoke(ctx, WorkService_UnpayWeek_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) SetRate(ctx context.Context, in *SetRateRequest, opts ...grpc.CallOption) (*SetRateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetRateResponse)
+	err := c.cc.Invoke(ctx, WorkService_SetRate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) ClaimDevice(ctx context.Context, in *ClaimDeviceRequest, opts ...grpc.CallOption) (*ClaimDeviceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ClaimDeviceResponse)
+	err := c.cc.Invoke(ctx, WorkService_ClaimDevice_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *workServiceClient) LeaveDevice(ctx context.Context, in *LeaveDeviceRequest, opts ...grpc.CallOption) (*LeaveDeviceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(LeaveDeviceResponse)
+	err := c.cc.Invoke(ctx, WorkService_LeaveDevice_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkServiceServer is the server API for WorkService service.
 // All implementations must embed UnimplementedWorkServiceServer
 // for forward compatibility.
@@ -205,6 +272,18 @@ type WorkServiceServer interface {
 	VisitFinished(context.Context, *VisitFinishedRequest) (*VisitFinishedResponse, error)
 	// The phone says its person got to the business's place or left it (work.autoArrive, work.autoLeave).
 	AtPlace(context.Context, *AtPlaceRequest) (*AtPlaceResponse, error)
+	// Pays a week: keeps what each helper had worked and was owed, and keeps each one's draft pay (what isn't paid yet)
+	// up to date for Front Desk to mark paid; a helper owed nothing has no draft.
+	PayWeek(context.Context, *PayWeekRequest) (*PayWeekResponse, error)
+	// Takes back paying a week: its drafts go, what was paid stays.
+	UnpayWeek(context.Context, *UnpayWeekRequest) (*UnpayWeekResponse, error)
+	// Sets what someone is paid an hour; no rate takes it away.
+	SetRate(context.Context, *SetRateRequest) (*SetRateResponse, error)
+	// At work runs on one device at a time: a device claims it (take, or when nobody holds it, it's this one's already,
+	// or the holder's claim lapsed) and renews it; otherwise it hears which device has it.
+	ClaimDevice(context.Context, *ClaimDeviceRequest) (*ClaimDeviceResponse, error)
+	// A device done with At work lets go of it, if it still holds it.
+	LeaveDevice(context.Context, *LeaveDeviceRequest) (*LeaveDeviceResponse, error)
 	mustEmbedUnimplementedWorkServiceServer()
 }
 
@@ -244,6 +323,21 @@ func (UnimplementedWorkServiceServer) VisitFinished(context.Context, *VisitFinis
 }
 func (UnimplementedWorkServiceServer) AtPlace(context.Context, *AtPlaceRequest) (*AtPlaceResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method AtPlace not implemented")
+}
+func (UnimplementedWorkServiceServer) PayWeek(context.Context, *PayWeekRequest) (*PayWeekResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PayWeek not implemented")
+}
+func (UnimplementedWorkServiceServer) UnpayWeek(context.Context, *UnpayWeekRequest) (*UnpayWeekResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method UnpayWeek not implemented")
+}
+func (UnimplementedWorkServiceServer) SetRate(context.Context, *SetRateRequest) (*SetRateResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetRate not implemented")
+}
+func (UnimplementedWorkServiceServer) ClaimDevice(context.Context, *ClaimDeviceRequest) (*ClaimDeviceResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ClaimDevice not implemented")
+}
+func (UnimplementedWorkServiceServer) LeaveDevice(context.Context, *LeaveDeviceRequest) (*LeaveDeviceResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method LeaveDevice not implemented")
 }
 func (UnimplementedWorkServiceServer) mustEmbedUnimplementedWorkServiceServer() {}
 func (UnimplementedWorkServiceServer) testEmbeddedByValue()                     {}
@@ -446,6 +540,96 @@ func _WorkService_AtPlace_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkService_PayWeek_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PayWeekRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).PayWeek(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_PayWeek_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).PayWeek(ctx, req.(*PayWeekRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_UnpayWeek_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnpayWeekRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).UnpayWeek(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_UnpayWeek_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).UnpayWeek(ctx, req.(*UnpayWeekRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_SetRate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetRateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).SetRate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_SetRate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).SetRate(ctx, req.(*SetRateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_ClaimDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ClaimDeviceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).ClaimDevice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_ClaimDevice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).ClaimDevice(ctx, req.(*ClaimDeviceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _WorkService_LeaveDevice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(LeaveDeviceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkServiceServer).LeaveDevice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkService_LeaveDevice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkServiceServer).LeaveDevice(ctx, req.(*LeaveDeviceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkService_ServiceDesc is the grpc.ServiceDesc for WorkService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -492,6 +676,26 @@ var WorkService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AtPlace",
 			Handler:    _WorkService_AtPlace_Handler,
+		},
+		{
+			MethodName: "PayWeek",
+			Handler:    _WorkService_PayWeek_Handler,
+		},
+		{
+			MethodName: "UnpayWeek",
+			Handler:    _WorkService_UnpayWeek_Handler,
+		},
+		{
+			MethodName: "SetRate",
+			Handler:    _WorkService_SetRate_Handler,
+		},
+		{
+			MethodName: "ClaimDevice",
+			Handler:    _WorkService_ClaimDevice_Handler,
+		},
+		{
+			MethodName: "LeaveDevice",
+			Handler:    _WorkService_LeaveDevice_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

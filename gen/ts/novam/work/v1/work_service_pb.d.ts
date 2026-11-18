@@ -572,6 +572,289 @@ export declare type AtPlaceResponse = Message<"novam.work.v1.AtPlaceResponse"> &
 export declare const AtPlaceResponseSchema: GenMessage<AtPlaceResponse>;
 
 /**
+ * @generated from message novam.work.v1.PayWeekRequest
+ */
+export declare type PayWeekRequest = Message<"novam.work.v1.PayWeekRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * The week's Monday.
+   *
+   * @generated from field: string week = 2;
+   */
+  week: string;
+
+  /**
+   * @generated from field: string paid_by = 3;
+   */
+  paidBy: string;
+
+  /**
+   * @generated from field: string paid_at = 4;
+   */
+  paidAt: string;
+
+  /**
+   * Minutes each person had worked, and what each with a rate was owed (cents), by user id.
+   *
+   * @generated from field: map<string, int32> worked = 5;
+   */
+  worked: { [key: string]: number };
+
+  /**
+   * @generated from field: map<string, int64> pay = 6;
+   */
+  pay: { [key: string]: bigint };
+
+  /**
+   * @generated from field: repeated novam.work.v1.WeekPay pays = 7;
+   */
+  pays: WeekPay[];
+};
+
+/**
+ * Describes the message novam.work.v1.PayWeekRequest.
+ * Use `create(PayWeekRequestSchema)` to create a new message.
+ */
+export declare const PayWeekRequestSchema: GenMessage<PayWeekRequest>;
+
+/**
+ * One helper's pay for the week: amount_cents is what isn't paid yet, and none drops their draft.
+ *
+ * @generated from message novam.work.v1.WeekPay
+ */
+export declare type WeekPay = Message<"novam.work.v1.WeekPay"> & {
+  /**
+   * @generated from field: string user_id = 1;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string helper_id = 2;
+   */
+  helperId: string;
+
+  /**
+   * @generated from field: int32 minutes = 3;
+   */
+  minutes: number;
+
+  /**
+   * @generated from field: int64 cents_per_hour = 4;
+   */
+  centsPerHour: bigint;
+
+  /**
+   * @generated from field: int64 amount_cents = 5;
+   */
+  amountCents: bigint;
+};
+
+/**
+ * Describes the message novam.work.v1.WeekPay.
+ * Use `create(WeekPaySchema)` to create a new message.
+ */
+export declare const WeekPaySchema: GenMessage<WeekPay>;
+
+/**
+ * @generated from message novam.work.v1.PayWeekResponse
+ */
+export declare type PayWeekResponse = Message<"novam.work.v1.PayWeekResponse"> & {
+};
+
+/**
+ * Describes the message novam.work.v1.PayWeekResponse.
+ * Use `create(PayWeekResponseSchema)` to create a new message.
+ */
+export declare const PayWeekResponseSchema: GenMessage<PayWeekResponse>;
+
+/**
+ * @generated from message novam.work.v1.UnpayWeekRequest
+ */
+export declare type UnpayWeekRequest = Message<"novam.work.v1.UnpayWeekRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string week = 2;
+   */
+  week: string;
+};
+
+/**
+ * Describes the message novam.work.v1.UnpayWeekRequest.
+ * Use `create(UnpayWeekRequestSchema)` to create a new message.
+ */
+export declare const UnpayWeekRequestSchema: GenMessage<UnpayWeekRequest>;
+
+/**
+ * @generated from message novam.work.v1.UnpayWeekResponse
+ */
+export declare type UnpayWeekResponse = Message<"novam.work.v1.UnpayWeekResponse"> & {
+};
+
+/**
+ * Describes the message novam.work.v1.UnpayWeekResponse.
+ * Use `create(UnpayWeekResponseSchema)` to create a new message.
+ */
+export declare const UnpayWeekResponseSchema: GenMessage<UnpayWeekResponse>;
+
+/**
+ * @generated from message novam.work.v1.SetRateRequest
+ */
+export declare type SetRateRequest = Message<"novam.work.v1.SetRateRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string user_id = 2;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: optional int64 cents_per_hour = 3;
+   */
+  centsPerHour?: bigint;
+
+  /**
+   * @generated from field: string by_user_id = 4;
+   */
+  byUserId: string;
+};
+
+/**
+ * Describes the message novam.work.v1.SetRateRequest.
+ * Use `create(SetRateRequestSchema)` to create a new message.
+ */
+export declare const SetRateRequestSchema: GenMessage<SetRateRequest>;
+
+/**
+ * @generated from message novam.work.v1.SetRateResponse
+ */
+export declare type SetRateResponse = Message<"novam.work.v1.SetRateResponse"> & {
+};
+
+/**
+ * Describes the message novam.work.v1.SetRateResponse.
+ * Use `create(SetRateResponseSchema)` to create a new message.
+ */
+export declare const SetRateResponseSchema: GenMessage<SetRateResponse>;
+
+/**
+ * @generated from message novam.work.v1.ClaimDeviceRequest
+ */
+export declare type ClaimDeviceRequest = Message<"novam.work.v1.ClaimDeviceRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string user_id = 2;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string device = 3;
+   */
+  device: string;
+
+  /**
+   * @generated from field: string label = 4;
+   */
+  label: string;
+
+  /**
+   * @generated from field: bool take = 5;
+   */
+  take: boolean;
+
+  /**
+   * How long an unrenewed claim holds, in milliseconds.
+   *
+   * @generated from field: int64 lapses_ms = 6;
+   */
+  lapsesMs: bigint;
+};
+
+/**
+ * Describes the message novam.work.v1.ClaimDeviceRequest.
+ * Use `create(ClaimDeviceRequestSchema)` to create a new message.
+ */
+export declare const ClaimDeviceRequestSchema: GenMessage<ClaimDeviceRequest>;
+
+/**
+ * @generated from message novam.work.v1.ClaimDeviceResponse
+ */
+export declare type ClaimDeviceResponse = Message<"novam.work.v1.ClaimDeviceResponse"> & {
+  /**
+   * @generated from field: bool here = 1;
+   */
+  here: boolean;
+
+  /**
+   * @generated from field: string label = 2;
+   */
+  label: string;
+
+  /**
+   * @generated from field: string since = 3;
+   */
+  since: string;
+};
+
+/**
+ * Describes the message novam.work.v1.ClaimDeviceResponse.
+ * Use `create(ClaimDeviceResponseSchema)` to create a new message.
+ */
+export declare const ClaimDeviceResponseSchema: GenMessage<ClaimDeviceResponse>;
+
+/**
+ * @generated from message novam.work.v1.LeaveDeviceRequest
+ */
+export declare type LeaveDeviceRequest = Message<"novam.work.v1.LeaveDeviceRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string user_id = 2;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string device = 3;
+   */
+  device: string;
+};
+
+/**
+ * Describes the message novam.work.v1.LeaveDeviceRequest.
+ * Use `create(LeaveDeviceRequestSchema)` to create a new message.
+ */
+export declare const LeaveDeviceRequestSchema: GenMessage<LeaveDeviceRequest>;
+
+/**
+ * @generated from message novam.work.v1.LeaveDeviceResponse
+ */
+export declare type LeaveDeviceResponse = Message<"novam.work.v1.LeaveDeviceResponse"> & {
+};
+
+/**
+ * Describes the message novam.work.v1.LeaveDeviceResponse.
+ * Use `create(LeaveDeviceResponseSchema)` to create a new message.
+ */
+export declare const LeaveDeviceResponseSchema: GenMessage<LeaveDeviceResponse>;
+
+/**
  * WorkService writes At work (ADR-0009): the spans of time someone at a business is working, serving a client,
  * driving or on a break, and what each day keeps (when they first opened Novam, the suggestions they answered, the
  * owner's changes to today). novam-data reads the day and works out its suggestions; the engine writes, under the
@@ -682,6 +965,58 @@ export declare const WorkService: GenService<{
     methodKind: "unary";
     input: typeof AtPlaceRequestSchema;
     output: typeof AtPlaceResponseSchema;
+  },
+  /**
+   * Pays a week: keeps what each helper had worked and was owed, and keeps each one's draft pay (what isn't paid yet)
+   * up to date for Front Desk to mark paid; a helper owed nothing has no draft.
+   *
+   * @generated from rpc novam.work.v1.WorkService.PayWeek
+   */
+  payWeek: {
+    methodKind: "unary";
+    input: typeof PayWeekRequestSchema;
+    output: typeof PayWeekResponseSchema;
+  },
+  /**
+   * Takes back paying a week: its drafts go, what was paid stays.
+   *
+   * @generated from rpc novam.work.v1.WorkService.UnpayWeek
+   */
+  unpayWeek: {
+    methodKind: "unary";
+    input: typeof UnpayWeekRequestSchema;
+    output: typeof UnpayWeekResponseSchema;
+  },
+  /**
+   * Sets what someone is paid an hour; no rate takes it away.
+   *
+   * @generated from rpc novam.work.v1.WorkService.SetRate
+   */
+  setRate: {
+    methodKind: "unary";
+    input: typeof SetRateRequestSchema;
+    output: typeof SetRateResponseSchema;
+  },
+  /**
+   * At work runs on one device at a time: a device claims it (take, or when nobody holds it, it's this one's already,
+   * or the holder's claim lapsed) and renews it; otherwise it hears which device has it.
+   *
+   * @generated from rpc novam.work.v1.WorkService.ClaimDevice
+   */
+  claimDevice: {
+    methodKind: "unary";
+    input: typeof ClaimDeviceRequestSchema;
+    output: typeof ClaimDeviceResponseSchema;
+  },
+  /**
+   * A device done with At work lets go of it, if it still holds it.
+   *
+   * @generated from rpc novam.work.v1.WorkService.LeaveDevice
+   */
+  leaveDevice: {
+    methodKind: "unary";
+    input: typeof LeaveDeviceRequestSchema;
+    output: typeof LeaveDeviceResponseSchema;
   },
 }>;
 

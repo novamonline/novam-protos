@@ -34,6 +34,18 @@ service WorkService {
   rpc VisitFinished(VisitFinishedRequest) returns (VisitFinishedResponse);
   // The phone says its person got to the business's place or left it (work.autoArrive, work.autoLeave).
   rpc AtPlace(AtPlaceRequest) returns (AtPlaceResponse);
+  // Pays a week: keeps what each helper had worked and was owed, and keeps each one's draft pay (what isn't paid yet)
+  // up to date for Front Desk to mark paid; a helper owed nothing has no draft.
+  rpc PayWeek(PayWeekRequest) returns (PayWeekResponse);
+  // Takes back paying a week: its drafts go, what was paid stays.
+  rpc UnpayWeek(UnpayWeekRequest) returns (UnpayWeekResponse);
+  // Sets what someone is paid an hour; no rate takes it away.
+  rpc SetRate(SetRateRequest) returns (SetRateResponse);
+  // At work runs on one device at a time: a device claims it (take, or when nobody holds it, it's this one's already,
+  // or the holder's claim lapsed) and renews it; otherwise it hears which device has it.
+  rpc ClaimDevice(ClaimDeviceRequest) returns (ClaimDeviceResponse);
+  // A device done with At work lets go of it, if it still holds it.
+  rpc LeaveDevice(LeaveDeviceRequest) returns (LeaveDeviceResponse);
 }
 
 message Links {
@@ -165,3 +177,66 @@ message AtPlaceRequest {
 message AtPlaceResponse {
   bool changed = 1;
 }
+
+message PayWeekRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The week's Monday.
+  string week = 2;
+  string paid_by = 3;
+  string paid_at = 4;
+  // Minutes each person had worked, and what each with a rate was owed (cents), by user id.
+  map<string, int32> worked = 5;
+  map<string, int64> pay = 6;
+  repeated WeekPay pays = 7;
+}
+
+// One helper's pay for the week: amount_cents is what isn't paid yet, and none drops their draft.
+message WeekPay {
+  string user_id = 1;
+  string helper_id = 2;
+  int32 minutes = 3;
+  int64 cents_per_hour = 4;
+  int64 amount_cents = 5;
+}
+
+message PayWeekResponse {}
+
+message UnpayWeekRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string week = 2;
+}
+
+message UnpayWeekResponse {}
+
+message SetRateRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  optional int64 cents_per_hour = 3;
+  string by_user_id = 4;
+}
+
+message SetRateResponse {}
+
+message ClaimDeviceRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string device = 3;
+  string label = 4;
+  bool take = 5;
+  // How long an unrenewed claim holds, in milliseconds.
+  int64 lapses_ms = 6;
+}
+
+message ClaimDeviceResponse {
+  bool here = 1;
+  string label = 2;
+  string since = 3;
+}
+
+message LeaveDeviceRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string device = 3;
+}
+
+message LeaveDeviceResponse {}

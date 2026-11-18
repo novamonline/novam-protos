@@ -1270,6 +1270,646 @@ func (x *AtPlaceResponse) GetChanged() bool {
 	return false
 }
 
+type PayWeekRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// The week's Monday.
+	Week   string `protobuf:"bytes,2,opt,name=week,proto3" json:"week,omitempty"`
+	PaidBy string `protobuf:"bytes,3,opt,name=paid_by,json=paidBy,proto3" json:"paid_by,omitempty"`
+	PaidAt string `protobuf:"bytes,4,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"`
+	// Minutes each person had worked, and what each with a rate was owed (cents), by user id.
+	Worked        map[string]int32 `protobuf:"bytes,5,rep,name=worked,proto3" json:"worked,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	Pay           map[string]int64 `protobuf:"bytes,6,rep,name=pay,proto3" json:"pay,omitempty" protobuf_key:"bytes,1,opt,name=key" protobuf_val:"varint,2,opt,name=value"`
+	Pays          []*WeekPay       `protobuf:"bytes,7,rep,name=pays,proto3" json:"pays,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PayWeekRequest) Reset() {
+	*x = PayWeekRequest{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PayWeekRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PayWeekRequest) ProtoMessage() {}
+
+func (x *PayWeekRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PayWeekRequest.ProtoReflect.Descriptor instead.
+func (*PayWeekRequest) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *PayWeekRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *PayWeekRequest) GetWeek() string {
+	if x != nil {
+		return x.Week
+	}
+	return ""
+}
+
+func (x *PayWeekRequest) GetPaidBy() string {
+	if x != nil {
+		return x.PaidBy
+	}
+	return ""
+}
+
+func (x *PayWeekRequest) GetPaidAt() string {
+	if x != nil {
+		return x.PaidAt
+	}
+	return ""
+}
+
+func (x *PayWeekRequest) GetWorked() map[string]int32 {
+	if x != nil {
+		return x.Worked
+	}
+	return nil
+}
+
+func (x *PayWeekRequest) GetPay() map[string]int64 {
+	if x != nil {
+		return x.Pay
+	}
+	return nil
+}
+
+func (x *PayWeekRequest) GetPays() []*WeekPay {
+	if x != nil {
+		return x.Pays
+	}
+	return nil
+}
+
+// One helper's pay for the week: amount_cents is what isn't paid yet, and none drops their draft.
+type WeekPay struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	UserId        string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	HelperId      string                 `protobuf:"bytes,2,opt,name=helper_id,json=helperId,proto3" json:"helper_id,omitempty"`
+	Minutes       int32                  `protobuf:"varint,3,opt,name=minutes,proto3" json:"minutes,omitempty"`
+	CentsPerHour  int64                  `protobuf:"varint,4,opt,name=cents_per_hour,json=centsPerHour,proto3" json:"cents_per_hour,omitempty"`
+	AmountCents   int64                  `protobuf:"varint,5,opt,name=amount_cents,json=amountCents,proto3" json:"amount_cents,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *WeekPay) Reset() {
+	*x = WeekPay{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *WeekPay) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*WeekPay) ProtoMessage() {}
+
+func (x *WeekPay) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use WeekPay.ProtoReflect.Descriptor instead.
+func (*WeekPay) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *WeekPay) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *WeekPay) GetHelperId() string {
+	if x != nil {
+		return x.HelperId
+	}
+	return ""
+}
+
+func (x *WeekPay) GetMinutes() int32 {
+	if x != nil {
+		return x.Minutes
+	}
+	return 0
+}
+
+func (x *WeekPay) GetCentsPerHour() int64 {
+	if x != nil {
+		return x.CentsPerHour
+	}
+	return 0
+}
+
+func (x *WeekPay) GetAmountCents() int64 {
+	if x != nil {
+		return x.AmountCents
+	}
+	return 0
+}
+
+type PayWeekResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PayWeekResponse) Reset() {
+	*x = PayWeekResponse{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PayWeekResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PayWeekResponse) ProtoMessage() {}
+
+func (x *PayWeekResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PayWeekResponse.ProtoReflect.Descriptor instead.
+func (*PayWeekResponse) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{23}
+}
+
+type UnpayWeekRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Week          string                 `protobuf:"bytes,2,opt,name=week,proto3" json:"week,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnpayWeekRequest) Reset() {
+	*x = UnpayWeekRequest{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[24]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnpayWeekRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnpayWeekRequest) ProtoMessage() {}
+
+func (x *UnpayWeekRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[24]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnpayWeekRequest.ProtoReflect.Descriptor instead.
+func (*UnpayWeekRequest) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{24}
+}
+
+func (x *UnpayWeekRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *UnpayWeekRequest) GetWeek() string {
+	if x != nil {
+		return x.Week
+	}
+	return ""
+}
+
+type UnpayWeekResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *UnpayWeekResponse) Reset() {
+	*x = UnpayWeekResponse{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[25]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *UnpayWeekResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*UnpayWeekResponse) ProtoMessage() {}
+
+func (x *UnpayWeekResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[25]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use UnpayWeekResponse.ProtoReflect.Descriptor instead.
+func (*UnpayWeekResponse) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{25}
+}
+
+type SetRateRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	CentsPerHour  *int64                 `protobuf:"varint,3,opt,name=cents_per_hour,json=centsPerHour,proto3,oneof" json:"cents_per_hour,omitempty"`
+	ByUserId      string                 `protobuf:"bytes,4,opt,name=by_user_id,json=byUserId,proto3" json:"by_user_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetRateRequest) Reset() {
+	*x = SetRateRequest{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[26]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetRateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetRateRequest) ProtoMessage() {}
+
+func (x *SetRateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[26]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetRateRequest.ProtoReflect.Descriptor instead.
+func (*SetRateRequest) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{26}
+}
+
+func (x *SetRateRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *SetRateRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *SetRateRequest) GetCentsPerHour() int64 {
+	if x != nil && x.CentsPerHour != nil {
+		return *x.CentsPerHour
+	}
+	return 0
+}
+
+func (x *SetRateRequest) GetByUserId() string {
+	if x != nil {
+		return x.ByUserId
+	}
+	return ""
+}
+
+type SetRateResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetRateResponse) Reset() {
+	*x = SetRateResponse{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[27]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetRateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetRateResponse) ProtoMessage() {}
+
+func (x *SetRateResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[27]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetRateResponse.ProtoReflect.Descriptor instead.
+func (*SetRateResponse) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{27}
+}
+
+type ClaimDeviceRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	UserId   string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Device   string                 `protobuf:"bytes,3,opt,name=device,proto3" json:"device,omitempty"`
+	Label    string                 `protobuf:"bytes,4,opt,name=label,proto3" json:"label,omitempty"`
+	Take     bool                   `protobuf:"varint,5,opt,name=take,proto3" json:"take,omitempty"`
+	// How long an unrenewed claim holds, in milliseconds.
+	LapsesMs      int64 `protobuf:"varint,6,opt,name=lapses_ms,json=lapsesMs,proto3" json:"lapses_ms,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClaimDeviceRequest) Reset() {
+	*x = ClaimDeviceRequest{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[28]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClaimDeviceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClaimDeviceRequest) ProtoMessage() {}
+
+func (x *ClaimDeviceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[28]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClaimDeviceRequest.ProtoReflect.Descriptor instead.
+func (*ClaimDeviceRequest) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{28}
+}
+
+func (x *ClaimDeviceRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ClaimDeviceRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *ClaimDeviceRequest) GetDevice() string {
+	if x != nil {
+		return x.Device
+	}
+	return ""
+}
+
+func (x *ClaimDeviceRequest) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *ClaimDeviceRequest) GetTake() bool {
+	if x != nil {
+		return x.Take
+	}
+	return false
+}
+
+func (x *ClaimDeviceRequest) GetLapsesMs() int64 {
+	if x != nil {
+		return x.LapsesMs
+	}
+	return 0
+}
+
+type ClaimDeviceResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Here          bool                   `protobuf:"varint,1,opt,name=here,proto3" json:"here,omitempty"`
+	Label         string                 `protobuf:"bytes,2,opt,name=label,proto3" json:"label,omitempty"`
+	Since         string                 `protobuf:"bytes,3,opt,name=since,proto3" json:"since,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClaimDeviceResponse) Reset() {
+	*x = ClaimDeviceResponse{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[29]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClaimDeviceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClaimDeviceResponse) ProtoMessage() {}
+
+func (x *ClaimDeviceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[29]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClaimDeviceResponse.ProtoReflect.Descriptor instead.
+func (*ClaimDeviceResponse) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{29}
+}
+
+func (x *ClaimDeviceResponse) GetHere() bool {
+	if x != nil {
+		return x.Here
+	}
+	return false
+}
+
+func (x *ClaimDeviceResponse) GetLabel() string {
+	if x != nil {
+		return x.Label
+	}
+	return ""
+}
+
+func (x *ClaimDeviceResponse) GetSince() string {
+	if x != nil {
+		return x.Since
+	}
+	return ""
+}
+
+type LeaveDeviceRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	UserId        string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Device        string                 `protobuf:"bytes,3,opt,name=device,proto3" json:"device,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaveDeviceRequest) Reset() {
+	*x = LeaveDeviceRequest{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[30]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaveDeviceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaveDeviceRequest) ProtoMessage() {}
+
+func (x *LeaveDeviceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[30]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaveDeviceRequest.ProtoReflect.Descriptor instead.
+func (*LeaveDeviceRequest) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{30}
+}
+
+func (x *LeaveDeviceRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *LeaveDeviceRequest) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *LeaveDeviceRequest) GetDevice() string {
+	if x != nil {
+		return x.Device
+	}
+	return ""
+}
+
+type LeaveDeviceResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *LeaveDeviceResponse) Reset() {
+	*x = LeaveDeviceResponse{}
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *LeaveDeviceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*LeaveDeviceResponse) ProtoMessage() {}
+
+func (x *LeaveDeviceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_work_v1_work_service_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use LeaveDeviceResponse.ProtoReflect.Descriptor instead.
+func (*LeaveDeviceResponse) Descriptor() ([]byte, []int) {
+	return file_novam_work_v1_work_service_proto_rawDescGZIP(), []int{31}
+}
+
 var File_novam_work_v1_work_service_proto protoreflect.FileDescriptor
 
 const file_novam_work_v1_work_service_proto_rawDesc = "" +
@@ -1362,7 +2002,56 @@ const file_novam_work_v1_work_service_proto_rawDesc = "" +
 	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x18\n" +
 	"\aarrived\x18\x03 \x01(\bR\aarrived\"+\n" +
 	"\x0fAtPlaceResponse\x12\x18\n" +
-	"\achanged\x18\x01 \x01(\bR\achanged2\xb6\x06\n" +
+	"\achanged\x18\x01 \x01(\bR\achanged\"\xb0\x03\n" +
+	"\x0ePayWeekRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x12\n" +
+	"\x04week\x18\x02 \x01(\tR\x04week\x12\x17\n" +
+	"\apaid_by\x18\x03 \x01(\tR\x06paidBy\x12\x17\n" +
+	"\apaid_at\x18\x04 \x01(\tR\x06paidAt\x12A\n" +
+	"\x06worked\x18\x05 \x03(\v2).novam.work.v1.PayWeekRequest.WorkedEntryR\x06worked\x128\n" +
+	"\x03pay\x18\x06 \x03(\v2&.novam.work.v1.PayWeekRequest.PayEntryR\x03pay\x12*\n" +
+	"\x04pays\x18\a \x03(\v2\x16.novam.work.v1.WeekPayR\x04pays\x1a9\n" +
+	"\vWorkedEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x05R\x05value:\x028\x01\x1a6\n" +
+	"\bPayEntry\x12\x10\n" +
+	"\x03key\x18\x01 \x01(\tR\x03key\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x03R\x05value:\x028\x01\"\xa2\x01\n" +
+	"\aWeekPay\x12\x17\n" +
+	"\auser_id\x18\x01 \x01(\tR\x06userId\x12\x1b\n" +
+	"\thelper_id\x18\x02 \x01(\tR\bhelperId\x12\x18\n" +
+	"\aminutes\x18\x03 \x01(\x05R\aminutes\x12$\n" +
+	"\x0ecents_per_hour\x18\x04 \x01(\x03R\fcentsPerHour\x12!\n" +
+	"\famount_cents\x18\x05 \x01(\x03R\vamountCents\"\x11\n" +
+	"\x0fPayWeekResponse\"d\n" +
+	"\x10UnpayWeekRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x12\n" +
+	"\x04week\x18\x02 \x01(\tR\x04week\"\x13\n" +
+	"\x11UnpayWeekResponse\"\xc3\x01\n" +
+	"\x0eSetRateRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12)\n" +
+	"\x0ecents_per_hour\x18\x03 \x01(\x03H\x00R\fcentsPerHour\x88\x01\x01\x12\x1c\n" +
+	"\n" +
+	"by_user_id\x18\x04 \x01(\tR\bbyUserIdB\x11\n" +
+	"\x0f_cents_per_hour\"\x11\n" +
+	"\x0fSetRateResponse\"\xca\x01\n" +
+	"\x12ClaimDeviceRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06device\x18\x03 \x01(\tR\x06device\x12\x14\n" +
+	"\x05label\x18\x04 \x01(\tR\x05label\x12\x12\n" +
+	"\x04take\x18\x05 \x01(\bR\x04take\x12\x1b\n" +
+	"\tlapses_ms\x18\x06 \x01(\x03R\blapsesMs\"U\n" +
+	"\x13ClaimDeviceResponse\x12\x12\n" +
+	"\x04here\x18\x01 \x01(\bR\x04here\x12\x14\n" +
+	"\x05label\x18\x02 \x01(\tR\x05label\x12\x14\n" +
+	"\x05since\x18\x03 \x01(\tR\x05since\"\x83\x01\n" +
+	"\x12LeaveDeviceRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x17\n" +
+	"\auser_id\x18\x02 \x01(\tR\x06userId\x12\x16\n" +
+	"\x06device\x18\x03 \x01(\tR\x06device\"\x15\n" +
+	"\x13LeaveDeviceResponse2\xc6\t\n" +
 	"\vWorkService\x12N\n" +
 	"\tSetStatus\x12\x1f.novam.work.v1.SetStatusRequest\x1a .novam.work.v1.SetStatusResponse\x12H\n" +
 	"\aFixTime\x12\x1d.novam.work.v1.FixTimeRequest\x1a\x1e.novam.work.v1.FixTimeResponse\x12N\n" +
@@ -1374,7 +2063,12 @@ const file_novam_work_v1_work_service_proto_rawDesc = "" +
 	"ApplyHours\x12 .novam.work.v1.ApplyHoursRequest\x1a!.novam.work.v1.ApplyHoursResponse\x12]\n" +
 	"\x0eVisitCheckedIn\x12$.novam.work.v1.VisitCheckedInRequest\x1a%.novam.work.v1.VisitCheckedInResponse\x12Z\n" +
 	"\rVisitFinished\x12#.novam.work.v1.VisitFinishedRequest\x1a$.novam.work.v1.VisitFinishedResponse\x12H\n" +
-	"\aAtPlace\x12\x1d.novam.work.v1.AtPlaceRequest\x1a\x1e.novam.work.v1.AtPlaceResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/work/v1;workv1b\x06proto3"
+	"\aAtPlace\x12\x1d.novam.work.v1.AtPlaceRequest\x1a\x1e.novam.work.v1.AtPlaceResponse\x12H\n" +
+	"\aPayWeek\x12\x1d.novam.work.v1.PayWeekRequest\x1a\x1e.novam.work.v1.PayWeekResponse\x12N\n" +
+	"\tUnpayWeek\x12\x1f.novam.work.v1.UnpayWeekRequest\x1a .novam.work.v1.UnpayWeekResponse\x12H\n" +
+	"\aSetRate\x12\x1d.novam.work.v1.SetRateRequest\x1a\x1e.novam.work.v1.SetRateResponse\x12T\n" +
+	"\vClaimDevice\x12!.novam.work.v1.ClaimDeviceRequest\x1a\".novam.work.v1.ClaimDeviceResponse\x12T\n" +
+	"\vLeaveDevice\x12!.novam.work.v1.LeaveDeviceRequest\x1a\".novam.work.v1.LeaveDeviceResponseBAZ?github.com/novamonline/novam-protos/gen/go/novam/work/v1;workv1b\x06proto3"
 
 var (
 	file_novam_work_v1_work_service_proto_rawDescOnce sync.Once
@@ -1388,7 +2082,7 @@ func file_novam_work_v1_work_service_proto_rawDescGZIP() []byte {
 	return file_novam_work_v1_work_service_proto_rawDescData
 }
 
-var file_novam_work_v1_work_service_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
+var file_novam_work_v1_work_service_proto_msgTypes = make([]protoimpl.MessageInfo, 34)
 var file_novam_work_v1_work_service_proto_goTypes = []any{
 	(*Links)(nil),                  // 0: novam.work.v1.Links
 	(*SetStatusRequest)(nil),       // 1: novam.work.v1.SetStatusRequest
@@ -1411,47 +2105,78 @@ var file_novam_work_v1_work_service_proto_goTypes = []any{
 	(*VisitFinishedResponse)(nil),  // 18: novam.work.v1.VisitFinishedResponse
 	(*AtPlaceRequest)(nil),         // 19: novam.work.v1.AtPlaceRequest
 	(*AtPlaceResponse)(nil),        // 20: novam.work.v1.AtPlaceResponse
-	(*v1.RequestMetadata)(nil),     // 21: novam.common.v1.RequestMetadata
+	(*PayWeekRequest)(nil),         // 21: novam.work.v1.PayWeekRequest
+	(*WeekPay)(nil),                // 22: novam.work.v1.WeekPay
+	(*PayWeekResponse)(nil),        // 23: novam.work.v1.PayWeekResponse
+	(*UnpayWeekRequest)(nil),       // 24: novam.work.v1.UnpayWeekRequest
+	(*UnpayWeekResponse)(nil),      // 25: novam.work.v1.UnpayWeekResponse
+	(*SetRateRequest)(nil),         // 26: novam.work.v1.SetRateRequest
+	(*SetRateResponse)(nil),        // 27: novam.work.v1.SetRateResponse
+	(*ClaimDeviceRequest)(nil),     // 28: novam.work.v1.ClaimDeviceRequest
+	(*ClaimDeviceResponse)(nil),    // 29: novam.work.v1.ClaimDeviceResponse
+	(*LeaveDeviceRequest)(nil),     // 30: novam.work.v1.LeaveDeviceRequest
+	(*LeaveDeviceResponse)(nil),    // 31: novam.work.v1.LeaveDeviceResponse
+	nil,                            // 32: novam.work.v1.PayWeekRequest.WorkedEntry
+	nil,                            // 33: novam.work.v1.PayWeekRequest.PayEntry
+	(*v1.RequestMetadata)(nil),     // 34: novam.common.v1.RequestMetadata
 }
 var file_novam_work_v1_work_service_proto_depIdxs = []int32{
-	21, // 0: novam.work.v1.SetStatusRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 0: novam.work.v1.SetStatusRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 1: novam.work.v1.SetStatusRequest.links:type_name -> novam.work.v1.Links
-	21, // 2: novam.work.v1.FixTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 2: novam.work.v1.FixTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 3: novam.work.v1.FixTimeRequest.links:type_name -> novam.work.v1.Links
-	21, // 4: novam.work.v1.PlaceTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 4: novam.work.v1.PlaceTimeRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 5: novam.work.v1.PlaceTimeRequest.links:type_name -> novam.work.v1.Links
-	21, // 6: novam.work.v1.EndDayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	21, // 7: novam.work.v1.NoteDayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	21, // 8: novam.work.v1.ChangeTodayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	21, // 9: novam.work.v1.ApplyHoursRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	21, // 10: novam.work.v1.VisitCheckedInRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	21, // 11: novam.work.v1.VisitFinishedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	21, // 12: novam.work.v1.AtPlaceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	1,  // 13: novam.work.v1.WorkService.SetStatus:input_type -> novam.work.v1.SetStatusRequest
-	3,  // 14: novam.work.v1.WorkService.FixTime:input_type -> novam.work.v1.FixTimeRequest
-	5,  // 15: novam.work.v1.WorkService.PlaceTime:input_type -> novam.work.v1.PlaceTimeRequest
-	7,  // 16: novam.work.v1.WorkService.EndDay:input_type -> novam.work.v1.EndDayRequest
-	9,  // 17: novam.work.v1.WorkService.NoteDay:input_type -> novam.work.v1.NoteDayRequest
-	11, // 18: novam.work.v1.WorkService.ChangeToday:input_type -> novam.work.v1.ChangeTodayRequest
-	13, // 19: novam.work.v1.WorkService.ApplyHours:input_type -> novam.work.v1.ApplyHoursRequest
-	15, // 20: novam.work.v1.WorkService.VisitCheckedIn:input_type -> novam.work.v1.VisitCheckedInRequest
-	17, // 21: novam.work.v1.WorkService.VisitFinished:input_type -> novam.work.v1.VisitFinishedRequest
-	19, // 22: novam.work.v1.WorkService.AtPlace:input_type -> novam.work.v1.AtPlaceRequest
-	2,  // 23: novam.work.v1.WorkService.SetStatus:output_type -> novam.work.v1.SetStatusResponse
-	4,  // 24: novam.work.v1.WorkService.FixTime:output_type -> novam.work.v1.FixTimeResponse
-	6,  // 25: novam.work.v1.WorkService.PlaceTime:output_type -> novam.work.v1.PlaceTimeResponse
-	8,  // 26: novam.work.v1.WorkService.EndDay:output_type -> novam.work.v1.EndDayResponse
-	10, // 27: novam.work.v1.WorkService.NoteDay:output_type -> novam.work.v1.NoteDayResponse
-	12, // 28: novam.work.v1.WorkService.ChangeToday:output_type -> novam.work.v1.ChangeTodayResponse
-	14, // 29: novam.work.v1.WorkService.ApplyHours:output_type -> novam.work.v1.ApplyHoursResponse
-	16, // 30: novam.work.v1.WorkService.VisitCheckedIn:output_type -> novam.work.v1.VisitCheckedInResponse
-	18, // 31: novam.work.v1.WorkService.VisitFinished:output_type -> novam.work.v1.VisitFinishedResponse
-	20, // 32: novam.work.v1.WorkService.AtPlace:output_type -> novam.work.v1.AtPlaceResponse
-	23, // [23:33] is the sub-list for method output_type
-	13, // [13:23] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	34, // 6: novam.work.v1.EndDayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 7: novam.work.v1.NoteDayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 8: novam.work.v1.ChangeTodayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 9: novam.work.v1.ApplyHoursRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 10: novam.work.v1.VisitCheckedInRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 11: novam.work.v1.VisitFinishedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 12: novam.work.v1.AtPlaceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 13: novam.work.v1.PayWeekRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	32, // 14: novam.work.v1.PayWeekRequest.worked:type_name -> novam.work.v1.PayWeekRequest.WorkedEntry
+	33, // 15: novam.work.v1.PayWeekRequest.pay:type_name -> novam.work.v1.PayWeekRequest.PayEntry
+	22, // 16: novam.work.v1.PayWeekRequest.pays:type_name -> novam.work.v1.WeekPay
+	34, // 17: novam.work.v1.UnpayWeekRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 18: novam.work.v1.SetRateRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 19: novam.work.v1.ClaimDeviceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	34, // 20: novam.work.v1.LeaveDeviceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	1,  // 21: novam.work.v1.WorkService.SetStatus:input_type -> novam.work.v1.SetStatusRequest
+	3,  // 22: novam.work.v1.WorkService.FixTime:input_type -> novam.work.v1.FixTimeRequest
+	5,  // 23: novam.work.v1.WorkService.PlaceTime:input_type -> novam.work.v1.PlaceTimeRequest
+	7,  // 24: novam.work.v1.WorkService.EndDay:input_type -> novam.work.v1.EndDayRequest
+	9,  // 25: novam.work.v1.WorkService.NoteDay:input_type -> novam.work.v1.NoteDayRequest
+	11, // 26: novam.work.v1.WorkService.ChangeToday:input_type -> novam.work.v1.ChangeTodayRequest
+	13, // 27: novam.work.v1.WorkService.ApplyHours:input_type -> novam.work.v1.ApplyHoursRequest
+	15, // 28: novam.work.v1.WorkService.VisitCheckedIn:input_type -> novam.work.v1.VisitCheckedInRequest
+	17, // 29: novam.work.v1.WorkService.VisitFinished:input_type -> novam.work.v1.VisitFinishedRequest
+	19, // 30: novam.work.v1.WorkService.AtPlace:input_type -> novam.work.v1.AtPlaceRequest
+	21, // 31: novam.work.v1.WorkService.PayWeek:input_type -> novam.work.v1.PayWeekRequest
+	24, // 32: novam.work.v1.WorkService.UnpayWeek:input_type -> novam.work.v1.UnpayWeekRequest
+	26, // 33: novam.work.v1.WorkService.SetRate:input_type -> novam.work.v1.SetRateRequest
+	28, // 34: novam.work.v1.WorkService.ClaimDevice:input_type -> novam.work.v1.ClaimDeviceRequest
+	30, // 35: novam.work.v1.WorkService.LeaveDevice:input_type -> novam.work.v1.LeaveDeviceRequest
+	2,  // 36: novam.work.v1.WorkService.SetStatus:output_type -> novam.work.v1.SetStatusResponse
+	4,  // 37: novam.work.v1.WorkService.FixTime:output_type -> novam.work.v1.FixTimeResponse
+	6,  // 38: novam.work.v1.WorkService.PlaceTime:output_type -> novam.work.v1.PlaceTimeResponse
+	8,  // 39: novam.work.v1.WorkService.EndDay:output_type -> novam.work.v1.EndDayResponse
+	10, // 40: novam.work.v1.WorkService.NoteDay:output_type -> novam.work.v1.NoteDayResponse
+	12, // 41: novam.work.v1.WorkService.ChangeToday:output_type -> novam.work.v1.ChangeTodayResponse
+	14, // 42: novam.work.v1.WorkService.ApplyHours:output_type -> novam.work.v1.ApplyHoursResponse
+	16, // 43: novam.work.v1.WorkService.VisitCheckedIn:output_type -> novam.work.v1.VisitCheckedInResponse
+	18, // 44: novam.work.v1.WorkService.VisitFinished:output_type -> novam.work.v1.VisitFinishedResponse
+	20, // 45: novam.work.v1.WorkService.AtPlace:output_type -> novam.work.v1.AtPlaceResponse
+	23, // 46: novam.work.v1.WorkService.PayWeek:output_type -> novam.work.v1.PayWeekResponse
+	25, // 47: novam.work.v1.WorkService.UnpayWeek:output_type -> novam.work.v1.UnpayWeekResponse
+	27, // 48: novam.work.v1.WorkService.SetRate:output_type -> novam.work.v1.SetRateResponse
+	29, // 49: novam.work.v1.WorkService.ClaimDevice:output_type -> novam.work.v1.ClaimDeviceResponse
+	31, // 50: novam.work.v1.WorkService.LeaveDevice:output_type -> novam.work.v1.LeaveDeviceResponse
+	36, // [36:51] is the sub-list for method output_type
+	21, // [21:36] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_novam_work_v1_work_service_proto_init() }
@@ -1461,13 +2186,14 @@ func file_novam_work_v1_work_service_proto_init() {
 	}
 	file_novam_work_v1_work_service_proto_msgTypes[1].OneofWrappers = []any{}
 	file_novam_work_v1_work_service_proto_msgTypes[11].OneofWrappers = []any{}
+	file_novam_work_v1_work_service_proto_msgTypes[26].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_work_v1_work_service_proto_rawDesc), len(file_novam_work_v1_work_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   21,
+			NumMessages:   34,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
