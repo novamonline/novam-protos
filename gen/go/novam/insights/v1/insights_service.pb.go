@@ -924,8 +924,10 @@ type GetGoalStandingsRequest struct {
 	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	TimeZone string                 `protobuf:"bytes,2,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
 	// Today in the business's time zone, YYYY-MM-DD.
-	Today         string       `protobuf:"bytes,3,opt,name=today,proto3" json:"today,omitempty"`
-	Goals         []*GoalInput `protobuf:"bytes,4,rep,name=goals,proto3" json:"goals,omitempty"`
+	Today string       `protobuf:"bytes,3,opt,name=today,proto3" json:"today,omitempty"`
+	Goals []*GoalInput `protobuf:"bytes,4,rep,name=goals,proto3" json:"goals,omitempty"`
+	// Save each started goal's point for value_day when it is new or the measure moved, and return each goal's trend.
+	SaveSnapshots bool `protobuf:"varint,5,opt,name=save_snapshots,json=saveSnapshots,proto3" json:"save_snapshots,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -988,6 +990,13 @@ func (x *GetGoalStandingsRequest) GetGoals() []*GoalInput {
 	return nil
 }
 
+func (x *GetGoalStandingsRequest) GetSaveSnapshots() bool {
+	if x != nil {
+		return x.SaveSnapshots
+	}
+	return false
+}
+
 type GoalStanding struct {
 	state  protoimpl.MessageState `protogen:"open.v1"`
 	GoalId string                 `protobuf:"bytes,1,opt,name=goal_id,json=goalId,proto3" json:"goal_id,omitempty"`
@@ -1007,7 +1016,9 @@ type GoalStanding struct {
 	UsualTicket *float64 `protobuf:"fixed64,11,opt,name=usual_ticket,json=usualTicket,proto3,oneof" json:"usual_ticket,omitempty"`
 	OpenLeads   int32    `protobuf:"varint,12,opt,name=open_leads,json=openLeads,proto3" json:"open_leads,omitempty"`
 	// The day the value is for (today, or the goal's last day once it is over); YYYY-MM-DD.
-	ValueDay      string `protobuf:"bytes,13,opt,name=value_day,json=valueDay,proto3" json:"value_day,omitempty"`
+	ValueDay string `protobuf:"bytes,13,opt,name=value_day,json=valueDay,proto3" json:"value_day,omitempty"`
+	// The goal's saved points, oldest first; with save_snapshots only.
+	Trend         []*TrendPoint `protobuf:"bytes,14,rep,name=trend,proto3" json:"trend,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -1133,6 +1144,66 @@ func (x *GoalStanding) GetValueDay() string {
 	return ""
 }
 
+func (x *GoalStanding) GetTrend() []*TrendPoint {
+	if x != nil {
+		return x.Trend
+	}
+	return nil
+}
+
+type TrendPoint struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// YYYY-MM-DD.
+	Day           string  `protobuf:"bytes,1,opt,name=day,proto3" json:"day,omitempty"`
+	Value         float64 `protobuf:"fixed64,2,opt,name=value,proto3" json:"value,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TrendPoint) Reset() {
+	*x = TrendPoint{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TrendPoint) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TrendPoint) ProtoMessage() {}
+
+func (x *TrendPoint) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TrendPoint.ProtoReflect.Descriptor instead.
+func (*TrendPoint) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *TrendPoint) GetDay() string {
+	if x != nil {
+		return x.Day
+	}
+	return ""
+}
+
+func (x *TrendPoint) GetValue() float64 {
+	if x != nil {
+		return x.Value
+	}
+	return 0
+}
+
 type GetGoalStandingsResponse struct {
 	state protoimpl.MessageState `protogen:"open.v1"`
 	// In the order of the request's goals; a goal on an unknown metric is left out.
@@ -1143,7 +1214,7 @@ type GetGoalStandingsResponse struct {
 
 func (x *GetGoalStandingsResponse) Reset() {
 	*x = GetGoalStandingsResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[14]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1155,7 +1226,7 @@ func (x *GetGoalStandingsResponse) String() string {
 func (*GetGoalStandingsResponse) ProtoMessage() {}
 
 func (x *GetGoalStandingsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[14]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1168,7 +1239,7 @@ func (x *GetGoalStandingsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetGoalStandingsResponse.ProtoReflect.Descriptor instead.
 func (*GetGoalStandingsResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{14}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *GetGoalStandingsResponse) GetStandings() []*GoalStanding {
@@ -1189,7 +1260,7 @@ type GetSalesSummaryRequest struct {
 
 func (x *GetSalesSummaryRequest) Reset() {
 	*x = GetSalesSummaryRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[15]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1201,7 +1272,7 @@ func (x *GetSalesSummaryRequest) String() string {
 func (*GetSalesSummaryRequest) ProtoMessage() {}
 
 func (x *GetSalesSummaryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[15]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1214,7 +1285,7 @@ func (x *GetSalesSummaryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSalesSummaryRequest.ProtoReflect.Descriptor instead.
 func (*GetSalesSummaryRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{15}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GetSalesSummaryRequest) GetMetadata() *v1.RequestMetadata {
@@ -1248,7 +1319,7 @@ type MethodAmount struct {
 
 func (x *MethodAmount) Reset() {
 	*x = MethodAmount{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[16]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1260,7 +1331,7 @@ func (x *MethodAmount) String() string {
 func (*MethodAmount) ProtoMessage() {}
 
 func (x *MethodAmount) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[16]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1273,7 +1344,7 @@ func (x *MethodAmount) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MethodAmount.ProtoReflect.Descriptor instead.
 func (*MethodAmount) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{16}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *MethodAmount) GetMethod() string {
@@ -1302,7 +1373,7 @@ type SalesGiftCards struct {
 
 func (x *SalesGiftCards) Reset() {
 	*x = SalesGiftCards{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[17]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1314,7 +1385,7 @@ func (x *SalesGiftCards) String() string {
 func (*SalesGiftCards) ProtoMessage() {}
 
 func (x *SalesGiftCards) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[17]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1327,7 +1398,7 @@ func (x *SalesGiftCards) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SalesGiftCards.ProtoReflect.Descriptor instead.
 func (*SalesGiftCards) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{17}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *SalesGiftCards) GetSold() float64 {
@@ -1377,7 +1448,7 @@ type GetSalesSummaryResponse struct {
 
 func (x *GetSalesSummaryResponse) Reset() {
 	*x = GetSalesSummaryResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[18]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1389,7 +1460,7 @@ func (x *GetSalesSummaryResponse) String() string {
 func (*GetSalesSummaryResponse) ProtoMessage() {}
 
 func (x *GetSalesSummaryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[18]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1402,7 +1473,7 @@ func (x *GetSalesSummaryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSalesSummaryResponse.ProtoReflect.Descriptor instead.
 func (*GetSalesSummaryResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{18}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *GetSalesSummaryResponse) GetBilled() float64 {
@@ -1493,7 +1564,7 @@ type GetTipsSummaryRequest struct {
 
 func (x *GetTipsSummaryRequest) Reset() {
 	*x = GetTipsSummaryRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[19]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1505,7 +1576,7 @@ func (x *GetTipsSummaryRequest) String() string {
 func (*GetTipsSummaryRequest) ProtoMessage() {}
 
 func (x *GetTipsSummaryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[19]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1518,7 +1589,7 @@ func (x *GetTipsSummaryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTipsSummaryRequest.ProtoReflect.Descriptor instead.
 func (*GetTipsSummaryRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{19}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *GetTipsSummaryRequest) GetMetadata() *v1.RequestMetadata {
@@ -1555,7 +1626,7 @@ type MemberTips struct {
 
 func (x *MemberTips) Reset() {
 	*x = MemberTips{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[20]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[21]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1567,7 +1638,7 @@ func (x *MemberTips) String() string {
 func (*MemberTips) ProtoMessage() {}
 
 func (x *MemberTips) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[20]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[21]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1580,7 +1651,7 @@ func (x *MemberTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use MemberTips.ProtoReflect.Descriptor instead.
 func (*MemberTips) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{20}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{21}
 }
 
 func (x *MemberTips) GetMemberId() string {
@@ -1622,7 +1693,7 @@ type ServiceTips struct {
 
 func (x *ServiceTips) Reset() {
 	*x = ServiceTips{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[21]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[22]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1634,7 +1705,7 @@ func (x *ServiceTips) String() string {
 func (*ServiceTips) ProtoMessage() {}
 
 func (x *ServiceTips) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[21]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[22]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1647,7 +1718,7 @@ func (x *ServiceTips) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ServiceTips.ProtoReflect.Descriptor instead.
 func (*ServiceTips) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{21}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{22}
 }
 
 func (x *ServiceTips) GetName() string {
@@ -1687,7 +1758,7 @@ type GetTipsSummaryResponse struct {
 
 func (x *GetTipsSummaryResponse) Reset() {
 	*x = GetTipsSummaryResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[22]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[23]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1699,7 +1770,7 @@ func (x *GetTipsSummaryResponse) String() string {
 func (*GetTipsSummaryResponse) ProtoMessage() {}
 
 func (x *GetTipsSummaryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[22]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[23]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1712,7 +1783,7 @@ func (x *GetTipsSummaryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetTipsSummaryResponse.ProtoReflect.Descriptor instead.
 func (*GetTipsSummaryResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{22}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{23}
 }
 
 func (x *GetTipsSummaryResponse) GetTotal() float64 {
@@ -1774,7 +1845,7 @@ type GetChartRequest struct {
 
 func (x *GetChartRequest) Reset() {
 	*x = GetChartRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[23]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[24]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1786,7 +1857,7 @@ func (x *GetChartRequest) String() string {
 func (*GetChartRequest) ProtoMessage() {}
 
 func (x *GetChartRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[23]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[24]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1799,7 +1870,7 @@ func (x *GetChartRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetChartRequest.ProtoReflect.Descriptor instead.
 func (*GetChartRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{23}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{24}
 }
 
 func (x *GetChartRequest) GetMetadata() *v1.RequestMetadata {
@@ -1826,7 +1897,7 @@ type ChartPoint struct {
 
 func (x *ChartPoint) Reset() {
 	*x = ChartPoint{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[24]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[25]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1838,7 +1909,7 @@ func (x *ChartPoint) String() string {
 func (*ChartPoint) ProtoMessage() {}
 
 func (x *ChartPoint) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[24]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[25]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1851,7 +1922,7 @@ func (x *ChartPoint) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ChartPoint.ProtoReflect.Descriptor instead.
 func (*ChartPoint) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{24}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{25}
 }
 
 func (x *ChartPoint) GetLabel() string {
@@ -1877,7 +1948,7 @@ type GetChartResponse struct {
 
 func (x *GetChartResponse) Reset() {
 	*x = GetChartResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[25]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[26]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1889,7 +1960,7 @@ func (x *GetChartResponse) String() string {
 func (*GetChartResponse) ProtoMessage() {}
 
 func (x *GetChartResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[25]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[26]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1902,7 +1973,7 @@ func (x *GetChartResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetChartResponse.ProtoReflect.Descriptor instead.
 func (*GetChartResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{25}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{26}
 }
 
 func (x *GetChartResponse) GetPoints() []*ChartPoint {
@@ -1924,7 +1995,7 @@ type ReportMetric struct {
 
 func (x *ReportMetric) Reset() {
 	*x = ReportMetric{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[26]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[27]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1936,7 +2007,7 @@ func (x *ReportMetric) String() string {
 func (*ReportMetric) ProtoMessage() {}
 
 func (x *ReportMetric) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[26]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[27]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1949,7 +2020,7 @@ func (x *ReportMetric) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ReportMetric.ProtoReflect.Descriptor instead.
 func (*ReportMetric) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{26}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{27}
 }
 
 func (x *ReportMetric) GetName() string {
@@ -1986,7 +2057,7 @@ type ComputeReportRequest struct {
 
 func (x *ComputeReportRequest) Reset() {
 	*x = ComputeReportRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[27]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[28]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1998,7 +2069,7 @@ func (x *ComputeReportRequest) String() string {
 func (*ComputeReportRequest) ProtoMessage() {}
 
 func (x *ComputeReportRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[27]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[28]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2011,7 +2082,7 @@ func (x *ComputeReportRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ComputeReportRequest.ProtoReflect.Descriptor instead.
 func (*ComputeReportRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{27}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{28}
 }
 
 func (x *ComputeReportRequest) GetMetadata() *v1.RequestMetadata {
@@ -2051,7 +2122,7 @@ type ComputeReportResponse struct {
 
 func (x *ComputeReportResponse) Reset() {
 	*x = ComputeReportResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[28]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[29]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2063,7 +2134,7 @@ func (x *ComputeReportResponse) String() string {
 func (*ComputeReportResponse) ProtoMessage() {}
 
 func (x *ComputeReportResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[28]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[29]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2076,7 +2147,7 @@ func (x *ComputeReportResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ComputeReportResponse.ProtoReflect.Descriptor instead.
 func (*ComputeReportResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{28}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{29}
 }
 
 func (x *ComputeReportResponse) GetMetrics() []*ReportMetric {
@@ -2102,7 +2173,7 @@ type RenderReportRequest struct {
 
 func (x *RenderReportRequest) Reset() {
 	*x = RenderReportRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[29]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[30]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2114,7 +2185,7 @@ func (x *RenderReportRequest) String() string {
 func (*RenderReportRequest) ProtoMessage() {}
 
 func (x *RenderReportRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[29]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[30]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2127,7 +2198,7 @@ func (x *RenderReportRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RenderReportRequest.ProtoReflect.Descriptor instead.
 func (*RenderReportRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{29}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{30}
 }
 
 func (x *RenderReportRequest) GetMetadata() *v1.RequestMetadata {
@@ -2189,7 +2260,7 @@ type RenderReportResponse struct {
 
 func (x *RenderReportResponse) Reset() {
 	*x = RenderReportResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[30]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[31]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2201,7 +2272,7 @@ func (x *RenderReportResponse) String() string {
 func (*RenderReportResponse) ProtoMessage() {}
 
 func (x *RenderReportResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[30]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[31]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2214,7 +2285,7 @@ func (x *RenderReportResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RenderReportResponse.ProtoReflect.Descriptor instead.
 func (*RenderReportResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{30}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{31}
 }
 
 func (x *RenderReportResponse) GetContent() []byte {
@@ -2241,7 +2312,7 @@ type TimeRange struct {
 
 func (x *TimeRange) Reset() {
 	*x = TimeRange{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[31]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[32]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2253,7 +2324,7 @@ func (x *TimeRange) String() string {
 func (*TimeRange) ProtoMessage() {}
 
 func (x *TimeRange) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[31]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[32]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2266,7 +2337,7 @@ func (x *TimeRange) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TimeRange.ProtoReflect.Descriptor instead.
 func (*TimeRange) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{31}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{32}
 }
 
 func (x *TimeRange) GetStart() *timestamppb.Timestamp {
@@ -2309,7 +2380,7 @@ type ListOpenTimesRequest struct {
 
 func (x *ListOpenTimesRequest) Reset() {
 	*x = ListOpenTimesRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[32]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[33]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2321,7 +2392,7 @@ func (x *ListOpenTimesRequest) String() string {
 func (*ListOpenTimesRequest) ProtoMessage() {}
 
 func (x *ListOpenTimesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[32]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[33]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2334,7 +2405,7 @@ func (x *ListOpenTimesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOpenTimesRequest.ProtoReflect.Descriptor instead.
 func (*ListOpenTimesRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{32}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{33}
 }
 
 func (x *ListOpenTimesRequest) GetMetadata() *v1.RequestMetadata {
@@ -2418,7 +2489,7 @@ type OpenTime struct {
 
 func (x *OpenTime) Reset() {
 	*x = OpenTime{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[33]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[34]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2430,7 +2501,7 @@ func (x *OpenTime) String() string {
 func (*OpenTime) ProtoMessage() {}
 
 func (x *OpenTime) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[33]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[34]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2443,7 +2514,7 @@ func (x *OpenTime) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use OpenTime.ProtoReflect.Descriptor instead.
 func (*OpenTime) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{33}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{34}
 }
 
 func (x *OpenTime) GetStart() *timestamppb.Timestamp {
@@ -2478,7 +2549,7 @@ type ListOpenTimesResponse struct {
 
 func (x *ListOpenTimesResponse) Reset() {
 	*x = ListOpenTimesResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[34]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[35]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2490,7 +2561,7 @@ func (x *ListOpenTimesResponse) String() string {
 func (*ListOpenTimesResponse) ProtoMessage() {}
 
 func (x *ListOpenTimesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[34]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[35]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2503,7 +2574,7 @@ func (x *ListOpenTimesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListOpenTimesResponse.ProtoReflect.Descriptor instead.
 func (*ListOpenTimesResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{34}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{35}
 }
 
 func (x *ListOpenTimesResponse) GetTimes() []*OpenTime {
@@ -2531,7 +2602,7 @@ type Get1099SeasonRequest struct {
 
 func (x *Get1099SeasonRequest) Reset() {
 	*x = Get1099SeasonRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[35]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[36]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2543,7 +2614,7 @@ func (x *Get1099SeasonRequest) String() string {
 func (*Get1099SeasonRequest) ProtoMessage() {}
 
 func (x *Get1099SeasonRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[35]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[36]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2556,7 +2627,7 @@ func (x *Get1099SeasonRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Get1099SeasonRequest.ProtoReflect.Descriptor instead.
 func (*Get1099SeasonRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{35}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{36}
 }
 
 func (x *Get1099SeasonRequest) GetMetadata() *v1.RequestMetadata {
@@ -2593,7 +2664,7 @@ type Form1099Summary struct {
 
 func (x *Form1099Summary) Reset() {
 	*x = Form1099Summary{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[36]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[37]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2605,7 +2676,7 @@ func (x *Form1099Summary) String() string {
 func (*Form1099Summary) ProtoMessage() {}
 
 func (x *Form1099Summary) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[36]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[37]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2618,7 +2689,7 @@ func (x *Form1099Summary) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Form1099Summary.ProtoReflect.Descriptor instead.
 func (*Form1099Summary) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{36}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{37}
 }
 
 func (x *Form1099Summary) GetHelperId() string {
@@ -2684,7 +2755,7 @@ type Get1099SeasonResponse struct {
 
 func (x *Get1099SeasonResponse) Reset() {
 	*x = Get1099SeasonResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[37]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[38]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2696,7 +2767,7 @@ func (x *Get1099SeasonResponse) String() string {
 func (*Get1099SeasonResponse) ProtoMessage() {}
 
 func (x *Get1099SeasonResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[37]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[38]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2709,7 +2780,7 @@ func (x *Get1099SeasonResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Get1099SeasonResponse.ProtoReflect.Descriptor instead.
 func (*Get1099SeasonResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{37}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{38}
 }
 
 func (x *Get1099SeasonResponse) GetTaxYear() int32 {
@@ -2754,7 +2825,7 @@ type BuildTaxPackageRequest struct {
 
 func (x *BuildTaxPackageRequest) Reset() {
 	*x = BuildTaxPackageRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[38]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[39]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2766,7 +2837,7 @@ func (x *BuildTaxPackageRequest) String() string {
 func (*BuildTaxPackageRequest) ProtoMessage() {}
 
 func (x *BuildTaxPackageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[38]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[39]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2779,7 +2850,7 @@ func (x *BuildTaxPackageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BuildTaxPackageRequest.ProtoReflect.Descriptor instead.
 func (*BuildTaxPackageRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{38}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{39}
 }
 
 func (x *BuildTaxPackageRequest) GetMetadata() *v1.RequestMetadata {
@@ -2821,7 +2892,7 @@ type BuildTaxPackageResponse struct {
 
 func (x *BuildTaxPackageResponse) Reset() {
 	*x = BuildTaxPackageResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[39]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[40]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2833,7 +2904,7 @@ func (x *BuildTaxPackageResponse) String() string {
 func (*BuildTaxPackageResponse) ProtoMessage() {}
 
 func (x *BuildTaxPackageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[39]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[40]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2846,7 +2917,7 @@ func (x *BuildTaxPackageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use BuildTaxPackageResponse.ProtoReflect.Descriptor instead.
 func (*BuildTaxPackageResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{39}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{40}
 }
 
 func (x *BuildTaxPackageResponse) GetZip() []byte {
@@ -2875,7 +2946,7 @@ type GetLedgerRequest struct {
 
 func (x *GetLedgerRequest) Reset() {
 	*x = GetLedgerRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[40]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[41]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2887,7 +2958,7 @@ func (x *GetLedgerRequest) String() string {
 func (*GetLedgerRequest) ProtoMessage() {}
 
 func (x *GetLedgerRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[40]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[41]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2900,7 +2971,7 @@ func (x *GetLedgerRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLedgerRequest.ProtoReflect.Descriptor instead.
 func (*GetLedgerRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{40}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{41}
 }
 
 func (x *GetLedgerRequest) GetMetadata() *v1.RequestMetadata {
@@ -2934,7 +3005,7 @@ type GetLedgerResponse struct {
 
 func (x *GetLedgerResponse) Reset() {
 	*x = GetLedgerResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[41]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[42]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2946,7 +3017,7 @@ func (x *GetLedgerResponse) String() string {
 func (*GetLedgerResponse) ProtoMessage() {}
 
 func (x *GetLedgerResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[41]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[42]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -2959,7 +3030,7 @@ func (x *GetLedgerResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetLedgerResponse.ProtoReflect.Descriptor instead.
 func (*GetLedgerResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{41}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{42}
 }
 
 func (x *GetLedgerResponse) GetLedger() *structpb.Struct {
@@ -2980,7 +3051,7 @@ type GetBankFeedRequest struct {
 
 func (x *GetBankFeedRequest) Reset() {
 	*x = GetBankFeedRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[42]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[43]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -2992,7 +3063,7 @@ func (x *GetBankFeedRequest) String() string {
 func (*GetBankFeedRequest) ProtoMessage() {}
 
 func (x *GetBankFeedRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[42]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[43]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3005,7 +3076,7 @@ func (x *GetBankFeedRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBankFeedRequest.ProtoReflect.Descriptor instead.
 func (*GetBankFeedRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{42}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{43}
 }
 
 func (x *GetBankFeedRequest) GetMetadata() *v1.RequestMetadata {
@@ -3039,7 +3110,7 @@ type GetBankFeedResponse struct {
 
 func (x *GetBankFeedResponse) Reset() {
 	*x = GetBankFeedResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[43]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[44]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3051,7 +3122,7 @@ func (x *GetBankFeedResponse) String() string {
 func (*GetBankFeedResponse) ProtoMessage() {}
 
 func (x *GetBankFeedResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[43]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[44]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3064,7 +3135,7 @@ func (x *GetBankFeedResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetBankFeedResponse.ProtoReflect.Descriptor instead.
 func (*GetBankFeedResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{43}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{44}
 }
 
 func (x *GetBankFeedResponse) GetFeed() *structpb.Struct {
@@ -3085,7 +3156,7 @@ type GetMoneyOverviewRequest struct {
 
 func (x *GetMoneyOverviewRequest) Reset() {
 	*x = GetMoneyOverviewRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[44]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[45]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3097,7 +3168,7 @@ func (x *GetMoneyOverviewRequest) String() string {
 func (*GetMoneyOverviewRequest) ProtoMessage() {}
 
 func (x *GetMoneyOverviewRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[44]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[45]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3110,7 +3181,7 @@ func (x *GetMoneyOverviewRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMoneyOverviewRequest.ProtoReflect.Descriptor instead.
 func (*GetMoneyOverviewRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{44}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{45}
 }
 
 func (x *GetMoneyOverviewRequest) GetMetadata() *v1.RequestMetadata {
@@ -3137,7 +3208,7 @@ type GetMoneyOverviewResponse struct {
 
 func (x *GetMoneyOverviewResponse) Reset() {
 	*x = GetMoneyOverviewResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[45]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[46]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3149,7 +3220,7 @@ func (x *GetMoneyOverviewResponse) String() string {
 func (*GetMoneyOverviewResponse) ProtoMessage() {}
 
 func (x *GetMoneyOverviewResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[45]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[46]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3162,7 +3233,7 @@ func (x *GetMoneyOverviewResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetMoneyOverviewResponse.ProtoReflect.Descriptor instead.
 func (*GetMoneyOverviewResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{45}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{46}
 }
 
 func (x *GetMoneyOverviewResponse) GetOverview() *structpb.Struct {
@@ -3183,7 +3254,7 @@ type GetQuarterlyTaxesRequest struct {
 
 func (x *GetQuarterlyTaxesRequest) Reset() {
 	*x = GetQuarterlyTaxesRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[46]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[47]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3195,7 +3266,7 @@ func (x *GetQuarterlyTaxesRequest) String() string {
 func (*GetQuarterlyTaxesRequest) ProtoMessage() {}
 
 func (x *GetQuarterlyTaxesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[46]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[47]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3208,7 +3279,7 @@ func (x *GetQuarterlyTaxesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetQuarterlyTaxesRequest.ProtoReflect.Descriptor instead.
 func (*GetQuarterlyTaxesRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{46}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{47}
 }
 
 func (x *GetQuarterlyTaxesRequest) GetMetadata() *v1.RequestMetadata {
@@ -3235,7 +3306,7 @@ type GetQuarterlyTaxesResponse struct {
 
 func (x *GetQuarterlyTaxesResponse) Reset() {
 	*x = GetQuarterlyTaxesResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[47]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[48]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3247,7 +3318,7 @@ func (x *GetQuarterlyTaxesResponse) String() string {
 func (*GetQuarterlyTaxesResponse) ProtoMessage() {}
 
 func (x *GetQuarterlyTaxesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[47]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[48]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3260,7 +3331,7 @@ func (x *GetQuarterlyTaxesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetQuarterlyTaxesResponse.ProtoReflect.Descriptor instead.
 func (*GetQuarterlyTaxesResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{47}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{48}
 }
 
 func (x *GetQuarterlyTaxesResponse) GetQuarterly() *structpb.Struct {
@@ -3281,7 +3352,7 @@ type GetHelper1099SRequest struct {
 
 func (x *GetHelper1099SRequest) Reset() {
 	*x = GetHelper1099SRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[48]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[49]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3293,7 +3364,7 @@ func (x *GetHelper1099SRequest) String() string {
 func (*GetHelper1099SRequest) ProtoMessage() {}
 
 func (x *GetHelper1099SRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[48]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[49]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3306,7 +3377,7 @@ func (x *GetHelper1099SRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetHelper1099SRequest.ProtoReflect.Descriptor instead.
 func (*GetHelper1099SRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{48}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{49}
 }
 
 func (x *GetHelper1099SRequest) GetMetadata() *v1.RequestMetadata {
@@ -3333,7 +3404,7 @@ type GetHelper1099SResponse struct {
 
 func (x *GetHelper1099SResponse) Reset() {
 	*x = GetHelper1099SResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[49]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[50]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3345,7 +3416,7 @@ func (x *GetHelper1099SResponse) String() string {
 func (*GetHelper1099SResponse) ProtoMessage() {}
 
 func (x *GetHelper1099SResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[49]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[50]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3358,7 +3429,7 @@ func (x *GetHelper1099SResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetHelper1099SResponse.ProtoReflect.Descriptor instead.
 func (*GetHelper1099SResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{49}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{50}
 }
 
 func (x *GetHelper1099SResponse) GetList() *structpb.Struct {
@@ -3377,7 +3448,7 @@ type GetPaycheckRequest struct {
 
 func (x *GetPaycheckRequest) Reset() {
 	*x = GetPaycheckRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[50]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[51]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3389,7 +3460,7 @@ func (x *GetPaycheckRequest) String() string {
 func (*GetPaycheckRequest) ProtoMessage() {}
 
 func (x *GetPaycheckRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[50]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[51]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3402,7 +3473,7 @@ func (x *GetPaycheckRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPaycheckRequest.ProtoReflect.Descriptor instead.
 func (*GetPaycheckRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{50}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{51}
 }
 
 func (x *GetPaycheckRequest) GetMetadata() *v1.RequestMetadata {
@@ -3422,7 +3493,7 @@ type GetPaycheckResponse struct {
 
 func (x *GetPaycheckResponse) Reset() {
 	*x = GetPaycheckResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[51]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[52]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3434,7 +3505,7 @@ func (x *GetPaycheckResponse) String() string {
 func (*GetPaycheckResponse) ProtoMessage() {}
 
 func (x *GetPaycheckResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[51]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[52]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3447,7 +3518,7 @@ func (x *GetPaycheckResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetPaycheckResponse.ProtoReflect.Descriptor instead.
 func (*GetPaycheckResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{51}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{52}
 }
 
 func (x *GetPaycheckResponse) GetPaycheck() *structpb.Struct {
@@ -3468,7 +3539,7 @@ type GetSpendingSummaryRequest struct {
 
 func (x *GetSpendingSummaryRequest) Reset() {
 	*x = GetSpendingSummaryRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[52]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[53]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3480,7 +3551,7 @@ func (x *GetSpendingSummaryRequest) String() string {
 func (*GetSpendingSummaryRequest) ProtoMessage() {}
 
 func (x *GetSpendingSummaryRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[52]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[53]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3493,7 +3564,7 @@ func (x *GetSpendingSummaryRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpendingSummaryRequest.ProtoReflect.Descriptor instead.
 func (*GetSpendingSummaryRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{52}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{53}
 }
 
 func (x *GetSpendingSummaryRequest) GetMetadata() *v1.RequestMetadata {
@@ -3520,7 +3591,7 @@ type GetSpendingSummaryResponse struct {
 
 func (x *GetSpendingSummaryResponse) Reset() {
 	*x = GetSpendingSummaryResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[53]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[54]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3532,7 +3603,7 @@ func (x *GetSpendingSummaryResponse) String() string {
 func (*GetSpendingSummaryResponse) ProtoMessage() {}
 
 func (x *GetSpendingSummaryResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[53]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[54]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3545,7 +3616,7 @@ func (x *GetSpendingSummaryResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpendingSummaryResponse.ProtoReflect.Descriptor instead.
 func (*GetSpendingSummaryResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{53}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{54}
 }
 
 func (x *GetSpendingSummaryResponse) GetSummary() *structpb.Struct {
@@ -3564,7 +3635,7 @@ type GetSpendingQuestionsRequest struct {
 
 func (x *GetSpendingQuestionsRequest) Reset() {
 	*x = GetSpendingQuestionsRequest{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[54]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[55]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3576,7 +3647,7 @@ func (x *GetSpendingQuestionsRequest) String() string {
 func (*GetSpendingQuestionsRequest) ProtoMessage() {}
 
 func (x *GetSpendingQuestionsRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[54]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[55]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3589,7 +3660,7 @@ func (x *GetSpendingQuestionsRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpendingQuestionsRequest.ProtoReflect.Descriptor instead.
 func (*GetSpendingQuestionsRequest) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{54}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{55}
 }
 
 func (x *GetSpendingQuestionsRequest) GetMetadata() *v1.RequestMetadata {
@@ -3609,7 +3680,7 @@ type GetSpendingQuestionsResponse struct {
 
 func (x *GetSpendingQuestionsResponse) Reset() {
 	*x = GetSpendingQuestionsResponse{}
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[55]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[56]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -3621,7 +3692,7 @@ func (x *GetSpendingQuestionsResponse) String() string {
 func (*GetSpendingQuestionsResponse) ProtoMessage() {}
 
 func (x *GetSpendingQuestionsResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[55]
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[56]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -3634,7 +3705,7 @@ func (x *GetSpendingQuestionsResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GetSpendingQuestionsResponse.ProtoReflect.Descriptor instead.
 func (*GetSpendingQuestionsResponse) Descriptor() ([]byte, []int) {
-	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{55}
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{56}
 }
 
 func (x *GetSpendingQuestionsResponse) GetQuestions() *structpb.Struct {
@@ -3642,6 +3713,120 @@ func (x *GetSpendingQuestionsResponse) GetQuestions() *structpb.Struct {
 		return x.Questions
 	}
 	return nil
+}
+
+type BackfillGoalTrendRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	TimeZone string                 `protobuf:"bytes,2,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
+	// Today in the business's time zone, YYYY-MM-DD.
+	Today         string     `protobuf:"bytes,3,opt,name=today,proto3" json:"today,omitempty"`
+	Goal          *GoalInput `protobuf:"bytes,4,opt,name=goal,proto3" json:"goal,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BackfillGoalTrendRequest) Reset() {
+	*x = BackfillGoalTrendRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[57]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BackfillGoalTrendRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BackfillGoalTrendRequest) ProtoMessage() {}
+
+func (x *BackfillGoalTrendRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[57]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BackfillGoalTrendRequest.ProtoReflect.Descriptor instead.
+func (*BackfillGoalTrendRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{57}
+}
+
+func (x *BackfillGoalTrendRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *BackfillGoalTrendRequest) GetTimeZone() string {
+	if x != nil {
+		return x.TimeZone
+	}
+	return ""
+}
+
+func (x *BackfillGoalTrendRequest) GetToday() string {
+	if x != nil {
+		return x.Today
+	}
+	return ""
+}
+
+func (x *BackfillGoalTrendRequest) GetGoal() *GoalInput {
+	if x != nil {
+		return x.Goal
+	}
+	return nil
+}
+
+type BackfillGoalTrendResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Points written; days already saved are kept as they are.
+	Saved         int32 `protobuf:"varint,1,opt,name=saved,proto3" json:"saved,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *BackfillGoalTrendResponse) Reset() {
+	*x = BackfillGoalTrendResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *BackfillGoalTrendResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*BackfillGoalTrendResponse) ProtoMessage() {}
+
+func (x *BackfillGoalTrendResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use BackfillGoalTrendResponse.ProtoReflect.Descriptor instead.
+func (*BackfillGoalTrendResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *BackfillGoalTrendResponse) GetSaved() int32 {
+	if x != nil {
+		return x.Saved
+	}
+	return 0
 }
 
 var File_novam_insights_v1_insights_service_proto protoreflect.FileDescriptor
@@ -3715,12 +3900,13 @@ const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
 	"start_date\x18\x05 \x01(\tR\tstartDate\x12\x19\n" +
 	"\bend_date\x18\x06 \x01(\tR\aendDate\x12\x1f\n" +
 	"\vassignee_id\x18\a \x01(\tR\n" +
-	"assigneeId\"\xbe\x01\n" +
+	"assigneeId\"\xe5\x01\n" +
 	"\x17GetGoalStandingsRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1b\n" +
 	"\ttime_zone\x18\x02 \x01(\tR\btimeZone\x12\x14\n" +
 	"\x05today\x18\x03 \x01(\tR\x05today\x122\n" +
-	"\x05goals\x18\x04 \x03(\v2\x1c.novam.insights.v1.GoalInputR\x05goals\"\x9c\x03\n" +
+	"\x05goals\x18\x04 \x03(\v2\x1c.novam.insights.v1.GoalInputR\x05goals\x12%\n" +
+	"\x0esave_snapshots\x18\x05 \x01(\bR\rsaveSnapshots\"\xd1\x03\n" +
 	"\fGoalStanding\x12\x17\n" +
 	"\agoal_id\x18\x01 \x01(\tR\x06goalId\x12\x16\n" +
 	"\x06status\x18\x02 \x01(\tR\x06status\x12\x19\n" +
@@ -3737,10 +3923,15 @@ const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
 	"\fusual_ticket\x18\v \x01(\x01H\x02R\vusualTicket\x88\x01\x01\x12\x1d\n" +
 	"\n" +
 	"open_leads\x18\f \x01(\x05R\topenLeads\x12\x1b\n" +
-	"\tvalue_day\x18\r \x01(\tR\bvalueDayB\b\n" +
+	"\tvalue_day\x18\r \x01(\tR\bvalueDay\x123\n" +
+	"\x05trend\x18\x0e \x03(\v2\x1d.novam.insights.v1.TrendPointR\x05trendB\b\n" +
 	"\x06_valueB\t\n" +
 	"\a_likelyB\x0f\n" +
-	"\r_usual_ticket\"Y\n" +
+	"\r_usual_ticket\"4\n" +
+	"\n" +
+	"TrendPoint\x12\x10\n" +
+	"\x03day\x18\x01 \x01(\tR\x03day\x12\x14\n" +
+	"\x05value\x18\x02 \x01(\x01R\x05value\"Y\n" +
 	"\x18GetGoalStandingsResponse\x12=\n" +
 	"\tstandings\x18\x01 \x03(\v2\x1f.novam.insights.v1.GoalStandingR\tstandings\"\xb6\x01\n" +
 	"\x16GetSalesSummaryRequest\x12<\n" +
@@ -3921,17 +4112,25 @@ const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
 	"\x1bGetSpendingQuestionsRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"U\n" +
 	"\x1cGetSpendingQuestionsResponse\x125\n" +
-	"\tquestions\x18\x01 \x01(\v2\x17.google.protobuf.StructR\tquestions*\xa7\x01\n" +
+	"\tquestions\x18\x01 \x01(\v2\x17.google.protobuf.StructR\tquestions\"\xbd\x01\n" +
+	"\x18BackfillGoalTrendRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1b\n" +
+	"\ttime_zone\x18\x02 \x01(\tR\btimeZone\x12\x14\n" +
+	"\x05today\x18\x03 \x01(\tR\x05today\x120\n" +
+	"\x04goal\x18\x04 \x01(\v2\x1c.novam.insights.v1.GoalInputR\x04goal\"1\n" +
+	"\x19BackfillGoalTrendResponse\x12\x14\n" +
+	"\x05saved\x18\x01 \x01(\x05R\x05saved*\xa7\x01\n" +
 	"\tChartKind\x12\x1a\n" +
 	"\x16CHART_KIND_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aCHART_KIND_API_PERFORMANCE\x10\x01\x12\x1c\n" +
 	"\x18CHART_KIND_RECORD_COUNTS\x10\x02\x12 \n" +
 	"\x1cCHART_KIND_REVENUE_BY_METHOD\x10\x03\x12\x1e\n" +
-	"\x1aCHART_KIND_RECENT_INVOICES\x10\x042\xa1\x0f\n" +
+	"\x1aCHART_KIND_RECENT_INVOICES\x10\x042\x91\x10\n" +
 	"\x0fInsightsService\x12n\n" +
 	"\x11GetFinanceSummary\x12+.novam.insights.v1.GetFinanceSummaryRequest\x1a,.novam.insights.v1.GetFinanceSummaryResponse\x12P\n" +
 	"\aMeasure\x12!.novam.insights.v1.MeasureRequest\x1a\".novam.insights.v1.MeasureResponse\x12k\n" +
-	"\x10GetGoalStandings\x12*.novam.insights.v1.GetGoalStandingsRequest\x1a+.novam.insights.v1.GetGoalStandingsResponse\x12h\n" +
+	"\x10GetGoalStandings\x12*.novam.insights.v1.GetGoalStandingsRequest\x1a+.novam.insights.v1.GetGoalStandingsResponse\x12n\n" +
+	"\x11BackfillGoalTrend\x12+.novam.insights.v1.BackfillGoalTrendRequest\x1a,.novam.insights.v1.BackfillGoalTrendResponse\x12h\n" +
 	"\x0fGetSalesSummary\x12).novam.insights.v1.GetSalesSummaryRequest\x1a*.novam.insights.v1.GetSalesSummaryResponse\x12e\n" +
 	"\x0eGetTipsSummary\x12(.novam.insights.v1.GetTipsSummaryRequest\x1a).novam.insights.v1.GetTipsSummaryResponse\x12S\n" +
 	"\bGetChart\x12\".novam.insights.v1.GetChartRequest\x1a#.novam.insights.v1.GetChartResponse\x12b\n" +
@@ -3962,7 +4161,7 @@ func file_novam_insights_v1_insights_service_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_insights_v1_insights_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_insights_v1_insights_service_proto_msgTypes = make([]protoimpl.MessageInfo, 57)
+var file_novam_insights_v1_insights_service_proto_msgTypes = make([]protoimpl.MessageInfo, 60)
 var file_novam_insights_v1_insights_service_proto_goTypes = []any{
 	(ChartKind)(0),                       // 0: novam.insights.v1.ChartKind
 	(*GetFinanceSummaryRequest)(nil),     // 1: novam.insights.v1.GetFinanceSummaryRequest
@@ -3979,161 +4178,169 @@ var file_novam_insights_v1_insights_service_proto_goTypes = []any{
 	(*GoalInput)(nil),                    // 12: novam.insights.v1.GoalInput
 	(*GetGoalStandingsRequest)(nil),      // 13: novam.insights.v1.GetGoalStandingsRequest
 	(*GoalStanding)(nil),                 // 14: novam.insights.v1.GoalStanding
-	(*GetGoalStandingsResponse)(nil),     // 15: novam.insights.v1.GetGoalStandingsResponse
-	(*GetSalesSummaryRequest)(nil),       // 16: novam.insights.v1.GetSalesSummaryRequest
-	(*MethodAmount)(nil),                 // 17: novam.insights.v1.MethodAmount
-	(*SalesGiftCards)(nil),               // 18: novam.insights.v1.SalesGiftCards
-	(*GetSalesSummaryResponse)(nil),      // 19: novam.insights.v1.GetSalesSummaryResponse
-	(*GetTipsSummaryRequest)(nil),        // 20: novam.insights.v1.GetTipsSummaryRequest
-	(*MemberTips)(nil),                   // 21: novam.insights.v1.MemberTips
-	(*ServiceTips)(nil),                  // 22: novam.insights.v1.ServiceTips
-	(*GetTipsSummaryResponse)(nil),       // 23: novam.insights.v1.GetTipsSummaryResponse
-	(*GetChartRequest)(nil),              // 24: novam.insights.v1.GetChartRequest
-	(*ChartPoint)(nil),                   // 25: novam.insights.v1.ChartPoint
-	(*GetChartResponse)(nil),             // 26: novam.insights.v1.GetChartResponse
-	(*ReportMetric)(nil),                 // 27: novam.insights.v1.ReportMetric
-	(*ComputeReportRequest)(nil),         // 28: novam.insights.v1.ComputeReportRequest
-	(*ComputeReportResponse)(nil),        // 29: novam.insights.v1.ComputeReportResponse
-	(*RenderReportRequest)(nil),          // 30: novam.insights.v1.RenderReportRequest
-	(*RenderReportResponse)(nil),         // 31: novam.insights.v1.RenderReportResponse
-	(*TimeRange)(nil),                    // 32: novam.insights.v1.TimeRange
-	(*ListOpenTimesRequest)(nil),         // 33: novam.insights.v1.ListOpenTimesRequest
-	(*OpenTime)(nil),                     // 34: novam.insights.v1.OpenTime
-	(*ListOpenTimesResponse)(nil),        // 35: novam.insights.v1.ListOpenTimesResponse
-	(*Get1099SeasonRequest)(nil),         // 36: novam.insights.v1.Get1099SeasonRequest
-	(*Form1099Summary)(nil),              // 37: novam.insights.v1.Form1099Summary
-	(*Get1099SeasonResponse)(nil),        // 38: novam.insights.v1.Get1099SeasonResponse
-	(*BuildTaxPackageRequest)(nil),       // 39: novam.insights.v1.BuildTaxPackageRequest
-	(*BuildTaxPackageResponse)(nil),      // 40: novam.insights.v1.BuildTaxPackageResponse
-	(*GetLedgerRequest)(nil),             // 41: novam.insights.v1.GetLedgerRequest
-	(*GetLedgerResponse)(nil),            // 42: novam.insights.v1.GetLedgerResponse
-	(*GetBankFeedRequest)(nil),           // 43: novam.insights.v1.GetBankFeedRequest
-	(*GetBankFeedResponse)(nil),          // 44: novam.insights.v1.GetBankFeedResponse
-	(*GetMoneyOverviewRequest)(nil),      // 45: novam.insights.v1.GetMoneyOverviewRequest
-	(*GetMoneyOverviewResponse)(nil),     // 46: novam.insights.v1.GetMoneyOverviewResponse
-	(*GetQuarterlyTaxesRequest)(nil),     // 47: novam.insights.v1.GetQuarterlyTaxesRequest
-	(*GetQuarterlyTaxesResponse)(nil),    // 48: novam.insights.v1.GetQuarterlyTaxesResponse
-	(*GetHelper1099SRequest)(nil),        // 49: novam.insights.v1.GetHelper1099sRequest
-	(*GetHelper1099SResponse)(nil),       // 50: novam.insights.v1.GetHelper1099sResponse
-	(*GetPaycheckRequest)(nil),           // 51: novam.insights.v1.GetPaycheckRequest
-	(*GetPaycheckResponse)(nil),          // 52: novam.insights.v1.GetPaycheckResponse
-	(*GetSpendingSummaryRequest)(nil),    // 53: novam.insights.v1.GetSpendingSummaryRequest
-	(*GetSpendingSummaryResponse)(nil),   // 54: novam.insights.v1.GetSpendingSummaryResponse
-	(*GetSpendingQuestionsRequest)(nil),  // 55: novam.insights.v1.GetSpendingQuestionsRequest
-	(*GetSpendingQuestionsResponse)(nil), // 56: novam.insights.v1.GetSpendingQuestionsResponse
-	nil,                                  // 57: novam.insights.v1.ChartPoint.ValuesEntry
-	(*v1.RequestMetadata)(nil),           // 58: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),        // 59: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),              // 60: google.protobuf.Struct
+	(*TrendPoint)(nil),                   // 15: novam.insights.v1.TrendPoint
+	(*GetGoalStandingsResponse)(nil),     // 16: novam.insights.v1.GetGoalStandingsResponse
+	(*GetSalesSummaryRequest)(nil),       // 17: novam.insights.v1.GetSalesSummaryRequest
+	(*MethodAmount)(nil),                 // 18: novam.insights.v1.MethodAmount
+	(*SalesGiftCards)(nil),               // 19: novam.insights.v1.SalesGiftCards
+	(*GetSalesSummaryResponse)(nil),      // 20: novam.insights.v1.GetSalesSummaryResponse
+	(*GetTipsSummaryRequest)(nil),        // 21: novam.insights.v1.GetTipsSummaryRequest
+	(*MemberTips)(nil),                   // 22: novam.insights.v1.MemberTips
+	(*ServiceTips)(nil),                  // 23: novam.insights.v1.ServiceTips
+	(*GetTipsSummaryResponse)(nil),       // 24: novam.insights.v1.GetTipsSummaryResponse
+	(*GetChartRequest)(nil),              // 25: novam.insights.v1.GetChartRequest
+	(*ChartPoint)(nil),                   // 26: novam.insights.v1.ChartPoint
+	(*GetChartResponse)(nil),             // 27: novam.insights.v1.GetChartResponse
+	(*ReportMetric)(nil),                 // 28: novam.insights.v1.ReportMetric
+	(*ComputeReportRequest)(nil),         // 29: novam.insights.v1.ComputeReportRequest
+	(*ComputeReportResponse)(nil),        // 30: novam.insights.v1.ComputeReportResponse
+	(*RenderReportRequest)(nil),          // 31: novam.insights.v1.RenderReportRequest
+	(*RenderReportResponse)(nil),         // 32: novam.insights.v1.RenderReportResponse
+	(*TimeRange)(nil),                    // 33: novam.insights.v1.TimeRange
+	(*ListOpenTimesRequest)(nil),         // 34: novam.insights.v1.ListOpenTimesRequest
+	(*OpenTime)(nil),                     // 35: novam.insights.v1.OpenTime
+	(*ListOpenTimesResponse)(nil),        // 36: novam.insights.v1.ListOpenTimesResponse
+	(*Get1099SeasonRequest)(nil),         // 37: novam.insights.v1.Get1099SeasonRequest
+	(*Form1099Summary)(nil),              // 38: novam.insights.v1.Form1099Summary
+	(*Get1099SeasonResponse)(nil),        // 39: novam.insights.v1.Get1099SeasonResponse
+	(*BuildTaxPackageRequest)(nil),       // 40: novam.insights.v1.BuildTaxPackageRequest
+	(*BuildTaxPackageResponse)(nil),      // 41: novam.insights.v1.BuildTaxPackageResponse
+	(*GetLedgerRequest)(nil),             // 42: novam.insights.v1.GetLedgerRequest
+	(*GetLedgerResponse)(nil),            // 43: novam.insights.v1.GetLedgerResponse
+	(*GetBankFeedRequest)(nil),           // 44: novam.insights.v1.GetBankFeedRequest
+	(*GetBankFeedResponse)(nil),          // 45: novam.insights.v1.GetBankFeedResponse
+	(*GetMoneyOverviewRequest)(nil),      // 46: novam.insights.v1.GetMoneyOverviewRequest
+	(*GetMoneyOverviewResponse)(nil),     // 47: novam.insights.v1.GetMoneyOverviewResponse
+	(*GetQuarterlyTaxesRequest)(nil),     // 48: novam.insights.v1.GetQuarterlyTaxesRequest
+	(*GetQuarterlyTaxesResponse)(nil),    // 49: novam.insights.v1.GetQuarterlyTaxesResponse
+	(*GetHelper1099SRequest)(nil),        // 50: novam.insights.v1.GetHelper1099sRequest
+	(*GetHelper1099SResponse)(nil),       // 51: novam.insights.v1.GetHelper1099sResponse
+	(*GetPaycheckRequest)(nil),           // 52: novam.insights.v1.GetPaycheckRequest
+	(*GetPaycheckResponse)(nil),          // 53: novam.insights.v1.GetPaycheckResponse
+	(*GetSpendingSummaryRequest)(nil),    // 54: novam.insights.v1.GetSpendingSummaryRequest
+	(*GetSpendingSummaryResponse)(nil),   // 55: novam.insights.v1.GetSpendingSummaryResponse
+	(*GetSpendingQuestionsRequest)(nil),  // 56: novam.insights.v1.GetSpendingQuestionsRequest
+	(*GetSpendingQuestionsResponse)(nil), // 57: novam.insights.v1.GetSpendingQuestionsResponse
+	(*BackfillGoalTrendRequest)(nil),     // 58: novam.insights.v1.BackfillGoalTrendRequest
+	(*BackfillGoalTrendResponse)(nil),    // 59: novam.insights.v1.BackfillGoalTrendResponse
+	nil,                                  // 60: novam.insights.v1.ChartPoint.ValuesEntry
+	(*v1.RequestMetadata)(nil),           // 61: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),        // 62: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),              // 63: google.protobuf.Struct
 }
 var file_novam_insights_v1_insights_service_proto_depIdxs = []int32{
-	58, // 0: novam.insights.v1.GetFinanceSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	61, // 0: novam.insights.v1.GetFinanceSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	4,  // 1: novam.insights.v1.FinanceYear.expenses_by_category:type_name -> novam.insights.v1.CategoryAmount
 	2,  // 2: novam.insights.v1.GetFinanceSummaryResponse.paid_past_week:type_name -> novam.insights.v1.PaidPeriod
 	2,  // 3: novam.insights.v1.GetFinanceSummaryResponse.paid_this_month:type_name -> novam.insights.v1.PaidPeriod
 	3,  // 4: novam.insights.v1.GetFinanceSummaryResponse.outstanding:type_name -> novam.insights.v1.Outstanding
 	5,  // 5: novam.insights.v1.GetFinanceSummaryResponse.year:type_name -> novam.insights.v1.FinanceYear
 	6,  // 6: novam.insights.v1.GetFinanceSummaryResponse.gift_cards:type_name -> novam.insights.v1.GiftCardTotals
-	58, // 7: novam.insights.v1.MeasureRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	61, // 7: novam.insights.v1.MeasureRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	8,  // 8: novam.insights.v1.MeasureRequest.windows:type_name -> novam.insights.v1.MeasureWindow
 	10, // 9: novam.insights.v1.MeasureResponse.values:type_name -> novam.insights.v1.MeasureValue
-	58, // 10: novam.insights.v1.GetGoalStandingsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	61, // 10: novam.insights.v1.GetGoalStandingsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	12, // 11: novam.insights.v1.GetGoalStandingsRequest.goals:type_name -> novam.insights.v1.GoalInput
-	14, // 12: novam.insights.v1.GetGoalStandingsResponse.standings:type_name -> novam.insights.v1.GoalStanding
-	58, // 13: novam.insights.v1.GetSalesSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	59, // 14: novam.insights.v1.GetSalesSummaryRequest.start:type_name -> google.protobuf.Timestamp
-	59, // 15: novam.insights.v1.GetSalesSummaryRequest.end:type_name -> google.protobuf.Timestamp
-	18, // 16: novam.insights.v1.GetSalesSummaryResponse.gift_cards:type_name -> novam.insights.v1.SalesGiftCards
-	17, // 17: novam.insights.v1.GetSalesSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
-	58, // 18: novam.insights.v1.GetTipsSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	59, // 19: novam.insights.v1.GetTipsSummaryRequest.start:type_name -> google.protobuf.Timestamp
-	59, // 20: novam.insights.v1.GetTipsSummaryRequest.end:type_name -> google.protobuf.Timestamp
-	17, // 21: novam.insights.v1.GetTipsSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
-	21, // 22: novam.insights.v1.GetTipsSummaryResponse.by_member:type_name -> novam.insights.v1.MemberTips
-	22, // 23: novam.insights.v1.GetTipsSummaryResponse.by_service:type_name -> novam.insights.v1.ServiceTips
-	58, // 24: novam.insights.v1.GetChartRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 25: novam.insights.v1.GetChartRequest.kind:type_name -> novam.insights.v1.ChartKind
-	57, // 26: novam.insights.v1.ChartPoint.values:type_name -> novam.insights.v1.ChartPoint.ValuesEntry
-	25, // 27: novam.insights.v1.GetChartResponse.points:type_name -> novam.insights.v1.ChartPoint
-	58, // 28: novam.insights.v1.ComputeReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	59, // 29: novam.insights.v1.ComputeReportRequest.start:type_name -> google.protobuf.Timestamp
-	59, // 30: novam.insights.v1.ComputeReportRequest.end:type_name -> google.protobuf.Timestamp
-	27, // 31: novam.insights.v1.ComputeReportResponse.metrics:type_name -> novam.insights.v1.ReportMetric
-	58, // 32: novam.insights.v1.RenderReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	59, // 33: novam.insights.v1.RenderReportRequest.period_start:type_name -> google.protobuf.Timestamp
-	59, // 34: novam.insights.v1.RenderReportRequest.period_end:type_name -> google.protobuf.Timestamp
-	59, // 35: novam.insights.v1.RenderReportRequest.generated_at:type_name -> google.protobuf.Timestamp
-	27, // 36: novam.insights.v1.RenderReportRequest.metrics:type_name -> novam.insights.v1.ReportMetric
-	59, // 37: novam.insights.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
-	59, // 38: novam.insights.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
-	58, // 39: novam.insights.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	32, // 40: novam.insights.v1.ListOpenTimesRequest.person_busy:type_name -> novam.insights.v1.TimeRange
-	59, // 41: novam.insights.v1.ListOpenTimesRequest.now:type_name -> google.protobuf.Timestamp
-	59, // 42: novam.insights.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
-	59, // 43: novam.insights.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
-	34, // 44: novam.insights.v1.ListOpenTimesResponse.times:type_name -> novam.insights.v1.OpenTime
-	58, // 45: novam.insights.v1.Get1099SeasonRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	37, // 46: novam.insights.v1.Get1099SeasonResponse.summaries:type_name -> novam.insights.v1.Form1099Summary
-	58, // 47: novam.insights.v1.BuildTaxPackageRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 48: novam.insights.v1.GetLedgerRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 49: novam.insights.v1.GetLedgerResponse.ledger:type_name -> google.protobuf.Struct
-	58, // 50: novam.insights.v1.GetBankFeedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 51: novam.insights.v1.GetBankFeedResponse.feed:type_name -> google.protobuf.Struct
-	58, // 52: novam.insights.v1.GetMoneyOverviewRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 53: novam.insights.v1.GetMoneyOverviewResponse.overview:type_name -> google.protobuf.Struct
-	58, // 54: novam.insights.v1.GetQuarterlyTaxesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 55: novam.insights.v1.GetQuarterlyTaxesResponse.quarterly:type_name -> google.protobuf.Struct
-	58, // 56: novam.insights.v1.GetHelper1099sRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 57: novam.insights.v1.GetHelper1099sResponse.list:type_name -> google.protobuf.Struct
-	58, // 58: novam.insights.v1.GetPaycheckRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 59: novam.insights.v1.GetPaycheckResponse.paycheck:type_name -> google.protobuf.Struct
-	58, // 60: novam.insights.v1.GetSpendingSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 61: novam.insights.v1.GetSpendingSummaryResponse.summary:type_name -> google.protobuf.Struct
-	58, // 62: novam.insights.v1.GetSpendingQuestionsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 63: novam.insights.v1.GetSpendingQuestionsResponse.questions:type_name -> google.protobuf.Struct
-	1,  // 64: novam.insights.v1.InsightsService.GetFinanceSummary:input_type -> novam.insights.v1.GetFinanceSummaryRequest
-	9,  // 65: novam.insights.v1.InsightsService.Measure:input_type -> novam.insights.v1.MeasureRequest
-	13, // 66: novam.insights.v1.InsightsService.GetGoalStandings:input_type -> novam.insights.v1.GetGoalStandingsRequest
-	16, // 67: novam.insights.v1.InsightsService.GetSalesSummary:input_type -> novam.insights.v1.GetSalesSummaryRequest
-	20, // 68: novam.insights.v1.InsightsService.GetTipsSummary:input_type -> novam.insights.v1.GetTipsSummaryRequest
-	24, // 69: novam.insights.v1.InsightsService.GetChart:input_type -> novam.insights.v1.GetChartRequest
-	28, // 70: novam.insights.v1.InsightsService.ComputeReport:input_type -> novam.insights.v1.ComputeReportRequest
-	30, // 71: novam.insights.v1.InsightsService.RenderReport:input_type -> novam.insights.v1.RenderReportRequest
-	33, // 72: novam.insights.v1.InsightsService.ListOpenTimes:input_type -> novam.insights.v1.ListOpenTimesRequest
-	36, // 73: novam.insights.v1.InsightsService.Get1099Season:input_type -> novam.insights.v1.Get1099SeasonRequest
-	39, // 74: novam.insights.v1.InsightsService.BuildTaxPackage:input_type -> novam.insights.v1.BuildTaxPackageRequest
-	41, // 75: novam.insights.v1.InsightsService.GetLedger:input_type -> novam.insights.v1.GetLedgerRequest
-	43, // 76: novam.insights.v1.InsightsService.GetBankFeed:input_type -> novam.insights.v1.GetBankFeedRequest
-	45, // 77: novam.insights.v1.InsightsService.GetMoneyOverview:input_type -> novam.insights.v1.GetMoneyOverviewRequest
-	47, // 78: novam.insights.v1.InsightsService.GetQuarterlyTaxes:input_type -> novam.insights.v1.GetQuarterlyTaxesRequest
-	49, // 79: novam.insights.v1.InsightsService.GetHelper1099s:input_type -> novam.insights.v1.GetHelper1099sRequest
-	51, // 80: novam.insights.v1.InsightsService.GetPaycheck:input_type -> novam.insights.v1.GetPaycheckRequest
-	53, // 81: novam.insights.v1.InsightsService.GetSpendingSummary:input_type -> novam.insights.v1.GetSpendingSummaryRequest
-	55, // 82: novam.insights.v1.InsightsService.GetSpendingQuestions:input_type -> novam.insights.v1.GetSpendingQuestionsRequest
-	7,  // 83: novam.insights.v1.InsightsService.GetFinanceSummary:output_type -> novam.insights.v1.GetFinanceSummaryResponse
-	11, // 84: novam.insights.v1.InsightsService.Measure:output_type -> novam.insights.v1.MeasureResponse
-	15, // 85: novam.insights.v1.InsightsService.GetGoalStandings:output_type -> novam.insights.v1.GetGoalStandingsResponse
-	19, // 86: novam.insights.v1.InsightsService.GetSalesSummary:output_type -> novam.insights.v1.GetSalesSummaryResponse
-	23, // 87: novam.insights.v1.InsightsService.GetTipsSummary:output_type -> novam.insights.v1.GetTipsSummaryResponse
-	26, // 88: novam.insights.v1.InsightsService.GetChart:output_type -> novam.insights.v1.GetChartResponse
-	29, // 89: novam.insights.v1.InsightsService.ComputeReport:output_type -> novam.insights.v1.ComputeReportResponse
-	31, // 90: novam.insights.v1.InsightsService.RenderReport:output_type -> novam.insights.v1.RenderReportResponse
-	35, // 91: novam.insights.v1.InsightsService.ListOpenTimes:output_type -> novam.insights.v1.ListOpenTimesResponse
-	38, // 92: novam.insights.v1.InsightsService.Get1099Season:output_type -> novam.insights.v1.Get1099SeasonResponse
-	40, // 93: novam.insights.v1.InsightsService.BuildTaxPackage:output_type -> novam.insights.v1.BuildTaxPackageResponse
-	42, // 94: novam.insights.v1.InsightsService.GetLedger:output_type -> novam.insights.v1.GetLedgerResponse
-	44, // 95: novam.insights.v1.InsightsService.GetBankFeed:output_type -> novam.insights.v1.GetBankFeedResponse
-	46, // 96: novam.insights.v1.InsightsService.GetMoneyOverview:output_type -> novam.insights.v1.GetMoneyOverviewResponse
-	48, // 97: novam.insights.v1.InsightsService.GetQuarterlyTaxes:output_type -> novam.insights.v1.GetQuarterlyTaxesResponse
-	50, // 98: novam.insights.v1.InsightsService.GetHelper1099s:output_type -> novam.insights.v1.GetHelper1099sResponse
-	52, // 99: novam.insights.v1.InsightsService.GetPaycheck:output_type -> novam.insights.v1.GetPaycheckResponse
-	54, // 100: novam.insights.v1.InsightsService.GetSpendingSummary:output_type -> novam.insights.v1.GetSpendingSummaryResponse
-	56, // 101: novam.insights.v1.InsightsService.GetSpendingQuestions:output_type -> novam.insights.v1.GetSpendingQuestionsResponse
-	83, // [83:102] is the sub-list for method output_type
-	64, // [64:83] is the sub-list for method input_type
-	64, // [64:64] is the sub-list for extension type_name
-	64, // [64:64] is the sub-list for extension extendee
-	0,  // [0:64] is the sub-list for field type_name
+	15, // 12: novam.insights.v1.GoalStanding.trend:type_name -> novam.insights.v1.TrendPoint
+	14, // 13: novam.insights.v1.GetGoalStandingsResponse.standings:type_name -> novam.insights.v1.GoalStanding
+	61, // 14: novam.insights.v1.GetSalesSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	62, // 15: novam.insights.v1.GetSalesSummaryRequest.start:type_name -> google.protobuf.Timestamp
+	62, // 16: novam.insights.v1.GetSalesSummaryRequest.end:type_name -> google.protobuf.Timestamp
+	19, // 17: novam.insights.v1.GetSalesSummaryResponse.gift_cards:type_name -> novam.insights.v1.SalesGiftCards
+	18, // 18: novam.insights.v1.GetSalesSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
+	61, // 19: novam.insights.v1.GetTipsSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	62, // 20: novam.insights.v1.GetTipsSummaryRequest.start:type_name -> google.protobuf.Timestamp
+	62, // 21: novam.insights.v1.GetTipsSummaryRequest.end:type_name -> google.protobuf.Timestamp
+	18, // 22: novam.insights.v1.GetTipsSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
+	22, // 23: novam.insights.v1.GetTipsSummaryResponse.by_member:type_name -> novam.insights.v1.MemberTips
+	23, // 24: novam.insights.v1.GetTipsSummaryResponse.by_service:type_name -> novam.insights.v1.ServiceTips
+	61, // 25: novam.insights.v1.GetChartRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 26: novam.insights.v1.GetChartRequest.kind:type_name -> novam.insights.v1.ChartKind
+	60, // 27: novam.insights.v1.ChartPoint.values:type_name -> novam.insights.v1.ChartPoint.ValuesEntry
+	26, // 28: novam.insights.v1.GetChartResponse.points:type_name -> novam.insights.v1.ChartPoint
+	61, // 29: novam.insights.v1.ComputeReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	62, // 30: novam.insights.v1.ComputeReportRequest.start:type_name -> google.protobuf.Timestamp
+	62, // 31: novam.insights.v1.ComputeReportRequest.end:type_name -> google.protobuf.Timestamp
+	28, // 32: novam.insights.v1.ComputeReportResponse.metrics:type_name -> novam.insights.v1.ReportMetric
+	61, // 33: novam.insights.v1.RenderReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	62, // 34: novam.insights.v1.RenderReportRequest.period_start:type_name -> google.protobuf.Timestamp
+	62, // 35: novam.insights.v1.RenderReportRequest.period_end:type_name -> google.protobuf.Timestamp
+	62, // 36: novam.insights.v1.RenderReportRequest.generated_at:type_name -> google.protobuf.Timestamp
+	28, // 37: novam.insights.v1.RenderReportRequest.metrics:type_name -> novam.insights.v1.ReportMetric
+	62, // 38: novam.insights.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
+	62, // 39: novam.insights.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
+	61, // 40: novam.insights.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	33, // 41: novam.insights.v1.ListOpenTimesRequest.person_busy:type_name -> novam.insights.v1.TimeRange
+	62, // 42: novam.insights.v1.ListOpenTimesRequest.now:type_name -> google.protobuf.Timestamp
+	62, // 43: novam.insights.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
+	62, // 44: novam.insights.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
+	35, // 45: novam.insights.v1.ListOpenTimesResponse.times:type_name -> novam.insights.v1.OpenTime
+	61, // 46: novam.insights.v1.Get1099SeasonRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	38, // 47: novam.insights.v1.Get1099SeasonResponse.summaries:type_name -> novam.insights.v1.Form1099Summary
+	61, // 48: novam.insights.v1.BuildTaxPackageRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	61, // 49: novam.insights.v1.GetLedgerRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 50: novam.insights.v1.GetLedgerResponse.ledger:type_name -> google.protobuf.Struct
+	61, // 51: novam.insights.v1.GetBankFeedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 52: novam.insights.v1.GetBankFeedResponse.feed:type_name -> google.protobuf.Struct
+	61, // 53: novam.insights.v1.GetMoneyOverviewRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 54: novam.insights.v1.GetMoneyOverviewResponse.overview:type_name -> google.protobuf.Struct
+	61, // 55: novam.insights.v1.GetQuarterlyTaxesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 56: novam.insights.v1.GetQuarterlyTaxesResponse.quarterly:type_name -> google.protobuf.Struct
+	61, // 57: novam.insights.v1.GetHelper1099sRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 58: novam.insights.v1.GetHelper1099sResponse.list:type_name -> google.protobuf.Struct
+	61, // 59: novam.insights.v1.GetPaycheckRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 60: novam.insights.v1.GetPaycheckResponse.paycheck:type_name -> google.protobuf.Struct
+	61, // 61: novam.insights.v1.GetSpendingSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 62: novam.insights.v1.GetSpendingSummaryResponse.summary:type_name -> google.protobuf.Struct
+	61, // 63: novam.insights.v1.GetSpendingQuestionsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	63, // 64: novam.insights.v1.GetSpendingQuestionsResponse.questions:type_name -> google.protobuf.Struct
+	61, // 65: novam.insights.v1.BackfillGoalTrendRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	12, // 66: novam.insights.v1.BackfillGoalTrendRequest.goal:type_name -> novam.insights.v1.GoalInput
+	1,  // 67: novam.insights.v1.InsightsService.GetFinanceSummary:input_type -> novam.insights.v1.GetFinanceSummaryRequest
+	9,  // 68: novam.insights.v1.InsightsService.Measure:input_type -> novam.insights.v1.MeasureRequest
+	13, // 69: novam.insights.v1.InsightsService.GetGoalStandings:input_type -> novam.insights.v1.GetGoalStandingsRequest
+	58, // 70: novam.insights.v1.InsightsService.BackfillGoalTrend:input_type -> novam.insights.v1.BackfillGoalTrendRequest
+	17, // 71: novam.insights.v1.InsightsService.GetSalesSummary:input_type -> novam.insights.v1.GetSalesSummaryRequest
+	21, // 72: novam.insights.v1.InsightsService.GetTipsSummary:input_type -> novam.insights.v1.GetTipsSummaryRequest
+	25, // 73: novam.insights.v1.InsightsService.GetChart:input_type -> novam.insights.v1.GetChartRequest
+	29, // 74: novam.insights.v1.InsightsService.ComputeReport:input_type -> novam.insights.v1.ComputeReportRequest
+	31, // 75: novam.insights.v1.InsightsService.RenderReport:input_type -> novam.insights.v1.RenderReportRequest
+	34, // 76: novam.insights.v1.InsightsService.ListOpenTimes:input_type -> novam.insights.v1.ListOpenTimesRequest
+	37, // 77: novam.insights.v1.InsightsService.Get1099Season:input_type -> novam.insights.v1.Get1099SeasonRequest
+	40, // 78: novam.insights.v1.InsightsService.BuildTaxPackage:input_type -> novam.insights.v1.BuildTaxPackageRequest
+	42, // 79: novam.insights.v1.InsightsService.GetLedger:input_type -> novam.insights.v1.GetLedgerRequest
+	44, // 80: novam.insights.v1.InsightsService.GetBankFeed:input_type -> novam.insights.v1.GetBankFeedRequest
+	46, // 81: novam.insights.v1.InsightsService.GetMoneyOverview:input_type -> novam.insights.v1.GetMoneyOverviewRequest
+	48, // 82: novam.insights.v1.InsightsService.GetQuarterlyTaxes:input_type -> novam.insights.v1.GetQuarterlyTaxesRequest
+	50, // 83: novam.insights.v1.InsightsService.GetHelper1099s:input_type -> novam.insights.v1.GetHelper1099sRequest
+	52, // 84: novam.insights.v1.InsightsService.GetPaycheck:input_type -> novam.insights.v1.GetPaycheckRequest
+	54, // 85: novam.insights.v1.InsightsService.GetSpendingSummary:input_type -> novam.insights.v1.GetSpendingSummaryRequest
+	56, // 86: novam.insights.v1.InsightsService.GetSpendingQuestions:input_type -> novam.insights.v1.GetSpendingQuestionsRequest
+	7,  // 87: novam.insights.v1.InsightsService.GetFinanceSummary:output_type -> novam.insights.v1.GetFinanceSummaryResponse
+	11, // 88: novam.insights.v1.InsightsService.Measure:output_type -> novam.insights.v1.MeasureResponse
+	16, // 89: novam.insights.v1.InsightsService.GetGoalStandings:output_type -> novam.insights.v1.GetGoalStandingsResponse
+	59, // 90: novam.insights.v1.InsightsService.BackfillGoalTrend:output_type -> novam.insights.v1.BackfillGoalTrendResponse
+	20, // 91: novam.insights.v1.InsightsService.GetSalesSummary:output_type -> novam.insights.v1.GetSalesSummaryResponse
+	24, // 92: novam.insights.v1.InsightsService.GetTipsSummary:output_type -> novam.insights.v1.GetTipsSummaryResponse
+	27, // 93: novam.insights.v1.InsightsService.GetChart:output_type -> novam.insights.v1.GetChartResponse
+	30, // 94: novam.insights.v1.InsightsService.ComputeReport:output_type -> novam.insights.v1.ComputeReportResponse
+	32, // 95: novam.insights.v1.InsightsService.RenderReport:output_type -> novam.insights.v1.RenderReportResponse
+	36, // 96: novam.insights.v1.InsightsService.ListOpenTimes:output_type -> novam.insights.v1.ListOpenTimesResponse
+	39, // 97: novam.insights.v1.InsightsService.Get1099Season:output_type -> novam.insights.v1.Get1099SeasonResponse
+	41, // 98: novam.insights.v1.InsightsService.BuildTaxPackage:output_type -> novam.insights.v1.BuildTaxPackageResponse
+	43, // 99: novam.insights.v1.InsightsService.GetLedger:output_type -> novam.insights.v1.GetLedgerResponse
+	45, // 100: novam.insights.v1.InsightsService.GetBankFeed:output_type -> novam.insights.v1.GetBankFeedResponse
+	47, // 101: novam.insights.v1.InsightsService.GetMoneyOverview:output_type -> novam.insights.v1.GetMoneyOverviewResponse
+	49, // 102: novam.insights.v1.InsightsService.GetQuarterlyTaxes:output_type -> novam.insights.v1.GetQuarterlyTaxesResponse
+	51, // 103: novam.insights.v1.InsightsService.GetHelper1099s:output_type -> novam.insights.v1.GetHelper1099sResponse
+	53, // 104: novam.insights.v1.InsightsService.GetPaycheck:output_type -> novam.insights.v1.GetPaycheckResponse
+	55, // 105: novam.insights.v1.InsightsService.GetSpendingSummary:output_type -> novam.insights.v1.GetSpendingSummaryResponse
+	57, // 106: novam.insights.v1.InsightsService.GetSpendingQuestions:output_type -> novam.insights.v1.GetSpendingQuestionsResponse
+	87, // [87:107] is the sub-list for method output_type
+	67, // [67:87] is the sub-list for method input_type
+	67, // [67:67] is the sub-list for extension type_name
+	67, // [67:67] is the sub-list for extension extendee
+	0,  // [0:67] is the sub-list for field type_name
 }
 
 func init() { file_novam_insights_v1_insights_service_proto_init() }
@@ -4144,14 +4351,14 @@ func file_novam_insights_v1_insights_service_proto_init() {
 	file_novam_insights_v1_insights_service_proto_msgTypes[4].OneofWrappers = []any{}
 	file_novam_insights_v1_insights_service_proto_msgTypes[9].OneofWrappers = []any{}
 	file_novam_insights_v1_insights_service_proto_msgTypes[13].OneofWrappers = []any{}
-	file_novam_insights_v1_insights_service_proto_msgTypes[22].OneofWrappers = []any{}
+	file_novam_insights_v1_insights_service_proto_msgTypes[23].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_insights_v1_insights_service_proto_rawDesc), len(file_novam_insights_v1_insights_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   57,
+			NumMessages:   60,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

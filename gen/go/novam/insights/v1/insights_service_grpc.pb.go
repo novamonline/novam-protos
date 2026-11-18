@@ -22,6 +22,7 @@ const (
 	InsightsService_GetFinanceSummary_FullMethodName    = "/novam.insights.v1.InsightsService/GetFinanceSummary"
 	InsightsService_Measure_FullMethodName              = "/novam.insights.v1.InsightsService/Measure"
 	InsightsService_GetGoalStandings_FullMethodName     = "/novam.insights.v1.InsightsService/GetGoalStandings"
+	InsightsService_BackfillGoalTrend_FullMethodName    = "/novam.insights.v1.InsightsService/BackfillGoalTrend"
 	InsightsService_GetSalesSummary_FullMethodName      = "/novam.insights.v1.InsightsService/GetSalesSummary"
 	InsightsService_GetTipsSummary_FullMethodName       = "/novam.insights.v1.InsightsService/GetTipsSummary"
 	InsightsService_GetChart_FullMethodName             = "/novam.insights.v1.InsightsService/GetChart"
@@ -55,6 +56,9 @@ type InsightsServiceClient interface {
 	Measure(ctx context.Context, in *MeasureRequest, opts ...grpc.CallOption) (*MeasureResponse, error)
 	// Where goals stand: value so far, pace, likely landing and the gap per week.
 	GetGoalStandings(ctx context.Context, in *GetGoalStandingsRequest, opts ...grpc.CallOption) (*GetGoalStandingsResponse, error)
+	// Fills a new goal's trend from the days before it was set (every day of a short goal, then weekly, then monthly,
+	// up to today), keeping points already saved.
+	BackfillGoalTrend(ctx context.Context, in *BackfillGoalTrendRequest, opts ...grpc.CallOption) (*BackfillGoalTrendResponse, error)
 	// Sales over a period, from billed to kept.
 	GetSalesSummary(ctx context.Context, in *GetSalesSummaryRequest, opts ...grpc.CallOption) (*GetSalesSummaryResponse, error)
 	// Tips over a period, by method, team member and service.
@@ -125,6 +129,16 @@ func (c *insightsServiceClient) GetGoalStandings(ctx context.Context, in *GetGoa
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetGoalStandingsResponse)
 	err := c.cc.Invoke(ctx, InsightsService_GetGoalStandings_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insightsServiceClient) BackfillGoalTrend(ctx context.Context, in *BackfillGoalTrendRequest, opts ...grpc.CallOption) (*BackfillGoalTrendResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(BackfillGoalTrendResponse)
+	err := c.cc.Invoke(ctx, InsightsService_BackfillGoalTrend_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -306,6 +320,9 @@ type InsightsServiceServer interface {
 	Measure(context.Context, *MeasureRequest) (*MeasureResponse, error)
 	// Where goals stand: value so far, pace, likely landing and the gap per week.
 	GetGoalStandings(context.Context, *GetGoalStandingsRequest) (*GetGoalStandingsResponse, error)
+	// Fills a new goal's trend from the days before it was set (every day of a short goal, then weekly, then monthly,
+	// up to today), keeping points already saved.
+	BackfillGoalTrend(context.Context, *BackfillGoalTrendRequest) (*BackfillGoalTrendResponse, error)
 	// Sales over a period, from billed to kept.
 	GetSalesSummary(context.Context, *GetSalesSummaryRequest) (*GetSalesSummaryResponse, error)
 	// Tips over a period, by method, team member and service.
@@ -360,6 +377,9 @@ func (UnimplementedInsightsServiceServer) Measure(context.Context, *MeasureReque
 }
 func (UnimplementedInsightsServiceServer) GetGoalStandings(context.Context, *GetGoalStandingsRequest) (*GetGoalStandingsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetGoalStandings not implemented")
+}
+func (UnimplementedInsightsServiceServer) BackfillGoalTrend(context.Context, *BackfillGoalTrendRequest) (*BackfillGoalTrendResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method BackfillGoalTrend not implemented")
 }
 func (UnimplementedInsightsServiceServer) GetSalesSummary(context.Context, *GetSalesSummaryRequest) (*GetSalesSummaryResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetSalesSummary not implemented")
@@ -480,6 +500,24 @@ func _InsightsService_GetGoalStandings_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InsightsServiceServer).GetGoalStandings(ctx, req.(*GetGoalStandingsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsightsService_BackfillGoalTrend_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BackfillGoalTrendRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).BackfillGoalTrend(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_BackfillGoalTrend_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).BackfillGoalTrend(ctx, req.(*BackfillGoalTrendRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -790,6 +828,10 @@ var InsightsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetGoalStandings",
 			Handler:    _InsightsService_GetGoalStandings_Handler,
+		},
+		{
+			MethodName: "BackfillGoalTrend",
+			Handler:    _InsightsService_BackfillGoalTrend_Handler,
 		},
 		{
 			MethodName: "GetSalesSummary",

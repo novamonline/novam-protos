@@ -19,6 +19,9 @@ service InsightsService {
   rpc Measure(MeasureRequest) returns (MeasureResponse);
   // Where goals stand: value so far, pace, likely landing and the gap per week.
   rpc GetGoalStandings(GetGoalStandingsRequest) returns (GetGoalStandingsResponse);
+  // Fills a new goal's trend from the days before it was set (every day of a short goal, then weekly, then monthly,
+  // up to today), keeping points already saved.
+  rpc BackfillGoalTrend(BackfillGoalTrendRequest) returns (BackfillGoalTrendResponse);
   // Sales over a period, from billed to kept.
   rpc GetSalesSummary(GetSalesSummaryRequest) returns (GetSalesSummaryResponse);
   // Tips over a period, by method, team member and service.
@@ -166,6 +169,8 @@ message GetGoalStandingsRequest {
   // Today in the business's time zone, YYYY-MM-DD.
   string today = 3;
   repeated GoalInput goals = 4;
+  // Save each started goal's point for value_day when it is new or the measure moved, and return each goal's trend.
+  bool save_snapshots = 5;
 }
 
 message GoalStanding {
@@ -187,6 +192,14 @@ message GoalStanding {
   int32 open_leads = 12;
   // The day the value is for (today, or the goal's last day once it is over); YYYY-MM-DD.
   string value_day = 13;
+  // The goal's saved points, oldest first; with save_snapshots only.
+  repeated TrendPoint trend = 14;
+}
+
+message TrendPoint {
+  // YYYY-MM-DD.
+  string day = 1;
+  double value = 2;
 }
 
 message GetGoalStandingsResponse {
@@ -485,4 +498,17 @@ message GetSpendingQuestionsRequest {
 message GetSpendingQuestionsResponse {
   // As novam-data's spendingQuestions: questions, total_size.
   google.protobuf.Struct questions = 1;
+}
+
+message BackfillGoalTrendRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string time_zone = 2;
+  // Today in the business's time zone, YYYY-MM-DD.
+  string today = 3;
+  GoalInput goal = 4;
+}
+
+message BackfillGoalTrendResponse {
+  // Points written; days already saved are kept as they are.
+  int32 saved = 1;
 }

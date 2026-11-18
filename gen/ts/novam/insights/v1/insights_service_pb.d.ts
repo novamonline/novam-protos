@@ -445,6 +445,13 @@ export declare type GetGoalStandingsRequest = Message<"novam.insights.v1.GetGoal
    * @generated from field: repeated novam.insights.v1.GoalInput goals = 4;
    */
   goals: GoalInput[];
+
+  /**
+   * Save each started goal's point for value_day when it is new or the measure moved, and return each goal's trend.
+   *
+   * @generated from field: bool save_snapshots = 5;
+   */
+  saveSnapshots: boolean;
 };
 
 /**
@@ -531,6 +538,13 @@ export declare type GoalStanding = Message<"novam.insights.v1.GoalStanding"> & {
    * @generated from field: string value_day = 13;
    */
   valueDay: string;
+
+  /**
+   * The goal's saved points, oldest first; with save_snapshots only.
+   *
+   * @generated from field: repeated novam.insights.v1.TrendPoint trend = 14;
+   */
+  trend: TrendPoint[];
 };
 
 /**
@@ -538,6 +552,29 @@ export declare type GoalStanding = Message<"novam.insights.v1.GoalStanding"> & {
  * Use `create(GoalStandingSchema)` to create a new message.
  */
 export declare const GoalStandingSchema: GenMessage<GoalStanding>;
+
+/**
+ * @generated from message novam.insights.v1.TrendPoint
+ */
+export declare type TrendPoint = Message<"novam.insights.v1.TrendPoint"> & {
+  /**
+   * YYYY-MM-DD.
+   *
+   * @generated from field: string day = 1;
+   */
+  day: string;
+
+  /**
+   * @generated from field: double value = 2;
+   */
+  value: number;
+};
+
+/**
+ * Describes the message novam.insights.v1.TrendPoint.
+ * Use `create(TrendPointSchema)` to create a new message.
+ */
+export declare const TrendPointSchema: GenMessage<TrendPoint>;
 
 /**
  * @generated from message novam.insights.v1.GetGoalStandingsResponse
@@ -1680,6 +1717,57 @@ export declare type GetSpendingQuestionsResponse = Message<"novam.insights.v1.Ge
 export declare const GetSpendingQuestionsResponseSchema: GenMessage<GetSpendingQuestionsResponse>;
 
 /**
+ * @generated from message novam.insights.v1.BackfillGoalTrendRequest
+ */
+export declare type BackfillGoalTrendRequest = Message<"novam.insights.v1.BackfillGoalTrendRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string time_zone = 2;
+   */
+  timeZone: string;
+
+  /**
+   * Today in the business's time zone, YYYY-MM-DD.
+   *
+   * @generated from field: string today = 3;
+   */
+  today: string;
+
+  /**
+   * @generated from field: novam.insights.v1.GoalInput goal = 4;
+   */
+  goal?: GoalInput;
+};
+
+/**
+ * Describes the message novam.insights.v1.BackfillGoalTrendRequest.
+ * Use `create(BackfillGoalTrendRequestSchema)` to create a new message.
+ */
+export declare const BackfillGoalTrendRequestSchema: GenMessage<BackfillGoalTrendRequest>;
+
+/**
+ * @generated from message novam.insights.v1.BackfillGoalTrendResponse
+ */
+export declare type BackfillGoalTrendResponse = Message<"novam.insights.v1.BackfillGoalTrendResponse"> & {
+  /**
+   * Points written; days already saved are kept as they are.
+   *
+   * @generated from field: int32 saved = 1;
+   */
+  saved: number;
+};
+
+/**
+ * Describes the message novam.insights.v1.BackfillGoalTrendResponse.
+ * Use `create(BackfillGoalTrendResponseSchema)` to create a new message.
+ */
+export declare const BackfillGoalTrendResponseSchema: GenMessage<BackfillGoalTrendResponse>;
+
+/**
  * @generated from enum novam.insights.v1.ChartKind
  */
 export enum ChartKind {
@@ -1761,6 +1849,17 @@ export declare const InsightsService: GenService<{
     methodKind: "unary";
     input: typeof GetGoalStandingsRequestSchema;
     output: typeof GetGoalStandingsResponseSchema;
+  },
+  /**
+   * Fills a new goal's trend from the days before it was set (every day of a short goal, then weekly, then monthly,
+   * up to today), keeping points already saved.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.BackfillGoalTrend
+   */
+  backfillGoalTrend: {
+    methodKind: "unary";
+    input: typeof BackfillGoalTrendRequestSchema;
+    output: typeof BackfillGoalTrendResponseSchema;
   },
   /**
    * Sales over a period, from billed to kept.
