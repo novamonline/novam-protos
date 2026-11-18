@@ -104,6 +104,7 @@ type Command struct {
 	//	*Command_CallAddTurn
 	//	*Command_CallEnd
 	//	*Command_RunAutomation
+	//	*Command_InvoiceSend
 	Payload       isCommand_Payload `protobuf_oneof:"payload"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -294,6 +295,15 @@ func (x *Command) GetRunAutomation() *RunAutomation {
 	return nil
 }
 
+func (x *Command) GetInvoiceSend() *InvoiceSend {
+	if x != nil {
+		if x, ok := x.Payload.(*Command_InvoiceSend); ok {
+			return x.InvoiceSend
+		}
+	}
+	return nil
+}
+
 type isCommand_Payload interface {
 	isCommand_Payload()
 }
@@ -342,6 +352,10 @@ type Command_RunAutomation struct {
 	RunAutomation *RunAutomation `protobuf:"bytes,20,opt,name=run_automation,json=runAutomation,proto3,oneof"`
 }
 
+type Command_InvoiceSend struct {
+	InvoiceSend *InvoiceSend `protobuf:"bytes,21,opt,name=invoice_send,json=invoiceSend,proto3,oneof"`
+}
+
 func (*Command_RecordCreate) isCommand_Payload() {}
 
 func (*Command_RecordUpdate) isCommand_Payload() {}
@@ -363,6 +377,8 @@ func (*Command_CallAddTurn) isCommand_Payload() {}
 func (*Command_CallEnd) isCommand_Payload() {}
 
 func (*Command_RunAutomation) isCommand_Payload() {}
+
+func (*Command_InvoiceSend) isCommand_Payload() {}
 
 // Who the change is made as. novam-data checks permissions and writes the audit trail as this actor.
 type Actor struct {
@@ -1290,6 +1306,54 @@ func (x *RunAutomation) GetKind() string {
 	return ""
 }
 
+// clientInvoices.send: emails the invoice to its client as the app's Send does (its PDF, the ways to pay and a pay
+// link), and a draft becomes sent; a client with autopay on is charged when it is due. Sent with no actor, it is
+// the business's own scheduled work, such as a membership's or standing plan's monthly bill the engine just made.
+// The result's invoice is the invoice as sent.
+type InvoiceSend struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	InvoiceId     string                 `protobuf:"bytes,1,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *InvoiceSend) Reset() {
+	*x = InvoiceSend{}
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *InvoiceSend) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*InvoiceSend) ProtoMessage() {}
+
+func (x *InvoiceSend) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use InvoiceSend.ProtoReflect.Descriptor instead.
+func (*InvoiceSend) Descriptor() ([]byte, []int) {
+	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *InvoiceSend) GetInvoiceId() string {
+	if x != nil {
+		return x.InvoiceId
+	}
+	return ""
+}
+
 // Published to the command's reply_subject once it is applied or rejected, and kept for a day. A command that
 // fails for a reason that may pass (the database is down) is not acknowledged and gets no result until it is
 // retried.
@@ -1315,7 +1379,7 @@ type CommandResult struct {
 
 func (x *CommandResult) Reset() {
 	*x = CommandResult{}
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[16]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1327,7 +1391,7 @@ func (x *CommandResult) String() string {
 func (*CommandResult) ProtoMessage() {}
 
 func (x *CommandResult) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[16]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1340,7 +1404,7 @@ func (x *CommandResult) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CommandResult.ProtoReflect.Descriptor instead.
 func (*CommandResult) Descriptor() ([]byte, []int) {
-	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{16}
+	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *CommandResult) GetCommandId() string {
@@ -1469,7 +1533,7 @@ type HeldTime struct {
 
 func (x *HeldTime) Reset() {
 	*x = HeldTime{}
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[17]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1481,7 +1545,7 @@ func (x *HeldTime) String() string {
 func (*HeldTime) ProtoMessage() {}
 
 func (x *HeldTime) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[17]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1494,7 +1558,7 @@ func (x *HeldTime) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use HeldTime.ProtoReflect.Descriptor instead.
 func (*HeldTime) Descriptor() ([]byte, []int) {
-	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{17}
+	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *HeldTime) GetStart() *timestamppb.Timestamp {
@@ -1537,7 +1601,7 @@ type AutomationRun struct {
 
 func (x *AutomationRun) Reset() {
 	*x = AutomationRun{}
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[18]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1549,7 +1613,7 @@ func (x *AutomationRun) String() string {
 func (*AutomationRun) ProtoMessage() {}
 
 func (x *AutomationRun) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[18]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1562,7 +1626,7 @@ func (x *AutomationRun) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AutomationRun.ProtoReflect.Descriptor instead.
 func (*AutomationRun) Descriptor() ([]byte, []int) {
-	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{18}
+	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *AutomationRun) GetMade() int32 {
@@ -1590,7 +1654,7 @@ type CallStarted struct {
 
 func (x *CallStarted) Reset() {
 	*x = CallStarted{}
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[19]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[20]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1602,7 +1666,7 @@ func (x *CallStarted) String() string {
 func (*CallStarted) ProtoMessage() {}
 
 func (x *CallStarted) ProtoReflect() protoreflect.Message {
-	mi := &file_novam_commands_v1_commands_proto_msgTypes[19]
+	mi := &file_novam_commands_v1_commands_proto_msgTypes[20]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1615,7 +1679,7 @@ func (x *CallStarted) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CallStarted.ProtoReflect.Descriptor instead.
 func (*CallStarted) Descriptor() ([]byte, []int) {
-	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{19}
+	return file_novam_commands_v1_commands_proto_rawDescGZIP(), []int{20}
 }
 
 func (x *CallStarted) GetThreadId() string {
@@ -1657,7 +1721,7 @@ var File_novam_commands_v1_commands_proto protoreflect.FileDescriptor
 
 const file_novam_commands_v1_commands_proto_rawDesc = "" +
 	"\n" +
-	" novam/commands/v1/commands.proto\x12\x11novam.commands.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cnovam/common/v1/errors.proto\x1a%novam/events/v1/business_events.proto\"\xe3\a\n" +
+	" novam/commands/v1/commands.proto\x12\x11novam.commands.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cnovam/common/v1/errors.proto\x1a%novam/events/v1/business_events.proto\"\xa8\b\n" +
 	"\aCommand\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
 	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12.\n" +
@@ -1682,7 +1746,8 @@ const file_novam_commands_v1_commands_proto_rawDesc = "" +
 	"call_start\x18\x11 \x01(\v2\x1c.novam.commands.v1.CallStartH\x00R\tcallStart\x12D\n" +
 	"\rcall_add_turn\x18\x12 \x01(\v2\x1e.novam.commands.v1.CallAddTurnH\x00R\vcallAddTurn\x127\n" +
 	"\bcall_end\x18\x13 \x01(\v2\x1a.novam.commands.v1.CallEndH\x00R\acallEnd\x12I\n" +
-	"\x0erun_automation\x18\x14 \x01(\v2 .novam.commands.v1.RunAutomationH\x00R\rrunAutomationB\t\n" +
+	"\x0erun_automation\x18\x14 \x01(\v2 .novam.commands.v1.RunAutomationH\x00R\rrunAutomation\x12C\n" +
+	"\finvoice_send\x18\x15 \x01(\v2\x1e.novam.commands.v1.InvoiceSendH\x00R\vinvoiceSendB\t\n" +
 	"\apayload\"\xc6\x01\n" +
 	"\x05Actor\x12>\n" +
 	"\bworkflow\x18\x01 \x01(\v2 .novam.commands.v1.WorkflowActorH\x00R\bworkflow\x12A\n" +
@@ -1742,7 +1807,10 @@ const file_novam_commands_v1_commands_proto_rawDesc = "" +
 	"\acall_id\x18\x02 \x01(\tR\x06callId\x12#\n" +
 	"\ragent_seconds\x18\x03 \x01(\x05R\fagentSeconds\"#\n" +
 	"\rRunAutomation\x12\x12\n" +
-	"\x04kind\x18\x01 \x01(\tR\x04kind\"\x9f\x04\n" +
+	"\x04kind\x18\x01 \x01(\tR\x04kind\",\n" +
+	"\vInvoiceSend\x12\x1d\n" +
+	"\n" +
+	"invoice_id\x18\x01 \x01(\tR\tinvoiceId\"\x9f\x04\n" +
 	"\rCommandResult\x12\x1d\n" +
 	"\n" +
 	"command_id\x18\x01 \x01(\tR\tcommandId\x128\n" +
@@ -1791,7 +1859,7 @@ func file_novam_commands_v1_commands_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_commands_v1_commands_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_commands_v1_commands_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_novam_commands_v1_commands_proto_msgTypes = make([]protoimpl.MessageInfo, 21)
 var file_novam_commands_v1_commands_proto_goTypes = []any{
 	(CommandStatus)(0),            // 0: novam.commands.v1.CommandStatus
 	(*Command)(nil),               // 1: novam.commands.v1.Command
@@ -1810,18 +1878,19 @@ var file_novam_commands_v1_commands_proto_goTypes = []any{
 	(*CallAddTurn)(nil),           // 14: novam.commands.v1.CallAddTurn
 	(*CallEnd)(nil),               // 15: novam.commands.v1.CallEnd
 	(*RunAutomation)(nil),         // 16: novam.commands.v1.RunAutomation
-	(*CommandResult)(nil),         // 17: novam.commands.v1.CommandResult
-	(*HeldTime)(nil),              // 18: novam.commands.v1.HeldTime
-	(*AutomationRun)(nil),         // 19: novam.commands.v1.AutomationRun
-	(*CallStarted)(nil),           // 20: novam.commands.v1.CallStarted
-	(*timestamppb.Timestamp)(nil), // 21: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),       // 22: google.protobuf.Struct
-	(*v1.ErrorDetails)(nil),       // 23: novam.common.v1.ErrorDetails
-	(*v11.ClientInvoice)(nil),     // 24: novam.events.v1.ClientInvoice
+	(*InvoiceSend)(nil),           // 17: novam.commands.v1.InvoiceSend
+	(*CommandResult)(nil),         // 18: novam.commands.v1.CommandResult
+	(*HeldTime)(nil),              // 19: novam.commands.v1.HeldTime
+	(*AutomationRun)(nil),         // 20: novam.commands.v1.AutomationRun
+	(*CallStarted)(nil),           // 21: novam.commands.v1.CallStarted
+	(*timestamppb.Timestamp)(nil), // 22: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),       // 23: google.protobuf.Struct
+	(*v1.ErrorDetails)(nil),       // 24: novam.common.v1.ErrorDetails
+	(*v11.ClientInvoice)(nil),     // 25: novam.events.v1.ClientInvoice
 }
 var file_novam_commands_v1_commands_proto_depIdxs = []int32{
 	2,  // 0: novam.commands.v1.Command.actor:type_name -> novam.commands.v1.Actor
-	21, // 1: novam.commands.v1.Command.created_at:type_name -> google.protobuf.Timestamp
+	22, // 1: novam.commands.v1.Command.created_at:type_name -> google.protobuf.Timestamp
 	6,  // 2: novam.commands.v1.Command.record_create:type_name -> novam.commands.v1.RecordCreate
 	7,  // 3: novam.commands.v1.Command.record_update:type_name -> novam.commands.v1.RecordUpdate
 	8,  // 4: novam.commands.v1.Command.task_create:type_name -> novam.commands.v1.TaskCreate
@@ -1833,27 +1902,28 @@ var file_novam_commands_v1_commands_proto_depIdxs = []int32{
 	14, // 10: novam.commands.v1.Command.call_add_turn:type_name -> novam.commands.v1.CallAddTurn
 	15, // 11: novam.commands.v1.Command.call_end:type_name -> novam.commands.v1.CallEnd
 	16, // 12: novam.commands.v1.Command.run_automation:type_name -> novam.commands.v1.RunAutomation
-	3,  // 13: novam.commands.v1.Actor.workflow:type_name -> novam.commands.v1.WorkflowActor
-	4,  // 14: novam.commands.v1.Actor.reception:type_name -> novam.commands.v1.ReceptionActor
-	5,  // 15: novam.commands.v1.Actor.user:type_name -> novam.commands.v1.UserActor
-	22, // 16: novam.commands.v1.RecordCreate.fields:type_name -> google.protobuf.Struct
-	22, // 17: novam.commands.v1.RecordUpdate.fields:type_name -> google.protobuf.Struct
-	21, // 18: novam.commands.v1.HoldTime.start:type_name -> google.protobuf.Timestamp
-	0,  // 19: novam.commands.v1.CommandResult.status:type_name -> novam.commands.v1.CommandStatus
-	23, // 20: novam.commands.v1.CommandResult.error:type_name -> novam.common.v1.ErrorDetails
-	21, // 21: novam.commands.v1.CommandResult.applied_at:type_name -> google.protobuf.Timestamp
-	22, // 22: novam.commands.v1.CommandResult.record:type_name -> google.protobuf.Struct
-	24, // 23: novam.commands.v1.CommandResult.invoice:type_name -> novam.events.v1.ClientInvoice
-	18, // 24: novam.commands.v1.CommandResult.held_time:type_name -> novam.commands.v1.HeldTime
-	20, // 25: novam.commands.v1.CommandResult.call_started:type_name -> novam.commands.v1.CallStarted
-	19, // 26: novam.commands.v1.CommandResult.automation_run:type_name -> novam.commands.v1.AutomationRun
-	21, // 27: novam.commands.v1.HeldTime.start:type_name -> google.protobuf.Timestamp
-	21, // 28: novam.commands.v1.HeldTime.end:type_name -> google.protobuf.Timestamp
-	29, // [29:29] is the sub-list for method output_type
-	29, // [29:29] is the sub-list for method input_type
-	29, // [29:29] is the sub-list for extension type_name
-	29, // [29:29] is the sub-list for extension extendee
-	0,  // [0:29] is the sub-list for field type_name
+	17, // 13: novam.commands.v1.Command.invoice_send:type_name -> novam.commands.v1.InvoiceSend
+	3,  // 14: novam.commands.v1.Actor.workflow:type_name -> novam.commands.v1.WorkflowActor
+	4,  // 15: novam.commands.v1.Actor.reception:type_name -> novam.commands.v1.ReceptionActor
+	5,  // 16: novam.commands.v1.Actor.user:type_name -> novam.commands.v1.UserActor
+	23, // 17: novam.commands.v1.RecordCreate.fields:type_name -> google.protobuf.Struct
+	23, // 18: novam.commands.v1.RecordUpdate.fields:type_name -> google.protobuf.Struct
+	22, // 19: novam.commands.v1.HoldTime.start:type_name -> google.protobuf.Timestamp
+	0,  // 20: novam.commands.v1.CommandResult.status:type_name -> novam.commands.v1.CommandStatus
+	24, // 21: novam.commands.v1.CommandResult.error:type_name -> novam.common.v1.ErrorDetails
+	22, // 22: novam.commands.v1.CommandResult.applied_at:type_name -> google.protobuf.Timestamp
+	23, // 23: novam.commands.v1.CommandResult.record:type_name -> google.protobuf.Struct
+	25, // 24: novam.commands.v1.CommandResult.invoice:type_name -> novam.events.v1.ClientInvoice
+	19, // 25: novam.commands.v1.CommandResult.held_time:type_name -> novam.commands.v1.HeldTime
+	21, // 26: novam.commands.v1.CommandResult.call_started:type_name -> novam.commands.v1.CallStarted
+	20, // 27: novam.commands.v1.CommandResult.automation_run:type_name -> novam.commands.v1.AutomationRun
+	22, // 28: novam.commands.v1.HeldTime.start:type_name -> google.protobuf.Timestamp
+	22, // 29: novam.commands.v1.HeldTime.end:type_name -> google.protobuf.Timestamp
+	30, // [30:30] is the sub-list for method output_type
+	30, // [30:30] is the sub-list for method input_type
+	30, // [30:30] is the sub-list for extension type_name
+	30, // [30:30] is the sub-list for extension extendee
+	0,  // [0:30] is the sub-list for field type_name
 }
 
 func init() { file_novam_commands_v1_commands_proto_init() }
@@ -1873,13 +1943,14 @@ func file_novam_commands_v1_commands_proto_init() {
 		(*Command_CallAddTurn)(nil),
 		(*Command_CallEnd)(nil),
 		(*Command_RunAutomation)(nil),
+		(*Command_InvoiceSend)(nil),
 	}
 	file_novam_commands_v1_commands_proto_msgTypes[1].OneofWrappers = []any{
 		(*Actor_Workflow)(nil),
 		(*Actor_Reception)(nil),
 		(*Actor_User)(nil),
 	}
-	file_novam_commands_v1_commands_proto_msgTypes[16].OneofWrappers = []any{
+	file_novam_commands_v1_commands_proto_msgTypes[17].OneofWrappers = []any{
 		(*CommandResult_Record)(nil),
 		(*CommandResult_Invoice)(nil),
 		(*CommandResult_HeldTime)(nil),
@@ -1892,7 +1963,7 @@ func file_novam_commands_v1_commands_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_commands_v1_commands_proto_rawDesc), len(file_novam_commands_v1_commands_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   20,
+			NumMessages:   21,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

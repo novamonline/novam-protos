@@ -46,6 +46,7 @@ message Command {
     CallAddTurn call_add_turn = 18;
     CallEnd call_end = 19;
     RunAutomation run_automation = 20;
+    InvoiceSend invoice_send = 21;
   }
 }
 
@@ -155,6 +156,14 @@ message CallEnd {
 // automation_run says how much it made.
 message RunAutomation {
   string kind = 1;
+}
+
+// clientInvoices.send: emails the invoice to its client as the app's Send does (its PDF, the ways to pay and a pay
+// link), and a draft becomes sent; a client with autopay on is charged when it is due. Sent with no actor, it is
+// the business's own scheduled work, such as a membership's or standing plan's monthly bill the engine just made.
+// The result's invoice is the invoice as sent.
+message InvoiceSend {
+  string invoice_id = 1;
 }
 
 enum CommandStatus {

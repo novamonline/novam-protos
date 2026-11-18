@@ -131,6 +131,12 @@ export declare type Command = Message<"novam.commands.v1.Command"> & {
      */
     value: RunAutomation;
     case: "runAutomation";
+  } | {
+    /**
+     * @generated from field: novam.commands.v1.InvoiceSend invoice_send = 21;
+     */
+    value: InvoiceSend;
+    case: "invoiceSend";
   } | { case: undefined; value?: undefined };
 };
 
@@ -572,6 +578,27 @@ export declare type RunAutomation = Message<"novam.commands.v1.RunAutomation"> &
  * Use `create(RunAutomationSchema)` to create a new message.
  */
 export declare const RunAutomationSchema: GenMessage<RunAutomation>;
+
+/**
+ * clientInvoices.send: emails the invoice to its client as the app's Send does (its PDF, the ways to pay and a pay
+ * link), and a draft becomes sent; a client with autopay on is charged when it is due. Sent with no actor, it is
+ * the business's own scheduled work, such as a membership's or standing plan's monthly bill the engine just made.
+ * The result's invoice is the invoice as sent.
+ *
+ * @generated from message novam.commands.v1.InvoiceSend
+ */
+export declare type InvoiceSend = Message<"novam.commands.v1.InvoiceSend"> & {
+  /**
+   * @generated from field: string invoice_id = 1;
+   */
+  invoiceId: string;
+};
+
+/**
+ * Describes the message novam.commands.v1.InvoiceSend.
+ * Use `create(InvoiceSendSchema)` to create a new message.
+ */
+export declare const InvoiceSendSchema: GenMessage<InvoiceSend>;
 
 /**
  * Published to the command's reply_subject once it is applied or rejected, and kept for a day. A command that
