@@ -37,6 +37,11 @@ service PaymentsService {
   // holds or the invoice still owes. The invoice is paid when nothing is left. FAILED_PRECONDITION says why a card
   // or invoice can't be used, NOT_FOUND an invoice that isn't there.
   rpc RedeemGiftCard(RedeemGiftCardRequest) returns (RedeemGiftCardResponse);
+  // Autopay: charges the invoices that are due to the wallet method each client chose, logs each try and tells the
+  // client and the team, as novam-data's lib/autopay.ts does. Each charge is claimed by its intent row and sent with
+  // that row's Idempotency-Key, so it is never made twice, whoever runs it. UNAVAILABLE only before anything was done
+  // (the engine can't charge wallets here); after any other error the caller must not try the same invoices itself.
+  rpc RunAutopay(RunAutopayRequest) returns (RunAutopayResponse);
 }
 
 message RecordPaymentRequest {
@@ -162,4 +167,17 @@ message RedeemGiftCardResponse {
   double invoice_balance = 4;
   string code = 5;
   bool invoice_paid = 6;
+}
+
+message RunAutopayRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // One invoice of the token's business (it was just sent or saved); empty for all of its due invoices.
+  string invoice_id = 2;
+  // Every business that allows autopay, whatever the token's business; for novam-data's own sweep.
+  bool all_businesses = 3;
+}
+
+message RunAutopayResponse {
+  // Invoices tried.
+  int32 tried = 1;
 }

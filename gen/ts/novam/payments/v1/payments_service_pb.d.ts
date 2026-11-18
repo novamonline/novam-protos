@@ -527,6 +527,54 @@ export declare type RedeemGiftCardResponse = Message<"novam.payments.v1.RedeemGi
 export declare const RedeemGiftCardResponseSchema: GenMessage<RedeemGiftCardResponse>;
 
 /**
+ * @generated from message novam.payments.v1.RunAutopayRequest
+ */
+export declare type RunAutopayRequest = Message<"novam.payments.v1.RunAutopayRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * One invoice of the token's business (it was just sent or saved); empty for all of its due invoices.
+   *
+   * @generated from field: string invoice_id = 2;
+   */
+  invoiceId: string;
+
+  /**
+   * Every business that allows autopay, whatever the token's business; for novam-data's own sweep.
+   *
+   * @generated from field: bool all_businesses = 3;
+   */
+  allBusinesses: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.RunAutopayRequest.
+ * Use `create(RunAutopayRequestSchema)` to create a new message.
+ */
+export declare const RunAutopayRequestSchema: GenMessage<RunAutopayRequest>;
+
+/**
+ * @generated from message novam.payments.v1.RunAutopayResponse
+ */
+export declare type RunAutopayResponse = Message<"novam.payments.v1.RunAutopayResponse"> & {
+  /**
+   * Invoices tried.
+   *
+   * @generated from field: int32 tried = 1;
+   */
+  tried: number;
+};
+
+/**
+ * Describes the message novam.payments.v1.RunAutopayResponse.
+ * Use `create(RunAutopayResponseSchema)` to create a new message.
+ */
+export declare const RunAutopayResponseSchema: GenMessage<RunAutopayResponse>;
+
+/**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
  * what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
  * sound first, then asks here; it reads the payment back to answer.
@@ -631,6 +679,19 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof RedeemGiftCardRequestSchema;
     output: typeof RedeemGiftCardResponseSchema;
+  },
+  /**
+   * Autopay: charges the invoices that are due to the wallet method each client chose, logs each try and tells the
+   * client and the team, as novam-data's lib/autopay.ts does. Each charge is claimed by its intent row and sent with
+   * that row's Idempotency-Key, so it is never made twice, whoever runs it. UNAVAILABLE only before anything was done
+   * (the engine can't charge wallets here); after any other error the caller must not try the same invoices itself.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.RunAutopay
+   */
+  runAutopay: {
+    methodKind: "unary";
+    input: typeof RunAutopayRequestSchema;
+    output: typeof RunAutopayResponseSchema;
   },
 }>;
 

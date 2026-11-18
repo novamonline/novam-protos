@@ -28,6 +28,7 @@ const (
 	PaymentsService_DeletePayment_FullMethodName     = "/novam.payments.v1.PaymentsService/DeletePayment"
 	PaymentsService_RestorePayment_FullMethodName    = "/novam.payments.v1.PaymentsService/RestorePayment"
 	PaymentsService_RedeemGiftCard_FullMethodName    = "/novam.payments.v1.PaymentsService/RedeemGiftCard"
+	PaymentsService_RunAutopay_FullMethodName        = "/novam.payments.v1.PaymentsService/RunAutopay"
 )
 
 // PaymentsServiceClient is the client API for PaymentsService service.
@@ -64,6 +65,11 @@ type PaymentsServiceClient interface {
 	// holds or the invoice still owes. The invoice is paid when nothing is left. FAILED_PRECONDITION says why a card
 	// or invoice can't be used, NOT_FOUND an invoice that isn't there.
 	RedeemGiftCard(ctx context.Context, in *RedeemGiftCardRequest, opts ...grpc.CallOption) (*RedeemGiftCardResponse, error)
+	// Autopay: charges the invoices that are due to the wallet method each client chose, logs each try and tells the
+	// client and the team, as novam-data's lib/autopay.ts does. Each charge is claimed by its intent row and sent with
+	// that row's Idempotency-Key, so it is never made twice, whoever runs it. UNAVAILABLE only before anything was done
+	// (the engine can't charge wallets here); after any other error the caller must not try the same invoices itself.
+	RunAutopay(ctx context.Context, in *RunAutopayRequest, opts ...grpc.CallOption) (*RunAutopayResponse, error)
 }
 
 type paymentsServiceClient struct {
@@ -164,6 +170,16 @@ func (c *paymentsServiceClient) RedeemGiftCard(ctx context.Context, in *RedeemGi
 	return out, nil
 }
 
+func (c *paymentsServiceClient) RunAutopay(ctx context.Context, in *RunAutopayRequest, opts ...grpc.CallOption) (*RunAutopayResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RunAutopayResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_RunAutopay_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentsServiceServer is the server API for PaymentsService service.
 // All implementations must embed UnimplementedPaymentsServiceServer
 // for forward compatibility.
@@ -198,6 +214,11 @@ type PaymentsServiceServer interface {
 	// holds or the invoice still owes. The invoice is paid when nothing is left. FAILED_PRECONDITION says why a card
 	// or invoice can't be used, NOT_FOUND an invoice that isn't there.
 	RedeemGiftCard(context.Context, *RedeemGiftCardRequest) (*RedeemGiftCardResponse, error)
+	// Autopay: charges the invoices that are due to the wallet method each client chose, logs each try and tells the
+	// client and the team, as novam-data's lib/autopay.ts does. Each charge is claimed by its intent row and sent with
+	// that row's Idempotency-Key, so it is never made twice, whoever runs it. UNAVAILABLE only before anything was done
+	// (the engine can't charge wallets here); after any other error the caller must not try the same invoices itself.
+	RunAutopay(context.Context, *RunAutopayRequest) (*RunAutopayResponse, error)
 	mustEmbedUnimplementedPaymentsServiceServer()
 }
 
@@ -234,6 +255,9 @@ func (UnimplementedPaymentsServiceServer) RestorePayment(context.Context, *Resto
 }
 func (UnimplementedPaymentsServiceServer) RedeemGiftCard(context.Context, *RedeemGiftCardRequest) (*RedeemGiftCardResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RedeemGiftCard not implemented")
+}
+func (UnimplementedPaymentsServiceServer) RunAutopay(context.Context, *RunAutopayRequest) (*RunAutopayResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RunAutopay not implemented")
 }
 func (UnimplementedPaymentsServiceServer) mustEmbedUnimplementedPaymentsServiceServer() {}
 func (UnimplementedPaymentsServiceServer) testEmbeddedByValue()                         {}
@@ -418,6 +442,24 @@ func _PaymentsService_RedeemGiftCard_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_RunAutopay_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RunAutopayRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).RunAutopay(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_RunAutopay_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).RunAutopay(ctx, req.(*RunAutopayRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentsService_ServiceDesc is the grpc.ServiceDesc for PaymentsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -460,6 +502,10 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RedeemGiftCard",
 			Handler:    _PaymentsService_RedeemGiftCard_Handler,
+		},
+		{
+			MethodName: "RunAutopay",
+			Handler:    _PaymentsService_RunAutopay_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

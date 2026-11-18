@@ -1136,6 +1136,113 @@ func (x *RedeemGiftCardResponse) GetInvoicePaid() bool {
 	return false
 }
 
+type RunAutopayRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// One invoice of the token's business (it was just sent or saved); empty for all of its due invoices.
+	InvoiceId string `protobuf:"bytes,2,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty"`
+	// Every business that allows autopay, whatever the token's business; for novam-data's own sweep.
+	AllBusinesses bool `protobuf:"varint,3,opt,name=all_businesses,json=allBusinesses,proto3" json:"all_businesses,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunAutopayRequest) Reset() {
+	*x = RunAutopayRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[18]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunAutopayRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunAutopayRequest) ProtoMessage() {}
+
+func (x *RunAutopayRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[18]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunAutopayRequest.ProtoReflect.Descriptor instead.
+func (*RunAutopayRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{18}
+}
+
+func (x *RunAutopayRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *RunAutopayRequest) GetInvoiceId() string {
+	if x != nil {
+		return x.InvoiceId
+	}
+	return ""
+}
+
+func (x *RunAutopayRequest) GetAllBusinesses() bool {
+	if x != nil {
+		return x.AllBusinesses
+	}
+	return false
+}
+
+type RunAutopayResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// Invoices tried.
+	Tried         int32 `protobuf:"varint,1,opt,name=tried,proto3" json:"tried,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunAutopayResponse) Reset() {
+	*x = RunAutopayResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[19]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunAutopayResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunAutopayResponse) ProtoMessage() {}
+
+func (x *RunAutopayResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[19]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunAutopayResponse.ProtoReflect.Descriptor instead.
+func (*RunAutopayResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{19}
+}
+
+func (x *RunAutopayResponse) GetTried() int32 {
+	if x != nil {
+		return x.Tried
+	}
+	return 0
+}
+
 var File_novam_payments_v1_payments_service_proto protoreflect.FileDescriptor
 
 const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
@@ -1226,7 +1333,14 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\abalance\x18\x03 \x01(\x01R\abalance\x12'\n" +
 	"\x0finvoice_balance\x18\x04 \x01(\x01R\x0einvoiceBalance\x12\x12\n" +
 	"\x04code\x18\x05 \x01(\tR\x04code\x12!\n" +
-	"\finvoice_paid\x18\x06 \x01(\bR\vinvoicePaid2\xa1\a\n" +
+	"\finvoice_paid\x18\x06 \x01(\bR\vinvoicePaid\"\x97\x01\n" +
+	"\x11RunAutopayRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1d\n" +
+	"\n" +
+	"invoice_id\x18\x02 \x01(\tR\tinvoiceId\x12%\n" +
+	"\x0eall_businesses\x18\x03 \x01(\bR\rallBusinesses\"*\n" +
+	"\x12RunAutopayResponse\x12\x14\n" +
+	"\x05tried\x18\x01 \x01(\x05R\x05tried2\xfc\a\n" +
 	"\x0fPaymentsService\x12b\n" +
 	"\rRecordPayment\x12'.novam.payments.v1.RecordPaymentRequest\x1a(.novam.payments.v1.RecordPaymentResponse\x12n\n" +
 	"\x11MarkPaidIfCovered\x12+.novam.payments.v1.MarkPaidIfCoveredRequest\x1a,.novam.payments.v1.MarkPaidIfCoveredResponse\x12_\n" +
@@ -1236,7 +1350,9 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\x0eDisputePayment\x12(.novam.payments.v1.DisputePaymentRequest\x1a).novam.payments.v1.DisputePaymentResponse\x12b\n" +
 	"\rDeletePayment\x12'.novam.payments.v1.DeletePaymentRequest\x1a(.novam.payments.v1.DeletePaymentResponse\x12e\n" +
 	"\x0eRestorePayment\x12(.novam.payments.v1.RestorePaymentRequest\x1a).novam.payments.v1.RestorePaymentResponse\x12e\n" +
-	"\x0eRedeemGiftCard\x12(.novam.payments.v1.RedeemGiftCardRequest\x1a).novam.payments.v1.RedeemGiftCardResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/payments/v1;paymentsv1b\x06proto3"
+	"\x0eRedeemGiftCard\x12(.novam.payments.v1.RedeemGiftCardRequest\x1a).novam.payments.v1.RedeemGiftCardResponse\x12Y\n" +
+	"\n" +
+	"RunAutopay\x12$.novam.payments.v1.RunAutopayRequest\x1a%.novam.payments.v1.RunAutopayResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/payments/v1;paymentsv1b\x06proto3"
 
 var (
 	file_novam_payments_v1_payments_service_proto_rawDescOnce sync.Once
@@ -1250,7 +1366,7 @@ func file_novam_payments_v1_payments_service_proto_rawDescGZIP() []byte {
 	return file_novam_payments_v1_payments_service_proto_rawDescData
 }
 
-var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
+var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_novam_payments_v1_payments_service_proto_goTypes = []any{
 	(*RecordPaymentRequest)(nil),      // 0: novam.payments.v1.RecordPaymentRequest
 	(*RecordPaymentResponse)(nil),     // 1: novam.payments.v1.RecordPaymentResponse
@@ -1270,43 +1386,48 @@ var file_novam_payments_v1_payments_service_proto_goTypes = []any{
 	(*RestorePaymentResponse)(nil),    // 15: novam.payments.v1.RestorePaymentResponse
 	(*RedeemGiftCardRequest)(nil),     // 16: novam.payments.v1.RedeemGiftCardRequest
 	(*RedeemGiftCardResponse)(nil),    // 17: novam.payments.v1.RedeemGiftCardResponse
-	(*v1.RequestMetadata)(nil),        // 18: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),     // 19: google.protobuf.Timestamp
+	(*RunAutopayRequest)(nil),         // 18: novam.payments.v1.RunAutopayRequest
+	(*RunAutopayResponse)(nil),        // 19: novam.payments.v1.RunAutopayResponse
+	(*v1.RequestMetadata)(nil),        // 20: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),     // 21: google.protobuf.Timestamp
 }
 var file_novam_payments_v1_payments_service_proto_depIdxs = []int32{
-	18, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	19, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
-	18, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 3: novam.payments.v1.ReopenIfOwedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 4: novam.payments.v1.FailPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 5: novam.payments.v1.RefundPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 6: novam.payments.v1.DisputePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 7: novam.payments.v1.DeletePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 8: novam.payments.v1.RestorePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	18, // 9: novam.payments.v1.RedeemGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 10: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
-	2,  // 11: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
-	4,  // 12: novam.payments.v1.PaymentsService.ReopenIfOwed:input_type -> novam.payments.v1.ReopenIfOwedRequest
-	6,  // 13: novam.payments.v1.PaymentsService.FailPayment:input_type -> novam.payments.v1.FailPaymentRequest
-	8,  // 14: novam.payments.v1.PaymentsService.RefundPayment:input_type -> novam.payments.v1.RefundPaymentRequest
-	10, // 15: novam.payments.v1.PaymentsService.DisputePayment:input_type -> novam.payments.v1.DisputePaymentRequest
-	12, // 16: novam.payments.v1.PaymentsService.DeletePayment:input_type -> novam.payments.v1.DeletePaymentRequest
-	14, // 17: novam.payments.v1.PaymentsService.RestorePayment:input_type -> novam.payments.v1.RestorePaymentRequest
-	16, // 18: novam.payments.v1.PaymentsService.RedeemGiftCard:input_type -> novam.payments.v1.RedeemGiftCardRequest
-	1,  // 19: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
-	3,  // 20: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
-	5,  // 21: novam.payments.v1.PaymentsService.ReopenIfOwed:output_type -> novam.payments.v1.ReopenIfOwedResponse
-	7,  // 22: novam.payments.v1.PaymentsService.FailPayment:output_type -> novam.payments.v1.FailPaymentResponse
-	9,  // 23: novam.payments.v1.PaymentsService.RefundPayment:output_type -> novam.payments.v1.RefundPaymentResponse
-	11, // 24: novam.payments.v1.PaymentsService.DisputePayment:output_type -> novam.payments.v1.DisputePaymentResponse
-	13, // 25: novam.payments.v1.PaymentsService.DeletePayment:output_type -> novam.payments.v1.DeletePaymentResponse
-	15, // 26: novam.payments.v1.PaymentsService.RestorePayment:output_type -> novam.payments.v1.RestorePaymentResponse
-	17, // 27: novam.payments.v1.PaymentsService.RedeemGiftCard:output_type -> novam.payments.v1.RedeemGiftCardResponse
-	19, // [19:28] is the sub-list for method output_type
-	10, // [10:19] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	20, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	21, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
+	20, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 3: novam.payments.v1.ReopenIfOwedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 4: novam.payments.v1.FailPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 5: novam.payments.v1.RefundPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 6: novam.payments.v1.DisputePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 7: novam.payments.v1.DeletePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 8: novam.payments.v1.RestorePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 9: novam.payments.v1.RedeemGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	20, // 10: novam.payments.v1.RunAutopayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 11: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
+	2,  // 12: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
+	4,  // 13: novam.payments.v1.PaymentsService.ReopenIfOwed:input_type -> novam.payments.v1.ReopenIfOwedRequest
+	6,  // 14: novam.payments.v1.PaymentsService.FailPayment:input_type -> novam.payments.v1.FailPaymentRequest
+	8,  // 15: novam.payments.v1.PaymentsService.RefundPayment:input_type -> novam.payments.v1.RefundPaymentRequest
+	10, // 16: novam.payments.v1.PaymentsService.DisputePayment:input_type -> novam.payments.v1.DisputePaymentRequest
+	12, // 17: novam.payments.v1.PaymentsService.DeletePayment:input_type -> novam.payments.v1.DeletePaymentRequest
+	14, // 18: novam.payments.v1.PaymentsService.RestorePayment:input_type -> novam.payments.v1.RestorePaymentRequest
+	16, // 19: novam.payments.v1.PaymentsService.RedeemGiftCard:input_type -> novam.payments.v1.RedeemGiftCardRequest
+	18, // 20: novam.payments.v1.PaymentsService.RunAutopay:input_type -> novam.payments.v1.RunAutopayRequest
+	1,  // 21: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
+	3,  // 22: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
+	5,  // 23: novam.payments.v1.PaymentsService.ReopenIfOwed:output_type -> novam.payments.v1.ReopenIfOwedResponse
+	7,  // 24: novam.payments.v1.PaymentsService.FailPayment:output_type -> novam.payments.v1.FailPaymentResponse
+	9,  // 25: novam.payments.v1.PaymentsService.RefundPayment:output_type -> novam.payments.v1.RefundPaymentResponse
+	11, // 26: novam.payments.v1.PaymentsService.DisputePayment:output_type -> novam.payments.v1.DisputePaymentResponse
+	13, // 27: novam.payments.v1.PaymentsService.DeletePayment:output_type -> novam.payments.v1.DeletePaymentResponse
+	15, // 28: novam.payments.v1.PaymentsService.RestorePayment:output_type -> novam.payments.v1.RestorePaymentResponse
+	17, // 29: novam.payments.v1.PaymentsService.RedeemGiftCard:output_type -> novam.payments.v1.RedeemGiftCardResponse
+	19, // 30: novam.payments.v1.PaymentsService.RunAutopay:output_type -> novam.payments.v1.RunAutopayResponse
+	21, // [21:31] is the sub-list for method output_type
+	11, // [11:21] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	11, // [11:11] is the sub-list for extension extendee
+	0,  // [0:11] is the sub-list for field type_name
 }
 
 func init() { file_novam_payments_v1_payments_service_proto_init() }
@@ -1321,7 +1442,7 @@ func file_novam_payments_v1_payments_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_payments_v1_payments_service_proto_rawDesc), len(file_novam_payments_v1_payments_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   18,
+			NumMessages:   20,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
