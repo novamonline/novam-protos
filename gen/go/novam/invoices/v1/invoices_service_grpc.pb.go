@@ -25,6 +25,7 @@ const (
 	InvoicesService_UndeleteInvoice_FullMethodName = "/novam.invoices.v1.InvoicesService/UndeleteInvoice"
 	InvoicesService_PrepareSend_FullMethodName     = "/novam.invoices.v1.InvoicesService/PrepareSend"
 	InvoicesService_MarkSent_FullMethodName        = "/novam.invoices.v1.InvoicesService/MarkSent"
+	InvoicesService_SendInvoice_FullMethodName     = "/novam.invoices.v1.InvoicesService/SendInvoice"
 )
 
 // InvoicesServiceClient is the client API for InvoicesService service.
@@ -45,6 +46,10 @@ type InvoicesServiceClient interface {
 	PrepareSend(ctx context.Context, in *PrepareSendRequest, opts ...grpc.CallOption) (*PrepareSendResponse, error)
 	// The invoice went to the client: a draft becomes sent, and sent_at is set the first time.
 	MarkSent(ctx context.Context, in *MarkSentRequest, opts ...grpc.CallOption) (*MarkSentResponse, error)
+	// Emails the invoice to the client with its PDF and a link to pay it (numbered, a stale draft's due date moved, a
+	// draft marked sent), and tells the client's Novam Pro accounts. FAILED_PRECONDITION: deleted, cancelled or paid, or
+	// the client has no email address. UNAVAILABLE: the engine has no mail server, so novam-data sends it.
+	SendInvoice(ctx context.Context, in *SendInvoiceRequest, opts ...grpc.CallOption) (*SendInvoiceResponse, error)
 }
 
 type invoicesServiceClient struct {
@@ -115,6 +120,16 @@ func (c *invoicesServiceClient) MarkSent(ctx context.Context, in *MarkSentReques
 	return out, nil
 }
 
+func (c *invoicesServiceClient) SendInvoice(ctx context.Context, in *SendInvoiceRequest, opts ...grpc.CallOption) (*SendInvoiceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SendInvoiceResponse)
+	err := c.cc.Invoke(ctx, InvoicesService_SendInvoice_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InvoicesServiceServer is the server API for InvoicesService service.
 // All implementations must embed UnimplementedInvoicesServiceServer
 // for forward compatibility.
@@ -133,6 +148,10 @@ type InvoicesServiceServer interface {
 	PrepareSend(context.Context, *PrepareSendRequest) (*PrepareSendResponse, error)
 	// The invoice went to the client: a draft becomes sent, and sent_at is set the first time.
 	MarkSent(context.Context, *MarkSentRequest) (*MarkSentResponse, error)
+	// Emails the invoice to the client with its PDF and a link to pay it (numbered, a stale draft's due date moved, a
+	// draft marked sent), and tells the client's Novam Pro accounts. FAILED_PRECONDITION: deleted, cancelled or paid, or
+	// the client has no email address. UNAVAILABLE: the engine has no mail server, so novam-data sends it.
+	SendInvoice(context.Context, *SendInvoiceRequest) (*SendInvoiceResponse, error)
 	mustEmbedUnimplementedInvoicesServiceServer()
 }
 
@@ -160,6 +179,9 @@ func (UnimplementedInvoicesServiceServer) PrepareSend(context.Context, *PrepareS
 }
 func (UnimplementedInvoicesServiceServer) MarkSent(context.Context, *MarkSentRequest) (*MarkSentResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method MarkSent not implemented")
+}
+func (UnimplementedInvoicesServiceServer) SendInvoice(context.Context, *SendInvoiceRequest) (*SendInvoiceResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SendInvoice not implemented")
 }
 func (UnimplementedInvoicesServiceServer) mustEmbedUnimplementedInvoicesServiceServer() {}
 func (UnimplementedInvoicesServiceServer) testEmbeddedByValue()                         {}
@@ -290,6 +312,24 @@ func _InvoicesService_MarkSent_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InvoicesService_SendInvoice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendInvoiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InvoicesServiceServer).SendInvoice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InvoicesService_SendInvoice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InvoicesServiceServer).SendInvoice(ctx, req.(*SendInvoiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InvoicesService_ServiceDesc is the grpc.ServiceDesc for InvoicesService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -320,6 +360,10 @@ var InvoicesService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MarkSent",
 			Handler:    _InvoicesService_MarkSent_Handler,
+		},
+		{
+			MethodName: "SendInvoice",
+			Handler:    _InvoicesService_SendInvoice_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

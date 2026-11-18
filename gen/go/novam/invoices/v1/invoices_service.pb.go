@@ -594,6 +594,94 @@ func (*MarkSentResponse) Descriptor() ([]byte, []int) {
 	return file_novam_invoices_v1_invoices_service_proto_rawDescGZIP(), []int{11}
 }
 
+type SendInvoiceRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Id            string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendInvoiceRequest) Reset() {
+	*x = SendInvoiceRequest{}
+	mi := &file_novam_invoices_v1_invoices_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendInvoiceRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendInvoiceRequest) ProtoMessage() {}
+
+func (x *SendInvoiceRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_invoices_v1_invoices_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendInvoiceRequest.ProtoReflect.Descriptor instead.
+func (*SendInvoiceRequest) Descriptor() ([]byte, []int) {
+	return file_novam_invoices_v1_invoices_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *SendInvoiceRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *SendInvoiceRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type SendInvoiceResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendInvoiceResponse) Reset() {
+	*x = SendInvoiceResponse{}
+	mi := &file_novam_invoices_v1_invoices_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendInvoiceResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendInvoiceResponse) ProtoMessage() {}
+
+func (x *SendInvoiceResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_invoices_v1_invoices_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendInvoiceResponse.ProtoReflect.Descriptor instead.
+func (*SendInvoiceResponse) Descriptor() ([]byte, []int) {
+	return file_novam_invoices_v1_invoices_service_proto_rawDescGZIP(), []int{13}
+}
+
 var File_novam_invoices_v1_invoices_service_proto protoreflect.FileDescriptor
 
 const file_novam_invoices_v1_invoices_service_proto_rawDesc = "" +
@@ -628,14 +716,19 @@ const file_novam_invoices_v1_invoices_service_proto_rawDesc = "" +
 	"\x0fMarkSentRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\"\x12\n" +
-	"\x10MarkSentResponse2\xda\x04\n" +
+	"\x10MarkSentResponse\"b\n" +
+	"\x12SendInvoiceRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\"\x15\n" +
+	"\x13SendInvoiceResponse2\xb8\x05\n" +
 	"\x0fInvoicesService\x12b\n" +
 	"\rCreateInvoice\x12'.novam.invoices.v1.CreateInvoiceRequest\x1a(.novam.invoices.v1.CreateInvoiceResponse\x12b\n" +
 	"\rUpdateInvoice\x12'.novam.invoices.v1.UpdateInvoiceRequest\x1a(.novam.invoices.v1.UpdateInvoiceResponse\x12b\n" +
 	"\rDeleteInvoice\x12'.novam.invoices.v1.DeleteInvoiceRequest\x1a(.novam.invoices.v1.DeleteInvoiceResponse\x12h\n" +
 	"\x0fUndeleteInvoice\x12).novam.invoices.v1.UndeleteInvoiceRequest\x1a*.novam.invoices.v1.UndeleteInvoiceResponse\x12\\\n" +
 	"\vPrepareSend\x12%.novam.invoices.v1.PrepareSendRequest\x1a&.novam.invoices.v1.PrepareSendResponse\x12S\n" +
-	"\bMarkSent\x12\".novam.invoices.v1.MarkSentRequest\x1a#.novam.invoices.v1.MarkSentResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/invoices/v1;invoicesv1b\x06proto3"
+	"\bMarkSent\x12\".novam.invoices.v1.MarkSentRequest\x1a#.novam.invoices.v1.MarkSentResponse\x12\\\n" +
+	"\vSendInvoice\x12%.novam.invoices.v1.SendInvoiceRequest\x1a&.novam.invoices.v1.SendInvoiceResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/invoices/v1;invoicesv1b\x06proto3"
 
 var (
 	file_novam_invoices_v1_invoices_service_proto_rawDescOnce sync.Once
@@ -649,7 +742,7 @@ func file_novam_invoices_v1_invoices_service_proto_rawDescGZIP() []byte {
 	return file_novam_invoices_v1_invoices_service_proto_rawDescData
 }
 
-var file_novam_invoices_v1_invoices_service_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_novam_invoices_v1_invoices_service_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
 var file_novam_invoices_v1_invoices_service_proto_goTypes = []any{
 	(*CreateInvoiceRequest)(nil),    // 0: novam.invoices.v1.CreateInvoiceRequest
 	(*CreateInvoiceResponse)(nil),   // 1: novam.invoices.v1.CreateInvoiceResponse
@@ -663,32 +756,37 @@ var file_novam_invoices_v1_invoices_service_proto_goTypes = []any{
 	(*PrepareSendResponse)(nil),     // 9: novam.invoices.v1.PrepareSendResponse
 	(*MarkSentRequest)(nil),         // 10: novam.invoices.v1.MarkSentRequest
 	(*MarkSentResponse)(nil),        // 11: novam.invoices.v1.MarkSentResponse
-	(*v1.RequestMetadata)(nil),      // 12: novam.common.v1.RequestMetadata
+	(*SendInvoiceRequest)(nil),      // 12: novam.invoices.v1.SendInvoiceRequest
+	(*SendInvoiceResponse)(nil),     // 13: novam.invoices.v1.SendInvoiceResponse
+	(*v1.RequestMetadata)(nil),      // 14: novam.common.v1.RequestMetadata
 }
 var file_novam_invoices_v1_invoices_service_proto_depIdxs = []int32{
-	12, // 0: novam.invoices.v1.CreateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	12, // 1: novam.invoices.v1.UpdateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	12, // 2: novam.invoices.v1.DeleteInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	12, // 3: novam.invoices.v1.UndeleteInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	12, // 4: novam.invoices.v1.PrepareSendRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	12, // 5: novam.invoices.v1.MarkSentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 6: novam.invoices.v1.InvoicesService.CreateInvoice:input_type -> novam.invoices.v1.CreateInvoiceRequest
-	2,  // 7: novam.invoices.v1.InvoicesService.UpdateInvoice:input_type -> novam.invoices.v1.UpdateInvoiceRequest
-	4,  // 8: novam.invoices.v1.InvoicesService.DeleteInvoice:input_type -> novam.invoices.v1.DeleteInvoiceRequest
-	6,  // 9: novam.invoices.v1.InvoicesService.UndeleteInvoice:input_type -> novam.invoices.v1.UndeleteInvoiceRequest
-	8,  // 10: novam.invoices.v1.InvoicesService.PrepareSend:input_type -> novam.invoices.v1.PrepareSendRequest
-	10, // 11: novam.invoices.v1.InvoicesService.MarkSent:input_type -> novam.invoices.v1.MarkSentRequest
-	1,  // 12: novam.invoices.v1.InvoicesService.CreateInvoice:output_type -> novam.invoices.v1.CreateInvoiceResponse
-	3,  // 13: novam.invoices.v1.InvoicesService.UpdateInvoice:output_type -> novam.invoices.v1.UpdateInvoiceResponse
-	5,  // 14: novam.invoices.v1.InvoicesService.DeleteInvoice:output_type -> novam.invoices.v1.DeleteInvoiceResponse
-	7,  // 15: novam.invoices.v1.InvoicesService.UndeleteInvoice:output_type -> novam.invoices.v1.UndeleteInvoiceResponse
-	9,  // 16: novam.invoices.v1.InvoicesService.PrepareSend:output_type -> novam.invoices.v1.PrepareSendResponse
-	11, // 17: novam.invoices.v1.InvoicesService.MarkSent:output_type -> novam.invoices.v1.MarkSentResponse
-	12, // [12:18] is the sub-list for method output_type
-	6,  // [6:12] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	14, // 0: novam.invoices.v1.CreateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 1: novam.invoices.v1.UpdateInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 2: novam.invoices.v1.DeleteInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 3: novam.invoices.v1.UndeleteInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 4: novam.invoices.v1.PrepareSendRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 5: novam.invoices.v1.MarkSentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	14, // 6: novam.invoices.v1.SendInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 7: novam.invoices.v1.InvoicesService.CreateInvoice:input_type -> novam.invoices.v1.CreateInvoiceRequest
+	2,  // 8: novam.invoices.v1.InvoicesService.UpdateInvoice:input_type -> novam.invoices.v1.UpdateInvoiceRequest
+	4,  // 9: novam.invoices.v1.InvoicesService.DeleteInvoice:input_type -> novam.invoices.v1.DeleteInvoiceRequest
+	6,  // 10: novam.invoices.v1.InvoicesService.UndeleteInvoice:input_type -> novam.invoices.v1.UndeleteInvoiceRequest
+	8,  // 11: novam.invoices.v1.InvoicesService.PrepareSend:input_type -> novam.invoices.v1.PrepareSendRequest
+	10, // 12: novam.invoices.v1.InvoicesService.MarkSent:input_type -> novam.invoices.v1.MarkSentRequest
+	12, // 13: novam.invoices.v1.InvoicesService.SendInvoice:input_type -> novam.invoices.v1.SendInvoiceRequest
+	1,  // 14: novam.invoices.v1.InvoicesService.CreateInvoice:output_type -> novam.invoices.v1.CreateInvoiceResponse
+	3,  // 15: novam.invoices.v1.InvoicesService.UpdateInvoice:output_type -> novam.invoices.v1.UpdateInvoiceResponse
+	5,  // 16: novam.invoices.v1.InvoicesService.DeleteInvoice:output_type -> novam.invoices.v1.DeleteInvoiceResponse
+	7,  // 17: novam.invoices.v1.InvoicesService.UndeleteInvoice:output_type -> novam.invoices.v1.UndeleteInvoiceResponse
+	9,  // 18: novam.invoices.v1.InvoicesService.PrepareSend:output_type -> novam.invoices.v1.PrepareSendResponse
+	11, // 19: novam.invoices.v1.InvoicesService.MarkSent:output_type -> novam.invoices.v1.MarkSentResponse
+	13, // 20: novam.invoices.v1.InvoicesService.SendInvoice:output_type -> novam.invoices.v1.SendInvoiceResponse
+	14, // [14:21] is the sub-list for method output_type
+	7,  // [7:14] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_novam_invoices_v1_invoices_service_proto_init() }
@@ -702,7 +800,7 @@ func file_novam_invoices_v1_invoices_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_invoices_v1_invoices_service_proto_rawDesc), len(file_novam_invoices_v1_invoices_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   14,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

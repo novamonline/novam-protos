@@ -240,6 +240,39 @@ export declare type MarkSentResponse = Message<"novam.invoices.v1.MarkSentRespon
 export declare const MarkSentResponseSchema: GenMessage<MarkSentResponse>;
 
 /**
+ * @generated from message novam.invoices.v1.SendInvoiceRequest
+ */
+export declare type SendInvoiceRequest = Message<"novam.invoices.v1.SendInvoiceRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string id = 2;
+   */
+  id: string;
+};
+
+/**
+ * Describes the message novam.invoices.v1.SendInvoiceRequest.
+ * Use `create(SendInvoiceRequestSchema)` to create a new message.
+ */
+export declare const SendInvoiceRequestSchema: GenMessage<SendInvoiceRequest>;
+
+/**
+ * @generated from message novam.invoices.v1.SendInvoiceResponse
+ */
+export declare type SendInvoiceResponse = Message<"novam.invoices.v1.SendInvoiceResponse"> & {
+};
+
+/**
+ * Describes the message novam.invoices.v1.SendInvoiceResponse.
+ * Use `create(SendInvoiceResponseSchema)` to create a new message.
+ */
+export declare const SendInvoiceResponseSchema: GenMessage<SendInvoiceResponse>;
+
+/**
  * InvoicesService writes a business's client invoices (ADR-0009 step 3), served by novam-engine's workflows server.
  * novam-data checks the caller and the request and works out the fields as its resource does; the engine is the one
  * writer: the row, the number, discounts and rewards, the stamp, package sessions, the event and the change feed, in
@@ -300,6 +333,18 @@ export declare const InvoicesService: GenService<{
     methodKind: "unary";
     input: typeof MarkSentRequestSchema;
     output: typeof MarkSentResponseSchema;
+  },
+  /**
+   * Emails the invoice to the client with its PDF and a link to pay it (numbered, a stale draft's due date moved, a
+   * draft marked sent), and tells the client's Novam Pro accounts. FAILED_PRECONDITION: deleted, cancelled or paid, or
+   * the client has no email address. UNAVAILABLE: the engine has no mail server, so novam-data sends it.
+   *
+   * @generated from rpc novam.invoices.v1.InvoicesService.SendInvoice
+   */
+  sendInvoice: {
+    methodKind: "unary";
+    input: typeof SendInvoiceRequestSchema;
+    output: typeof SendInvoiceResponseSchema;
   },
 }>;
 

@@ -20,6 +20,10 @@ service InvoicesService {
   rpc PrepareSend(PrepareSendRequest) returns (PrepareSendResponse);
   // The invoice went to the client: a draft becomes sent, and sent_at is set the first time.
   rpc MarkSent(MarkSentRequest) returns (MarkSentResponse);
+  // Emails the invoice to the client with its PDF and a link to pay it (numbered, a stale draft's due date moved, a
+  // draft marked sent), and tells the client's Novam Pro accounts. FAILED_PRECONDITION: deleted, cancelled or paid, or
+  // the client has no email address. UNAVAILABLE: the engine has no mail server, so novam-data sends it.
+  rpc SendInvoice(SendInvoiceRequest) returns (SendInvoiceResponse);
 }
 
 message CreateInvoiceRequest {
@@ -74,3 +78,10 @@ message MarkSentRequest {
 }
 
 message MarkSentResponse {}
+
+message SendInvoiceRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string id = 2;
+}
+
+message SendInvoiceResponse {}
