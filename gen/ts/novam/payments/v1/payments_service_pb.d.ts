@@ -1543,6 +1543,117 @@ export declare type MarkPartnerStatementCollectedResponse = Message<"novam.payme
 export declare const MarkPartnerStatementCollectedResponseSchema: GenMessage<MarkPartnerStatementCollectedResponse>;
 
 /**
+ * @generated from message novam.payments.v1.ChangePlanByMembershipRequest
+ */
+export declare type ChangePlanByMembershipRequest = Message<"novam.payments.v1.ChangePlanByMembershipRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * launch, pro, team or business.
+   *
+   * @generated from field: string plan = 2;
+   */
+  plan: string;
+
+  /**
+   * month or year.
+   *
+   * @generated from field: string period = 3;
+   */
+  period: string;
+
+  /**
+   * now or next: when a switch takes effect, as the owner chose; empty lets the terms decide.
+   *
+   * @generated from field: string when = 4;
+   */
+  when: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ChangePlanByMembershipRequest.
+ * Use `create(ChangePlanByMembershipRequestSchema)` to create a new message.
+ */
+export declare const ChangePlanByMembershipRequestSchema: GenMessage<ChangePlanByMembershipRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ChangePlanByMembershipResponse
+ */
+export declare type ChangePlanByMembershipResponse = Message<"novam.payments.v1.ChangePlanByMembershipResponse"> & {
+  /**
+   * @generated from field: string plan = 1;
+   */
+  plan: string;
+
+  /**
+   * The plan that takes over later.
+   *
+   * @generated from field: string pending_plan = 2;
+   */
+  pendingPlan: string;
+
+  /**
+   * When pending_plan takes over, RFC 3339; empty when unknown.
+   *
+   * @generated from field: string effective_time = 3;
+   */
+  effectiveTime: string;
+
+  /**
+   * A bill was made: where the owner pays it.
+   *
+   * @generated from field: string pay_url = 4;
+   */
+  payUrl: string;
+
+  /**
+   * @generated from field: bool billed = 5;
+   */
+  billed: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.ChangePlanByMembershipResponse.
+ * Use `create(ChangePlanByMembershipResponseSchema)` to create a new message.
+ */
+export declare const ChangePlanByMembershipResponseSchema: GenMessage<ChangePlanByMembershipResponse>;
+
+/**
+ * @generated from message novam.payments.v1.ResumePlanByMembershipRequest
+ */
+export declare type ResumePlanByMembershipRequest = Message<"novam.payments.v1.ResumePlanByMembershipRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.payments.v1.ResumePlanByMembershipRequest.
+ * Use `create(ResumePlanByMembershipRequestSchema)` to create a new message.
+ */
+export declare const ResumePlanByMembershipRequestSchema: GenMessage<ResumePlanByMembershipRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ResumePlanByMembershipResponse
+ */
+export declare type ResumePlanByMembershipResponse = Message<"novam.payments.v1.ResumePlanByMembershipResponse"> & {
+  /**
+   * @generated from field: bool resumed = 1;
+   */
+  resumed: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.ResumePlanByMembershipResponse.
+ * Use `create(ResumePlanByMembershipResponseSchema)` to create a new message.
+ */
+export declare const ResumePlanByMembershipResponseSchema: GenMessage<ResumePlanByMembershipResponse>;
+
+/**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
  * what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
  * sound first, then asks here; it reads the payment back to answer.
@@ -1783,6 +1894,28 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof ResumePlanRequestSchema;
     output: typeof ResumePlanResponseSchema;
+  },
+  /**
+   * Changes the business's plan when plans are memberships with Novam's own business: joins, switches or cancels the
+   * membership, and the plan follows it. UNAVAILABLE when the engine has no PLATFORM_ORG_ID or the business isn't
+   * Novam's client yet, before anything changes, so novam-data does it.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ChangePlanByMembership
+   */
+  changePlanByMembership: {
+    methodKind: "unary";
+    input: typeof ChangePlanByMembershipRequestSchema;
+    output: typeof ChangePlanByMembershipResponseSchema;
+  },
+  /**
+   * Keeps the business's cancelled Novam plan membership going; resumed is false when there was none to keep.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ResumePlanByMembership
+   */
+  resumePlanByMembership: {
+    methodKind: "unary";
+    input: typeof ResumePlanByMembershipRequestSchema;
+    output: typeof ResumePlanByMembershipResponseSchema;
   },
   /**
    * Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.

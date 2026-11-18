@@ -78,6 +78,12 @@ service PaymentsService {
   rpc FinishPlanCard(FinishPlanCardRequest) returns (FinishPlanCardResponse);
   // Keeps a paid plan that was cancelled for the end of its period.
   rpc ResumePlan(ResumePlanRequest) returns (ResumePlanResponse);
+  // Changes the business's plan when plans are memberships with Novam's own business: joins, switches or cancels the
+  // membership, and the plan follows it. UNAVAILABLE when the engine has no PLATFORM_ORG_ID or the business isn't
+  // Novam's client yet, before anything changes, so novam-data does it.
+  rpc ChangePlanByMembership(ChangePlanByMembershipRequest) returns (ChangePlanByMembershipResponse);
+  // Keeps the business's cancelled Novam plan membership going; resumed is false when there was none to keep.
+  rpc ResumePlanByMembership(ResumePlanByMembershipRequest) returns (ResumePlanByMembershipResponse);
   // Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
   rpc CancelPlanNow(CancelPlanNowRequest) returns (CancelPlanNowResponse);
   // Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
@@ -473,3 +479,32 @@ message MarkPartnerStatementCollectedRequest {
 }
 
 message MarkPartnerStatementCollectedResponse {}
+
+message ChangePlanByMembershipRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // launch, pro, team or business.
+  string plan = 2;
+  // month or year.
+  string period = 3;
+  // now or next: when a switch takes effect, as the owner chose; empty lets the terms decide.
+  string when = 4;
+}
+
+message ChangePlanByMembershipResponse {
+  string plan = 1;
+  // The plan that takes over later.
+  string pending_plan = 2;
+  // When pending_plan takes over, RFC 3339; empty when unknown.
+  string effective_time = 3;
+  // A bill was made: where the owner pays it.
+  string pay_url = 4;
+  bool billed = 5;
+}
+
+message ResumePlanByMembershipRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message ResumePlanByMembershipResponse {
+  bool resumed = 1;
+}

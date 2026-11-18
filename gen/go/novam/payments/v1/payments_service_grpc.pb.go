@@ -40,6 +40,8 @@ const (
 	PaymentsService_StartPlanCard_FullMethodName                 = "/novam.payments.v1.PaymentsService/StartPlanCard"
 	PaymentsService_FinishPlanCard_FullMethodName                = "/novam.payments.v1.PaymentsService/FinishPlanCard"
 	PaymentsService_ResumePlan_FullMethodName                    = "/novam.payments.v1.PaymentsService/ResumePlan"
+	PaymentsService_ChangePlanByMembership_FullMethodName        = "/novam.payments.v1.PaymentsService/ChangePlanByMembership"
+	PaymentsService_ResumePlanByMembership_FullMethodName        = "/novam.payments.v1.PaymentsService/ResumePlanByMembership"
 	PaymentsService_CancelPlanNow_FullMethodName                 = "/novam.payments.v1.PaymentsService/CancelPlanNow"
 	PaymentsService_DetachPlanMethods_FullMethodName             = "/novam.payments.v1.PaymentsService/DetachPlanMethods"
 	PaymentsService_DraftPartnerStatements_FullMethodName        = "/novam.payments.v1.PaymentsService/DraftPartnerStatements"
@@ -122,6 +124,12 @@ type PaymentsServiceClient interface {
 	FinishPlanCard(ctx context.Context, in *FinishPlanCardRequest, opts ...grpc.CallOption) (*FinishPlanCardResponse, error)
 	// Keeps a paid plan that was cancelled for the end of its period.
 	ResumePlan(ctx context.Context, in *ResumePlanRequest, opts ...grpc.CallOption) (*ResumePlanResponse, error)
+	// Changes the business's plan when plans are memberships with Novam's own business: joins, switches or cancels the
+	// membership, and the plan follows it. UNAVAILABLE when the engine has no PLATFORM_ORG_ID or the business isn't
+	// Novam's client yet, before anything changes, so novam-data does it.
+	ChangePlanByMembership(ctx context.Context, in *ChangePlanByMembershipRequest, opts ...grpc.CallOption) (*ChangePlanByMembershipResponse, error)
+	// Keeps the business's cancelled Novam plan membership going; resumed is false when there was none to keep.
+	ResumePlanByMembership(ctx context.Context, in *ResumePlanByMembershipRequest, opts ...grpc.CallOption) (*ResumePlanByMembershipResponse, error)
 	// Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
 	CancelPlanNow(ctx context.Context, in *CancelPlanNowRequest, opts ...grpc.CallOption) (*CancelPlanNowResponse, error)
 	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
@@ -356,6 +364,26 @@ func (c *paymentsServiceClient) ResumePlan(ctx context.Context, in *ResumePlanRe
 	return out, nil
 }
 
+func (c *paymentsServiceClient) ChangePlanByMembership(ctx context.Context, in *ChangePlanByMembershipRequest, opts ...grpc.CallOption) (*ChangePlanByMembershipResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ChangePlanByMembershipResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ChangePlanByMembership_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) ResumePlanByMembership(ctx context.Context, in *ResumePlanByMembershipRequest, opts ...grpc.CallOption) (*ResumePlanByMembershipResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ResumePlanByMembershipResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ResumePlanByMembership_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *paymentsServiceClient) CancelPlanNow(ctx context.Context, in *CancelPlanNowRequest, opts ...grpc.CallOption) (*CancelPlanNowResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CancelPlanNowResponse)
@@ -490,6 +518,12 @@ type PaymentsServiceServer interface {
 	FinishPlanCard(context.Context, *FinishPlanCardRequest) (*FinishPlanCardResponse, error)
 	// Keeps a paid plan that was cancelled for the end of its period.
 	ResumePlan(context.Context, *ResumePlanRequest) (*ResumePlanResponse, error)
+	// Changes the business's plan when plans are memberships with Novam's own business: joins, switches or cancels the
+	// membership, and the plan follows it. UNAVAILABLE when the engine has no PLATFORM_ORG_ID or the business isn't
+	// Novam's client yet, before anything changes, so novam-data does it.
+	ChangePlanByMembership(context.Context, *ChangePlanByMembershipRequest) (*ChangePlanByMembershipResponse, error)
+	// Keeps the business's cancelled Novam plan membership going; resumed is false when there was none to keep.
+	ResumePlanByMembership(context.Context, *ResumePlanByMembershipRequest) (*ResumePlanByMembershipResponse, error)
 	// Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
 	CancelPlanNow(context.Context, *CancelPlanNowRequest) (*CancelPlanNowResponse, error)
 	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
@@ -576,6 +610,12 @@ func (UnimplementedPaymentsServiceServer) FinishPlanCard(context.Context, *Finis
 }
 func (UnimplementedPaymentsServiceServer) ResumePlan(context.Context, *ResumePlanRequest) (*ResumePlanResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ResumePlan not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ChangePlanByMembership(context.Context, *ChangePlanByMembershipRequest) (*ChangePlanByMembershipResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ChangePlanByMembership not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ResumePlanByMembership(context.Context, *ResumePlanByMembershipRequest) (*ResumePlanByMembershipResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ResumePlanByMembership not implemented")
 }
 func (UnimplementedPaymentsServiceServer) CancelPlanNow(context.Context, *CancelPlanNowRequest) (*CancelPlanNowResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CancelPlanNow not implemented")
@@ -994,6 +1034,42 @@ func _PaymentsService_ResumePlan_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_ChangePlanByMembership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangePlanByMembershipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ChangePlanByMembership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ChangePlanByMembership_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ChangePlanByMembership(ctx, req.(*ChangePlanByMembershipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_ResumePlanByMembership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ResumePlanByMembershipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ResumePlanByMembership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ResumePlanByMembership_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ResumePlanByMembership(ctx, req.(*ResumePlanByMembershipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _PaymentsService_CancelPlanNow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CancelPlanNowRequest)
 	if err := dec(in); err != nil {
@@ -1192,6 +1268,14 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResumePlan",
 			Handler:    _PaymentsService_ResumePlan_Handler,
+		},
+		{
+			MethodName: "ChangePlanByMembership",
+			Handler:    _PaymentsService_ChangePlanByMembership_Handler,
+		},
+		{
+			MethodName: "ResumePlanByMembership",
+			Handler:    _PaymentsService_ResumePlanByMembership_Handler,
 		},
 		{
 			MethodName: "CancelPlanNow",
