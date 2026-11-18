@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package novam.payments.v1;
+
+import "google/protobuf/timestamp.proto";
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/payments/v1;paymentsv1";
+
+// PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
+// what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
+// sound first, then asks here; it reads the payment back to answer.
+service PaymentsService {
+  // Records a payment on an invoice: the payments row, money a renter's client paid electronically into the
+  // business's accounts held for the renter, the loyalty stamp once the invoice is covered, a tip given to the visit's
+  // team member when no one is named, and the change feed. With mark_paid_if_covered, the invoice is marked paid once
+  // its payments cover it.
+  rpc RecordPayment(RecordPaymentRequest) returns (RecordPaymentResponse);
+  // Marks an invoice paid once its payments cover it.
+  rpc MarkPaidIfCovered(MarkPaidIfCoveredRequest) returns (MarkPaidIfCoveredResponse);
+}
+
+message RecordPaymentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // Chosen by novam-data, so a retried request records the payment once.
+  string payment_id = 2;
+  string client_invoice_id = 3;
+  double amount = 4;
+  string method = 5;
+  google.protobuf.Timestamp paid_at = 6;
+  string notes = 7;
+  // A tip on top of the payment; 0 for none.
+  double tip = 8;
+  string tip_member_id = 9;
+  // The person recording it is a renter, who took the money themselves: nothing is held for them.
+  bool recorded_by_renter = 10;
+  bool mark_paid_if_covered = 11;
+}
+
+message RecordPaymentResponse {
+  string payment_id = 1;
+  // The invoice was marked paid by this call.
+  bool invoice_paid = 2;
+}
+
+message MarkPaidIfCoveredRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string client_invoice_id = 2;
+}
+
+message MarkPaidIfCoveredResponse {
+  bool invoice_paid = 1;
+}
