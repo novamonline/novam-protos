@@ -42,6 +42,7 @@ const (
 	PaymentsService_ResumePlan_FullMethodName                    = "/novam.payments.v1.PaymentsService/ResumePlan"
 	PaymentsService_ChangePlanByMembership_FullMethodName        = "/novam.payments.v1.PaymentsService/ChangePlanByMembership"
 	PaymentsService_ResumePlanByMembership_FullMethodName        = "/novam.payments.v1.PaymentsService/ResumePlanByMembership"
+	PaymentsService_AddAiByMembership_FullMethodName             = "/novam.payments.v1.PaymentsService/AddAiByMembership"
 	PaymentsService_CancelPlanNow_FullMethodName                 = "/novam.payments.v1.PaymentsService/CancelPlanNow"
 	PaymentsService_DetachPlanMethods_FullMethodName             = "/novam.payments.v1.PaymentsService/DetachPlanMethods"
 	PaymentsService_DraftPartnerStatements_FullMethodName        = "/novam.payments.v1.PaymentsService/DraftPartnerStatements"
@@ -130,6 +131,10 @@ type PaymentsServiceClient interface {
 	ChangePlanByMembership(ctx context.Context, in *ChangePlanByMembershipRequest, opts ...grpc.CallOption) (*ChangePlanByMembershipResponse, error)
 	// Keeps the business's cancelled Novam plan membership going; resumed is false when there was none to keep.
 	ResumePlanByMembership(ctx context.Context, in *ResumePlanByMembershipRequest, opts ...grpc.CallOption) (*ResumePlanByMembershipResponse, error)
+	// Adds the AI add-on to the business's paid plan billed as a Novam membership: the AI membership for its plan and
+	// period, its first bill covering the rest of the plan's period; a removed one not yet ended just keeps going.
+	// UNAVAILABLE before anything changes when the engine has no PLATFORM_ORG_ID or the business isn't Novam's client.
+	AddAiByMembership(ctx context.Context, in *AddAiByMembershipRequest, opts ...grpc.CallOption) (*AddAiByMembershipResponse, error)
 	// Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
 	CancelPlanNow(ctx context.Context, in *CancelPlanNowRequest, opts ...grpc.CallOption) (*CancelPlanNowResponse, error)
 	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
@@ -384,6 +389,16 @@ func (c *paymentsServiceClient) ResumePlanByMembership(ctx context.Context, in *
 	return out, nil
 }
 
+func (c *paymentsServiceClient) AddAiByMembership(ctx context.Context, in *AddAiByMembershipRequest, opts ...grpc.CallOption) (*AddAiByMembershipResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AddAiByMembershipResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_AddAiByMembership_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *paymentsServiceClient) CancelPlanNow(ctx context.Context, in *CancelPlanNowRequest, opts ...grpc.CallOption) (*CancelPlanNowResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CancelPlanNowResponse)
@@ -524,6 +539,10 @@ type PaymentsServiceServer interface {
 	ChangePlanByMembership(context.Context, *ChangePlanByMembershipRequest) (*ChangePlanByMembershipResponse, error)
 	// Keeps the business's cancelled Novam plan membership going; resumed is false when there was none to keep.
 	ResumePlanByMembership(context.Context, *ResumePlanByMembershipRequest) (*ResumePlanByMembershipResponse, error)
+	// Adds the AI add-on to the business's paid plan billed as a Novam membership: the AI membership for its plan and
+	// period, its first bill covering the rest of the plan's period; a removed one not yet ended just keeps going.
+	// UNAVAILABLE before anything changes when the engine has no PLATFORM_ORG_ID or the business isn't Novam's client.
+	AddAiByMembership(context.Context, *AddAiByMembershipRequest) (*AddAiByMembershipResponse, error)
 	// Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
 	CancelPlanNow(context.Context, *CancelPlanNowRequest) (*CancelPlanNowResponse, error)
 	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
@@ -616,6 +635,9 @@ func (UnimplementedPaymentsServiceServer) ChangePlanByMembership(context.Context
 }
 func (UnimplementedPaymentsServiceServer) ResumePlanByMembership(context.Context, *ResumePlanByMembershipRequest) (*ResumePlanByMembershipResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method ResumePlanByMembership not implemented")
+}
+func (UnimplementedPaymentsServiceServer) AddAiByMembership(context.Context, *AddAiByMembershipRequest) (*AddAiByMembershipResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddAiByMembership not implemented")
 }
 func (UnimplementedPaymentsServiceServer) CancelPlanNow(context.Context, *CancelPlanNowRequest) (*CancelPlanNowResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method CancelPlanNow not implemented")
@@ -1070,6 +1092,24 @@ func _PaymentsService_ResumePlanByMembership_Handler(srv interface{}, ctx contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_AddAiByMembership_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddAiByMembershipRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).AddAiByMembership(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_AddAiByMembership_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).AddAiByMembership(ctx, req.(*AddAiByMembershipRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _PaymentsService_CancelPlanNow_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CancelPlanNowRequest)
 	if err := dec(in); err != nil {
@@ -1276,6 +1316,10 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ResumePlanByMembership",
 			Handler:    _PaymentsService_ResumePlanByMembership_Handler,
+		},
+		{
+			MethodName: "AddAiByMembership",
+			Handler:    _PaymentsService_AddAiByMembership_Handler,
 		},
 		{
 			MethodName: "CancelPlanNow",

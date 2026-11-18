@@ -84,6 +84,10 @@ service PaymentsService {
   rpc ChangePlanByMembership(ChangePlanByMembershipRequest) returns (ChangePlanByMembershipResponse);
   // Keeps the business's cancelled Novam plan membership going; resumed is false when there was none to keep.
   rpc ResumePlanByMembership(ResumePlanByMembershipRequest) returns (ResumePlanByMembershipResponse);
+  // Adds the AI add-on to the business's paid plan billed as a Novam membership: the AI membership for its plan and
+  // period, its first bill covering the rest of the plan's period; a removed one not yet ended just keeps going.
+  // UNAVAILABLE before anything changes when the engine has no PLATFORM_ORG_ID or the business isn't Novam's client.
+  rpc AddAiByMembership(AddAiByMembershipRequest) returns (AddAiByMembershipResponse);
   // Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
   rpc CancelPlanNow(CancelPlanNowRequest) returns (CancelPlanNowResponse);
   // Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
@@ -507,4 +511,15 @@ message ResumePlanByMembershipRequest {
 
 message ResumePlanByMembershipResponse {
   bool resumed = 1;
+}
+
+message AddAiByMembershipRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message AddAiByMembershipResponse {
+  // A bill was made.
+  bool billed = 1;
+  // Where the owner pays it.
+  string pay_url = 2;
 }

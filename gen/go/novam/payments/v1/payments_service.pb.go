@@ -3569,6 +3569,104 @@ func (x *ResumePlanByMembershipResponse) GetResumed() bool {
 	return false
 }
 
+type AddAiByMembershipRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddAiByMembershipRequest) Reset() {
+	*x = AddAiByMembershipRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[58]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddAiByMembershipRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddAiByMembershipRequest) ProtoMessage() {}
+
+func (x *AddAiByMembershipRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[58]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddAiByMembershipRequest.ProtoReflect.Descriptor instead.
+func (*AddAiByMembershipRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{58}
+}
+
+func (x *AddAiByMembershipRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+type AddAiByMembershipResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// A bill was made.
+	Billed bool `protobuf:"varint,1,opt,name=billed,proto3" json:"billed,omitempty"`
+	// Where the owner pays it.
+	PayUrl        string `protobuf:"bytes,2,opt,name=pay_url,json=payUrl,proto3" json:"pay_url,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AddAiByMembershipResponse) Reset() {
+	*x = AddAiByMembershipResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[59]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AddAiByMembershipResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AddAiByMembershipResponse) ProtoMessage() {}
+
+func (x *AddAiByMembershipResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[59]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AddAiByMembershipResponse.ProtoReflect.Descriptor instead.
+func (*AddAiByMembershipResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{59}
+}
+
+func (x *AddAiByMembershipResponse) GetBilled() bool {
+	if x != nil {
+		return x.Billed
+	}
+	return false
+}
+
+func (x *AddAiByMembershipResponse) GetPayUrl() string {
+	if x != nil {
+		return x.PayUrl
+	}
+	return ""
+}
+
 var File_novam_payments_v1_payments_service_proto protoreflect.FileDescriptor
 
 const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
@@ -3834,7 +3932,12 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\x1dResumePlanByMembershipRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\":\n" +
 	"\x1eResumePlanByMembershipResponse\x12\x18\n" +
-	"\aresumed\x18\x01 \x01(\bR\aresumed2\xa4\x18\n" +
+	"\aresumed\x18\x01 \x01(\bR\aresumed\"X\n" +
+	"\x18AddAiByMembershipRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"L\n" +
+	"\x19AddAiByMembershipResponse\x12\x16\n" +
+	"\x06billed\x18\x01 \x01(\bR\x06billed\x12\x17\n" +
+	"\apay_url\x18\x02 \x01(\tR\x06payUrl2\x94\x19\n" +
 	"\x0fPaymentsService\x12b\n" +
 	"\rRecordPayment\x12'.novam.payments.v1.RecordPaymentRequest\x1a(.novam.payments.v1.RecordPaymentResponse\x12n\n" +
 	"\x11MarkPaidIfCovered\x12+.novam.payments.v1.MarkPaidIfCoveredRequest\x1a,.novam.payments.v1.MarkPaidIfCoveredResponse\x12_\n" +
@@ -3862,7 +3965,8 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\n" +
 	"ResumePlan\x12$.novam.payments.v1.ResumePlanRequest\x1a%.novam.payments.v1.ResumePlanResponse\x12}\n" +
 	"\x16ChangePlanByMembership\x120.novam.payments.v1.ChangePlanByMembershipRequest\x1a1.novam.payments.v1.ChangePlanByMembershipResponse\x12}\n" +
-	"\x16ResumePlanByMembership\x120.novam.payments.v1.ResumePlanByMembershipRequest\x1a1.novam.payments.v1.ResumePlanByMembershipResponse\x12b\n" +
+	"\x16ResumePlanByMembership\x120.novam.payments.v1.ResumePlanByMembershipRequest\x1a1.novam.payments.v1.ResumePlanByMembershipResponse\x12n\n" +
+	"\x11AddAiByMembership\x12+.novam.payments.v1.AddAiByMembershipRequest\x1a,.novam.payments.v1.AddAiByMembershipResponse\x12b\n" +
 	"\rCancelPlanNow\x12'.novam.payments.v1.CancelPlanNowRequest\x1a(.novam.payments.v1.CancelPlanNowResponse\x12n\n" +
 	"\x11DetachPlanMethods\x12+.novam.payments.v1.DetachPlanMethodsRequest\x1a,.novam.payments.v1.DetachPlanMethodsResponse\x12}\n" +
 	"\x16DraftPartnerStatements\x120.novam.payments.v1.DraftPartnerStatementsRequest\x1a1.novam.payments.v1.DraftPartnerStatementsResponse\x12\x83\x01\n" +
@@ -3882,7 +3986,7 @@ func file_novam_payments_v1_payments_service_proto_rawDescGZIP() []byte {
 	return file_novam_payments_v1_payments_service_proto_rawDescData
 }
 
-var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 58)
+var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 60)
 var file_novam_payments_v1_payments_service_proto_goTypes = []any{
 	(*RecordPaymentRequest)(nil),                  // 0: novam.payments.v1.RecordPaymentRequest
 	(*RecordPaymentResponse)(nil),                 // 1: novam.payments.v1.RecordPaymentResponse
@@ -3942,105 +4046,110 @@ var file_novam_payments_v1_payments_service_proto_goTypes = []any{
 	(*ChangePlanByMembershipResponse)(nil),        // 55: novam.payments.v1.ChangePlanByMembershipResponse
 	(*ResumePlanByMembershipRequest)(nil),         // 56: novam.payments.v1.ResumePlanByMembershipRequest
 	(*ResumePlanByMembershipResponse)(nil),        // 57: novam.payments.v1.ResumePlanByMembershipResponse
-	(*v1.RequestMetadata)(nil),                    // 58: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),                 // 59: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),                       // 60: google.protobuf.Struct
+	(*AddAiByMembershipRequest)(nil),              // 58: novam.payments.v1.AddAiByMembershipRequest
+	(*AddAiByMembershipResponse)(nil),             // 59: novam.payments.v1.AddAiByMembershipResponse
+	(*v1.RequestMetadata)(nil),                    // 60: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),                 // 61: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),                       // 62: google.protobuf.Struct
 }
 var file_novam_payments_v1_payments_service_proto_depIdxs = []int32{
-	58, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	59, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
-	58, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 3: novam.payments.v1.ReopenIfOwedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 4: novam.payments.v1.FailPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 5: novam.payments.v1.RefundPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 6: novam.payments.v1.DisputePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 7: novam.payments.v1.DeletePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 8: novam.payments.v1.RestorePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 9: novam.payments.v1.RedeemGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 10: novam.payments.v1.RunAutopayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 11: novam.payments.v1.PayInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 12: novam.payments.v1.RefreshIntentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 13: novam.payments.v1.ApplyIntentEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 14: novam.payments.v1.OpenCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 15: novam.payments.v1.SettleCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 16: novam.payments.v1.FailCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 17: novam.payments.v1.ApplyStripeEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	60, // 18: novam.payments.v1.ApplyStripeEventRequest.object:type_name -> google.protobuf.Struct
-	58, // 19: novam.payments.v1.ChangePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 20: novam.payments.v1.StartPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 21: novam.payments.v1.FinishPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 22: novam.payments.v1.ResumePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 23: novam.payments.v1.CancelPlanNowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 24: novam.payments.v1.DetachPlanMethodsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 25: novam.payments.v1.DraftPartnerStatementsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 26: novam.payments.v1.ApprovePartnerStatementsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 27: novam.payments.v1.SendPartnerStatementRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 28: novam.payments.v1.MarkPartnerStatementCollectedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 29: novam.payments.v1.ChangePlanByMembershipRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	58, // 30: novam.payments.v1.ResumePlanByMembershipRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 31: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
-	2,  // 32: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
-	4,  // 33: novam.payments.v1.PaymentsService.ReopenIfOwed:input_type -> novam.payments.v1.ReopenIfOwedRequest
-	6,  // 34: novam.payments.v1.PaymentsService.FailPayment:input_type -> novam.payments.v1.FailPaymentRequest
-	8,  // 35: novam.payments.v1.PaymentsService.RefundPayment:input_type -> novam.payments.v1.RefundPaymentRequest
-	10, // 36: novam.payments.v1.PaymentsService.DisputePayment:input_type -> novam.payments.v1.DisputePaymentRequest
-	12, // 37: novam.payments.v1.PaymentsService.DeletePayment:input_type -> novam.payments.v1.DeletePaymentRequest
-	14, // 38: novam.payments.v1.PaymentsService.RestorePayment:input_type -> novam.payments.v1.RestorePaymentRequest
-	16, // 39: novam.payments.v1.PaymentsService.RedeemGiftCard:input_type -> novam.payments.v1.RedeemGiftCardRequest
-	18, // 40: novam.payments.v1.PaymentsService.RunAutopay:input_type -> novam.payments.v1.RunAutopayRequest
-	20, // 41: novam.payments.v1.PaymentsService.PayInvoice:input_type -> novam.payments.v1.PayInvoiceRequest
-	22, // 42: novam.payments.v1.PaymentsService.RefreshIntent:input_type -> novam.payments.v1.RefreshIntentRequest
-	24, // 43: novam.payments.v1.PaymentsService.ApplyIntentEvent:input_type -> novam.payments.v1.ApplyIntentEventRequest
-	26, // 44: novam.payments.v1.PaymentsService.OpenCheckout:input_type -> novam.payments.v1.OpenCheckoutRequest
-	28, // 45: novam.payments.v1.PaymentsService.SettleCheckout:input_type -> novam.payments.v1.SettleCheckoutRequest
-	30, // 46: novam.payments.v1.PaymentsService.FailCheckout:input_type -> novam.payments.v1.FailCheckoutRequest
-	32, // 47: novam.payments.v1.PaymentsService.ApplyStripeEvent:input_type -> novam.payments.v1.ApplyStripeEventRequest
-	34, // 48: novam.payments.v1.PaymentsService.ChangePlan:input_type -> novam.payments.v1.ChangePlanRequest
-	36, // 49: novam.payments.v1.PaymentsService.StartPlanCard:input_type -> novam.payments.v1.StartPlanCardRequest
-	38, // 50: novam.payments.v1.PaymentsService.FinishPlanCard:input_type -> novam.payments.v1.FinishPlanCardRequest
-	40, // 51: novam.payments.v1.PaymentsService.ResumePlan:input_type -> novam.payments.v1.ResumePlanRequest
-	54, // 52: novam.payments.v1.PaymentsService.ChangePlanByMembership:input_type -> novam.payments.v1.ChangePlanByMembershipRequest
-	56, // 53: novam.payments.v1.PaymentsService.ResumePlanByMembership:input_type -> novam.payments.v1.ResumePlanByMembershipRequest
-	42, // 54: novam.payments.v1.PaymentsService.CancelPlanNow:input_type -> novam.payments.v1.CancelPlanNowRequest
-	44, // 55: novam.payments.v1.PaymentsService.DetachPlanMethods:input_type -> novam.payments.v1.DetachPlanMethodsRequest
-	46, // 56: novam.payments.v1.PaymentsService.DraftPartnerStatements:input_type -> novam.payments.v1.DraftPartnerStatementsRequest
-	48, // 57: novam.payments.v1.PaymentsService.ApprovePartnerStatements:input_type -> novam.payments.v1.ApprovePartnerStatementsRequest
-	50, // 58: novam.payments.v1.PaymentsService.SendPartnerStatement:input_type -> novam.payments.v1.SendPartnerStatementRequest
-	52, // 59: novam.payments.v1.PaymentsService.MarkPartnerStatementCollected:input_type -> novam.payments.v1.MarkPartnerStatementCollectedRequest
-	1,  // 60: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
-	3,  // 61: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
-	5,  // 62: novam.payments.v1.PaymentsService.ReopenIfOwed:output_type -> novam.payments.v1.ReopenIfOwedResponse
-	7,  // 63: novam.payments.v1.PaymentsService.FailPayment:output_type -> novam.payments.v1.FailPaymentResponse
-	9,  // 64: novam.payments.v1.PaymentsService.RefundPayment:output_type -> novam.payments.v1.RefundPaymentResponse
-	11, // 65: novam.payments.v1.PaymentsService.DisputePayment:output_type -> novam.payments.v1.DisputePaymentResponse
-	13, // 66: novam.payments.v1.PaymentsService.DeletePayment:output_type -> novam.payments.v1.DeletePaymentResponse
-	15, // 67: novam.payments.v1.PaymentsService.RestorePayment:output_type -> novam.payments.v1.RestorePaymentResponse
-	17, // 68: novam.payments.v1.PaymentsService.RedeemGiftCard:output_type -> novam.payments.v1.RedeemGiftCardResponse
-	19, // 69: novam.payments.v1.PaymentsService.RunAutopay:output_type -> novam.payments.v1.RunAutopayResponse
-	21, // 70: novam.payments.v1.PaymentsService.PayInvoice:output_type -> novam.payments.v1.PayInvoiceResponse
-	23, // 71: novam.payments.v1.PaymentsService.RefreshIntent:output_type -> novam.payments.v1.RefreshIntentResponse
-	25, // 72: novam.payments.v1.PaymentsService.ApplyIntentEvent:output_type -> novam.payments.v1.ApplyIntentEventResponse
-	27, // 73: novam.payments.v1.PaymentsService.OpenCheckout:output_type -> novam.payments.v1.OpenCheckoutResponse
-	29, // 74: novam.payments.v1.PaymentsService.SettleCheckout:output_type -> novam.payments.v1.SettleCheckoutResponse
-	31, // 75: novam.payments.v1.PaymentsService.FailCheckout:output_type -> novam.payments.v1.FailCheckoutResponse
-	33, // 76: novam.payments.v1.PaymentsService.ApplyStripeEvent:output_type -> novam.payments.v1.ApplyStripeEventResponse
-	35, // 77: novam.payments.v1.PaymentsService.ChangePlan:output_type -> novam.payments.v1.ChangePlanResponse
-	37, // 78: novam.payments.v1.PaymentsService.StartPlanCard:output_type -> novam.payments.v1.StartPlanCardResponse
-	39, // 79: novam.payments.v1.PaymentsService.FinishPlanCard:output_type -> novam.payments.v1.FinishPlanCardResponse
-	41, // 80: novam.payments.v1.PaymentsService.ResumePlan:output_type -> novam.payments.v1.ResumePlanResponse
-	55, // 81: novam.payments.v1.PaymentsService.ChangePlanByMembership:output_type -> novam.payments.v1.ChangePlanByMembershipResponse
-	57, // 82: novam.payments.v1.PaymentsService.ResumePlanByMembership:output_type -> novam.payments.v1.ResumePlanByMembershipResponse
-	43, // 83: novam.payments.v1.PaymentsService.CancelPlanNow:output_type -> novam.payments.v1.CancelPlanNowResponse
-	45, // 84: novam.payments.v1.PaymentsService.DetachPlanMethods:output_type -> novam.payments.v1.DetachPlanMethodsResponse
-	47, // 85: novam.payments.v1.PaymentsService.DraftPartnerStatements:output_type -> novam.payments.v1.DraftPartnerStatementsResponse
-	49, // 86: novam.payments.v1.PaymentsService.ApprovePartnerStatements:output_type -> novam.payments.v1.ApprovePartnerStatementsResponse
-	51, // 87: novam.payments.v1.PaymentsService.SendPartnerStatement:output_type -> novam.payments.v1.SendPartnerStatementResponse
-	53, // 88: novam.payments.v1.PaymentsService.MarkPartnerStatementCollected:output_type -> novam.payments.v1.MarkPartnerStatementCollectedResponse
-	60, // [60:89] is the sub-list for method output_type
-	31, // [31:60] is the sub-list for method input_type
-	31, // [31:31] is the sub-list for extension type_name
-	31, // [31:31] is the sub-list for extension extendee
-	0,  // [0:31] is the sub-list for field type_name
+	60, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	61, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
+	60, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 3: novam.payments.v1.ReopenIfOwedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 4: novam.payments.v1.FailPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 5: novam.payments.v1.RefundPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 6: novam.payments.v1.DisputePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 7: novam.payments.v1.DeletePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 8: novam.payments.v1.RestorePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 9: novam.payments.v1.RedeemGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 10: novam.payments.v1.RunAutopayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 11: novam.payments.v1.PayInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 12: novam.payments.v1.RefreshIntentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 13: novam.payments.v1.ApplyIntentEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 14: novam.payments.v1.OpenCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 15: novam.payments.v1.SettleCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 16: novam.payments.v1.FailCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 17: novam.payments.v1.ApplyStripeEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	62, // 18: novam.payments.v1.ApplyStripeEventRequest.object:type_name -> google.protobuf.Struct
+	60, // 19: novam.payments.v1.ChangePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 20: novam.payments.v1.StartPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 21: novam.payments.v1.FinishPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 22: novam.payments.v1.ResumePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 23: novam.payments.v1.CancelPlanNowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 24: novam.payments.v1.DetachPlanMethodsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 25: novam.payments.v1.DraftPartnerStatementsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 26: novam.payments.v1.ApprovePartnerStatementsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 27: novam.payments.v1.SendPartnerStatementRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 28: novam.payments.v1.MarkPartnerStatementCollectedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 29: novam.payments.v1.ChangePlanByMembershipRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 30: novam.payments.v1.ResumePlanByMembershipRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 31: novam.payments.v1.AddAiByMembershipRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 32: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
+	2,  // 33: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
+	4,  // 34: novam.payments.v1.PaymentsService.ReopenIfOwed:input_type -> novam.payments.v1.ReopenIfOwedRequest
+	6,  // 35: novam.payments.v1.PaymentsService.FailPayment:input_type -> novam.payments.v1.FailPaymentRequest
+	8,  // 36: novam.payments.v1.PaymentsService.RefundPayment:input_type -> novam.payments.v1.RefundPaymentRequest
+	10, // 37: novam.payments.v1.PaymentsService.DisputePayment:input_type -> novam.payments.v1.DisputePaymentRequest
+	12, // 38: novam.payments.v1.PaymentsService.DeletePayment:input_type -> novam.payments.v1.DeletePaymentRequest
+	14, // 39: novam.payments.v1.PaymentsService.RestorePayment:input_type -> novam.payments.v1.RestorePaymentRequest
+	16, // 40: novam.payments.v1.PaymentsService.RedeemGiftCard:input_type -> novam.payments.v1.RedeemGiftCardRequest
+	18, // 41: novam.payments.v1.PaymentsService.RunAutopay:input_type -> novam.payments.v1.RunAutopayRequest
+	20, // 42: novam.payments.v1.PaymentsService.PayInvoice:input_type -> novam.payments.v1.PayInvoiceRequest
+	22, // 43: novam.payments.v1.PaymentsService.RefreshIntent:input_type -> novam.payments.v1.RefreshIntentRequest
+	24, // 44: novam.payments.v1.PaymentsService.ApplyIntentEvent:input_type -> novam.payments.v1.ApplyIntentEventRequest
+	26, // 45: novam.payments.v1.PaymentsService.OpenCheckout:input_type -> novam.payments.v1.OpenCheckoutRequest
+	28, // 46: novam.payments.v1.PaymentsService.SettleCheckout:input_type -> novam.payments.v1.SettleCheckoutRequest
+	30, // 47: novam.payments.v1.PaymentsService.FailCheckout:input_type -> novam.payments.v1.FailCheckoutRequest
+	32, // 48: novam.payments.v1.PaymentsService.ApplyStripeEvent:input_type -> novam.payments.v1.ApplyStripeEventRequest
+	34, // 49: novam.payments.v1.PaymentsService.ChangePlan:input_type -> novam.payments.v1.ChangePlanRequest
+	36, // 50: novam.payments.v1.PaymentsService.StartPlanCard:input_type -> novam.payments.v1.StartPlanCardRequest
+	38, // 51: novam.payments.v1.PaymentsService.FinishPlanCard:input_type -> novam.payments.v1.FinishPlanCardRequest
+	40, // 52: novam.payments.v1.PaymentsService.ResumePlan:input_type -> novam.payments.v1.ResumePlanRequest
+	54, // 53: novam.payments.v1.PaymentsService.ChangePlanByMembership:input_type -> novam.payments.v1.ChangePlanByMembershipRequest
+	56, // 54: novam.payments.v1.PaymentsService.ResumePlanByMembership:input_type -> novam.payments.v1.ResumePlanByMembershipRequest
+	58, // 55: novam.payments.v1.PaymentsService.AddAiByMembership:input_type -> novam.payments.v1.AddAiByMembershipRequest
+	42, // 56: novam.payments.v1.PaymentsService.CancelPlanNow:input_type -> novam.payments.v1.CancelPlanNowRequest
+	44, // 57: novam.payments.v1.PaymentsService.DetachPlanMethods:input_type -> novam.payments.v1.DetachPlanMethodsRequest
+	46, // 58: novam.payments.v1.PaymentsService.DraftPartnerStatements:input_type -> novam.payments.v1.DraftPartnerStatementsRequest
+	48, // 59: novam.payments.v1.PaymentsService.ApprovePartnerStatements:input_type -> novam.payments.v1.ApprovePartnerStatementsRequest
+	50, // 60: novam.payments.v1.PaymentsService.SendPartnerStatement:input_type -> novam.payments.v1.SendPartnerStatementRequest
+	52, // 61: novam.payments.v1.PaymentsService.MarkPartnerStatementCollected:input_type -> novam.payments.v1.MarkPartnerStatementCollectedRequest
+	1,  // 62: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
+	3,  // 63: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
+	5,  // 64: novam.payments.v1.PaymentsService.ReopenIfOwed:output_type -> novam.payments.v1.ReopenIfOwedResponse
+	7,  // 65: novam.payments.v1.PaymentsService.FailPayment:output_type -> novam.payments.v1.FailPaymentResponse
+	9,  // 66: novam.payments.v1.PaymentsService.RefundPayment:output_type -> novam.payments.v1.RefundPaymentResponse
+	11, // 67: novam.payments.v1.PaymentsService.DisputePayment:output_type -> novam.payments.v1.DisputePaymentResponse
+	13, // 68: novam.payments.v1.PaymentsService.DeletePayment:output_type -> novam.payments.v1.DeletePaymentResponse
+	15, // 69: novam.payments.v1.PaymentsService.RestorePayment:output_type -> novam.payments.v1.RestorePaymentResponse
+	17, // 70: novam.payments.v1.PaymentsService.RedeemGiftCard:output_type -> novam.payments.v1.RedeemGiftCardResponse
+	19, // 71: novam.payments.v1.PaymentsService.RunAutopay:output_type -> novam.payments.v1.RunAutopayResponse
+	21, // 72: novam.payments.v1.PaymentsService.PayInvoice:output_type -> novam.payments.v1.PayInvoiceResponse
+	23, // 73: novam.payments.v1.PaymentsService.RefreshIntent:output_type -> novam.payments.v1.RefreshIntentResponse
+	25, // 74: novam.payments.v1.PaymentsService.ApplyIntentEvent:output_type -> novam.payments.v1.ApplyIntentEventResponse
+	27, // 75: novam.payments.v1.PaymentsService.OpenCheckout:output_type -> novam.payments.v1.OpenCheckoutResponse
+	29, // 76: novam.payments.v1.PaymentsService.SettleCheckout:output_type -> novam.payments.v1.SettleCheckoutResponse
+	31, // 77: novam.payments.v1.PaymentsService.FailCheckout:output_type -> novam.payments.v1.FailCheckoutResponse
+	33, // 78: novam.payments.v1.PaymentsService.ApplyStripeEvent:output_type -> novam.payments.v1.ApplyStripeEventResponse
+	35, // 79: novam.payments.v1.PaymentsService.ChangePlan:output_type -> novam.payments.v1.ChangePlanResponse
+	37, // 80: novam.payments.v1.PaymentsService.StartPlanCard:output_type -> novam.payments.v1.StartPlanCardResponse
+	39, // 81: novam.payments.v1.PaymentsService.FinishPlanCard:output_type -> novam.payments.v1.FinishPlanCardResponse
+	41, // 82: novam.payments.v1.PaymentsService.ResumePlan:output_type -> novam.payments.v1.ResumePlanResponse
+	55, // 83: novam.payments.v1.PaymentsService.ChangePlanByMembership:output_type -> novam.payments.v1.ChangePlanByMembershipResponse
+	57, // 84: novam.payments.v1.PaymentsService.ResumePlanByMembership:output_type -> novam.payments.v1.ResumePlanByMembershipResponse
+	59, // 85: novam.payments.v1.PaymentsService.AddAiByMembership:output_type -> novam.payments.v1.AddAiByMembershipResponse
+	43, // 86: novam.payments.v1.PaymentsService.CancelPlanNow:output_type -> novam.payments.v1.CancelPlanNowResponse
+	45, // 87: novam.payments.v1.PaymentsService.DetachPlanMethods:output_type -> novam.payments.v1.DetachPlanMethodsResponse
+	47, // 88: novam.payments.v1.PaymentsService.DraftPartnerStatements:output_type -> novam.payments.v1.DraftPartnerStatementsResponse
+	49, // 89: novam.payments.v1.PaymentsService.ApprovePartnerStatements:output_type -> novam.payments.v1.ApprovePartnerStatementsResponse
+	51, // 90: novam.payments.v1.PaymentsService.SendPartnerStatement:output_type -> novam.payments.v1.SendPartnerStatementResponse
+	53, // 91: novam.payments.v1.PaymentsService.MarkPartnerStatementCollected:output_type -> novam.payments.v1.MarkPartnerStatementCollectedResponse
+	62, // [62:92] is the sub-list for method output_type
+	32, // [32:62] is the sub-list for method input_type
+	32, // [32:32] is the sub-list for extension type_name
+	32, // [32:32] is the sub-list for extension extendee
+	0,  // [0:32] is the sub-list for field type_name
 }
 
 func init() { file_novam_payments_v1_payments_service_proto_init() }
@@ -4056,7 +4165,7 @@ func file_novam_payments_v1_payments_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_payments_v1_payments_service_proto_rawDesc), len(file_novam_payments_v1_payments_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   58,
+			NumMessages:   60,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -1654,6 +1654,47 @@ export declare type ResumePlanByMembershipResponse = Message<"novam.payments.v1.
 export declare const ResumePlanByMembershipResponseSchema: GenMessage<ResumePlanByMembershipResponse>;
 
 /**
+ * @generated from message novam.payments.v1.AddAiByMembershipRequest
+ */
+export declare type AddAiByMembershipRequest = Message<"novam.payments.v1.AddAiByMembershipRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.payments.v1.AddAiByMembershipRequest.
+ * Use `create(AddAiByMembershipRequestSchema)` to create a new message.
+ */
+export declare const AddAiByMembershipRequestSchema: GenMessage<AddAiByMembershipRequest>;
+
+/**
+ * @generated from message novam.payments.v1.AddAiByMembershipResponse
+ */
+export declare type AddAiByMembershipResponse = Message<"novam.payments.v1.AddAiByMembershipResponse"> & {
+  /**
+   * A bill was made.
+   *
+   * @generated from field: bool billed = 1;
+   */
+  billed: boolean;
+
+  /**
+   * Where the owner pays it.
+   *
+   * @generated from field: string pay_url = 2;
+   */
+  payUrl: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.AddAiByMembershipResponse.
+ * Use `create(AddAiByMembershipResponseSchema)` to create a new message.
+ */
+export declare const AddAiByMembershipResponseSchema: GenMessage<AddAiByMembershipResponse>;
+
+/**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
  * what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
  * sound first, then asks here; it reads the payment back to answer.
@@ -1916,6 +1957,18 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof ResumePlanByMembershipRequestSchema;
     output: typeof ResumePlanByMembershipResponseSchema;
+  },
+  /**
+   * Adds the AI add-on to the business's paid plan billed as a Novam membership: the AI membership for its plan and
+   * period, its first bill covering the rest of the plan's period; a removed one not yet ended just keeps going.
+   * UNAVAILABLE before anything changes when the engine has no PLATFORM_ORG_ID or the business isn't Novam's client.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.AddAiByMembership
+   */
+  addAiByMembership: {
+    methodKind: "unary";
+    input: typeof AddAiByMembershipRequestSchema;
+    output: typeof AddAiByMembershipResponseSchema;
   },
   /**
    * Ends the business's Stripe subscription now (a business being deleted) and puts it on Launch.
