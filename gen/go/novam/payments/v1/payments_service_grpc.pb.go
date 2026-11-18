@@ -35,6 +35,7 @@ const (
 	PaymentsService_OpenCheckout_FullMethodName      = "/novam.payments.v1.PaymentsService/OpenCheckout"
 	PaymentsService_SettleCheckout_FullMethodName    = "/novam.payments.v1.PaymentsService/SettleCheckout"
 	PaymentsService_FailCheckout_FullMethodName      = "/novam.payments.v1.PaymentsService/FailCheckout"
+	PaymentsService_ApplyStripeEvent_FullMethodName  = "/novam.payments.v1.PaymentsService/ApplyStripeEvent"
 )
 
 // PaymentsServiceClient is the client API for PaymentsService service.
@@ -94,6 +95,12 @@ type PaymentsServiceClient interface {
 	SettleCheckout(ctx context.Context, in *SettleCheckoutRequest, opts ...grpc.CallOption) (*SettleCheckoutResponse, error)
 	// A bank payment started on the pay page that didn't go through: the open checkout is marked failed.
 	FailCheckout(ctx context.Context, in *FailCheckoutRequest, opts ...grpc.CallOption) (*FailCheckoutResponse, error)
+	// A Stripe webhook event novam-data verified, for the kinds the engine applies: a business's own Novam plan
+	// (subscription checkouts, customer.subscription.*, its bills' invoice.* events and the plan card), a filing order's
+	// checkout, and a gift card bought on the business's page or from a wallet. Each is applied once; handled is false
+	// for any other kind, which novam-data applies itself. UNAVAILABLE when the engine lacks what the kind needs (Stripe,
+	// the plans' prices, a filing partner), before anything is written.
+	ApplyStripeEvent(ctx context.Context, in *ApplyStripeEventRequest, opts ...grpc.CallOption) (*ApplyStripeEventResponse, error)
 }
 
 type paymentsServiceClient struct {
@@ -264,6 +271,16 @@ func (c *paymentsServiceClient) FailCheckout(ctx context.Context, in *FailChecko
 	return out, nil
 }
 
+func (c *paymentsServiceClient) ApplyStripeEvent(ctx context.Context, in *ApplyStripeEventRequest, opts ...grpc.CallOption) (*ApplyStripeEventResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplyStripeEventResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ApplyStripeEvent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentsServiceServer is the server API for PaymentsService service.
 // All implementations must embed UnimplementedPaymentsServiceServer
 // for forward compatibility.
@@ -321,6 +338,12 @@ type PaymentsServiceServer interface {
 	SettleCheckout(context.Context, *SettleCheckoutRequest) (*SettleCheckoutResponse, error)
 	// A bank payment started on the pay page that didn't go through: the open checkout is marked failed.
 	FailCheckout(context.Context, *FailCheckoutRequest) (*FailCheckoutResponse, error)
+	// A Stripe webhook event novam-data verified, for the kinds the engine applies: a business's own Novam plan
+	// (subscription checkouts, customer.subscription.*, its bills' invoice.* events and the plan card), a filing order's
+	// checkout, and a gift card bought on the business's page or from a wallet. Each is applied once; handled is false
+	// for any other kind, which novam-data applies itself. UNAVAILABLE when the engine lacks what the kind needs (Stripe,
+	// the plans' prices, a filing partner), before anything is written.
+	ApplyStripeEvent(context.Context, *ApplyStripeEventRequest) (*ApplyStripeEventResponse, error)
 	mustEmbedUnimplementedPaymentsServiceServer()
 }
 
@@ -378,6 +401,9 @@ func (UnimplementedPaymentsServiceServer) SettleCheckout(context.Context, *Settl
 }
 func (UnimplementedPaymentsServiceServer) FailCheckout(context.Context, *FailCheckoutRequest) (*FailCheckoutResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method FailCheckout not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ApplyStripeEvent(context.Context, *ApplyStripeEventRequest) (*ApplyStripeEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ApplyStripeEvent not implemented")
 }
 func (UnimplementedPaymentsServiceServer) mustEmbedUnimplementedPaymentsServiceServer() {}
 func (UnimplementedPaymentsServiceServer) testEmbeddedByValue()                         {}
@@ -688,6 +714,24 @@ func _PaymentsService_FailCheckout_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_ApplyStripeEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApplyStripeEventRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ApplyStripeEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ApplyStripeEvent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ApplyStripeEvent(ctx, req.(*ApplyStripeEventRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentsService_ServiceDesc is the grpc.ServiceDesc for PaymentsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -758,6 +802,10 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "FailCheckout",
 			Handler:    _PaymentsService_FailCheckout_Handler,
+		},
+		{
+			MethodName: "ApplyStripeEvent",
+			Handler:    _PaymentsService_ApplyStripeEvent_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

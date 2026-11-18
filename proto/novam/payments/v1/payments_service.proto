@@ -2,6 +2,7 @@ syntax = "proto3";
 
 package novam.payments.v1;
 
+import "google/protobuf/struct.proto";
 import "google/protobuf/timestamp.proto";
 import "novam/common/v1/common.proto";
 
@@ -60,6 +61,12 @@ service PaymentsService {
   rpc SettleCheckout(SettleCheckoutRequest) returns (SettleCheckoutResponse);
   // A bank payment started on the pay page that didn't go through: the open checkout is marked failed.
   rpc FailCheckout(FailCheckoutRequest) returns (FailCheckoutResponse);
+  // A Stripe webhook event novam-data verified, for the kinds the engine applies: a business's own Novam plan
+  // (subscription checkouts, customer.subscription.*, its bills' invoice.* events and the plan card), a filing order's
+  // checkout, and a gift card bought on the business's page or from a wallet. Each is applied once; handled is false
+  // for any other kind, which novam-data applies itself. UNAVAILABLE when the engine lacks what the kind needs (Stripe,
+  // the plans' prices, a filing partner), before anything is written.
+  rpc ApplyStripeEvent(ApplyStripeEventRequest) returns (ApplyStripeEventResponse);
 }
 
 message RecordPaymentRequest {
@@ -311,4 +318,26 @@ message FailCheckoutRequest {
 message FailCheckoutResponse {
   // failed or unknown.
   string result = 1;
+}
+
+message ApplyStripeEventRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The event's type, e.g. checkout.session.completed.
+  string type = 2;
+  // The connected account it came from; empty for the platform account.
+  string account = 3;
+  // The event's data.object.
+  google.protobuf.Struct object = 4;
+}
+
+message ApplyStripeEventResponse {
+  bool handled = 1;
+  // subscription, plan_card, subscription_bill, filing, gift_card or wallet_gift_card.
+  string kind = 2;
+  // What it did, e.g. paid, already_paid, sent, unpaid, unknown, failed.
+  string result = 3;
+  // The business it was for, when known.
+  string org_id = 4;
+  // The record it was about: the gift card, the filing order.
+  string id = 5;
 }

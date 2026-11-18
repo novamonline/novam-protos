@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { RequestMetadata } from "../../common/v1/common_pb.js";
 import type { Timestamp } from "@bufbuild/protobuf/wkt";
 
@@ -1038,6 +1038,87 @@ export declare type FailCheckoutResponse = Message<"novam.payments.v1.FailChecko
 export declare const FailCheckoutResponseSchema: GenMessage<FailCheckoutResponse>;
 
 /**
+ * @generated from message novam.payments.v1.ApplyStripeEventRequest
+ */
+export declare type ApplyStripeEventRequest = Message<"novam.payments.v1.ApplyStripeEventRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * The event's type, e.g. checkout.session.completed.
+   *
+   * @generated from field: string type = 2;
+   */
+  type: string;
+
+  /**
+   * The connected account it came from; empty for the platform account.
+   *
+   * @generated from field: string account = 3;
+   */
+  account: string;
+
+  /**
+   * The event's data.object.
+   *
+   * @generated from field: google.protobuf.Struct object = 4;
+   */
+  object?: JsonObject;
+};
+
+/**
+ * Describes the message novam.payments.v1.ApplyStripeEventRequest.
+ * Use `create(ApplyStripeEventRequestSchema)` to create a new message.
+ */
+export declare const ApplyStripeEventRequestSchema: GenMessage<ApplyStripeEventRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ApplyStripeEventResponse
+ */
+export declare type ApplyStripeEventResponse = Message<"novam.payments.v1.ApplyStripeEventResponse"> & {
+  /**
+   * @generated from field: bool handled = 1;
+   */
+  handled: boolean;
+
+  /**
+   * subscription, plan_card, subscription_bill, filing, gift_card or wallet_gift_card.
+   *
+   * @generated from field: string kind = 2;
+   */
+  kind: string;
+
+  /**
+   * What it did, e.g. paid, already_paid, sent, unpaid, unknown, failed.
+   *
+   * @generated from field: string result = 3;
+   */
+  result: string;
+
+  /**
+   * The business it was for, when known.
+   *
+   * @generated from field: string org_id = 4;
+   */
+  orgId: string;
+
+  /**
+   * The record it was about: the gift card, the filing order.
+   *
+   * @generated from field: string id = 5;
+   */
+  id: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ApplyStripeEventResponse.
+ * Use `create(ApplyStripeEventResponseSchema)` to create a new message.
+ */
+export declare const ApplyStripeEventResponseSchema: GenMessage<ApplyStripeEventResponse>;
+
+/**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
  * what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
  * sound first, then asks here; it reads the payment back to answer.
@@ -1221,6 +1302,20 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof FailCheckoutRequestSchema;
     output: typeof FailCheckoutResponseSchema;
+  },
+  /**
+   * A Stripe webhook event novam-data verified, for the kinds the engine applies: a business's own Novam plan
+   * (subscription checkouts, customer.subscription.*, its bills' invoice.* events and the plan card), a filing order's
+   * checkout, and a gift card bought on the business's page or from a wallet. Each is applied once; handled is false
+   * for any other kind, which novam-data applies itself. UNAVAILABLE when the engine lacks what the kind needs (Stripe,
+   * the plans' prices, a filing partner), before anything is written.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ApplyStripeEvent
+   */
+  applyStripeEvent: {
+    methodKind: "unary";
+    input: typeof ApplyStripeEventRequestSchema;
+    output: typeof ApplyStripeEventResponseSchema;
   },
 }>;
 
