@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package novam.records.v1;
+
+import "google/protobuf/struct.proto";
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/records/v1;recordsv1";
+
+// RecordsService runs in novam-engine's workflows server and writes a business's records whose rules are only
+// their row and what it sets off in the database (ADR-0009): schedule blocks, offerings, and more as they move. Each
+// write stores the row, its business event when the collection has one, what the collection does after a write, and
+// the change feed, in one transaction. novam-data checks who may make it and readies the values, then asks here; it
+// reads the record back. A collection the engine doesn't write answers UNIMPLEMENTED, so novam-data writes it itself.
+service RecordsService {
+  rpc CreateRecord(CreateRecordRequest) returns (CreateRecordResponse);
+  // Changes the fields in update_mask.
+  rpc UpdateRecord(UpdateRecordRequest) returns (UpdateRecordResponse);
+  // Soft-deletes the record.
+  rpc DeleteRecord(DeleteRecordRequest) returns (DeleteRecordResponse);
+  rpc UndeleteRecord(UndeleteRecordRequest) returns (UndeleteRecordResponse);
+}
+
+message CreateRecordRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The collection as the REST API names it, e.g. scheduleBlocks, offerings.
+  string collection = 2;
+  // Chosen by novam-data, so a retried request adds the record once.
+  string id = 3;
+  // The record's fields as the REST API names them, ready to store.
+  google.protobuf.Struct fields = 4;
+}
+
+message CreateRecordResponse {}
+
+message UpdateRecordRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string collection = 2;
+  string id = 3;
+  // The new values of the fields in update_mask.
+  google.protobuf.Struct fields = 4;
+  repeated string update_mask = 5;
+}
+
+message UpdateRecordResponse {}
+
+message DeleteRecordRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string collection = 2;
+  string id = 3;
+}
+
+message DeleteRecordResponse {}
+
+message UndeleteRecordRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string collection = 2;
+  string id = 3;
+}
+
+message UndeleteRecordResponse {}
