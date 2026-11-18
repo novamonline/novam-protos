@@ -19,19 +19,25 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	InsightsService_GetFinanceSummary_FullMethodName = "/novam.insights.v1.InsightsService/GetFinanceSummary"
-	InsightsService_Measure_FullMethodName           = "/novam.insights.v1.InsightsService/Measure"
-	InsightsService_GetGoalStandings_FullMethodName  = "/novam.insights.v1.InsightsService/GetGoalStandings"
-	InsightsService_GetSalesSummary_FullMethodName   = "/novam.insights.v1.InsightsService/GetSalesSummary"
-	InsightsService_GetTipsSummary_FullMethodName    = "/novam.insights.v1.InsightsService/GetTipsSummary"
-	InsightsService_GetChart_FullMethodName          = "/novam.insights.v1.InsightsService/GetChart"
-	InsightsService_ComputeReport_FullMethodName     = "/novam.insights.v1.InsightsService/ComputeReport"
-	InsightsService_RenderReport_FullMethodName      = "/novam.insights.v1.InsightsService/RenderReport"
-	InsightsService_ListOpenTimes_FullMethodName     = "/novam.insights.v1.InsightsService/ListOpenTimes"
-	InsightsService_Get1099Season_FullMethodName     = "/novam.insights.v1.InsightsService/Get1099Season"
-	InsightsService_BuildTaxPackage_FullMethodName   = "/novam.insights.v1.InsightsService/BuildTaxPackage"
-	InsightsService_GetLedger_FullMethodName         = "/novam.insights.v1.InsightsService/GetLedger"
-	InsightsService_GetBankFeed_FullMethodName       = "/novam.insights.v1.InsightsService/GetBankFeed"
+	InsightsService_GetFinanceSummary_FullMethodName    = "/novam.insights.v1.InsightsService/GetFinanceSummary"
+	InsightsService_Measure_FullMethodName              = "/novam.insights.v1.InsightsService/Measure"
+	InsightsService_GetGoalStandings_FullMethodName     = "/novam.insights.v1.InsightsService/GetGoalStandings"
+	InsightsService_GetSalesSummary_FullMethodName      = "/novam.insights.v1.InsightsService/GetSalesSummary"
+	InsightsService_GetTipsSummary_FullMethodName       = "/novam.insights.v1.InsightsService/GetTipsSummary"
+	InsightsService_GetChart_FullMethodName             = "/novam.insights.v1.InsightsService/GetChart"
+	InsightsService_ComputeReport_FullMethodName        = "/novam.insights.v1.InsightsService/ComputeReport"
+	InsightsService_RenderReport_FullMethodName         = "/novam.insights.v1.InsightsService/RenderReport"
+	InsightsService_ListOpenTimes_FullMethodName        = "/novam.insights.v1.InsightsService/ListOpenTimes"
+	InsightsService_Get1099Season_FullMethodName        = "/novam.insights.v1.InsightsService/Get1099Season"
+	InsightsService_BuildTaxPackage_FullMethodName      = "/novam.insights.v1.InsightsService/BuildTaxPackage"
+	InsightsService_GetLedger_FullMethodName            = "/novam.insights.v1.InsightsService/GetLedger"
+	InsightsService_GetBankFeed_FullMethodName          = "/novam.insights.v1.InsightsService/GetBankFeed"
+	InsightsService_GetMoneyOverview_FullMethodName     = "/novam.insights.v1.InsightsService/GetMoneyOverview"
+	InsightsService_GetQuarterlyTaxes_FullMethodName    = "/novam.insights.v1.InsightsService/GetQuarterlyTaxes"
+	InsightsService_GetHelper1099S_FullMethodName       = "/novam.insights.v1.InsightsService/GetHelper1099s"
+	InsightsService_GetPaycheck_FullMethodName          = "/novam.insights.v1.InsightsService/GetPaycheck"
+	InsightsService_GetSpendingSummary_FullMethodName   = "/novam.insights.v1.InsightsService/GetSpendingSummary"
+	InsightsService_GetSpendingQuestions_FullMethodName = "/novam.insights.v1.InsightsService/GetSpendingQuestions"
 )
 
 // InsightsServiceClient is the client API for InsightsService service.
@@ -72,6 +78,19 @@ type InsightsServiceClient interface {
 	GetLedger(ctx context.Context, in *GetLedgerRequest, opts ...grpc.CallOption) (*GetLedgerResponse, error)
 	// Banking's feed for one account and year: each line with what Novam filed it as, and how far the year is sorted.
 	GetBankFeed(ctx context.Context, in *GetBankFeedRequest, opts ...grpc.CallOption) (*GetBankFeedResponse, error)
+	// Money's overview: this week's and the last four weeks' money in, what clients owe with the three longest overdue,
+	// and with include_taxes the tax set-aside and next quarterly payment. novam-data adds the payouts and what Novam does.
+	GetMoneyOverview(ctx context.Context, in *GetMoneyOverviewRequest, opts ...grpc.CallOption) (*GetMoneyOverviewResponse, error)
+	// A tax year's four quarterly estimated-tax payments and the next one still to make.
+	GetQuarterlyTaxes(ctx context.Context, in *GetQuarterlyTaxesRequest, opts ...grpc.CallOption) (*GetQuarterlyTaxesResponse, error)
+	// A tax year's 1099-NEC list: every helper, what they were paid, the threshold, their W-9 and the form.
+	GetHelper1099S(ctx context.Context, in *GetHelper1099SRequest, opts ...grpc.CallOption) (*GetHelper1099SResponse, error)
+	// The Paycheck planner: the weekly amount to pay yourself, why, its history and the owner's plan. It moves nothing.
+	GetPaycheck(ctx context.Context, in *GetPaycheckRequest, opts ...grpc.CallOption) (*GetPaycheckResponse, error)
+	// A month's business spending by category, and how much Novam sorted versus asked about.
+	GetSpendingSummary(ctx context.Context, in *GetSpendingSummaryRequest, opts ...grpc.CallOption) (*GetSpendingSummaryResponse, error)
+	// The bank lines of the last year Novam isn't sure about, newest first (at most 100).
+	GetSpendingQuestions(ctx context.Context, in *GetSpendingQuestionsRequest, opts ...grpc.CallOption) (*GetSpendingQuestionsResponse, error)
 }
 
 type insightsServiceClient struct {
@@ -212,6 +231,66 @@ func (c *insightsServiceClient) GetBankFeed(ctx context.Context, in *GetBankFeed
 	return out, nil
 }
 
+func (c *insightsServiceClient) GetMoneyOverview(ctx context.Context, in *GetMoneyOverviewRequest, opts ...grpc.CallOption) (*GetMoneyOverviewResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMoneyOverviewResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetMoneyOverview_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insightsServiceClient) GetQuarterlyTaxes(ctx context.Context, in *GetQuarterlyTaxesRequest, opts ...grpc.CallOption) (*GetQuarterlyTaxesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetQuarterlyTaxesResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetQuarterlyTaxes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insightsServiceClient) GetHelper1099S(ctx context.Context, in *GetHelper1099SRequest, opts ...grpc.CallOption) (*GetHelper1099SResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetHelper1099SResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetHelper1099S_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insightsServiceClient) GetPaycheck(ctx context.Context, in *GetPaycheckRequest, opts ...grpc.CallOption) (*GetPaycheckResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetPaycheckResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetPaycheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insightsServiceClient) GetSpendingSummary(ctx context.Context, in *GetSpendingSummaryRequest, opts ...grpc.CallOption) (*GetSpendingSummaryResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSpendingSummaryResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetSpendingSummary_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insightsServiceClient) GetSpendingQuestions(ctx context.Context, in *GetSpendingQuestionsRequest, opts ...grpc.CallOption) (*GetSpendingQuestionsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSpendingQuestionsResponse)
+	err := c.cc.Invoke(ctx, InsightsService_GetSpendingQuestions_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InsightsServiceServer is the server API for InsightsService service.
 // All implementations must embed UnimplementedInsightsServiceServer
 // for forward compatibility.
@@ -250,6 +329,19 @@ type InsightsServiceServer interface {
 	GetLedger(context.Context, *GetLedgerRequest) (*GetLedgerResponse, error)
 	// Banking's feed for one account and year: each line with what Novam filed it as, and how far the year is sorted.
 	GetBankFeed(context.Context, *GetBankFeedRequest) (*GetBankFeedResponse, error)
+	// Money's overview: this week's and the last four weeks' money in, what clients owe with the three longest overdue,
+	// and with include_taxes the tax set-aside and next quarterly payment. novam-data adds the payouts and what Novam does.
+	GetMoneyOverview(context.Context, *GetMoneyOverviewRequest) (*GetMoneyOverviewResponse, error)
+	// A tax year's four quarterly estimated-tax payments and the next one still to make.
+	GetQuarterlyTaxes(context.Context, *GetQuarterlyTaxesRequest) (*GetQuarterlyTaxesResponse, error)
+	// A tax year's 1099-NEC list: every helper, what they were paid, the threshold, their W-9 and the form.
+	GetHelper1099S(context.Context, *GetHelper1099SRequest) (*GetHelper1099SResponse, error)
+	// The Paycheck planner: the weekly amount to pay yourself, why, its history and the owner's plan. It moves nothing.
+	GetPaycheck(context.Context, *GetPaycheckRequest) (*GetPaycheckResponse, error)
+	// A month's business spending by category, and how much Novam sorted versus asked about.
+	GetSpendingSummary(context.Context, *GetSpendingSummaryRequest) (*GetSpendingSummaryResponse, error)
+	// The bank lines of the last year Novam isn't sure about, newest first (at most 100).
+	GetSpendingQuestions(context.Context, *GetSpendingQuestionsRequest) (*GetSpendingQuestionsResponse, error)
 	mustEmbedUnimplementedInsightsServiceServer()
 }
 
@@ -298,6 +390,24 @@ func (UnimplementedInsightsServiceServer) GetLedger(context.Context, *GetLedgerR
 }
 func (UnimplementedInsightsServiceServer) GetBankFeed(context.Context, *GetBankFeedRequest) (*GetBankFeedResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetBankFeed not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetMoneyOverview(context.Context, *GetMoneyOverviewRequest) (*GetMoneyOverviewResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetMoneyOverview not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetQuarterlyTaxes(context.Context, *GetQuarterlyTaxesRequest) (*GetQuarterlyTaxesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetQuarterlyTaxes not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetHelper1099S(context.Context, *GetHelper1099SRequest) (*GetHelper1099SResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetHelper1099S not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetPaycheck(context.Context, *GetPaycheckRequest) (*GetPaycheckResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetPaycheck not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetSpendingSummary(context.Context, *GetSpendingSummaryRequest) (*GetSpendingSummaryResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSpendingSummary not implemented")
+}
+func (UnimplementedInsightsServiceServer) GetSpendingQuestions(context.Context, *GetSpendingQuestionsRequest) (*GetSpendingQuestionsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSpendingQuestions not implemented")
 }
 func (UnimplementedInsightsServiceServer) mustEmbedUnimplementedInsightsServiceServer() {}
 func (UnimplementedInsightsServiceServer) testEmbeddedByValue()                         {}
@@ -554,6 +664,114 @@ func _InsightsService_GetBankFeed_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InsightsService_GetMoneyOverview_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMoneyOverviewRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetMoneyOverview(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetMoneyOverview_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetMoneyOverview(ctx, req.(*GetMoneyOverviewRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsightsService_GetQuarterlyTaxes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetQuarterlyTaxesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetQuarterlyTaxes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetQuarterlyTaxes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetQuarterlyTaxes(ctx, req.(*GetQuarterlyTaxesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsightsService_GetHelper1099S_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetHelper1099SRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetHelper1099S(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetHelper1099S_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetHelper1099S(ctx, req.(*GetHelper1099SRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsightsService_GetPaycheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetPaycheckRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetPaycheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetPaycheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetPaycheck(ctx, req.(*GetPaycheckRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsightsService_GetSpendingSummary_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSpendingSummaryRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetSpendingSummary(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetSpendingSummary_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetSpendingSummary(ctx, req.(*GetSpendingSummaryRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsightsService_GetSpendingQuestions_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSpendingQuestionsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).GetSpendingQuestions(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_GetSpendingQuestions_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).GetSpendingQuestions(ctx, req.(*GetSpendingQuestionsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InsightsService_ServiceDesc is the grpc.ServiceDesc for InsightsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -612,6 +830,30 @@ var InsightsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetBankFeed",
 			Handler:    _InsightsService_GetBankFeed_Handler,
+		},
+		{
+			MethodName: "GetMoneyOverview",
+			Handler:    _InsightsService_GetMoneyOverview_Handler,
+		},
+		{
+			MethodName: "GetQuarterlyTaxes",
+			Handler:    _InsightsService_GetQuarterlyTaxes_Handler,
+		},
+		{
+			MethodName: "GetHelper1099s",
+			Handler:    _InsightsService_GetHelper1099S_Handler,
+		},
+		{
+			MethodName: "GetPaycheck",
+			Handler:    _InsightsService_GetPaycheck_Handler,
+		},
+		{
+			MethodName: "GetSpendingSummary",
+			Handler:    _InsightsService_GetSpendingSummary_Handler,
+		},
+		{
+			MethodName: "GetSpendingQuestions",
+			Handler:    _InsightsService_GetSpendingQuestions_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

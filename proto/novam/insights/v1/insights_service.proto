@@ -42,6 +42,19 @@ service InsightsService {
   rpc GetLedger(GetLedgerRequest) returns (GetLedgerResponse);
   // Banking's feed for one account and year: each line with what Novam filed it as, and how far the year is sorted.
   rpc GetBankFeed(GetBankFeedRequest) returns (GetBankFeedResponse);
+  // Money's overview: this week's and the last four weeks' money in, what clients owe with the three longest overdue,
+  // and with include_taxes the tax set-aside and next quarterly payment. novam-data adds the payouts and what Novam does.
+  rpc GetMoneyOverview(GetMoneyOverviewRequest) returns (GetMoneyOverviewResponse);
+  // A tax year's four quarterly estimated-tax payments and the next one still to make.
+  rpc GetQuarterlyTaxes(GetQuarterlyTaxesRequest) returns (GetQuarterlyTaxesResponse);
+  // A tax year's 1099-NEC list: every helper, what they were paid, the threshold, their W-9 and the form.
+  rpc GetHelper1099s(GetHelper1099sRequest) returns (GetHelper1099sResponse);
+  // The Paycheck planner: the weekly amount to pay yourself, why, its history and the owner's plan. It moves nothing.
+  rpc GetPaycheck(GetPaycheckRequest) returns (GetPaycheckResponse);
+  // A month's business spending by category, and how much Novam sorted versus asked about.
+  rpc GetSpendingSummary(GetSpendingSummaryRequest) returns (GetSpendingSummaryResponse);
+  // The bank lines of the last year Novam isn't sure about, newest first (at most 100).
+  rpc GetSpendingQuestions(GetSpendingQuestionsRequest) returns (GetSpendingQuestionsResponse);
 }
 
 message GetFinanceSummaryRequest {
@@ -410,4 +423,66 @@ message GetBankFeedRequest {
 message GetBankFeedResponse {
   // As novam-data's bankFeed: lines and sorted_through.
   google.protobuf.Struct feed = 1;
+}
+
+message GetMoneyOverviewRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The caller has tax:read.
+  bool include_taxes = 2;
+}
+
+message GetMoneyOverviewResponse {
+  // As novam-data's moneyOverview, without payouts and novam_does.
+  google.protobuf.Struct overview = 1;
+}
+
+message GetQuarterlyTaxesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // 0 for the year the next payment is due in (else this year).
+  int32 tax_year = 2;
+}
+
+message GetQuarterlyTaxesResponse {
+  // As novam-data's quarterlyFor: year, set_aside_percent, quarters, next.
+  google.protobuf.Struct quarterly = 1;
+}
+
+message GetHelper1099sRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // 0 for this year.
+  int32 tax_year = 2;
+}
+
+message GetHelper1099sResponse {
+  // As novam-data's helper1099s: year, threshold, due_date, third_party_methods, helpers.
+  google.protobuf.Struct list = 1;
+}
+
+message GetPaycheckRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message GetPaycheckResponse {
+  // As novam-data's paycheck.
+  google.protobuf.Struct paycheck = 1;
+}
+
+message GetSpendingSummaryRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // YYYY-MM; this month where the business is when empty.
+  string month = 2;
+}
+
+message GetSpendingSummaryResponse {
+  // As novam-data's spendingSummary.
+  google.protobuf.Struct summary = 1;
+}
+
+message GetSpendingQuestionsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message GetSpendingQuestionsResponse {
+  // As novam-data's spendingQuestions: questions, total_size.
+  google.protobuf.Struct questions = 1;
 }

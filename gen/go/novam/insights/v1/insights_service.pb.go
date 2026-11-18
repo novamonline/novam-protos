@@ -3074,6 +3074,576 @@ func (x *GetBankFeedResponse) GetFeed() *structpb.Struct {
 	return nil
 }
 
+type GetMoneyOverviewRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// The caller has tax:read.
+	IncludeTaxes  bool `protobuf:"varint,2,opt,name=include_taxes,json=includeTaxes,proto3" json:"include_taxes,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetMoneyOverviewRequest) Reset() {
+	*x = GetMoneyOverviewRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[44]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetMoneyOverviewRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetMoneyOverviewRequest) ProtoMessage() {}
+
+func (x *GetMoneyOverviewRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[44]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetMoneyOverviewRequest.ProtoReflect.Descriptor instead.
+func (*GetMoneyOverviewRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{44}
+}
+
+func (x *GetMoneyOverviewRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetMoneyOverviewRequest) GetIncludeTaxes() bool {
+	if x != nil {
+		return x.IncludeTaxes
+	}
+	return false
+}
+
+type GetMoneyOverviewResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's moneyOverview, without payouts and novam_does.
+	Overview      *structpb.Struct `protobuf:"bytes,1,opt,name=overview,proto3" json:"overview,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetMoneyOverviewResponse) Reset() {
+	*x = GetMoneyOverviewResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[45]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetMoneyOverviewResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetMoneyOverviewResponse) ProtoMessage() {}
+
+func (x *GetMoneyOverviewResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[45]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetMoneyOverviewResponse.ProtoReflect.Descriptor instead.
+func (*GetMoneyOverviewResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{45}
+}
+
+func (x *GetMoneyOverviewResponse) GetOverview() *structpb.Struct {
+	if x != nil {
+		return x.Overview
+	}
+	return nil
+}
+
+type GetQuarterlyTaxesRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// 0 for the year the next payment is due in (else this year).
+	TaxYear       int32 `protobuf:"varint,2,opt,name=tax_year,json=taxYear,proto3" json:"tax_year,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetQuarterlyTaxesRequest) Reset() {
+	*x = GetQuarterlyTaxesRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[46]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetQuarterlyTaxesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetQuarterlyTaxesRequest) ProtoMessage() {}
+
+func (x *GetQuarterlyTaxesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[46]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetQuarterlyTaxesRequest.ProtoReflect.Descriptor instead.
+func (*GetQuarterlyTaxesRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *GetQuarterlyTaxesRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetQuarterlyTaxesRequest) GetTaxYear() int32 {
+	if x != nil {
+		return x.TaxYear
+	}
+	return 0
+}
+
+type GetQuarterlyTaxesResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's quarterlyFor: year, set_aside_percent, quarters, next.
+	Quarterly     *structpb.Struct `protobuf:"bytes,1,opt,name=quarterly,proto3" json:"quarterly,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetQuarterlyTaxesResponse) Reset() {
+	*x = GetQuarterlyTaxesResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[47]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetQuarterlyTaxesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetQuarterlyTaxesResponse) ProtoMessage() {}
+
+func (x *GetQuarterlyTaxesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[47]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetQuarterlyTaxesResponse.ProtoReflect.Descriptor instead.
+func (*GetQuarterlyTaxesResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *GetQuarterlyTaxesResponse) GetQuarterly() *structpb.Struct {
+	if x != nil {
+		return x.Quarterly
+	}
+	return nil
+}
+
+type GetHelper1099SRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// 0 for this year.
+	TaxYear       int32 `protobuf:"varint,2,opt,name=tax_year,json=taxYear,proto3" json:"tax_year,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetHelper1099SRequest) Reset() {
+	*x = GetHelper1099SRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[48]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetHelper1099SRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetHelper1099SRequest) ProtoMessage() {}
+
+func (x *GetHelper1099SRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[48]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetHelper1099SRequest.ProtoReflect.Descriptor instead.
+func (*GetHelper1099SRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *GetHelper1099SRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetHelper1099SRequest) GetTaxYear() int32 {
+	if x != nil {
+		return x.TaxYear
+	}
+	return 0
+}
+
+type GetHelper1099SResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's helper1099s: year, threshold, due_date, third_party_methods, helpers.
+	List          *structpb.Struct `protobuf:"bytes,1,opt,name=list,proto3" json:"list,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetHelper1099SResponse) Reset() {
+	*x = GetHelper1099SResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[49]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetHelper1099SResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetHelper1099SResponse) ProtoMessage() {}
+
+func (x *GetHelper1099SResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[49]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetHelper1099SResponse.ProtoReflect.Descriptor instead.
+func (*GetHelper1099SResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *GetHelper1099SResponse) GetList() *structpb.Struct {
+	if x != nil {
+		return x.List
+	}
+	return nil
+}
+
+type GetPaycheckRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPaycheckRequest) Reset() {
+	*x = GetPaycheckRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[50]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPaycheckRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPaycheckRequest) ProtoMessage() {}
+
+func (x *GetPaycheckRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[50]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPaycheckRequest.ProtoReflect.Descriptor instead.
+func (*GetPaycheckRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *GetPaycheckRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+type GetPaycheckResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's paycheck.
+	Paycheck      *structpb.Struct `protobuf:"bytes,1,opt,name=paycheck,proto3" json:"paycheck,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetPaycheckResponse) Reset() {
+	*x = GetPaycheckResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[51]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetPaycheckResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetPaycheckResponse) ProtoMessage() {}
+
+func (x *GetPaycheckResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[51]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetPaycheckResponse.ProtoReflect.Descriptor instead.
+func (*GetPaycheckResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{51}
+}
+
+func (x *GetPaycheckResponse) GetPaycheck() *structpb.Struct {
+	if x != nil {
+		return x.Paycheck
+	}
+	return nil
+}
+
+type GetSpendingSummaryRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// YYYY-MM; this month where the business is when empty.
+	Month         string `protobuf:"bytes,2,opt,name=month,proto3" json:"month,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSpendingSummaryRequest) Reset() {
+	*x = GetSpendingSummaryRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[52]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSpendingSummaryRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSpendingSummaryRequest) ProtoMessage() {}
+
+func (x *GetSpendingSummaryRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[52]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSpendingSummaryRequest.ProtoReflect.Descriptor instead.
+func (*GetSpendingSummaryRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *GetSpendingSummaryRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetSpendingSummaryRequest) GetMonth() string {
+	if x != nil {
+		return x.Month
+	}
+	return ""
+}
+
+type GetSpendingSummaryResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's spendingSummary.
+	Summary       *structpb.Struct `protobuf:"bytes,1,opt,name=summary,proto3" json:"summary,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSpendingSummaryResponse) Reset() {
+	*x = GetSpendingSummaryResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[53]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSpendingSummaryResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSpendingSummaryResponse) ProtoMessage() {}
+
+func (x *GetSpendingSummaryResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[53]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSpendingSummaryResponse.ProtoReflect.Descriptor instead.
+func (*GetSpendingSummaryResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{53}
+}
+
+func (x *GetSpendingSummaryResponse) GetSummary() *structpb.Struct {
+	if x != nil {
+		return x.Summary
+	}
+	return nil
+}
+
+type GetSpendingQuestionsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSpendingQuestionsRequest) Reset() {
+	*x = GetSpendingQuestionsRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[54]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSpendingQuestionsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSpendingQuestionsRequest) ProtoMessage() {}
+
+func (x *GetSpendingQuestionsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[54]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSpendingQuestionsRequest.ProtoReflect.Descriptor instead.
+func (*GetSpendingQuestionsRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{54}
+}
+
+func (x *GetSpendingQuestionsRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+type GetSpendingQuestionsResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's spendingQuestions: questions, total_size.
+	Questions     *structpb.Struct `protobuf:"bytes,1,opt,name=questions,proto3" json:"questions,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSpendingQuestionsResponse) Reset() {
+	*x = GetSpendingQuestionsResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[55]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSpendingQuestionsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSpendingQuestionsResponse) ProtoMessage() {}
+
+func (x *GetSpendingQuestionsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[55]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSpendingQuestionsResponse.ProtoReflect.Descriptor instead.
+func (*GetSpendingQuestionsResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{55}
+}
+
+func (x *GetSpendingQuestionsResponse) GetQuestions() *structpb.Struct {
+	if x != nil {
+		return x.Questions
+	}
+	return nil
+}
+
 var File_novam_insights_v1_insights_service_proto protoreflect.FileDescriptor
 
 const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
@@ -3323,14 +3893,41 @@ const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
 	"account_id\x18\x02 \x01(\tR\taccountId\x12\x19\n" +
 	"\btax_year\x18\x03 \x01(\x05R\ataxYear\"B\n" +
 	"\x13GetBankFeedResponse\x12+\n" +
-	"\x04feed\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x04feed*\xa7\x01\n" +
+	"\x04feed\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x04feed\"|\n" +
+	"\x17GetMoneyOverviewRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12#\n" +
+	"\rinclude_taxes\x18\x02 \x01(\bR\fincludeTaxes\"O\n" +
+	"\x18GetMoneyOverviewResponse\x123\n" +
+	"\boverview\x18\x01 \x01(\v2\x17.google.protobuf.StructR\boverview\"s\n" +
+	"\x18GetQuarterlyTaxesRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x19\n" +
+	"\btax_year\x18\x02 \x01(\x05R\ataxYear\"R\n" +
+	"\x19GetQuarterlyTaxesResponse\x125\n" +
+	"\tquarterly\x18\x01 \x01(\v2\x17.google.protobuf.StructR\tquarterly\"p\n" +
+	"\x15GetHelper1099sRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x19\n" +
+	"\btax_year\x18\x02 \x01(\x05R\ataxYear\"E\n" +
+	"\x16GetHelper1099sResponse\x12+\n" +
+	"\x04list\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x04list\"R\n" +
+	"\x12GetPaycheckRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"J\n" +
+	"\x13GetPaycheckResponse\x123\n" +
+	"\bpaycheck\x18\x01 \x01(\v2\x17.google.protobuf.StructR\bpaycheck\"o\n" +
+	"\x19GetSpendingSummaryRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x14\n" +
+	"\x05month\x18\x02 \x01(\tR\x05month\"O\n" +
+	"\x1aGetSpendingSummaryResponse\x121\n" +
+	"\asummary\x18\x01 \x01(\v2\x17.google.protobuf.StructR\asummary\"[\n" +
+	"\x1bGetSpendingQuestionsRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"U\n" +
+	"\x1cGetSpendingQuestionsResponse\x125\n" +
+	"\tquestions\x18\x01 \x01(\v2\x17.google.protobuf.StructR\tquestions*\xa7\x01\n" +
 	"\tChartKind\x12\x1a\n" +
 	"\x16CHART_KIND_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aCHART_KIND_API_PERFORMANCE\x10\x01\x12\x1c\n" +
 	"\x18CHART_KIND_RECORD_COUNTS\x10\x02\x12 \n" +
 	"\x1cCHART_KIND_REVENUE_BY_METHOD\x10\x03\x12\x1e\n" +
-	"\x1aCHART_KIND_RECENT_INVOICES\x10\x042\x93\n" +
-	"\n" +
+	"\x1aCHART_KIND_RECENT_INVOICES\x10\x042\xa1\x0f\n" +
 	"\x0fInsightsService\x12n\n" +
 	"\x11GetFinanceSummary\x12+.novam.insights.v1.GetFinanceSummaryRequest\x1a,.novam.insights.v1.GetFinanceSummaryResponse\x12P\n" +
 	"\aMeasure\x12!.novam.insights.v1.MeasureRequest\x1a\".novam.insights.v1.MeasureResponse\x12k\n" +
@@ -3344,7 +3941,13 @@ const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
 	"\rGet1099Season\x12'.novam.insights.v1.Get1099SeasonRequest\x1a(.novam.insights.v1.Get1099SeasonResponse\x12h\n" +
 	"\x0fBuildTaxPackage\x12).novam.insights.v1.BuildTaxPackageRequest\x1a*.novam.insights.v1.BuildTaxPackageResponse\x12V\n" +
 	"\tGetLedger\x12#.novam.insights.v1.GetLedgerRequest\x1a$.novam.insights.v1.GetLedgerResponse\x12\\\n" +
-	"\vGetBankFeed\x12%.novam.insights.v1.GetBankFeedRequest\x1a&.novam.insights.v1.GetBankFeedResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/insights/v1;insightsv1b\x06proto3"
+	"\vGetBankFeed\x12%.novam.insights.v1.GetBankFeedRequest\x1a&.novam.insights.v1.GetBankFeedResponse\x12k\n" +
+	"\x10GetMoneyOverview\x12*.novam.insights.v1.GetMoneyOverviewRequest\x1a+.novam.insights.v1.GetMoneyOverviewResponse\x12n\n" +
+	"\x11GetQuarterlyTaxes\x12+.novam.insights.v1.GetQuarterlyTaxesRequest\x1a,.novam.insights.v1.GetQuarterlyTaxesResponse\x12e\n" +
+	"\x0eGetHelper1099s\x12(.novam.insights.v1.GetHelper1099sRequest\x1a).novam.insights.v1.GetHelper1099sResponse\x12\\\n" +
+	"\vGetPaycheck\x12%.novam.insights.v1.GetPaycheckRequest\x1a&.novam.insights.v1.GetPaycheckResponse\x12q\n" +
+	"\x12GetSpendingSummary\x12,.novam.insights.v1.GetSpendingSummaryRequest\x1a-.novam.insights.v1.GetSpendingSummaryResponse\x12w\n" +
+	"\x14GetSpendingQuestions\x12..novam.insights.v1.GetSpendingQuestionsRequest\x1a/.novam.insights.v1.GetSpendingQuestionsResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/insights/v1;insightsv1b\x06proto3"
 
 var (
 	file_novam_insights_v1_insights_service_proto_rawDescOnce sync.Once
@@ -3359,142 +3962,178 @@ func file_novam_insights_v1_insights_service_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_insights_v1_insights_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_insights_v1_insights_service_proto_msgTypes = make([]protoimpl.MessageInfo, 45)
+var file_novam_insights_v1_insights_service_proto_msgTypes = make([]protoimpl.MessageInfo, 57)
 var file_novam_insights_v1_insights_service_proto_goTypes = []any{
-	(ChartKind)(0),                    // 0: novam.insights.v1.ChartKind
-	(*GetFinanceSummaryRequest)(nil),  // 1: novam.insights.v1.GetFinanceSummaryRequest
-	(*PaidPeriod)(nil),                // 2: novam.insights.v1.PaidPeriod
-	(*Outstanding)(nil),               // 3: novam.insights.v1.Outstanding
-	(*CategoryAmount)(nil),            // 4: novam.insights.v1.CategoryAmount
-	(*FinanceYear)(nil),               // 5: novam.insights.v1.FinanceYear
-	(*GiftCardTotals)(nil),            // 6: novam.insights.v1.GiftCardTotals
-	(*GetFinanceSummaryResponse)(nil), // 7: novam.insights.v1.GetFinanceSummaryResponse
-	(*MeasureWindow)(nil),             // 8: novam.insights.v1.MeasureWindow
-	(*MeasureRequest)(nil),            // 9: novam.insights.v1.MeasureRequest
-	(*MeasureValue)(nil),              // 10: novam.insights.v1.MeasureValue
-	(*MeasureResponse)(nil),           // 11: novam.insights.v1.MeasureResponse
-	(*GoalInput)(nil),                 // 12: novam.insights.v1.GoalInput
-	(*GetGoalStandingsRequest)(nil),   // 13: novam.insights.v1.GetGoalStandingsRequest
-	(*GoalStanding)(nil),              // 14: novam.insights.v1.GoalStanding
-	(*GetGoalStandingsResponse)(nil),  // 15: novam.insights.v1.GetGoalStandingsResponse
-	(*GetSalesSummaryRequest)(nil),    // 16: novam.insights.v1.GetSalesSummaryRequest
-	(*MethodAmount)(nil),              // 17: novam.insights.v1.MethodAmount
-	(*SalesGiftCards)(nil),            // 18: novam.insights.v1.SalesGiftCards
-	(*GetSalesSummaryResponse)(nil),   // 19: novam.insights.v1.GetSalesSummaryResponse
-	(*GetTipsSummaryRequest)(nil),     // 20: novam.insights.v1.GetTipsSummaryRequest
-	(*MemberTips)(nil),                // 21: novam.insights.v1.MemberTips
-	(*ServiceTips)(nil),               // 22: novam.insights.v1.ServiceTips
-	(*GetTipsSummaryResponse)(nil),    // 23: novam.insights.v1.GetTipsSummaryResponse
-	(*GetChartRequest)(nil),           // 24: novam.insights.v1.GetChartRequest
-	(*ChartPoint)(nil),                // 25: novam.insights.v1.ChartPoint
-	(*GetChartResponse)(nil),          // 26: novam.insights.v1.GetChartResponse
-	(*ReportMetric)(nil),              // 27: novam.insights.v1.ReportMetric
-	(*ComputeReportRequest)(nil),      // 28: novam.insights.v1.ComputeReportRequest
-	(*ComputeReportResponse)(nil),     // 29: novam.insights.v1.ComputeReportResponse
-	(*RenderReportRequest)(nil),       // 30: novam.insights.v1.RenderReportRequest
-	(*RenderReportResponse)(nil),      // 31: novam.insights.v1.RenderReportResponse
-	(*TimeRange)(nil),                 // 32: novam.insights.v1.TimeRange
-	(*ListOpenTimesRequest)(nil),      // 33: novam.insights.v1.ListOpenTimesRequest
-	(*OpenTime)(nil),                  // 34: novam.insights.v1.OpenTime
-	(*ListOpenTimesResponse)(nil),     // 35: novam.insights.v1.ListOpenTimesResponse
-	(*Get1099SeasonRequest)(nil),      // 36: novam.insights.v1.Get1099SeasonRequest
-	(*Form1099Summary)(nil),           // 37: novam.insights.v1.Form1099Summary
-	(*Get1099SeasonResponse)(nil),     // 38: novam.insights.v1.Get1099SeasonResponse
-	(*BuildTaxPackageRequest)(nil),    // 39: novam.insights.v1.BuildTaxPackageRequest
-	(*BuildTaxPackageResponse)(nil),   // 40: novam.insights.v1.BuildTaxPackageResponse
-	(*GetLedgerRequest)(nil),          // 41: novam.insights.v1.GetLedgerRequest
-	(*GetLedgerResponse)(nil),         // 42: novam.insights.v1.GetLedgerResponse
-	(*GetBankFeedRequest)(nil),        // 43: novam.insights.v1.GetBankFeedRequest
-	(*GetBankFeedResponse)(nil),       // 44: novam.insights.v1.GetBankFeedResponse
-	nil,                               // 45: novam.insights.v1.ChartPoint.ValuesEntry
-	(*v1.RequestMetadata)(nil),        // 46: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),     // 47: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),           // 48: google.protobuf.Struct
+	(ChartKind)(0),                       // 0: novam.insights.v1.ChartKind
+	(*GetFinanceSummaryRequest)(nil),     // 1: novam.insights.v1.GetFinanceSummaryRequest
+	(*PaidPeriod)(nil),                   // 2: novam.insights.v1.PaidPeriod
+	(*Outstanding)(nil),                  // 3: novam.insights.v1.Outstanding
+	(*CategoryAmount)(nil),               // 4: novam.insights.v1.CategoryAmount
+	(*FinanceYear)(nil),                  // 5: novam.insights.v1.FinanceYear
+	(*GiftCardTotals)(nil),               // 6: novam.insights.v1.GiftCardTotals
+	(*GetFinanceSummaryResponse)(nil),    // 7: novam.insights.v1.GetFinanceSummaryResponse
+	(*MeasureWindow)(nil),                // 8: novam.insights.v1.MeasureWindow
+	(*MeasureRequest)(nil),               // 9: novam.insights.v1.MeasureRequest
+	(*MeasureValue)(nil),                 // 10: novam.insights.v1.MeasureValue
+	(*MeasureResponse)(nil),              // 11: novam.insights.v1.MeasureResponse
+	(*GoalInput)(nil),                    // 12: novam.insights.v1.GoalInput
+	(*GetGoalStandingsRequest)(nil),      // 13: novam.insights.v1.GetGoalStandingsRequest
+	(*GoalStanding)(nil),                 // 14: novam.insights.v1.GoalStanding
+	(*GetGoalStandingsResponse)(nil),     // 15: novam.insights.v1.GetGoalStandingsResponse
+	(*GetSalesSummaryRequest)(nil),       // 16: novam.insights.v1.GetSalesSummaryRequest
+	(*MethodAmount)(nil),                 // 17: novam.insights.v1.MethodAmount
+	(*SalesGiftCards)(nil),               // 18: novam.insights.v1.SalesGiftCards
+	(*GetSalesSummaryResponse)(nil),      // 19: novam.insights.v1.GetSalesSummaryResponse
+	(*GetTipsSummaryRequest)(nil),        // 20: novam.insights.v1.GetTipsSummaryRequest
+	(*MemberTips)(nil),                   // 21: novam.insights.v1.MemberTips
+	(*ServiceTips)(nil),                  // 22: novam.insights.v1.ServiceTips
+	(*GetTipsSummaryResponse)(nil),       // 23: novam.insights.v1.GetTipsSummaryResponse
+	(*GetChartRequest)(nil),              // 24: novam.insights.v1.GetChartRequest
+	(*ChartPoint)(nil),                   // 25: novam.insights.v1.ChartPoint
+	(*GetChartResponse)(nil),             // 26: novam.insights.v1.GetChartResponse
+	(*ReportMetric)(nil),                 // 27: novam.insights.v1.ReportMetric
+	(*ComputeReportRequest)(nil),         // 28: novam.insights.v1.ComputeReportRequest
+	(*ComputeReportResponse)(nil),        // 29: novam.insights.v1.ComputeReportResponse
+	(*RenderReportRequest)(nil),          // 30: novam.insights.v1.RenderReportRequest
+	(*RenderReportResponse)(nil),         // 31: novam.insights.v1.RenderReportResponse
+	(*TimeRange)(nil),                    // 32: novam.insights.v1.TimeRange
+	(*ListOpenTimesRequest)(nil),         // 33: novam.insights.v1.ListOpenTimesRequest
+	(*OpenTime)(nil),                     // 34: novam.insights.v1.OpenTime
+	(*ListOpenTimesResponse)(nil),        // 35: novam.insights.v1.ListOpenTimesResponse
+	(*Get1099SeasonRequest)(nil),         // 36: novam.insights.v1.Get1099SeasonRequest
+	(*Form1099Summary)(nil),              // 37: novam.insights.v1.Form1099Summary
+	(*Get1099SeasonResponse)(nil),        // 38: novam.insights.v1.Get1099SeasonResponse
+	(*BuildTaxPackageRequest)(nil),       // 39: novam.insights.v1.BuildTaxPackageRequest
+	(*BuildTaxPackageResponse)(nil),      // 40: novam.insights.v1.BuildTaxPackageResponse
+	(*GetLedgerRequest)(nil),             // 41: novam.insights.v1.GetLedgerRequest
+	(*GetLedgerResponse)(nil),            // 42: novam.insights.v1.GetLedgerResponse
+	(*GetBankFeedRequest)(nil),           // 43: novam.insights.v1.GetBankFeedRequest
+	(*GetBankFeedResponse)(nil),          // 44: novam.insights.v1.GetBankFeedResponse
+	(*GetMoneyOverviewRequest)(nil),      // 45: novam.insights.v1.GetMoneyOverviewRequest
+	(*GetMoneyOverviewResponse)(nil),     // 46: novam.insights.v1.GetMoneyOverviewResponse
+	(*GetQuarterlyTaxesRequest)(nil),     // 47: novam.insights.v1.GetQuarterlyTaxesRequest
+	(*GetQuarterlyTaxesResponse)(nil),    // 48: novam.insights.v1.GetQuarterlyTaxesResponse
+	(*GetHelper1099SRequest)(nil),        // 49: novam.insights.v1.GetHelper1099sRequest
+	(*GetHelper1099SResponse)(nil),       // 50: novam.insights.v1.GetHelper1099sResponse
+	(*GetPaycheckRequest)(nil),           // 51: novam.insights.v1.GetPaycheckRequest
+	(*GetPaycheckResponse)(nil),          // 52: novam.insights.v1.GetPaycheckResponse
+	(*GetSpendingSummaryRequest)(nil),    // 53: novam.insights.v1.GetSpendingSummaryRequest
+	(*GetSpendingSummaryResponse)(nil),   // 54: novam.insights.v1.GetSpendingSummaryResponse
+	(*GetSpendingQuestionsRequest)(nil),  // 55: novam.insights.v1.GetSpendingQuestionsRequest
+	(*GetSpendingQuestionsResponse)(nil), // 56: novam.insights.v1.GetSpendingQuestionsResponse
+	nil,                                  // 57: novam.insights.v1.ChartPoint.ValuesEntry
+	(*v1.RequestMetadata)(nil),           // 58: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),        // 59: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),              // 60: google.protobuf.Struct
 }
 var file_novam_insights_v1_insights_service_proto_depIdxs = []int32{
-	46, // 0: novam.insights.v1.GetFinanceSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	58, // 0: novam.insights.v1.GetFinanceSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	4,  // 1: novam.insights.v1.FinanceYear.expenses_by_category:type_name -> novam.insights.v1.CategoryAmount
 	2,  // 2: novam.insights.v1.GetFinanceSummaryResponse.paid_past_week:type_name -> novam.insights.v1.PaidPeriod
 	2,  // 3: novam.insights.v1.GetFinanceSummaryResponse.paid_this_month:type_name -> novam.insights.v1.PaidPeriod
 	3,  // 4: novam.insights.v1.GetFinanceSummaryResponse.outstanding:type_name -> novam.insights.v1.Outstanding
 	5,  // 5: novam.insights.v1.GetFinanceSummaryResponse.year:type_name -> novam.insights.v1.FinanceYear
 	6,  // 6: novam.insights.v1.GetFinanceSummaryResponse.gift_cards:type_name -> novam.insights.v1.GiftCardTotals
-	46, // 7: novam.insights.v1.MeasureRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	58, // 7: novam.insights.v1.MeasureRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	8,  // 8: novam.insights.v1.MeasureRequest.windows:type_name -> novam.insights.v1.MeasureWindow
 	10, // 9: novam.insights.v1.MeasureResponse.values:type_name -> novam.insights.v1.MeasureValue
-	46, // 10: novam.insights.v1.GetGoalStandingsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	58, // 10: novam.insights.v1.GetGoalStandingsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	12, // 11: novam.insights.v1.GetGoalStandingsRequest.goals:type_name -> novam.insights.v1.GoalInput
 	14, // 12: novam.insights.v1.GetGoalStandingsResponse.standings:type_name -> novam.insights.v1.GoalStanding
-	46, // 13: novam.insights.v1.GetSalesSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	47, // 14: novam.insights.v1.GetSalesSummaryRequest.start:type_name -> google.protobuf.Timestamp
-	47, // 15: novam.insights.v1.GetSalesSummaryRequest.end:type_name -> google.protobuf.Timestamp
+	58, // 13: novam.insights.v1.GetSalesSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	59, // 14: novam.insights.v1.GetSalesSummaryRequest.start:type_name -> google.protobuf.Timestamp
+	59, // 15: novam.insights.v1.GetSalesSummaryRequest.end:type_name -> google.protobuf.Timestamp
 	18, // 16: novam.insights.v1.GetSalesSummaryResponse.gift_cards:type_name -> novam.insights.v1.SalesGiftCards
 	17, // 17: novam.insights.v1.GetSalesSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
-	46, // 18: novam.insights.v1.GetTipsSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	47, // 19: novam.insights.v1.GetTipsSummaryRequest.start:type_name -> google.protobuf.Timestamp
-	47, // 20: novam.insights.v1.GetTipsSummaryRequest.end:type_name -> google.protobuf.Timestamp
+	58, // 18: novam.insights.v1.GetTipsSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	59, // 19: novam.insights.v1.GetTipsSummaryRequest.start:type_name -> google.protobuf.Timestamp
+	59, // 20: novam.insights.v1.GetTipsSummaryRequest.end:type_name -> google.protobuf.Timestamp
 	17, // 21: novam.insights.v1.GetTipsSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
 	21, // 22: novam.insights.v1.GetTipsSummaryResponse.by_member:type_name -> novam.insights.v1.MemberTips
 	22, // 23: novam.insights.v1.GetTipsSummaryResponse.by_service:type_name -> novam.insights.v1.ServiceTips
-	46, // 24: novam.insights.v1.GetChartRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	58, // 24: novam.insights.v1.GetChartRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 25: novam.insights.v1.GetChartRequest.kind:type_name -> novam.insights.v1.ChartKind
-	45, // 26: novam.insights.v1.ChartPoint.values:type_name -> novam.insights.v1.ChartPoint.ValuesEntry
+	57, // 26: novam.insights.v1.ChartPoint.values:type_name -> novam.insights.v1.ChartPoint.ValuesEntry
 	25, // 27: novam.insights.v1.GetChartResponse.points:type_name -> novam.insights.v1.ChartPoint
-	46, // 28: novam.insights.v1.ComputeReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	47, // 29: novam.insights.v1.ComputeReportRequest.start:type_name -> google.protobuf.Timestamp
-	47, // 30: novam.insights.v1.ComputeReportRequest.end:type_name -> google.protobuf.Timestamp
+	58, // 28: novam.insights.v1.ComputeReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	59, // 29: novam.insights.v1.ComputeReportRequest.start:type_name -> google.protobuf.Timestamp
+	59, // 30: novam.insights.v1.ComputeReportRequest.end:type_name -> google.protobuf.Timestamp
 	27, // 31: novam.insights.v1.ComputeReportResponse.metrics:type_name -> novam.insights.v1.ReportMetric
-	46, // 32: novam.insights.v1.RenderReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	47, // 33: novam.insights.v1.RenderReportRequest.period_start:type_name -> google.protobuf.Timestamp
-	47, // 34: novam.insights.v1.RenderReportRequest.period_end:type_name -> google.protobuf.Timestamp
-	47, // 35: novam.insights.v1.RenderReportRequest.generated_at:type_name -> google.protobuf.Timestamp
+	58, // 32: novam.insights.v1.RenderReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	59, // 33: novam.insights.v1.RenderReportRequest.period_start:type_name -> google.protobuf.Timestamp
+	59, // 34: novam.insights.v1.RenderReportRequest.period_end:type_name -> google.protobuf.Timestamp
+	59, // 35: novam.insights.v1.RenderReportRequest.generated_at:type_name -> google.protobuf.Timestamp
 	27, // 36: novam.insights.v1.RenderReportRequest.metrics:type_name -> novam.insights.v1.ReportMetric
-	47, // 37: novam.insights.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
-	47, // 38: novam.insights.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
-	46, // 39: novam.insights.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	59, // 37: novam.insights.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
+	59, // 38: novam.insights.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
+	58, // 39: novam.insights.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	32, // 40: novam.insights.v1.ListOpenTimesRequest.person_busy:type_name -> novam.insights.v1.TimeRange
-	47, // 41: novam.insights.v1.ListOpenTimesRequest.now:type_name -> google.protobuf.Timestamp
-	47, // 42: novam.insights.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
-	47, // 43: novam.insights.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
+	59, // 41: novam.insights.v1.ListOpenTimesRequest.now:type_name -> google.protobuf.Timestamp
+	59, // 42: novam.insights.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
+	59, // 43: novam.insights.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
 	34, // 44: novam.insights.v1.ListOpenTimesResponse.times:type_name -> novam.insights.v1.OpenTime
-	46, // 45: novam.insights.v1.Get1099SeasonRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	58, // 45: novam.insights.v1.Get1099SeasonRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	37, // 46: novam.insights.v1.Get1099SeasonResponse.summaries:type_name -> novam.insights.v1.Form1099Summary
-	46, // 47: novam.insights.v1.BuildTaxPackageRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 48: novam.insights.v1.GetLedgerRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	48, // 49: novam.insights.v1.GetLedgerResponse.ledger:type_name -> google.protobuf.Struct
-	46, // 50: novam.insights.v1.GetBankFeedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	48, // 51: novam.insights.v1.GetBankFeedResponse.feed:type_name -> google.protobuf.Struct
-	1,  // 52: novam.insights.v1.InsightsService.GetFinanceSummary:input_type -> novam.insights.v1.GetFinanceSummaryRequest
-	9,  // 53: novam.insights.v1.InsightsService.Measure:input_type -> novam.insights.v1.MeasureRequest
-	13, // 54: novam.insights.v1.InsightsService.GetGoalStandings:input_type -> novam.insights.v1.GetGoalStandingsRequest
-	16, // 55: novam.insights.v1.InsightsService.GetSalesSummary:input_type -> novam.insights.v1.GetSalesSummaryRequest
-	20, // 56: novam.insights.v1.InsightsService.GetTipsSummary:input_type -> novam.insights.v1.GetTipsSummaryRequest
-	24, // 57: novam.insights.v1.InsightsService.GetChart:input_type -> novam.insights.v1.GetChartRequest
-	28, // 58: novam.insights.v1.InsightsService.ComputeReport:input_type -> novam.insights.v1.ComputeReportRequest
-	30, // 59: novam.insights.v1.InsightsService.RenderReport:input_type -> novam.insights.v1.RenderReportRequest
-	33, // 60: novam.insights.v1.InsightsService.ListOpenTimes:input_type -> novam.insights.v1.ListOpenTimesRequest
-	36, // 61: novam.insights.v1.InsightsService.Get1099Season:input_type -> novam.insights.v1.Get1099SeasonRequest
-	39, // 62: novam.insights.v1.InsightsService.BuildTaxPackage:input_type -> novam.insights.v1.BuildTaxPackageRequest
-	41, // 63: novam.insights.v1.InsightsService.GetLedger:input_type -> novam.insights.v1.GetLedgerRequest
-	43, // 64: novam.insights.v1.InsightsService.GetBankFeed:input_type -> novam.insights.v1.GetBankFeedRequest
-	7,  // 65: novam.insights.v1.InsightsService.GetFinanceSummary:output_type -> novam.insights.v1.GetFinanceSummaryResponse
-	11, // 66: novam.insights.v1.InsightsService.Measure:output_type -> novam.insights.v1.MeasureResponse
-	15, // 67: novam.insights.v1.InsightsService.GetGoalStandings:output_type -> novam.insights.v1.GetGoalStandingsResponse
-	19, // 68: novam.insights.v1.InsightsService.GetSalesSummary:output_type -> novam.insights.v1.GetSalesSummaryResponse
-	23, // 69: novam.insights.v1.InsightsService.GetTipsSummary:output_type -> novam.insights.v1.GetTipsSummaryResponse
-	26, // 70: novam.insights.v1.InsightsService.GetChart:output_type -> novam.insights.v1.GetChartResponse
-	29, // 71: novam.insights.v1.InsightsService.ComputeReport:output_type -> novam.insights.v1.ComputeReportResponse
-	31, // 72: novam.insights.v1.InsightsService.RenderReport:output_type -> novam.insights.v1.RenderReportResponse
-	35, // 73: novam.insights.v1.InsightsService.ListOpenTimes:output_type -> novam.insights.v1.ListOpenTimesResponse
-	38, // 74: novam.insights.v1.InsightsService.Get1099Season:output_type -> novam.insights.v1.Get1099SeasonResponse
-	40, // 75: novam.insights.v1.InsightsService.BuildTaxPackage:output_type -> novam.insights.v1.BuildTaxPackageResponse
-	42, // 76: novam.insights.v1.InsightsService.GetLedger:output_type -> novam.insights.v1.GetLedgerResponse
-	44, // 77: novam.insights.v1.InsightsService.GetBankFeed:output_type -> novam.insights.v1.GetBankFeedResponse
-	65, // [65:78] is the sub-list for method output_type
-	52, // [52:65] is the sub-list for method input_type
-	52, // [52:52] is the sub-list for extension type_name
-	52, // [52:52] is the sub-list for extension extendee
-	0,  // [0:52] is the sub-list for field type_name
+	58, // 47: novam.insights.v1.BuildTaxPackageRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	58, // 48: novam.insights.v1.GetLedgerRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 49: novam.insights.v1.GetLedgerResponse.ledger:type_name -> google.protobuf.Struct
+	58, // 50: novam.insights.v1.GetBankFeedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 51: novam.insights.v1.GetBankFeedResponse.feed:type_name -> google.protobuf.Struct
+	58, // 52: novam.insights.v1.GetMoneyOverviewRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 53: novam.insights.v1.GetMoneyOverviewResponse.overview:type_name -> google.protobuf.Struct
+	58, // 54: novam.insights.v1.GetQuarterlyTaxesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 55: novam.insights.v1.GetQuarterlyTaxesResponse.quarterly:type_name -> google.protobuf.Struct
+	58, // 56: novam.insights.v1.GetHelper1099sRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 57: novam.insights.v1.GetHelper1099sResponse.list:type_name -> google.protobuf.Struct
+	58, // 58: novam.insights.v1.GetPaycheckRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 59: novam.insights.v1.GetPaycheckResponse.paycheck:type_name -> google.protobuf.Struct
+	58, // 60: novam.insights.v1.GetSpendingSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 61: novam.insights.v1.GetSpendingSummaryResponse.summary:type_name -> google.protobuf.Struct
+	58, // 62: novam.insights.v1.GetSpendingQuestionsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	60, // 63: novam.insights.v1.GetSpendingQuestionsResponse.questions:type_name -> google.protobuf.Struct
+	1,  // 64: novam.insights.v1.InsightsService.GetFinanceSummary:input_type -> novam.insights.v1.GetFinanceSummaryRequest
+	9,  // 65: novam.insights.v1.InsightsService.Measure:input_type -> novam.insights.v1.MeasureRequest
+	13, // 66: novam.insights.v1.InsightsService.GetGoalStandings:input_type -> novam.insights.v1.GetGoalStandingsRequest
+	16, // 67: novam.insights.v1.InsightsService.GetSalesSummary:input_type -> novam.insights.v1.GetSalesSummaryRequest
+	20, // 68: novam.insights.v1.InsightsService.GetTipsSummary:input_type -> novam.insights.v1.GetTipsSummaryRequest
+	24, // 69: novam.insights.v1.InsightsService.GetChart:input_type -> novam.insights.v1.GetChartRequest
+	28, // 70: novam.insights.v1.InsightsService.ComputeReport:input_type -> novam.insights.v1.ComputeReportRequest
+	30, // 71: novam.insights.v1.InsightsService.RenderReport:input_type -> novam.insights.v1.RenderReportRequest
+	33, // 72: novam.insights.v1.InsightsService.ListOpenTimes:input_type -> novam.insights.v1.ListOpenTimesRequest
+	36, // 73: novam.insights.v1.InsightsService.Get1099Season:input_type -> novam.insights.v1.Get1099SeasonRequest
+	39, // 74: novam.insights.v1.InsightsService.BuildTaxPackage:input_type -> novam.insights.v1.BuildTaxPackageRequest
+	41, // 75: novam.insights.v1.InsightsService.GetLedger:input_type -> novam.insights.v1.GetLedgerRequest
+	43, // 76: novam.insights.v1.InsightsService.GetBankFeed:input_type -> novam.insights.v1.GetBankFeedRequest
+	45, // 77: novam.insights.v1.InsightsService.GetMoneyOverview:input_type -> novam.insights.v1.GetMoneyOverviewRequest
+	47, // 78: novam.insights.v1.InsightsService.GetQuarterlyTaxes:input_type -> novam.insights.v1.GetQuarterlyTaxesRequest
+	49, // 79: novam.insights.v1.InsightsService.GetHelper1099s:input_type -> novam.insights.v1.GetHelper1099sRequest
+	51, // 80: novam.insights.v1.InsightsService.GetPaycheck:input_type -> novam.insights.v1.GetPaycheckRequest
+	53, // 81: novam.insights.v1.InsightsService.GetSpendingSummary:input_type -> novam.insights.v1.GetSpendingSummaryRequest
+	55, // 82: novam.insights.v1.InsightsService.GetSpendingQuestions:input_type -> novam.insights.v1.GetSpendingQuestionsRequest
+	7,  // 83: novam.insights.v1.InsightsService.GetFinanceSummary:output_type -> novam.insights.v1.GetFinanceSummaryResponse
+	11, // 84: novam.insights.v1.InsightsService.Measure:output_type -> novam.insights.v1.MeasureResponse
+	15, // 85: novam.insights.v1.InsightsService.GetGoalStandings:output_type -> novam.insights.v1.GetGoalStandingsResponse
+	19, // 86: novam.insights.v1.InsightsService.GetSalesSummary:output_type -> novam.insights.v1.GetSalesSummaryResponse
+	23, // 87: novam.insights.v1.InsightsService.GetTipsSummary:output_type -> novam.insights.v1.GetTipsSummaryResponse
+	26, // 88: novam.insights.v1.InsightsService.GetChart:output_type -> novam.insights.v1.GetChartResponse
+	29, // 89: novam.insights.v1.InsightsService.ComputeReport:output_type -> novam.insights.v1.ComputeReportResponse
+	31, // 90: novam.insights.v1.InsightsService.RenderReport:output_type -> novam.insights.v1.RenderReportResponse
+	35, // 91: novam.insights.v1.InsightsService.ListOpenTimes:output_type -> novam.insights.v1.ListOpenTimesResponse
+	38, // 92: novam.insights.v1.InsightsService.Get1099Season:output_type -> novam.insights.v1.Get1099SeasonResponse
+	40, // 93: novam.insights.v1.InsightsService.BuildTaxPackage:output_type -> novam.insights.v1.BuildTaxPackageResponse
+	42, // 94: novam.insights.v1.InsightsService.GetLedger:output_type -> novam.insights.v1.GetLedgerResponse
+	44, // 95: novam.insights.v1.InsightsService.GetBankFeed:output_type -> novam.insights.v1.GetBankFeedResponse
+	46, // 96: novam.insights.v1.InsightsService.GetMoneyOverview:output_type -> novam.insights.v1.GetMoneyOverviewResponse
+	48, // 97: novam.insights.v1.InsightsService.GetQuarterlyTaxes:output_type -> novam.insights.v1.GetQuarterlyTaxesResponse
+	50, // 98: novam.insights.v1.InsightsService.GetHelper1099s:output_type -> novam.insights.v1.GetHelper1099sResponse
+	52, // 99: novam.insights.v1.InsightsService.GetPaycheck:output_type -> novam.insights.v1.GetPaycheckResponse
+	54, // 100: novam.insights.v1.InsightsService.GetSpendingSummary:output_type -> novam.insights.v1.GetSpendingSummaryResponse
+	56, // 101: novam.insights.v1.InsightsService.GetSpendingQuestions:output_type -> novam.insights.v1.GetSpendingQuestionsResponse
+	83, // [83:102] is the sub-list for method output_type
+	64, // [64:83] is the sub-list for method input_type
+	64, // [64:64] is the sub-list for extension type_name
+	64, // [64:64] is the sub-list for extension extendee
+	0,  // [0:64] is the sub-list for field type_name
 }
 
 func init() { file_novam_insights_v1_insights_service_proto_init() }
@@ -3512,7 +4151,7 @@ func file_novam_insights_v1_insights_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_insights_v1_insights_service_proto_rawDesc), len(file_novam_insights_v1_insights_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   45,
+			NumMessages:   57,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

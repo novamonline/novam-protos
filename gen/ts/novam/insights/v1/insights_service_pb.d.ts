@@ -1448,6 +1448,238 @@ export declare type GetBankFeedResponse = Message<"novam.insights.v1.GetBankFeed
 export declare const GetBankFeedResponseSchema: GenMessage<GetBankFeedResponse>;
 
 /**
+ * @generated from message novam.insights.v1.GetMoneyOverviewRequest
+ */
+export declare type GetMoneyOverviewRequest = Message<"novam.insights.v1.GetMoneyOverviewRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * The caller has tax:read.
+   *
+   * @generated from field: bool include_taxes = 2;
+   */
+  includeTaxes: boolean;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetMoneyOverviewRequest.
+ * Use `create(GetMoneyOverviewRequestSchema)` to create a new message.
+ */
+export declare const GetMoneyOverviewRequestSchema: GenMessage<GetMoneyOverviewRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetMoneyOverviewResponse
+ */
+export declare type GetMoneyOverviewResponse = Message<"novam.insights.v1.GetMoneyOverviewResponse"> & {
+  /**
+   * As novam-data's moneyOverview, without payouts and novam_does.
+   *
+   * @generated from field: google.protobuf.Struct overview = 1;
+   */
+  overview?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetMoneyOverviewResponse.
+ * Use `create(GetMoneyOverviewResponseSchema)` to create a new message.
+ */
+export declare const GetMoneyOverviewResponseSchema: GenMessage<GetMoneyOverviewResponse>;
+
+/**
+ * @generated from message novam.insights.v1.GetQuarterlyTaxesRequest
+ */
+export declare type GetQuarterlyTaxesRequest = Message<"novam.insights.v1.GetQuarterlyTaxesRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * 0 for the year the next payment is due in (else this year).
+   *
+   * @generated from field: int32 tax_year = 2;
+   */
+  taxYear: number;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetQuarterlyTaxesRequest.
+ * Use `create(GetQuarterlyTaxesRequestSchema)` to create a new message.
+ */
+export declare const GetQuarterlyTaxesRequestSchema: GenMessage<GetQuarterlyTaxesRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetQuarterlyTaxesResponse
+ */
+export declare type GetQuarterlyTaxesResponse = Message<"novam.insights.v1.GetQuarterlyTaxesResponse"> & {
+  /**
+   * As novam-data's quarterlyFor: year, set_aside_percent, quarters, next.
+   *
+   * @generated from field: google.protobuf.Struct quarterly = 1;
+   */
+  quarterly?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetQuarterlyTaxesResponse.
+ * Use `create(GetQuarterlyTaxesResponseSchema)` to create a new message.
+ */
+export declare const GetQuarterlyTaxesResponseSchema: GenMessage<GetQuarterlyTaxesResponse>;
+
+/**
+ * @generated from message novam.insights.v1.GetHelper1099sRequest
+ */
+export declare type GetHelper1099sRequest = Message<"novam.insights.v1.GetHelper1099sRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * 0 for this year.
+   *
+   * @generated from field: int32 tax_year = 2;
+   */
+  taxYear: number;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetHelper1099sRequest.
+ * Use `create(GetHelper1099sRequestSchema)` to create a new message.
+ */
+export declare const GetHelper1099sRequestSchema: GenMessage<GetHelper1099sRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetHelper1099sResponse
+ */
+export declare type GetHelper1099sResponse = Message<"novam.insights.v1.GetHelper1099sResponse"> & {
+  /**
+   * As novam-data's helper1099s: year, threshold, due_date, third_party_methods, helpers.
+   *
+   * @generated from field: google.protobuf.Struct list = 1;
+   */
+  list?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetHelper1099sResponse.
+ * Use `create(GetHelper1099sResponseSchema)` to create a new message.
+ */
+export declare const GetHelper1099sResponseSchema: GenMessage<GetHelper1099sResponse>;
+
+/**
+ * @generated from message novam.insights.v1.GetPaycheckRequest
+ */
+export declare type GetPaycheckRequest = Message<"novam.insights.v1.GetPaycheckRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetPaycheckRequest.
+ * Use `create(GetPaycheckRequestSchema)` to create a new message.
+ */
+export declare const GetPaycheckRequestSchema: GenMessage<GetPaycheckRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetPaycheckResponse
+ */
+export declare type GetPaycheckResponse = Message<"novam.insights.v1.GetPaycheckResponse"> & {
+  /**
+   * As novam-data's paycheck.
+   *
+   * @generated from field: google.protobuf.Struct paycheck = 1;
+   */
+  paycheck?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetPaycheckResponse.
+ * Use `create(GetPaycheckResponseSchema)` to create a new message.
+ */
+export declare const GetPaycheckResponseSchema: GenMessage<GetPaycheckResponse>;
+
+/**
+ * @generated from message novam.insights.v1.GetSpendingSummaryRequest
+ */
+export declare type GetSpendingSummaryRequest = Message<"novam.insights.v1.GetSpendingSummaryRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * YYYY-MM; this month where the business is when empty.
+   *
+   * @generated from field: string month = 2;
+   */
+  month: string;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetSpendingSummaryRequest.
+ * Use `create(GetSpendingSummaryRequestSchema)` to create a new message.
+ */
+export declare const GetSpendingSummaryRequestSchema: GenMessage<GetSpendingSummaryRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetSpendingSummaryResponse
+ */
+export declare type GetSpendingSummaryResponse = Message<"novam.insights.v1.GetSpendingSummaryResponse"> & {
+  /**
+   * As novam-data's spendingSummary.
+   *
+   * @generated from field: google.protobuf.Struct summary = 1;
+   */
+  summary?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetSpendingSummaryResponse.
+ * Use `create(GetSpendingSummaryResponseSchema)` to create a new message.
+ */
+export declare const GetSpendingSummaryResponseSchema: GenMessage<GetSpendingSummaryResponse>;
+
+/**
+ * @generated from message novam.insights.v1.GetSpendingQuestionsRequest
+ */
+export declare type GetSpendingQuestionsRequest = Message<"novam.insights.v1.GetSpendingQuestionsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetSpendingQuestionsRequest.
+ * Use `create(GetSpendingQuestionsRequestSchema)` to create a new message.
+ */
+export declare const GetSpendingQuestionsRequestSchema: GenMessage<GetSpendingQuestionsRequest>;
+
+/**
+ * @generated from message novam.insights.v1.GetSpendingQuestionsResponse
+ */
+export declare type GetSpendingQuestionsResponse = Message<"novam.insights.v1.GetSpendingQuestionsResponse"> & {
+  /**
+   * As novam-data's spendingQuestions: questions, total_size.
+   *
+   * @generated from field: google.protobuf.Struct questions = 1;
+   */
+  questions?: JsonObject;
+};
+
+/**
+ * Describes the message novam.insights.v1.GetSpendingQuestionsResponse.
+ * Use `create(GetSpendingQuestionsResponseSchema)` to create a new message.
+ */
+export declare const GetSpendingQuestionsResponseSchema: GenMessage<GetSpendingQuestionsResponse>;
+
+/**
  * @generated from enum novam.insights.v1.ChartKind
  */
 export enum ChartKind {
@@ -1632,6 +1864,67 @@ export declare const InsightsService: GenService<{
     methodKind: "unary";
     input: typeof GetBankFeedRequestSchema;
     output: typeof GetBankFeedResponseSchema;
+  },
+  /**
+   * Money's overview: this week's and the last four weeks' money in, what clients owe with the three longest overdue,
+   * and with include_taxes the tax set-aside and next quarterly payment. novam-data adds the payouts and what Novam does.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetMoneyOverview
+   */
+  getMoneyOverview: {
+    methodKind: "unary";
+    input: typeof GetMoneyOverviewRequestSchema;
+    output: typeof GetMoneyOverviewResponseSchema;
+  },
+  /**
+   * A tax year's four quarterly estimated-tax payments and the next one still to make.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetQuarterlyTaxes
+   */
+  getQuarterlyTaxes: {
+    methodKind: "unary";
+    input: typeof GetQuarterlyTaxesRequestSchema;
+    output: typeof GetQuarterlyTaxesResponseSchema;
+  },
+  /**
+   * A tax year's 1099-NEC list: every helper, what they were paid, the threshold, their W-9 and the form.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetHelper1099s
+   */
+  getHelper1099s: {
+    methodKind: "unary";
+    input: typeof GetHelper1099sRequestSchema;
+    output: typeof GetHelper1099sResponseSchema;
+  },
+  /**
+   * The Paycheck planner: the weekly amount to pay yourself, why, its history and the owner's plan. It moves nothing.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetPaycheck
+   */
+  getPaycheck: {
+    methodKind: "unary";
+    input: typeof GetPaycheckRequestSchema;
+    output: typeof GetPaycheckResponseSchema;
+  },
+  /**
+   * A month's business spending by category, and how much Novam sorted versus asked about.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetSpendingSummary
+   */
+  getSpendingSummary: {
+    methodKind: "unary";
+    input: typeof GetSpendingSummaryRequestSchema;
+    output: typeof GetSpendingSummaryResponseSchema;
+  },
+  /**
+   * The bank lines of the last year Novam isn't sure about, newest first (at most 100).
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.GetSpendingQuestions
+   */
+  getSpendingQuestions: {
+    methodKind: "unary";
+    input: typeof GetSpendingQuestionsRequestSchema;
+    output: typeof GetSpendingQuestionsResponseSchema;
   },
 }>;
 
