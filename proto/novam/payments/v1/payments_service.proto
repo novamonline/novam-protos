@@ -42,6 +42,24 @@ service PaymentsService {
   // that row's Idempotency-Key, so it is never made twice, whoever runs it. UNAVAILABLE only before anything was done
   // (the engine can't charge wallets here); after any other error the caller must not try the same invoices itself.
   rpc RunAutopay(RunAutopayRequest) returns (RunAutopayResponse);
+  // A client paying an invoice with a wallet method from Passes (or a quote's deposit): on-session, so a card that
+  // needs 3-D Secure comes back requires_action with what the app finishes it with. Never charges twice: one intent per
+  // invoice in flight, and Stripe's Idempotency-Key is that intent's row. UNAVAILABLE only when the engine can't charge
+  // wallets, before anything is done.
+  rpc PayInvoice(PayInvoiceRequest) returns (PayInvoiceResponse);
+  // After the person finished (or gave up on) 3-D Secure: what Stripe now says of their latest intent is recorded.
+  rpc RefreshIntent(RefreshIntentRequest) returns (RefreshIntentResponse);
+  // A verified payment_intent.succeeded, .processing or .payment_failed for a wallet intent: the payment recorded
+  // once, or failed once. The intent row is found by intent id, else by the attempt id in the intent's metadata (a
+  // charge whose answer was lost). Made for any business: the account the event came from is checked.
+  rpc ApplyIntentEvent(ApplyIntentEventRequest) returns (ApplyIntentEventResponse);
+  // A pay-page checkout just started at the processor: its card_checkouts row.
+  rpc OpenCheckout(OpenCheckoutRequest) returns (OpenCheckoutResponse);
+  // A checkout the processor says was paid (a signed webhook, or the processor asked): claimed once, its payment
+  // recorded with the tip apart, the invoice marked paid even when cancelled since, and the team told.
+  rpc SettleCheckout(SettleCheckoutRequest) returns (SettleCheckoutResponse);
+  // A bank payment started on the pay page that didn't go through: the open checkout is marked failed.
+  rpc FailCheckout(FailCheckoutRequest) returns (FailCheckoutResponse);
 }
 
 message RecordPaymentRequest {
@@ -180,4 +198,117 @@ message RunAutopayRequest {
 message RunAutopayResponse {
   // Invoices tried.
   int32 tried = 1;
+}
+
+message PayInvoiceRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string invoice_id = 3;
+  // Empty for the person's default method.
+  string method_id = 4;
+  // pay (Passes' pay button) or autopay.
+  string source = 5;
+}
+
+message PayInvoiceResponse {
+  // succeeded, processing, requires_action or failed.
+  string state = 1;
+  string attempt_id = 2;
+  string payment_intent_id = 3;
+  double amount = 4;
+  string currency = 5;
+  // requires_action only: what the app finishes 3-D Secure with.
+  string client_secret = 6;
+  string stripe_account = 7;
+  // failed only.
+  string error = 8;
+  string code = 9;
+  string method_id = 10;
+}
+
+message RefreshIntentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string invoice_id = 2;
+  string user_id = 3;
+}
+
+message RefreshIntentResponse {
+  // none, succeeded, processing, requires_action or failed.
+  string state = 1;
+  string payment_intent_id = 2;
+}
+
+message ApplyIntentEventRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // payment_intent.succeeded, payment_intent.processing or payment_intent.payment_failed.
+  string type = 2;
+  string intent_id = 3;
+  string last_error = 4;
+  // The intent's metadata.attempt_id.
+  string attempt_id = 5;
+  // The connected account the event came from.
+  string account = 6;
+}
+
+message ApplyIntentEventResponse {
+  // recorded, failed, unknown or ignored.
+  string result = 1;
+  string attempt_id = 2;
+  string org_id = 3;
+  string client_invoice_id = 4;
+  string user_id = 5;
+  string source = 6;
+  // A payment the failure flipped, if any.
+  string failed_payment_id = 7;
+}
+
+message OpenCheckoutRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string client_invoice_id = 2;
+  string processor = 3;
+  string session_id = 4;
+  double amount = 5;
+  string currency = 6;
+  string renter_contact_id = 7;
+  double tip = 8;
+}
+
+message OpenCheckoutResponse {
+  string checkout_id = 1;
+}
+
+message SettleCheckoutRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string processor = 2;
+  string session_id = 3;
+  // Only a checkout of this business, when set.
+  string org_id = 4;
+  // What the processor took, tip included; unset to take the checkout's own amount and tip.
+  optional double amount = 5;
+  string currency = 6;
+  // Stripe's intent behind it, so a later refund or dispute finds the payment.
+  string payment_intent = 7;
+  // How the payment is filed: its method (card, paypal) and notes; the processor's name for the team's notice.
+  string payment_method = 8;
+  string paid_how = 9;
+  string processor_name = 10;
+  // Taken in person (tap to pay): the team is told only of a second payment.
+  bool in_person = 11;
+}
+
+message SettleCheckoutResponse {
+  // paid, already_paid or unknown.
+  string result = 1;
+  string payment_id = 2;
+}
+
+message FailCheckoutRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string processor = 2;
+  string session_id = 3;
+}
+
+message FailCheckoutResponse {
+  // failed or unknown.
+  string result = 1;
 }

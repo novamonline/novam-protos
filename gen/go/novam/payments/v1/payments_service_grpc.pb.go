@@ -29,6 +29,12 @@ const (
 	PaymentsService_RestorePayment_FullMethodName    = "/novam.payments.v1.PaymentsService/RestorePayment"
 	PaymentsService_RedeemGiftCard_FullMethodName    = "/novam.payments.v1.PaymentsService/RedeemGiftCard"
 	PaymentsService_RunAutopay_FullMethodName        = "/novam.payments.v1.PaymentsService/RunAutopay"
+	PaymentsService_PayInvoice_FullMethodName        = "/novam.payments.v1.PaymentsService/PayInvoice"
+	PaymentsService_RefreshIntent_FullMethodName     = "/novam.payments.v1.PaymentsService/RefreshIntent"
+	PaymentsService_ApplyIntentEvent_FullMethodName  = "/novam.payments.v1.PaymentsService/ApplyIntentEvent"
+	PaymentsService_OpenCheckout_FullMethodName      = "/novam.payments.v1.PaymentsService/OpenCheckout"
+	PaymentsService_SettleCheckout_FullMethodName    = "/novam.payments.v1.PaymentsService/SettleCheckout"
+	PaymentsService_FailCheckout_FullMethodName      = "/novam.payments.v1.PaymentsService/FailCheckout"
 )
 
 // PaymentsServiceClient is the client API for PaymentsService service.
@@ -70,6 +76,24 @@ type PaymentsServiceClient interface {
 	// that row's Idempotency-Key, so it is never made twice, whoever runs it. UNAVAILABLE only before anything was done
 	// (the engine can't charge wallets here); after any other error the caller must not try the same invoices itself.
 	RunAutopay(ctx context.Context, in *RunAutopayRequest, opts ...grpc.CallOption) (*RunAutopayResponse, error)
+	// A client paying an invoice with a wallet method from Passes (or a quote's deposit): on-session, so a card that
+	// needs 3-D Secure comes back requires_action with what the app finishes it with. Never charges twice: one intent per
+	// invoice in flight, and Stripe's Idempotency-Key is that intent's row. UNAVAILABLE only when the engine can't charge
+	// wallets, before anything is done.
+	PayInvoice(ctx context.Context, in *PayInvoiceRequest, opts ...grpc.CallOption) (*PayInvoiceResponse, error)
+	// After the person finished (or gave up on) 3-D Secure: what Stripe now says of their latest intent is recorded.
+	RefreshIntent(ctx context.Context, in *RefreshIntentRequest, opts ...grpc.CallOption) (*RefreshIntentResponse, error)
+	// A verified payment_intent.succeeded, .processing or .payment_failed for a wallet intent: the payment recorded
+	// once, or failed once. The intent row is found by intent id, else by the attempt id in the intent's metadata (a
+	// charge whose answer was lost). Made for any business: the account the event came from is checked.
+	ApplyIntentEvent(ctx context.Context, in *ApplyIntentEventRequest, opts ...grpc.CallOption) (*ApplyIntentEventResponse, error)
+	// A pay-page checkout just started at the processor: its card_checkouts row.
+	OpenCheckout(ctx context.Context, in *OpenCheckoutRequest, opts ...grpc.CallOption) (*OpenCheckoutResponse, error)
+	// A checkout the processor says was paid (a signed webhook, or the processor asked): claimed once, its payment
+	// recorded with the tip apart, the invoice marked paid even when cancelled since, and the team told.
+	SettleCheckout(ctx context.Context, in *SettleCheckoutRequest, opts ...grpc.CallOption) (*SettleCheckoutResponse, error)
+	// A bank payment started on the pay page that didn't go through: the open checkout is marked failed.
+	FailCheckout(ctx context.Context, in *FailCheckoutRequest, opts ...grpc.CallOption) (*FailCheckoutResponse, error)
 }
 
 type paymentsServiceClient struct {
@@ -180,6 +204,66 @@ func (c *paymentsServiceClient) RunAutopay(ctx context.Context, in *RunAutopayRe
 	return out, nil
 }
 
+func (c *paymentsServiceClient) PayInvoice(ctx context.Context, in *PayInvoiceRequest, opts ...grpc.CallOption) (*PayInvoiceResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PayInvoiceResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_PayInvoice_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) RefreshIntent(ctx context.Context, in *RefreshIntentRequest, opts ...grpc.CallOption) (*RefreshIntentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RefreshIntentResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_RefreshIntent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) ApplyIntentEvent(ctx context.Context, in *ApplyIntentEventRequest, opts ...grpc.CallOption) (*ApplyIntentEventResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApplyIntentEventResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ApplyIntentEvent_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) OpenCheckout(ctx context.Context, in *OpenCheckoutRequest, opts ...grpc.CallOption) (*OpenCheckoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(OpenCheckoutResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_OpenCheckout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) SettleCheckout(ctx context.Context, in *SettleCheckoutRequest, opts ...grpc.CallOption) (*SettleCheckoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SettleCheckoutResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_SettleCheckout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) FailCheckout(ctx context.Context, in *FailCheckoutRequest, opts ...grpc.CallOption) (*FailCheckoutResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FailCheckoutResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_FailCheckout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentsServiceServer is the server API for PaymentsService service.
 // All implementations must embed UnimplementedPaymentsServiceServer
 // for forward compatibility.
@@ -219,6 +303,24 @@ type PaymentsServiceServer interface {
 	// that row's Idempotency-Key, so it is never made twice, whoever runs it. UNAVAILABLE only before anything was done
 	// (the engine can't charge wallets here); after any other error the caller must not try the same invoices itself.
 	RunAutopay(context.Context, *RunAutopayRequest) (*RunAutopayResponse, error)
+	// A client paying an invoice with a wallet method from Passes (or a quote's deposit): on-session, so a card that
+	// needs 3-D Secure comes back requires_action with what the app finishes it with. Never charges twice: one intent per
+	// invoice in flight, and Stripe's Idempotency-Key is that intent's row. UNAVAILABLE only when the engine can't charge
+	// wallets, before anything is done.
+	PayInvoice(context.Context, *PayInvoiceRequest) (*PayInvoiceResponse, error)
+	// After the person finished (or gave up on) 3-D Secure: what Stripe now says of their latest intent is recorded.
+	RefreshIntent(context.Context, *RefreshIntentRequest) (*RefreshIntentResponse, error)
+	// A verified payment_intent.succeeded, .processing or .payment_failed for a wallet intent: the payment recorded
+	// once, or failed once. The intent row is found by intent id, else by the attempt id in the intent's metadata (a
+	// charge whose answer was lost). Made for any business: the account the event came from is checked.
+	ApplyIntentEvent(context.Context, *ApplyIntentEventRequest) (*ApplyIntentEventResponse, error)
+	// A pay-page checkout just started at the processor: its card_checkouts row.
+	OpenCheckout(context.Context, *OpenCheckoutRequest) (*OpenCheckoutResponse, error)
+	// A checkout the processor says was paid (a signed webhook, or the processor asked): claimed once, its payment
+	// recorded with the tip apart, the invoice marked paid even when cancelled since, and the team told.
+	SettleCheckout(context.Context, *SettleCheckoutRequest) (*SettleCheckoutResponse, error)
+	// A bank payment started on the pay page that didn't go through: the open checkout is marked failed.
+	FailCheckout(context.Context, *FailCheckoutRequest) (*FailCheckoutResponse, error)
 	mustEmbedUnimplementedPaymentsServiceServer()
 }
 
@@ -258,6 +360,24 @@ func (UnimplementedPaymentsServiceServer) RedeemGiftCard(context.Context, *Redee
 }
 func (UnimplementedPaymentsServiceServer) RunAutopay(context.Context, *RunAutopayRequest) (*RunAutopayResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RunAutopay not implemented")
+}
+func (UnimplementedPaymentsServiceServer) PayInvoice(context.Context, *PayInvoiceRequest) (*PayInvoiceResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method PayInvoice not implemented")
+}
+func (UnimplementedPaymentsServiceServer) RefreshIntent(context.Context, *RefreshIntentRequest) (*RefreshIntentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RefreshIntent not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ApplyIntentEvent(context.Context, *ApplyIntentEventRequest) (*ApplyIntentEventResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ApplyIntentEvent not implemented")
+}
+func (UnimplementedPaymentsServiceServer) OpenCheckout(context.Context, *OpenCheckoutRequest) (*OpenCheckoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method OpenCheckout not implemented")
+}
+func (UnimplementedPaymentsServiceServer) SettleCheckout(context.Context, *SettleCheckoutRequest) (*SettleCheckoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SettleCheckout not implemented")
+}
+func (UnimplementedPaymentsServiceServer) FailCheckout(context.Context, *FailCheckoutRequest) (*FailCheckoutResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FailCheckout not implemented")
 }
 func (UnimplementedPaymentsServiceServer) mustEmbedUnimplementedPaymentsServiceServer() {}
 func (UnimplementedPaymentsServiceServer) testEmbeddedByValue()                         {}
@@ -460,6 +580,114 @@ func _PaymentsService_RunAutopay_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_PayInvoice_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PayInvoiceRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).PayInvoice(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_PayInvoice_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).PayInvoice(ctx, req.(*PayInvoiceRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_RefreshIntent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefreshIntentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).RefreshIntent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_RefreshIntent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).RefreshIntent(ctx, req.(*RefreshIntentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_ApplyIntentEvent_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApplyIntentEventRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ApplyIntentEvent(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ApplyIntentEvent_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ApplyIntentEvent(ctx, req.(*ApplyIntentEventRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_OpenCheckout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(OpenCheckoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).OpenCheckout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_OpenCheckout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).OpenCheckout(ctx, req.(*OpenCheckoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_SettleCheckout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SettleCheckoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).SettleCheckout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_SettleCheckout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).SettleCheckout(ctx, req.(*SettleCheckoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_FailCheckout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FailCheckoutRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).FailCheckout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_FailCheckout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).FailCheckout(ctx, req.(*FailCheckoutRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentsService_ServiceDesc is the grpc.ServiceDesc for PaymentsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -506,6 +734,30 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RunAutopay",
 			Handler:    _PaymentsService_RunAutopay_Handler,
+		},
+		{
+			MethodName: "PayInvoice",
+			Handler:    _PaymentsService_PayInvoice_Handler,
+		},
+		{
+			MethodName: "RefreshIntent",
+			Handler:    _PaymentsService_RefreshIntent_Handler,
+		},
+		{
+			MethodName: "ApplyIntentEvent",
+			Handler:    _PaymentsService_ApplyIntentEvent_Handler,
+		},
+		{
+			MethodName: "OpenCheckout",
+			Handler:    _PaymentsService_OpenCheckout_Handler,
+		},
+		{
+			MethodName: "SettleCheckout",
+			Handler:    _PaymentsService_SettleCheckout_Handler,
+		},
+		{
+			MethodName: "FailCheckout",
+			Handler:    _PaymentsService_FailCheckout_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

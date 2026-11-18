@@ -575,6 +575,469 @@ export declare type RunAutopayResponse = Message<"novam.payments.v1.RunAutopayRe
 export declare const RunAutopayResponseSchema: GenMessage<RunAutopayResponse>;
 
 /**
+ * @generated from message novam.payments.v1.PayInvoiceRequest
+ */
+export declare type PayInvoiceRequest = Message<"novam.payments.v1.PayInvoiceRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string user_id = 2;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string invoice_id = 3;
+   */
+  invoiceId: string;
+
+  /**
+   * Empty for the person's default method.
+   *
+   * @generated from field: string method_id = 4;
+   */
+  methodId: string;
+
+  /**
+   * pay (Passes' pay button) or autopay.
+   *
+   * @generated from field: string source = 5;
+   */
+  source: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.PayInvoiceRequest.
+ * Use `create(PayInvoiceRequestSchema)` to create a new message.
+ */
+export declare const PayInvoiceRequestSchema: GenMessage<PayInvoiceRequest>;
+
+/**
+ * @generated from message novam.payments.v1.PayInvoiceResponse
+ */
+export declare type PayInvoiceResponse = Message<"novam.payments.v1.PayInvoiceResponse"> & {
+  /**
+   * succeeded, processing, requires_action or failed.
+   *
+   * @generated from field: string state = 1;
+   */
+  state: string;
+
+  /**
+   * @generated from field: string attempt_id = 2;
+   */
+  attemptId: string;
+
+  /**
+   * @generated from field: string payment_intent_id = 3;
+   */
+  paymentIntentId: string;
+
+  /**
+   * @generated from field: double amount = 4;
+   */
+  amount: number;
+
+  /**
+   * @generated from field: string currency = 5;
+   */
+  currency: string;
+
+  /**
+   * requires_action only: what the app finishes 3-D Secure with.
+   *
+   * @generated from field: string client_secret = 6;
+   */
+  clientSecret: string;
+
+  /**
+   * @generated from field: string stripe_account = 7;
+   */
+  stripeAccount: string;
+
+  /**
+   * failed only.
+   *
+   * @generated from field: string error = 8;
+   */
+  error: string;
+
+  /**
+   * @generated from field: string code = 9;
+   */
+  code: string;
+
+  /**
+   * @generated from field: string method_id = 10;
+   */
+  methodId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.PayInvoiceResponse.
+ * Use `create(PayInvoiceResponseSchema)` to create a new message.
+ */
+export declare const PayInvoiceResponseSchema: GenMessage<PayInvoiceResponse>;
+
+/**
+ * @generated from message novam.payments.v1.RefreshIntentRequest
+ */
+export declare type RefreshIntentRequest = Message<"novam.payments.v1.RefreshIntentRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string invoice_id = 2;
+   */
+  invoiceId: string;
+
+  /**
+   * @generated from field: string user_id = 3;
+   */
+  userId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.RefreshIntentRequest.
+ * Use `create(RefreshIntentRequestSchema)` to create a new message.
+ */
+export declare const RefreshIntentRequestSchema: GenMessage<RefreshIntentRequest>;
+
+/**
+ * @generated from message novam.payments.v1.RefreshIntentResponse
+ */
+export declare type RefreshIntentResponse = Message<"novam.payments.v1.RefreshIntentResponse"> & {
+  /**
+   * none, succeeded, processing, requires_action or failed.
+   *
+   * @generated from field: string state = 1;
+   */
+  state: string;
+
+  /**
+   * @generated from field: string payment_intent_id = 2;
+   */
+  paymentIntentId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.RefreshIntentResponse.
+ * Use `create(RefreshIntentResponseSchema)` to create a new message.
+ */
+export declare const RefreshIntentResponseSchema: GenMessage<RefreshIntentResponse>;
+
+/**
+ * @generated from message novam.payments.v1.ApplyIntentEventRequest
+ */
+export declare type ApplyIntentEventRequest = Message<"novam.payments.v1.ApplyIntentEventRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * payment_intent.succeeded, payment_intent.processing or payment_intent.payment_failed.
+   *
+   * @generated from field: string type = 2;
+   */
+  type: string;
+
+  /**
+   * @generated from field: string intent_id = 3;
+   */
+  intentId: string;
+
+  /**
+   * @generated from field: string last_error = 4;
+   */
+  lastError: string;
+
+  /**
+   * The intent's metadata.attempt_id.
+   *
+   * @generated from field: string attempt_id = 5;
+   */
+  attemptId: string;
+
+  /**
+   * The connected account the event came from.
+   *
+   * @generated from field: string account = 6;
+   */
+  account: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ApplyIntentEventRequest.
+ * Use `create(ApplyIntentEventRequestSchema)` to create a new message.
+ */
+export declare const ApplyIntentEventRequestSchema: GenMessage<ApplyIntentEventRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ApplyIntentEventResponse
+ */
+export declare type ApplyIntentEventResponse = Message<"novam.payments.v1.ApplyIntentEventResponse"> & {
+  /**
+   * recorded, failed, unknown or ignored.
+   *
+   * @generated from field: string result = 1;
+   */
+  result: string;
+
+  /**
+   * @generated from field: string attempt_id = 2;
+   */
+  attemptId: string;
+
+  /**
+   * @generated from field: string org_id = 3;
+   */
+  orgId: string;
+
+  /**
+   * @generated from field: string client_invoice_id = 4;
+   */
+  clientInvoiceId: string;
+
+  /**
+   * @generated from field: string user_id = 5;
+   */
+  userId: string;
+
+  /**
+   * @generated from field: string source = 6;
+   */
+  source: string;
+
+  /**
+   * A payment the failure flipped, if any.
+   *
+   * @generated from field: string failed_payment_id = 7;
+   */
+  failedPaymentId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ApplyIntentEventResponse.
+ * Use `create(ApplyIntentEventResponseSchema)` to create a new message.
+ */
+export declare const ApplyIntentEventResponseSchema: GenMessage<ApplyIntentEventResponse>;
+
+/**
+ * @generated from message novam.payments.v1.OpenCheckoutRequest
+ */
+export declare type OpenCheckoutRequest = Message<"novam.payments.v1.OpenCheckoutRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string client_invoice_id = 2;
+   */
+  clientInvoiceId: string;
+
+  /**
+   * @generated from field: string processor = 3;
+   */
+  processor: string;
+
+  /**
+   * @generated from field: string session_id = 4;
+   */
+  sessionId: string;
+
+  /**
+   * @generated from field: double amount = 5;
+   */
+  amount: number;
+
+  /**
+   * @generated from field: string currency = 6;
+   */
+  currency: string;
+
+  /**
+   * @generated from field: string renter_contact_id = 7;
+   */
+  renterContactId: string;
+
+  /**
+   * @generated from field: double tip = 8;
+   */
+  tip: number;
+};
+
+/**
+ * Describes the message novam.payments.v1.OpenCheckoutRequest.
+ * Use `create(OpenCheckoutRequestSchema)` to create a new message.
+ */
+export declare const OpenCheckoutRequestSchema: GenMessage<OpenCheckoutRequest>;
+
+/**
+ * @generated from message novam.payments.v1.OpenCheckoutResponse
+ */
+export declare type OpenCheckoutResponse = Message<"novam.payments.v1.OpenCheckoutResponse"> & {
+  /**
+   * @generated from field: string checkout_id = 1;
+   */
+  checkoutId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.OpenCheckoutResponse.
+ * Use `create(OpenCheckoutResponseSchema)` to create a new message.
+ */
+export declare const OpenCheckoutResponseSchema: GenMessage<OpenCheckoutResponse>;
+
+/**
+ * @generated from message novam.payments.v1.SettleCheckoutRequest
+ */
+export declare type SettleCheckoutRequest = Message<"novam.payments.v1.SettleCheckoutRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string processor = 2;
+   */
+  processor: string;
+
+  /**
+   * @generated from field: string session_id = 3;
+   */
+  sessionId: string;
+
+  /**
+   * Only a checkout of this business, when set.
+   *
+   * @generated from field: string org_id = 4;
+   */
+  orgId: string;
+
+  /**
+   * What the processor took, tip included; unset to take the checkout's own amount and tip.
+   *
+   * @generated from field: optional double amount = 5;
+   */
+  amount?: number;
+
+  /**
+   * @generated from field: string currency = 6;
+   */
+  currency: string;
+
+  /**
+   * Stripe's intent behind it, so a later refund or dispute finds the payment.
+   *
+   * @generated from field: string payment_intent = 7;
+   */
+  paymentIntent: string;
+
+  /**
+   * How the payment is filed: its method (card, paypal) and notes; the processor's name for the team's notice.
+   *
+   * @generated from field: string payment_method = 8;
+   */
+  paymentMethod: string;
+
+  /**
+   * @generated from field: string paid_how = 9;
+   */
+  paidHow: string;
+
+  /**
+   * @generated from field: string processor_name = 10;
+   */
+  processorName: string;
+
+  /**
+   * Taken in person (tap to pay): the team is told only of a second payment.
+   *
+   * @generated from field: bool in_person = 11;
+   */
+  inPerson: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.SettleCheckoutRequest.
+ * Use `create(SettleCheckoutRequestSchema)` to create a new message.
+ */
+export declare const SettleCheckoutRequestSchema: GenMessage<SettleCheckoutRequest>;
+
+/**
+ * @generated from message novam.payments.v1.SettleCheckoutResponse
+ */
+export declare type SettleCheckoutResponse = Message<"novam.payments.v1.SettleCheckoutResponse"> & {
+  /**
+   * paid, already_paid or unknown.
+   *
+   * @generated from field: string result = 1;
+   */
+  result: string;
+
+  /**
+   * @generated from field: string payment_id = 2;
+   */
+  paymentId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.SettleCheckoutResponse.
+ * Use `create(SettleCheckoutResponseSchema)` to create a new message.
+ */
+export declare const SettleCheckoutResponseSchema: GenMessage<SettleCheckoutResponse>;
+
+/**
+ * @generated from message novam.payments.v1.FailCheckoutRequest
+ */
+export declare type FailCheckoutRequest = Message<"novam.payments.v1.FailCheckoutRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string processor = 2;
+   */
+  processor: string;
+
+  /**
+   * @generated from field: string session_id = 3;
+   */
+  sessionId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.FailCheckoutRequest.
+ * Use `create(FailCheckoutRequestSchema)` to create a new message.
+ */
+export declare const FailCheckoutRequestSchema: GenMessage<FailCheckoutRequest>;
+
+/**
+ * @generated from message novam.payments.v1.FailCheckoutResponse
+ */
+export declare type FailCheckoutResponse = Message<"novam.payments.v1.FailCheckoutResponse"> & {
+  /**
+   * failed or unknown.
+   *
+   * @generated from field: string result = 1;
+   */
+  result: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.FailCheckoutResponse.
+ * Use `create(FailCheckoutResponseSchema)` to create a new message.
+ */
+export declare const FailCheckoutResponseSchema: GenMessage<FailCheckoutResponse>;
+
+/**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
  * what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
  * sound first, then asks here; it reads the payment back to answer.
@@ -692,6 +1155,72 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof RunAutopayRequestSchema;
     output: typeof RunAutopayResponseSchema;
+  },
+  /**
+   * A client paying an invoice with a wallet method from Passes (or a quote's deposit): on-session, so a card that
+   * needs 3-D Secure comes back requires_action with what the app finishes it with. Never charges twice: one intent per
+   * invoice in flight, and Stripe's Idempotency-Key is that intent's row. UNAVAILABLE only when the engine can't charge
+   * wallets, before anything is done.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.PayInvoice
+   */
+  payInvoice: {
+    methodKind: "unary";
+    input: typeof PayInvoiceRequestSchema;
+    output: typeof PayInvoiceResponseSchema;
+  },
+  /**
+   * After the person finished (or gave up on) 3-D Secure: what Stripe now says of their latest intent is recorded.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.RefreshIntent
+   */
+  refreshIntent: {
+    methodKind: "unary";
+    input: typeof RefreshIntentRequestSchema;
+    output: typeof RefreshIntentResponseSchema;
+  },
+  /**
+   * A verified payment_intent.succeeded, .processing or .payment_failed for a wallet intent: the payment recorded
+   * once, or failed once. The intent row is found by intent id, else by the attempt id in the intent's metadata (a
+   * charge whose answer was lost). Made for any business: the account the event came from is checked.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ApplyIntentEvent
+   */
+  applyIntentEvent: {
+    methodKind: "unary";
+    input: typeof ApplyIntentEventRequestSchema;
+    output: typeof ApplyIntentEventResponseSchema;
+  },
+  /**
+   * A pay-page checkout just started at the processor: its card_checkouts row.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.OpenCheckout
+   */
+  openCheckout: {
+    methodKind: "unary";
+    input: typeof OpenCheckoutRequestSchema;
+    output: typeof OpenCheckoutResponseSchema;
+  },
+  /**
+   * A checkout the processor says was paid (a signed webhook, or the processor asked): claimed once, its payment
+   * recorded with the tip apart, the invoice marked paid even when cancelled since, and the team told.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.SettleCheckout
+   */
+  settleCheckout: {
+    methodKind: "unary";
+    input: typeof SettleCheckoutRequestSchema;
+    output: typeof SettleCheckoutResponseSchema;
+  },
+  /**
+   * A bank payment started on the pay page that didn't go through: the open checkout is marked failed.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.FailCheckout
+   */
+  failCheckout: {
+    methodKind: "unary";
+    input: typeof FailCheckoutRequestSchema;
+    output: typeof FailCheckoutResponseSchema;
   },
 }>;
 
