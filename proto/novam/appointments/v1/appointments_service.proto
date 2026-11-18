@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package novam.appointments.v1;
+
+import "google/protobuf/struct.proto";
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/appointments/v1;appointmentsv1";
+
+// AppointmentsService runs in novam-engine's workflows server and writes a business's bookings (ADR-0009): the row,
+// its appointment event, its helpers, a return's pickup order once the return is done, and the change feed, in one
+// transaction. novam-data checks who may change it and readies the values (the series, plan, kind and price of a
+// pickup, the place's address, the package invoice and membership pass), then asks here; it reads the booking back
+// and does what else a change sets off (Front Desk, the standing plan, the team's notice, helper splits).
+service AppointmentsService {
+  rpc CreateAppointment(CreateAppointmentRequest) returns (CreateAppointmentResponse);
+  // Changes the fields in update_mask.
+  rpc UpdateAppointment(UpdateAppointmentRequest) returns (UpdateAppointmentResponse);
+  rpc DeleteAppointment(DeleteAppointmentRequest) returns (DeleteAppointmentResponse);
+  rpc UndeleteAppointment(UndeleteAppointmentRequest) returns (UndeleteAppointmentResponse);
+}
+
+// The team's helpers on a visit, when the request said who they are; set replaces them all.
+message Helpers {
+  repeated string helper_ids = 1;
+}
+
+message CreateAppointmentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // Chosen by novam-data, so a retried request adds the booking once.
+  string appointment_id = 2;
+  // The booking's fields as the REST API names them (client_id, title, start, end, status, offering_id, price,
+  // series_rule, …), ready to store.
+  google.protobuf.Struct appointment = 3;
+  Helpers helpers = 4;
+}
+
+message CreateAppointmentResponse {}
+
+message UpdateAppointmentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string appointment_id = 2;
+  // The new values of the fields in update_mask, named as in CreateAppointmentRequest.appointment.
+  google.protobuf.Struct appointment = 3;
+  repeated string update_mask = 4;
+  Helpers helpers = 5;
+}
+
+message UpdateAppointmentResponse {
+  // The booking's status before this change.
+  string previous_status = 1;
+}
+
+message DeleteAppointmentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string appointment_id = 2;
+}
+
+message DeleteAppointmentResponse {}
+
+message UndeleteAppointmentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string appointment_id = 2;
+}
+
+message UndeleteAppointmentResponse {}
