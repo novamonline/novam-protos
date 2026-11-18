@@ -1,0 +1,293 @@
+syntax = "proto3";
+
+package novam.insights.v1;
+
+import "google/protobuf/timestamp.proto";
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/insights/v1;insightsv1";
+
+// InsightsService runs in novam-engine's workflows server. It works out the business's numbers (money totals, goal
+// measures and pace, sales, tips, charts and reports) by reading the shared Postgres; it writes nothing. novam-data
+// checks the caller's permissions and plan, then asks for only what the caller may see.
+service InsightsService {
+  // Money totals for the overview screens: payments in the last 7 days and this month, what clients still owe, and
+  // this year's money in, expenses, payouts, sales tax and gift cards.
+  rpc GetFinanceSummary(GetFinanceSummaryRequest) returns (GetFinanceSummaryResponse);
+  // The value of goal measures over windows of the business's days, one value per window.
+  rpc Measure(MeasureRequest) returns (MeasureResponse);
+  // Where goals stand: value so far, pace, likely landing and the gap per week.
+  rpc GetGoalStandings(GetGoalStandingsRequest) returns (GetGoalStandingsResponse);
+  // Sales over a period, from billed to kept.
+  rpc GetSalesSummary(GetSalesSummaryRequest) returns (GetSalesSummaryResponse);
+  // Tips over a period, by method, team member and service.
+  rpc GetTipsSummary(GetTipsSummaryRequest) returns (GetTipsSummaryResponse);
+  // One of the analytics charts.
+  rpc GetChart(GetChartRequest) returns (GetChartResponse);
+  // A report's metrics over a period.
+  rpc ComputeReport(ComputeReportRequest) returns (ComputeReportResponse);
+  // A report as a file: csv or pdf.
+  rpc RenderReport(RenderReportRequest) returns (RenderReportResponse);
+}
+
+message GetFinanceSummaryRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // IANA time zone for months and the year; UTC when empty.
+  string time_zone = 2;
+  // What clients still owe; for callers with invoices:read.
+  bool include_outstanding = 3;
+  // Paid bills; for callers with bills:read.
+  bool include_expenses = 4;
+  // A renter's contact id: totals over their own clients only, without the business's bills, payouts and gift cards.
+  string book_contact_id = 5;
+}
+
+message PaidPeriod {
+  double amount = 1;
+  int32 count = 2;
+  int32 card_or_bank_count = 3;
+}
+
+message Outstanding {
+  double amount = 1;
+  int32 count = 2;
+  double overdue_amount = 3;
+  int32 overdue_count = 4;
+}
+
+message CategoryAmount {
+  string category = 1;
+  double amount = 2;
+}
+
+message FinanceYear {
+  int32 year = 1;
+  double money_in = 2;
+  // Set with include_expenses.
+  optional double expenses = 3;
+  // Paid bills by category, largest first; bills without one are under "other".
+  repeated CategoryAmount expenses_by_category = 4;
+  double helper_payouts = 5;
+  // January to December; months still to come are 0.
+  repeated double money_in_by_month = 6;
+  // Paid straight to the business (Zelle, cash, check, bank transfer): no 1099-K will report it.
+  double money_in_direct = 7;
+  // The sales tax share of what clients paid: owed to the state, not income.
+  double sales_tax_collected = 8;
+}
+
+message GiftCardTotals {
+  double outstanding_balance = 1;
+  int32 active_count = 2;
+  double sold_this_year = 3;
+  double redeemed_this_year = 4;
+}
+
+message GetFinanceSummaryResponse {
+  string time_zone = 1;
+  PaidPeriod paid_past_week = 2;
+  PaidPeriod paid_this_month = 3;
+  // Set with include_outstanding.
+  Outstanding outstanding = 4;
+  FinanceYear year = 5;
+  GiftCardTotals gift_cards = 6;
+}
+
+// One measure over the business's days [from, to), YYYY-MM-DD in the request's time zone.
+message MeasureWindow {
+  // money_in, kept, profit_margin, average_ticket, product_sales, owed, client_lifetime_value, marketing_return,
+  // new_clients, clients_returning, leads_converted, appointments_done, how_full, no_shows, new_reviews,
+  // average_rating or team_share.
+  string metric = 1;
+  string from = 2;
+  string to = 3;
+  // One team member's own work, for the measures that allow it.
+  string assignee_id = 4;
+}
+
+message MeasureRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string time_zone = 2;
+  repeated MeasureWindow windows = 3;
+}
+
+message MeasureValue {
+  // Unset when there is nothing to measure yet (nothing to divide by).
+  optional double value = 1;
+}
+
+message MeasureResponse {
+  // In the order of the request's windows.
+  repeated MeasureValue values = 1;
+}
+
+message GoalInput {
+  string goal_id = 1;
+  string metric = 2;
+  double target = 3;
+  // at_least or at_most.
+  string direction = 4;
+  // First and last day, YYYY-MM-DD, both counted.
+  string start_date = 5;
+  string end_date = 6;
+  string assignee_id = 7;
+}
+
+message GetGoalStandingsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string time_zone = 2;
+  // Today in the business's time zone, YYYY-MM-DD.
+  string today = 3;
+  repeated GoalInput goals = 4;
+}
+
+message GoalStanding {
+  string goal_id = 1;
+  // not_started, not_enough, ahead, on_pace, behind, done or missed.
+  string status = 2;
+  optional double value = 3;
+  optional double likely = 4;
+  double gap = 5;
+  double gap_per_week = 6;
+  int32 days_left = 7;
+  // Share of the goal's time gone, 0 to 1.
+  double elapsed = 8;
+  // money, count, percent, rating or ratio.
+  string unit = 9;
+  bool additive = 10;
+  // The last 90 days' average ticket, for saying a gap as work; unset with no visits.
+  optional double usual_ticket = 11;
+  int32 open_leads = 12;
+  // The day the value is for (today, or the goal's last day once it is over); YYYY-MM-DD.
+  string value_day = 13;
+}
+
+message GetGoalStandingsResponse {
+  // In the order of the request's goals; a goal on an unknown metric is left out.
+  repeated GoalStanding standings = 1;
+}
+
+message GetSalesSummaryRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
+}
+
+message MethodAmount {
+  string method = 1;
+  double amount = 2;
+}
+
+message SalesGiftCards {
+  double sold = 1;
+  int32 sold_count = 2;
+  double redeemed = 3;
+  double outstanding = 4;
+}
+
+message GetSalesSummaryResponse {
+  double billed = 1;
+  int32 invoices = 2;
+  int32 visits = 3;
+  double discounts = 4;
+  double refunds = 5;
+  int32 refunded = 6;
+  double net = 7;
+  double tax = 8;
+  double tips = 9;
+  SalesGiftCards gift_cards = 10;
+  repeated MethodAmount by_method = 11;
+}
+
+message GetTipsSummaryRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  google.protobuf.Timestamp start = 2;
+  google.protobuf.Timestamp end = 3;
+}
+
+message MemberTips {
+  // Empty when the tip went to no one in particular.
+  string member_id = 1;
+  string name = 2;
+  double amount = 3;
+  int32 count = 4;
+}
+
+message ServiceTips {
+  string name = 1;
+  double amount = 2;
+  int32 count = 3;
+}
+
+message GetTipsSummaryResponse {
+  double total = 1;
+  int32 tipped = 2;
+  int32 payments = 3;
+  // Tips over what the tipped payments paid, as a whole percent; unset with no tips.
+  optional int32 average_pct = 4;
+  repeated MethodAmount by_method = 5;
+  repeated MemberTips by_member = 6;
+  repeated ServiceTips by_service = 7;
+}
+
+enum ChartKind {
+  CHART_KIND_UNSPECIFIED = 0;
+  // API latency, 5xx error rate and requests per day, last 14 days: label is the day, values response_time,
+  // error_rate and throughput.
+  CHART_KIND_API_PERFORMANCE = 1;
+  // Active records per area: label is the area, values value.
+  CHART_KIND_RECORD_COUNTS = 2;
+  // Payments by method: label is the method, values value.
+  CHART_KIND_REVENUE_BY_METHOD = 3;
+  // The 10 most recent invoices' totals: label is the invoice number, values value.
+  CHART_KIND_RECENT_INVOICES = 4;
+}
+
+message GetChartRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  ChartKind kind = 2;
+}
+
+message ChartPoint {
+  string label = 1;
+  map<string, double> values = 2;
+}
+
+message GetChartResponse {
+  repeated ChartPoint points = 1;
+}
+
+message ReportMetric {
+  string name = 1;
+  double value = 2;
+  // count or currency.
+  string unit = 3;
+}
+
+message ComputeReportRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // usage, performance, billing or custom.
+  string type = 2;
+  google.protobuf.Timestamp start = 3;
+  google.protobuf.Timestamp end = 4;
+}
+
+message ComputeReportResponse {
+  repeated ReportMetric metrics = 1;
+}
+
+message RenderReportRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // csv or pdf.
+  string format = 2;
+  string title = 3;
+  google.protobuf.Timestamp period_start = 4;
+  google.protobuf.Timestamp period_end = 5;
+  google.protobuf.Timestamp generated_at = 6;
+  repeated ReportMetric metrics = 7;
+}
+
+message RenderReportResponse {
+  bytes content = 1;
+  string content_type = 2;
+}
