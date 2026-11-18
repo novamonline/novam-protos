@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package novam.banking.v1;
+
+import "novam/common/v1/common.proto";
+import "novam/plaid/v1/plaid_service.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/banking/v1;bankingv1";
+
+// BankingService runs in novam-engine's workflows server and owns a business's linked banks (ADR-0009): it stores
+// a bank login (plaid_items, its access token encrypted with novam-data's ENCRYPTION_KEY), syncs its accounts and
+// transactions from Plaid, files new lines by the owner's merchant rules, and unlinks it. novam-data's Plaid routes
+// and webhook call it; the engine is the only writer of these rows while it can be asked.
+service BankingService {
+  // Stores a bank just linked with its accounts, and returns the login's row id. Logins whose accounts all moved
+  // to this one (the same bank linked twice) are ended at Plaid and deleted.
+  rpc SaveLink(SaveLinkRequest) returns (SaveLinkResponse);
+  // Syncs a login now: new, changed and removed transactions and balances. busy when another sync has it (that
+  // sync goes round again).
+  rpc SyncItem(SyncItemRequest) returns (SyncItemResponse);
+  // Syncs a login in the background, looking again after each wait in retry_ms while nothing has arrived (a bank
+  // just linked whose history Plaid is still gathering).
+  rpc SyncLater(SyncLaterRequest) returns (SyncLaterResponse);
+  // Ends a login at Plaid and deletes it with its token; its accounts and transactions stay, unlinked.
+  rpc RemoveLink(RemoveLinkRequest) returns (RemoveLinkResponse);
+}
+
+message SaveLinkRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // Plaid's item id.
+  string item_id = 2;
+  string access_token = 3;
+  // The business's own Plaid keys it was linked with; unset for Novam's.
+  novam.plaid.v1.Credentials own_keys = 4;
+  string institution_name = 5;
+  repeated novam.plaid.v1.Account accounts = 6;
+  // Novam's Plaid keys, for ending a replaced login linked with them.
+  novam.plaid.v1.Credentials novam_keys = 7;
+}
+
+message SaveLinkResponse {
+  string id = 1;
+  // Set when the login belongs to another business.
+  string refused = 2;
+}
+
+message SyncItemRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The login's row id.
+  string id = 2;
+  // After signing in to the bank again: clear the login's status first.
+  bool reconnected = 3;
+  // Novam's Plaid keys, for a login linked without the business's own.
+  novam.plaid.v1.Credentials novam_keys = 4;
+}
+
+message SyncItemResponse {
+  bool busy = 1;
+  int32 added = 2;
+  int32 modified = 3;
+  int32 removed = 4;
+  // What Plaid said when it refused; the login is marked needs_reconnect when only signing in again can clear it.
+  novam.plaid.v1.Failure failure = 5;
+}
+
+message SyncLaterRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string id = 2;
+  repeated int32 retry_ms = 3;
+  novam.plaid.v1.Credentials novam_keys = 4;
+}
+
+message SyncLaterResponse {}
+
+message RemoveLinkRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string id = 2;
+  novam.plaid.v1.Credentials novam_keys = 3;
+}
+
+message RemoveLinkResponse {
+  // False when the business has no such login.
+  bool removed = 1;
+  novam.plaid.v1.Failure failure = 2;
+}
