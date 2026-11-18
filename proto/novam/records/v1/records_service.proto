@@ -19,6 +19,10 @@ service RecordsService {
   // Soft-deletes the record.
   rpc DeleteRecord(DeleteRecordRequest) returns (DeleteRecordResponse);
   rpc UndeleteRecord(UndeleteRecordRequest) returns (UndeleteRecordResponse);
+  // Runs one of a collection's named changes to a record that a field update can't say, such as adding to a list
+  // or a note (scheduleBlocks keep, contacts followedUp). NOT_FOUND when the record isn't there; UNIMPLEMENTED when
+  // the engine doesn't have the action.
+  rpc RunAction(RunActionRequest) returns (RunActionResponse);
 }
 
 message CreateRecordRequest {
@@ -59,3 +63,14 @@ message UndeleteRecordRequest {
 }
 
 message UndeleteRecordResponse {}
+
+message RunActionRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string collection = 2;
+  string id = 3;
+  // The action's name, as the engine's collection registers it.
+  string action = 4;
+  google.protobuf.Struct args = 5;
+}
+
+message RunActionResponse {}

@@ -23,6 +23,7 @@ const (
 	RecordsService_UpdateRecord_FullMethodName   = "/novam.records.v1.RecordsService/UpdateRecord"
 	RecordsService_DeleteRecord_FullMethodName   = "/novam.records.v1.RecordsService/DeleteRecord"
 	RecordsService_UndeleteRecord_FullMethodName = "/novam.records.v1.RecordsService/UndeleteRecord"
+	RecordsService_RunAction_FullMethodName      = "/novam.records.v1.RecordsService/RunAction"
 )
 
 // RecordsServiceClient is the client API for RecordsService service.
@@ -41,6 +42,10 @@ type RecordsServiceClient interface {
 	// Soft-deletes the record.
 	DeleteRecord(ctx context.Context, in *DeleteRecordRequest, opts ...grpc.CallOption) (*DeleteRecordResponse, error)
 	UndeleteRecord(ctx context.Context, in *UndeleteRecordRequest, opts ...grpc.CallOption) (*UndeleteRecordResponse, error)
+	// Runs one of a collection's named changes to a record that a field update can't say, such as adding to a list
+	// or a note (scheduleBlocks keep, contacts followedUp). NOT_FOUND when the record isn't there; UNIMPLEMENTED when
+	// the engine doesn't have the action.
+	RunAction(ctx context.Context, in *RunActionRequest, opts ...grpc.CallOption) (*RunActionResponse, error)
 }
 
 type recordsServiceClient struct {
@@ -91,6 +96,16 @@ func (c *recordsServiceClient) UndeleteRecord(ctx context.Context, in *UndeleteR
 	return out, nil
 }
 
+func (c *recordsServiceClient) RunAction(ctx context.Context, in *RunActionRequest, opts ...grpc.CallOption) (*RunActionResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RunActionResponse)
+	err := c.cc.Invoke(ctx, RecordsService_RunAction_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // RecordsServiceServer is the server API for RecordsService service.
 // All implementations must embed UnimplementedRecordsServiceServer
 // for forward compatibility.
@@ -107,6 +122,10 @@ type RecordsServiceServer interface {
 	// Soft-deletes the record.
 	DeleteRecord(context.Context, *DeleteRecordRequest) (*DeleteRecordResponse, error)
 	UndeleteRecord(context.Context, *UndeleteRecordRequest) (*UndeleteRecordResponse, error)
+	// Runs one of a collection's named changes to a record that a field update can't say, such as adding to a list
+	// or a note (scheduleBlocks keep, contacts followedUp). NOT_FOUND when the record isn't there; UNIMPLEMENTED when
+	// the engine doesn't have the action.
+	RunAction(context.Context, *RunActionRequest) (*RunActionResponse, error)
 	mustEmbedUnimplementedRecordsServiceServer()
 }
 
@@ -128,6 +147,9 @@ func (UnimplementedRecordsServiceServer) DeleteRecord(context.Context, *DeleteRe
 }
 func (UnimplementedRecordsServiceServer) UndeleteRecord(context.Context, *UndeleteRecordRequest) (*UndeleteRecordResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method UndeleteRecord not implemented")
+}
+func (UnimplementedRecordsServiceServer) RunAction(context.Context, *RunActionRequest) (*RunActionResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RunAction not implemented")
 }
 func (UnimplementedRecordsServiceServer) mustEmbedUnimplementedRecordsServiceServer() {}
 func (UnimplementedRecordsServiceServer) testEmbeddedByValue()                        {}
@@ -222,6 +244,24 @@ func _RecordsService_UndeleteRecord_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _RecordsService_RunAction_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RunActionRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(RecordsServiceServer).RunAction(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: RecordsService_RunAction_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(RecordsServiceServer).RunAction(ctx, req.(*RunActionRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // RecordsService_ServiceDesc is the grpc.ServiceDesc for RecordsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -244,6 +284,10 @@ var RecordsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UndeleteRecord",
 			Handler:    _RecordsService_UndeleteRecord_Handler,
+		},
+		{
+			MethodName: "RunAction",
+			Handler:    _RecordsService_RunAction_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

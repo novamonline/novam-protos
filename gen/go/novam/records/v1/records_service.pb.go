@@ -435,6 +435,119 @@ func (*UndeleteRecordResponse) Descriptor() ([]byte, []int) {
 	return file_novam_records_v1_records_service_proto_rawDescGZIP(), []int{7}
 }
 
+type RunActionRequest struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Metadata   *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Collection string                 `protobuf:"bytes,2,opt,name=collection,proto3" json:"collection,omitempty"`
+	Id         string                 `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`
+	// The action's name, as the engine's collection registers it.
+	Action        string           `protobuf:"bytes,4,opt,name=action,proto3" json:"action,omitempty"`
+	Args          *structpb.Struct `protobuf:"bytes,5,opt,name=args,proto3" json:"args,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunActionRequest) Reset() {
+	*x = RunActionRequest{}
+	mi := &file_novam_records_v1_records_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunActionRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunActionRequest) ProtoMessage() {}
+
+func (x *RunActionRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_records_v1_records_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunActionRequest.ProtoReflect.Descriptor instead.
+func (*RunActionRequest) Descriptor() ([]byte, []int) {
+	return file_novam_records_v1_records_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *RunActionRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *RunActionRequest) GetCollection() string {
+	if x != nil {
+		return x.Collection
+	}
+	return ""
+}
+
+func (x *RunActionRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *RunActionRequest) GetAction() string {
+	if x != nil {
+		return x.Action
+	}
+	return ""
+}
+
+func (x *RunActionRequest) GetArgs() *structpb.Struct {
+	if x != nil {
+		return x.Args
+	}
+	return nil
+}
+
+type RunActionResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RunActionResponse) Reset() {
+	*x = RunActionResponse{}
+	mi := &file_novam_records_v1_records_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RunActionResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RunActionResponse) ProtoMessage() {}
+
+func (x *RunActionResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_records_v1_records_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RunActionResponse.ProtoReflect.Descriptor instead.
+func (*RunActionResponse) Descriptor() ([]byte, []int) {
+	return file_novam_records_v1_records_service_proto_rawDescGZIP(), []int{9}
+}
+
 var File_novam_records_v1_records_service_proto protoreflect.FileDescriptor
 
 const file_novam_records_v1_records_service_proto_rawDesc = "" +
@@ -471,12 +584,22 @@ const file_novam_records_v1_records_service_proto_rawDesc = "" +
 	"collection\x18\x02 \x01(\tR\n" +
 	"collection\x12\x0e\n" +
 	"\x02id\x18\x03 \x01(\tR\x02id\"\x18\n" +
-	"\x16UndeleteRecordResponse2\x92\x03\n" +
+	"\x16UndeleteRecordResponse\"\xc5\x01\n" +
+	"\x10RunActionRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1e\n" +
+	"\n" +
+	"collection\x18\x02 \x01(\tR\n" +
+	"collection\x12\x0e\n" +
+	"\x02id\x18\x03 \x01(\tR\x02id\x12\x16\n" +
+	"\x06action\x18\x04 \x01(\tR\x06action\x12+\n" +
+	"\x04args\x18\x05 \x01(\v2\x17.google.protobuf.StructR\x04args\"\x13\n" +
+	"\x11RunActionResponse2\xe8\x03\n" +
 	"\x0eRecordsService\x12]\n" +
 	"\fCreateRecord\x12%.novam.records.v1.CreateRecordRequest\x1a&.novam.records.v1.CreateRecordResponse\x12]\n" +
 	"\fUpdateRecord\x12%.novam.records.v1.UpdateRecordRequest\x1a&.novam.records.v1.UpdateRecordResponse\x12]\n" +
 	"\fDeleteRecord\x12%.novam.records.v1.DeleteRecordRequest\x1a&.novam.records.v1.DeleteRecordResponse\x12c\n" +
-	"\x0eUndeleteRecord\x12'.novam.records.v1.UndeleteRecordRequest\x1a(.novam.records.v1.UndeleteRecordResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/records/v1;recordsv1b\x06proto3"
+	"\x0eUndeleteRecord\x12'.novam.records.v1.UndeleteRecordRequest\x1a(.novam.records.v1.UndeleteRecordResponse\x12T\n" +
+	"\tRunAction\x12\".novam.records.v1.RunActionRequest\x1a#.novam.records.v1.RunActionResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/records/v1;recordsv1b\x06proto3"
 
 var (
 	file_novam_records_v1_records_service_proto_rawDescOnce sync.Once
@@ -490,7 +613,7 @@ func file_novam_records_v1_records_service_proto_rawDescGZIP() []byte {
 	return file_novam_records_v1_records_service_proto_rawDescData
 }
 
-var file_novam_records_v1_records_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_novam_records_v1_records_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_novam_records_v1_records_service_proto_goTypes = []any{
 	(*CreateRecordRequest)(nil),    // 0: novam.records.v1.CreateRecordRequest
 	(*CreateRecordResponse)(nil),   // 1: novam.records.v1.CreateRecordResponse
@@ -500,29 +623,35 @@ var file_novam_records_v1_records_service_proto_goTypes = []any{
 	(*DeleteRecordResponse)(nil),   // 5: novam.records.v1.DeleteRecordResponse
 	(*UndeleteRecordRequest)(nil),  // 6: novam.records.v1.UndeleteRecordRequest
 	(*UndeleteRecordResponse)(nil), // 7: novam.records.v1.UndeleteRecordResponse
-	(*v1.RequestMetadata)(nil),     // 8: novam.common.v1.RequestMetadata
-	(*structpb.Struct)(nil),        // 9: google.protobuf.Struct
+	(*RunActionRequest)(nil),       // 8: novam.records.v1.RunActionRequest
+	(*RunActionResponse)(nil),      // 9: novam.records.v1.RunActionResponse
+	(*v1.RequestMetadata)(nil),     // 10: novam.common.v1.RequestMetadata
+	(*structpb.Struct)(nil),        // 11: google.protobuf.Struct
 }
 var file_novam_records_v1_records_service_proto_depIdxs = []int32{
-	8,  // 0: novam.records.v1.CreateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	9,  // 1: novam.records.v1.CreateRecordRequest.fields:type_name -> google.protobuf.Struct
-	8,  // 2: novam.records.v1.UpdateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	9,  // 3: novam.records.v1.UpdateRecordRequest.fields:type_name -> google.protobuf.Struct
-	8,  // 4: novam.records.v1.DeleteRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	8,  // 5: novam.records.v1.UndeleteRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 6: novam.records.v1.RecordsService.CreateRecord:input_type -> novam.records.v1.CreateRecordRequest
-	2,  // 7: novam.records.v1.RecordsService.UpdateRecord:input_type -> novam.records.v1.UpdateRecordRequest
-	4,  // 8: novam.records.v1.RecordsService.DeleteRecord:input_type -> novam.records.v1.DeleteRecordRequest
-	6,  // 9: novam.records.v1.RecordsService.UndeleteRecord:input_type -> novam.records.v1.UndeleteRecordRequest
-	1,  // 10: novam.records.v1.RecordsService.CreateRecord:output_type -> novam.records.v1.CreateRecordResponse
-	3,  // 11: novam.records.v1.RecordsService.UpdateRecord:output_type -> novam.records.v1.UpdateRecordResponse
-	5,  // 12: novam.records.v1.RecordsService.DeleteRecord:output_type -> novam.records.v1.DeleteRecordResponse
-	7,  // 13: novam.records.v1.RecordsService.UndeleteRecord:output_type -> novam.records.v1.UndeleteRecordResponse
-	10, // [10:14] is the sub-list for method output_type
-	6,  // [6:10] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	10, // 0: novam.records.v1.CreateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 1: novam.records.v1.CreateRecordRequest.fields:type_name -> google.protobuf.Struct
+	10, // 2: novam.records.v1.UpdateRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 3: novam.records.v1.UpdateRecordRequest.fields:type_name -> google.protobuf.Struct
+	10, // 4: novam.records.v1.DeleteRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	10, // 5: novam.records.v1.UndeleteRecordRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	10, // 6: novam.records.v1.RunActionRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 7: novam.records.v1.RunActionRequest.args:type_name -> google.protobuf.Struct
+	0,  // 8: novam.records.v1.RecordsService.CreateRecord:input_type -> novam.records.v1.CreateRecordRequest
+	2,  // 9: novam.records.v1.RecordsService.UpdateRecord:input_type -> novam.records.v1.UpdateRecordRequest
+	4,  // 10: novam.records.v1.RecordsService.DeleteRecord:input_type -> novam.records.v1.DeleteRecordRequest
+	6,  // 11: novam.records.v1.RecordsService.UndeleteRecord:input_type -> novam.records.v1.UndeleteRecordRequest
+	8,  // 12: novam.records.v1.RecordsService.RunAction:input_type -> novam.records.v1.RunActionRequest
+	1,  // 13: novam.records.v1.RecordsService.CreateRecord:output_type -> novam.records.v1.CreateRecordResponse
+	3,  // 14: novam.records.v1.RecordsService.UpdateRecord:output_type -> novam.records.v1.UpdateRecordResponse
+	5,  // 15: novam.records.v1.RecordsService.DeleteRecord:output_type -> novam.records.v1.DeleteRecordResponse
+	7,  // 16: novam.records.v1.RecordsService.UndeleteRecord:output_type -> novam.records.v1.UndeleteRecordResponse
+	9,  // 17: novam.records.v1.RecordsService.RunAction:output_type -> novam.records.v1.RunActionResponse
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_novam_records_v1_records_service_proto_init() }
@@ -536,7 +665,7 @@ func file_novam_records_v1_records_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_records_v1_records_service_proto_rawDesc), len(file_novam_records_v1_records_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

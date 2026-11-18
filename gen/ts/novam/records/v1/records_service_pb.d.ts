@@ -187,6 +187,56 @@ export declare type UndeleteRecordResponse = Message<"novam.records.v1.UndeleteR
 export declare const UndeleteRecordResponseSchema: GenMessage<UndeleteRecordResponse>;
 
 /**
+ * @generated from message novam.records.v1.RunActionRequest
+ */
+export declare type RunActionRequest = Message<"novam.records.v1.RunActionRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string collection = 2;
+   */
+  collection: string;
+
+  /**
+   * @generated from field: string id = 3;
+   */
+  id: string;
+
+  /**
+   * The action's name, as the engine's collection registers it.
+   *
+   * @generated from field: string action = 4;
+   */
+  action: string;
+
+  /**
+   * @generated from field: google.protobuf.Struct args = 5;
+   */
+  args?: JsonObject;
+};
+
+/**
+ * Describes the message novam.records.v1.RunActionRequest.
+ * Use `create(RunActionRequestSchema)` to create a new message.
+ */
+export declare const RunActionRequestSchema: GenMessage<RunActionRequest>;
+
+/**
+ * @generated from message novam.records.v1.RunActionResponse
+ */
+export declare type RunActionResponse = Message<"novam.records.v1.RunActionResponse"> & {
+};
+
+/**
+ * Describes the message novam.records.v1.RunActionResponse.
+ * Use `create(RunActionResponseSchema)` to create a new message.
+ */
+export declare const RunActionResponseSchema: GenMessage<RunActionResponse>;
+
+/**
  * RecordsService runs in novam-engine's workflows server and writes a business's records whose rules are only
  * their row and what it sets off in the database (ADR-0009): schedule blocks, offerings, and more as they move. Each
  * write stores the row, its business event when the collection has one, what the collection does after a write, and
@@ -231,6 +281,18 @@ export declare const RecordsService: GenService<{
     methodKind: "unary";
     input: typeof UndeleteRecordRequestSchema;
     output: typeof UndeleteRecordResponseSchema;
+  },
+  /**
+   * Runs one of a collection's named changes to a record that a field update can't say, such as adding to a list
+   * or a note (scheduleBlocks keep, contacts followedUp). NOT_FOUND when the record isn't there; UNIMPLEMENTED when
+   * the engine doesn't have the action.
+   *
+   * @generated from rpc novam.records.v1.RecordsService.RunAction
+   */
+  runAction: {
+    methodKind: "unary";
+    input: typeof RunActionRequestSchema;
+    output: typeof RunActionResponseSchema;
   },
 }>;
 
