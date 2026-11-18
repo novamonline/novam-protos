@@ -137,6 +137,12 @@ export declare type Command = Message<"novam.commands.v1.Command"> & {
      */
     value: InvoiceSend;
     case: "invoiceSend";
+  } | {
+    /**
+     * @generated from field: novam.commands.v1.ClientMessage client_message = 22;
+     */
+    value: ClientMessage;
+    case: "clientMessage";
   } | { case: undefined; value?: undefined };
 };
 
@@ -599,6 +605,31 @@ export declare type InvoiceSend = Message<"novam.commands.v1.InvoiceSend"> & {
  * Use `create(InvoiceSendSchema)` to create a new message.
  */
 export declare const InvoiceSendSchema: GenMessage<InvoiceSend>;
+
+/**
+ * frontDeskThreads.postClientMessage: a message from a client to the business, in their conversation, as the client
+ * writing it themselves (the Front Desk thread is opened when there is none, and the team is told). The engine sends it
+ * when a client moves one of their bookings on their own calendar: the business is asked for the new time.
+ *
+ * @generated from message novam.commands.v1.ClientMessage
+ */
+export declare type ClientMessage = Message<"novam.commands.v1.ClientMessage"> & {
+  /**
+   * @generated from field: string client_id = 1;
+   */
+  clientId: string;
+
+  /**
+   * @generated from field: string body = 2;
+   */
+  body: string;
+};
+
+/**
+ * Describes the message novam.commands.v1.ClientMessage.
+ * Use `create(ClientMessageSchema)` to create a new message.
+ */
+export declare const ClientMessageSchema: GenMessage<ClientMessage>;
 
 /**
  * Published to the command's reply_subject once it is applied or rejected, and kept for a day. A command that

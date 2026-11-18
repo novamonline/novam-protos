@@ -1,0 +1,90 @@
+syntax = "proto3";
+
+package novam.calendars.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/calendars/v1;calendarsv1";
+
+// CalendarsService keeps calendars in step with Novam, in novam-engine's workflows server (ADR-0009). The team's own
+// Google and Outlook calendars (calendar_connections): their bookings written out as events, their busy times read in
+// as schedule blocks. And a client's own calendars (user_calendars: Google, Outlook, iCloud over CalDAV, a calendar
+// link): their events read in, their bookings with every business written out. The engine also runs both on their
+// timers and pushes booking changes as they happen; novam-data calls these when a person connects, changes or asks.
+// UNAVAILABLE means the engine can't do it here (no ENCRYPTION_KEY), so novam-data does it itself.
+service CalendarsService {
+  // Everything for one team calendar connection: bookings written, busy times read, push channels kept.
+  rpc SyncConnection(SyncConnectionRequest) returns (SyncConnectionResponse);
+  // Everything for one of a client's calendars: their events read, their bookings written.
+  rpc SyncUserCalendar(SyncUserCalendarRequest) returns (SyncUserCalendarResponse);
+  // A provider's change notification for a team calendar (a Google channel's headers, or Graph's notifications),
+  // checked against the channel's secret; a good one has the calendar read again shortly.
+  rpc CalendarNotified(CalendarNotifiedRequest) returns (CalendarNotifiedResponse);
+  // A client's own visit changed: their calendars are written again shortly.
+  rpc QueueUserWrites(QueueUserWritesRequest) returns (QueueUserWritesResponse);
+  // The periodic passes for both kinds, now; novam-data's backstop asks for this before running its own.
+  rpc RunCalendarPasses(RunCalendarPassesRequest) returns (RunCalendarPassesResponse);
+}
+
+message SyncConnectionRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string connection_id = 2;
+  // Read every calendar whole, not only what changed.
+  bool full = 3;
+}
+
+message SyncConnectionResponse {
+  bool ok = 1;
+  int32 created = 2;
+  int32 updated = 3;
+  int32 removed = 4;
+  int32 busy = 5;
+}
+
+message SyncUserCalendarRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string calendar_id = 2;
+  bool full = 3;
+}
+
+message SyncUserCalendarResponse {
+  bool ok = 1;
+}
+
+message MicrosoftNotification {
+  string subscription_id = 1;
+  string client_state = 2;
+  string lifecycle_event = 3;
+}
+
+message CalendarNotifiedRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // google or microsoft.
+  string provider = 2;
+  // Google's X-Goog-Channel-Id, X-Goog-Channel-Token and X-Goog-Resource-State.
+  string google_channel_id = 3;
+  string google_channel_token = 4;
+  string google_resource_state = 5;
+  repeated MicrosoftNotification microsoft = 6;
+}
+
+message CalendarNotifiedResponse {
+  // Notifications that named one of our channels with its secret.
+  int32 accepted = 1;
+}
+
+message QueueUserWritesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+}
+
+message QueueUserWritesResponse {}
+
+message RunCalendarPassesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message RunCalendarPassesResponse {
+  int32 connections_synced = 1;
+  int32 user_calendars_synced = 2;
+}

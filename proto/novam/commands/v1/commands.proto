@@ -47,6 +47,7 @@ message Command {
     CallEnd call_end = 19;
     RunAutomation run_automation = 20;
     InvoiceSend invoice_send = 21;
+    ClientMessage client_message = 22;
   }
 }
 
@@ -164,6 +165,14 @@ message RunAutomation {
 // The result's invoice is the invoice as sent.
 message InvoiceSend {
   string invoice_id = 1;
+}
+
+// frontDeskThreads.postClientMessage: a message from a client to the business, in their conversation, as the client
+// writing it themselves (the Front Desk thread is opened when there is none, and the team is told). The engine sends it
+// when a client moves one of their bookings on their own calendar: the business is asked for the new time.
+message ClientMessage {
+  string client_id = 1;
+  string body = 2;
 }
 
 enum CommandStatus {
