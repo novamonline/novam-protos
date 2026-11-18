@@ -1039,6 +1039,153 @@ export declare type RenderReportResponse = Message<"novam.insights.v1.RenderRepo
 export declare const RenderReportResponseSchema: GenMessage<RenderReportResponse>;
 
 /**
+ * @generated from message novam.insights.v1.TimeRange
+ */
+export declare type TimeRange = Message<"novam.insights.v1.TimeRange"> & {
+  /**
+   * @generated from field: google.protobuf.Timestamp start = 1;
+   */
+  start?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp end = 2;
+   */
+  end?: Timestamp;
+};
+
+/**
+ * Describes the message novam.insights.v1.TimeRange.
+ * Use `create(TimeRangeSchema)` to create a new message.
+ */
+export declare const TimeRangeSchema: GenMessage<TimeRange>;
+
+/**
+ * @generated from message novam.insights.v1.ListOpenTimesRequest
+ */
+export declare type ListOpenTimesRequest = Message<"novam.insights.v1.ListOpenTimesRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * How long the visit is.
+   *
+   * @generated from field: int32 minutes = 2;
+   */
+  minutes: number;
+
+  /**
+   * A day in the business's zone (YYYY-MM-DD), or an RFC 3339 time whose day there is used; today when empty or past.
+   *
+   * @generated from field: string from_date = 3;
+   */
+  fromDate: string;
+
+  /**
+   * @generated from field: int32 limit = 4;
+   */
+  limit: number;
+
+  /**
+   * At most this many times a day, spread from the day's first to its last; 3 when 0.
+   *
+   * @generated from field: int32 per_day = 5;
+   */
+  perDay: number;
+
+  /**
+   * A Front Desk thread whose own hold doesn't count, so its visitor can move it.
+   *
+   * @generated from field: string thread_id = 6;
+   */
+  threadId: string;
+
+  /**
+   * Also list the times inside the hours that are booked or held, marked taken.
+   *
+   * @generated from field: bool with_taken = 7;
+   */
+  withTaken: boolean;
+
+  /**
+   * The signed-in person's own busy times: left out for them, never shown taken.
+   *
+   * @generated from field: repeated novam.insights.v1.TimeRange person_busy = 8;
+   */
+  personBusy: TimeRange[];
+
+  /**
+   * Only this team member's times (the member a booking is for).
+   *
+   * @generated from field: string member_id = 9;
+   */
+  memberId: string;
+
+  /**
+   * The moment to look from; now when unset.
+   *
+   * @generated from field: google.protobuf.Timestamp now = 10;
+   */
+  now?: Timestamp;
+};
+
+/**
+ * Describes the message novam.insights.v1.ListOpenTimesRequest.
+ * Use `create(ListOpenTimesRequestSchema)` to create a new message.
+ */
+export declare const ListOpenTimesRequestSchema: GenMessage<ListOpenTimesRequest>;
+
+/**
+ * @generated from message novam.insights.v1.OpenTime
+ */
+export declare type OpenTime = Message<"novam.insights.v1.OpenTime"> & {
+  /**
+   * @generated from field: google.protobuf.Timestamp start = 1;
+   */
+  start?: Timestamp;
+
+  /**
+   * @generated from field: google.protobuf.Timestamp end = 2;
+   */
+  end?: Timestamp;
+
+  /**
+   * @generated from field: bool taken = 3;
+   */
+  taken: boolean;
+};
+
+/**
+ * Describes the message novam.insights.v1.OpenTime.
+ * Use `create(OpenTimeSchema)` to create a new message.
+ */
+export declare const OpenTimeSchema: GenMessage<OpenTime>;
+
+/**
+ * @generated from message novam.insights.v1.ListOpenTimesResponse
+ */
+export declare type ListOpenTimesResponse = Message<"novam.insights.v1.ListOpenTimesResponse"> & {
+  /**
+   * @generated from field: repeated novam.insights.v1.OpenTime times = 1;
+   */
+  times: OpenTime[];
+
+  /**
+   * The business's IANA time zone, the one the times are offered in.
+   *
+   * @generated from field: string time_zone = 2;
+   */
+  timeZone: string;
+};
+
+/**
+ * Describes the message novam.insights.v1.ListOpenTimesResponse.
+ * Use `create(ListOpenTimesResponseSchema)` to create a new message.
+ */
+export declare const ListOpenTimesResponseSchema: GenMessage<ListOpenTimesResponse>;
+
+/**
  * @generated from enum novam.insights.v1.ChartKind
  */
 export enum ChartKind {
@@ -1170,6 +1317,18 @@ export declare const InsightsService: GenService<{
     methodKind: "unary";
     input: typeof RenderReportRequestSchema;
     output: typeof RenderReportResponseSchema;
+  },
+  /**
+   * Times a visit can be booked: inside the business's hours, off its holidays and breaks, while someone who takes
+   * bookings is working and free, leaving out visits, time off, busy calendars and times held or being confirmed.
+   * The Reception agent, booking steps and novam-data's booking pages all offer these.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.ListOpenTimes
+   */
+  listOpenTimes: {
+    methodKind: "unary";
+    input: typeof ListOpenTimesRequestSchema;
+    output: typeof ListOpenTimesResponseSchema;
   },
 }>;
 

@@ -27,6 +27,7 @@ const (
 	InsightsService_GetChart_FullMethodName          = "/novam.insights.v1.InsightsService/GetChart"
 	InsightsService_ComputeReport_FullMethodName     = "/novam.insights.v1.InsightsService/ComputeReport"
 	InsightsService_RenderReport_FullMethodName      = "/novam.insights.v1.InsightsService/RenderReport"
+	InsightsService_ListOpenTimes_FullMethodName     = "/novam.insights.v1.InsightsService/ListOpenTimes"
 )
 
 // InsightsServiceClient is the client API for InsightsService service.
@@ -54,6 +55,10 @@ type InsightsServiceClient interface {
 	ComputeReport(ctx context.Context, in *ComputeReportRequest, opts ...grpc.CallOption) (*ComputeReportResponse, error)
 	// A report as a file: csv or pdf.
 	RenderReport(ctx context.Context, in *RenderReportRequest, opts ...grpc.CallOption) (*RenderReportResponse, error)
+	// Times a visit can be booked: inside the business's hours, off its holidays and breaks, while someone who takes
+	// bookings is working and free, leaving out visits, time off, busy calendars and times held or being confirmed.
+	// The Reception agent, booking steps and novam-data's booking pages all offer these.
+	ListOpenTimes(ctx context.Context, in *ListOpenTimesRequest, opts ...grpc.CallOption) (*ListOpenTimesResponse, error)
 }
 
 type insightsServiceClient struct {
@@ -144,6 +149,16 @@ func (c *insightsServiceClient) RenderReport(ctx context.Context, in *RenderRepo
 	return out, nil
 }
 
+func (c *insightsServiceClient) ListOpenTimes(ctx context.Context, in *ListOpenTimesRequest, opts ...grpc.CallOption) (*ListOpenTimesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListOpenTimesResponse)
+	err := c.cc.Invoke(ctx, InsightsService_ListOpenTimes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // InsightsServiceServer is the server API for InsightsService service.
 // All implementations must embed UnimplementedInsightsServiceServer
 // for forward compatibility.
@@ -169,6 +184,10 @@ type InsightsServiceServer interface {
 	ComputeReport(context.Context, *ComputeReportRequest) (*ComputeReportResponse, error)
 	// A report as a file: csv or pdf.
 	RenderReport(context.Context, *RenderReportRequest) (*RenderReportResponse, error)
+	// Times a visit can be booked: inside the business's hours, off its holidays and breaks, while someone who takes
+	// bookings is working and free, leaving out visits, time off, busy calendars and times held or being confirmed.
+	// The Reception agent, booking steps and novam-data's booking pages all offer these.
+	ListOpenTimes(context.Context, *ListOpenTimesRequest) (*ListOpenTimesResponse, error)
 	mustEmbedUnimplementedInsightsServiceServer()
 }
 
@@ -202,6 +221,9 @@ func (UnimplementedInsightsServiceServer) ComputeReport(context.Context, *Comput
 }
 func (UnimplementedInsightsServiceServer) RenderReport(context.Context, *RenderReportRequest) (*RenderReportResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RenderReport not implemented")
+}
+func (UnimplementedInsightsServiceServer) ListOpenTimes(context.Context, *ListOpenTimesRequest) (*ListOpenTimesResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ListOpenTimes not implemented")
 }
 func (UnimplementedInsightsServiceServer) mustEmbedUnimplementedInsightsServiceServer() {}
 func (UnimplementedInsightsServiceServer) testEmbeddedByValue()                         {}
@@ -368,6 +390,24 @@ func _InsightsService_RenderReport_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InsightsService_ListOpenTimes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListOpenTimesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsightsServiceServer).ListOpenTimes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsightsService_ListOpenTimes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsightsServiceServer).ListOpenTimes(ctx, req.(*ListOpenTimesRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // InsightsService_ServiceDesc is the grpc.ServiceDesc for InsightsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -406,6 +446,10 @@ var InsightsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RenderReport",
 			Handler:    _InsightsService_RenderReport_Handler,
+		},
+		{
+			MethodName: "ListOpenTimes",
+			Handler:    _InsightsService_ListOpenTimes_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

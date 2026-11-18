@@ -2230,6 +2230,295 @@ func (x *RenderReportResponse) GetContentType() string {
 	return ""
 }
 
+type TimeRange struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Start         *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=start,proto3" json:"start,omitempty"`
+	End           *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=end,proto3" json:"end,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TimeRange) Reset() {
+	*x = TimeRange{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[31]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TimeRange) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TimeRange) ProtoMessage() {}
+
+func (x *TimeRange) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[31]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TimeRange.ProtoReflect.Descriptor instead.
+func (*TimeRange) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{31}
+}
+
+func (x *TimeRange) GetStart() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Start
+	}
+	return nil
+}
+
+func (x *TimeRange) GetEnd() *timestamppb.Timestamp {
+	if x != nil {
+		return x.End
+	}
+	return nil
+}
+
+type ListOpenTimesRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// How long the visit is.
+	Minutes int32 `protobuf:"varint,2,opt,name=minutes,proto3" json:"minutes,omitempty"`
+	// A day in the business's zone (YYYY-MM-DD), or an RFC 3339 time whose day there is used; today when empty or past.
+	FromDate string `protobuf:"bytes,3,opt,name=from_date,json=fromDate,proto3" json:"from_date,omitempty"`
+	Limit    int32  `protobuf:"varint,4,opt,name=limit,proto3" json:"limit,omitempty"`
+	// At most this many times a day, spread from the day's first to its last; 3 when 0.
+	PerDay int32 `protobuf:"varint,5,opt,name=per_day,json=perDay,proto3" json:"per_day,omitempty"`
+	// A Front Desk thread whose own hold doesn't count, so its visitor can move it.
+	ThreadId string `protobuf:"bytes,6,opt,name=thread_id,json=threadId,proto3" json:"thread_id,omitempty"`
+	// Also list the times inside the hours that are booked or held, marked taken.
+	WithTaken bool `protobuf:"varint,7,opt,name=with_taken,json=withTaken,proto3" json:"with_taken,omitempty"`
+	// The signed-in person's own busy times: left out for them, never shown taken.
+	PersonBusy []*TimeRange `protobuf:"bytes,8,rep,name=person_busy,json=personBusy,proto3" json:"person_busy,omitempty"`
+	// Only this team member's times (the member a booking is for).
+	MemberId string `protobuf:"bytes,9,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty"`
+	// The moment to look from; now when unset.
+	Now           *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=now,proto3" json:"now,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOpenTimesRequest) Reset() {
+	*x = ListOpenTimesRequest{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[32]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOpenTimesRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOpenTimesRequest) ProtoMessage() {}
+
+func (x *ListOpenTimesRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[32]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOpenTimesRequest.ProtoReflect.Descriptor instead.
+func (*ListOpenTimesRequest) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{32}
+}
+
+func (x *ListOpenTimesRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ListOpenTimesRequest) GetMinutes() int32 {
+	if x != nil {
+		return x.Minutes
+	}
+	return 0
+}
+
+func (x *ListOpenTimesRequest) GetFromDate() string {
+	if x != nil {
+		return x.FromDate
+	}
+	return ""
+}
+
+func (x *ListOpenTimesRequest) GetLimit() int32 {
+	if x != nil {
+		return x.Limit
+	}
+	return 0
+}
+
+func (x *ListOpenTimesRequest) GetPerDay() int32 {
+	if x != nil {
+		return x.PerDay
+	}
+	return 0
+}
+
+func (x *ListOpenTimesRequest) GetThreadId() string {
+	if x != nil {
+		return x.ThreadId
+	}
+	return ""
+}
+
+func (x *ListOpenTimesRequest) GetWithTaken() bool {
+	if x != nil {
+		return x.WithTaken
+	}
+	return false
+}
+
+func (x *ListOpenTimesRequest) GetPersonBusy() []*TimeRange {
+	if x != nil {
+		return x.PersonBusy
+	}
+	return nil
+}
+
+func (x *ListOpenTimesRequest) GetMemberId() string {
+	if x != nil {
+		return x.MemberId
+	}
+	return ""
+}
+
+func (x *ListOpenTimesRequest) GetNow() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Now
+	}
+	return nil
+}
+
+type OpenTime struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Start         *timestamppb.Timestamp `protobuf:"bytes,1,opt,name=start,proto3" json:"start,omitempty"`
+	End           *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=end,proto3" json:"end,omitempty"`
+	Taken         bool                   `protobuf:"varint,3,opt,name=taken,proto3" json:"taken,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *OpenTime) Reset() {
+	*x = OpenTime{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[33]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *OpenTime) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*OpenTime) ProtoMessage() {}
+
+func (x *OpenTime) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[33]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use OpenTime.ProtoReflect.Descriptor instead.
+func (*OpenTime) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{33}
+}
+
+func (x *OpenTime) GetStart() *timestamppb.Timestamp {
+	if x != nil {
+		return x.Start
+	}
+	return nil
+}
+
+func (x *OpenTime) GetEnd() *timestamppb.Timestamp {
+	if x != nil {
+		return x.End
+	}
+	return nil
+}
+
+func (x *OpenTime) GetTaken() bool {
+	if x != nil {
+		return x.Taken
+	}
+	return false
+}
+
+type ListOpenTimesResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Times []*OpenTime            `protobuf:"bytes,1,rep,name=times,proto3" json:"times,omitempty"`
+	// The business's IANA time zone, the one the times are offered in.
+	TimeZone      string `protobuf:"bytes,2,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListOpenTimesResponse) Reset() {
+	*x = ListOpenTimesResponse{}
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[34]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListOpenTimesResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListOpenTimesResponse) ProtoMessage() {}
+
+func (x *ListOpenTimesResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_insights_v1_insights_service_proto_msgTypes[34]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListOpenTimesResponse.ProtoReflect.Descriptor instead.
+func (*ListOpenTimesResponse) Descriptor() ([]byte, []int) {
+	return file_novam_insights_v1_insights_service_proto_rawDescGZIP(), []int{34}
+}
+
+func (x *ListOpenTimesResponse) GetTimes() []*OpenTime {
+	if x != nil {
+		return x.Times
+	}
+	return nil
+}
+
+func (x *ListOpenTimesResponse) GetTimeZone() string {
+	if x != nil {
+		return x.TimeZone
+	}
+	return ""
+}
+
 var File_novam_insights_v1_insights_service_proto protoreflect.FileDescriptor
 
 const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
@@ -2415,13 +2704,37 @@ const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
 	"\ametrics\x18\a \x03(\v2\x1f.novam.insights.v1.ReportMetricR\ametrics\"S\n" +
 	"\x14RenderReportResponse\x12\x18\n" +
 	"\acontent\x18\x01 \x01(\fR\acontent\x12!\n" +
-	"\fcontent_type\x18\x02 \x01(\tR\vcontentType*\xa7\x01\n" +
+	"\fcontent_type\x18\x02 \x01(\tR\vcontentType\"k\n" +
+	"\tTimeRange\x120\n" +
+	"\x05start\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x05start\x12,\n" +
+	"\x03end\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x03end\"\x80\x03\n" +
+	"\x14ListOpenTimesRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x18\n" +
+	"\aminutes\x18\x02 \x01(\x05R\aminutes\x12\x1b\n" +
+	"\tfrom_date\x18\x03 \x01(\tR\bfromDate\x12\x14\n" +
+	"\x05limit\x18\x04 \x01(\x05R\x05limit\x12\x17\n" +
+	"\aper_day\x18\x05 \x01(\x05R\x06perDay\x12\x1b\n" +
+	"\tthread_id\x18\x06 \x01(\tR\bthreadId\x12\x1d\n" +
+	"\n" +
+	"with_taken\x18\a \x01(\bR\twithTaken\x12=\n" +
+	"\vperson_busy\x18\b \x03(\v2\x1c.novam.insights.v1.TimeRangeR\n" +
+	"personBusy\x12\x1b\n" +
+	"\tmember_id\x18\t \x01(\tR\bmemberId\x12,\n" +
+	"\x03now\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\x03now\"\x80\x01\n" +
+	"\bOpenTime\x120\n" +
+	"\x05start\x18\x01 \x01(\v2\x1a.google.protobuf.TimestampR\x05start\x12,\n" +
+	"\x03end\x18\x02 \x01(\v2\x1a.google.protobuf.TimestampR\x03end\x12\x14\n" +
+	"\x05taken\x18\x03 \x01(\bR\x05taken\"g\n" +
+	"\x15ListOpenTimesResponse\x121\n" +
+	"\x05times\x18\x01 \x03(\v2\x1b.novam.insights.v1.OpenTimeR\x05times\x12\x1b\n" +
+	"\ttime_zone\x18\x02 \x01(\tR\btimeZone*\xa7\x01\n" +
 	"\tChartKind\x12\x1a\n" +
 	"\x16CHART_KIND_UNSPECIFIED\x10\x00\x12\x1e\n" +
 	"\x1aCHART_KIND_API_PERFORMANCE\x10\x01\x12\x1c\n" +
 	"\x18CHART_KIND_RECORD_COUNTS\x10\x02\x12 \n" +
 	"\x1cCHART_KIND_REVENUE_BY_METHOD\x10\x03\x12\x1e\n" +
-	"\x1aCHART_KIND_RECENT_INVOICES\x10\x042\xab\x06\n" +
+	"\x1aCHART_KIND_RECENT_INVOICES\x10\x042\x8f\a\n" +
 	"\x0fInsightsService\x12n\n" +
 	"\x11GetFinanceSummary\x12+.novam.insights.v1.GetFinanceSummaryRequest\x1a,.novam.insights.v1.GetFinanceSummaryResponse\x12P\n" +
 	"\aMeasure\x12!.novam.insights.v1.MeasureRequest\x1a\".novam.insights.v1.MeasureResponse\x12k\n" +
@@ -2430,7 +2743,8 @@ const file_novam_insights_v1_insights_service_proto_rawDesc = "" +
 	"\x0eGetTipsSummary\x12(.novam.insights.v1.GetTipsSummaryRequest\x1a).novam.insights.v1.GetTipsSummaryResponse\x12S\n" +
 	"\bGetChart\x12\".novam.insights.v1.GetChartRequest\x1a#.novam.insights.v1.GetChartResponse\x12b\n" +
 	"\rComputeReport\x12'.novam.insights.v1.ComputeReportRequest\x1a(.novam.insights.v1.ComputeReportResponse\x12_\n" +
-	"\fRenderReport\x12&.novam.insights.v1.RenderReportRequest\x1a'.novam.insights.v1.RenderReportResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/insights/v1;insightsv1b\x06proto3"
+	"\fRenderReport\x12&.novam.insights.v1.RenderReportRequest\x1a'.novam.insights.v1.RenderReportResponse\x12b\n" +
+	"\rListOpenTimes\x12'.novam.insights.v1.ListOpenTimesRequest\x1a(.novam.insights.v1.ListOpenTimesResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/insights/v1;insightsv1b\x06proto3"
 
 var (
 	file_novam_insights_v1_insights_service_proto_rawDescOnce sync.Once
@@ -2445,7 +2759,7 @@ func file_novam_insights_v1_insights_service_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_insights_v1_insights_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_insights_v1_insights_service_proto_msgTypes = make([]protoimpl.MessageInfo, 32)
+var file_novam_insights_v1_insights_service_proto_msgTypes = make([]protoimpl.MessageInfo, 36)
 var file_novam_insights_v1_insights_service_proto_goTypes = []any{
 	(ChartKind)(0),                    // 0: novam.insights.v1.ChartKind
 	(*GetFinanceSummaryRequest)(nil),  // 1: novam.insights.v1.GetFinanceSummaryRequest
@@ -2479,69 +2793,83 @@ var file_novam_insights_v1_insights_service_proto_goTypes = []any{
 	(*ComputeReportResponse)(nil),     // 29: novam.insights.v1.ComputeReportResponse
 	(*RenderReportRequest)(nil),       // 30: novam.insights.v1.RenderReportRequest
 	(*RenderReportResponse)(nil),      // 31: novam.insights.v1.RenderReportResponse
-	nil,                               // 32: novam.insights.v1.ChartPoint.ValuesEntry
-	(*v1.RequestMetadata)(nil),        // 33: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),     // 34: google.protobuf.Timestamp
+	(*TimeRange)(nil),                 // 32: novam.insights.v1.TimeRange
+	(*ListOpenTimesRequest)(nil),      // 33: novam.insights.v1.ListOpenTimesRequest
+	(*OpenTime)(nil),                  // 34: novam.insights.v1.OpenTime
+	(*ListOpenTimesResponse)(nil),     // 35: novam.insights.v1.ListOpenTimesResponse
+	nil,                               // 36: novam.insights.v1.ChartPoint.ValuesEntry
+	(*v1.RequestMetadata)(nil),        // 37: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),     // 38: google.protobuf.Timestamp
 }
 var file_novam_insights_v1_insights_service_proto_depIdxs = []int32{
-	33, // 0: novam.insights.v1.GetFinanceSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	37, // 0: novam.insights.v1.GetFinanceSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	4,  // 1: novam.insights.v1.FinanceYear.expenses_by_category:type_name -> novam.insights.v1.CategoryAmount
 	2,  // 2: novam.insights.v1.GetFinanceSummaryResponse.paid_past_week:type_name -> novam.insights.v1.PaidPeriod
 	2,  // 3: novam.insights.v1.GetFinanceSummaryResponse.paid_this_month:type_name -> novam.insights.v1.PaidPeriod
 	3,  // 4: novam.insights.v1.GetFinanceSummaryResponse.outstanding:type_name -> novam.insights.v1.Outstanding
 	5,  // 5: novam.insights.v1.GetFinanceSummaryResponse.year:type_name -> novam.insights.v1.FinanceYear
 	6,  // 6: novam.insights.v1.GetFinanceSummaryResponse.gift_cards:type_name -> novam.insights.v1.GiftCardTotals
-	33, // 7: novam.insights.v1.MeasureRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	37, // 7: novam.insights.v1.MeasureRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	8,  // 8: novam.insights.v1.MeasureRequest.windows:type_name -> novam.insights.v1.MeasureWindow
 	10, // 9: novam.insights.v1.MeasureResponse.values:type_name -> novam.insights.v1.MeasureValue
-	33, // 10: novam.insights.v1.GetGoalStandingsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	37, // 10: novam.insights.v1.GetGoalStandingsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	12, // 11: novam.insights.v1.GetGoalStandingsRequest.goals:type_name -> novam.insights.v1.GoalInput
 	14, // 12: novam.insights.v1.GetGoalStandingsResponse.standings:type_name -> novam.insights.v1.GoalStanding
-	33, // 13: novam.insights.v1.GetSalesSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	34, // 14: novam.insights.v1.GetSalesSummaryRequest.start:type_name -> google.protobuf.Timestamp
-	34, // 15: novam.insights.v1.GetSalesSummaryRequest.end:type_name -> google.protobuf.Timestamp
+	37, // 13: novam.insights.v1.GetSalesSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	38, // 14: novam.insights.v1.GetSalesSummaryRequest.start:type_name -> google.protobuf.Timestamp
+	38, // 15: novam.insights.v1.GetSalesSummaryRequest.end:type_name -> google.protobuf.Timestamp
 	18, // 16: novam.insights.v1.GetSalesSummaryResponse.gift_cards:type_name -> novam.insights.v1.SalesGiftCards
 	17, // 17: novam.insights.v1.GetSalesSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
-	33, // 18: novam.insights.v1.GetTipsSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	34, // 19: novam.insights.v1.GetTipsSummaryRequest.start:type_name -> google.protobuf.Timestamp
-	34, // 20: novam.insights.v1.GetTipsSummaryRequest.end:type_name -> google.protobuf.Timestamp
+	37, // 18: novam.insights.v1.GetTipsSummaryRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	38, // 19: novam.insights.v1.GetTipsSummaryRequest.start:type_name -> google.protobuf.Timestamp
+	38, // 20: novam.insights.v1.GetTipsSummaryRequest.end:type_name -> google.protobuf.Timestamp
 	17, // 21: novam.insights.v1.GetTipsSummaryResponse.by_method:type_name -> novam.insights.v1.MethodAmount
 	21, // 22: novam.insights.v1.GetTipsSummaryResponse.by_member:type_name -> novam.insights.v1.MemberTips
 	22, // 23: novam.insights.v1.GetTipsSummaryResponse.by_service:type_name -> novam.insights.v1.ServiceTips
-	33, // 24: novam.insights.v1.GetChartRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	37, // 24: novam.insights.v1.GetChartRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 25: novam.insights.v1.GetChartRequest.kind:type_name -> novam.insights.v1.ChartKind
-	32, // 26: novam.insights.v1.ChartPoint.values:type_name -> novam.insights.v1.ChartPoint.ValuesEntry
+	36, // 26: novam.insights.v1.ChartPoint.values:type_name -> novam.insights.v1.ChartPoint.ValuesEntry
 	25, // 27: novam.insights.v1.GetChartResponse.points:type_name -> novam.insights.v1.ChartPoint
-	33, // 28: novam.insights.v1.ComputeReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	34, // 29: novam.insights.v1.ComputeReportRequest.start:type_name -> google.protobuf.Timestamp
-	34, // 30: novam.insights.v1.ComputeReportRequest.end:type_name -> google.protobuf.Timestamp
+	37, // 28: novam.insights.v1.ComputeReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	38, // 29: novam.insights.v1.ComputeReportRequest.start:type_name -> google.protobuf.Timestamp
+	38, // 30: novam.insights.v1.ComputeReportRequest.end:type_name -> google.protobuf.Timestamp
 	27, // 31: novam.insights.v1.ComputeReportResponse.metrics:type_name -> novam.insights.v1.ReportMetric
-	33, // 32: novam.insights.v1.RenderReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	34, // 33: novam.insights.v1.RenderReportRequest.period_start:type_name -> google.protobuf.Timestamp
-	34, // 34: novam.insights.v1.RenderReportRequest.period_end:type_name -> google.protobuf.Timestamp
-	34, // 35: novam.insights.v1.RenderReportRequest.generated_at:type_name -> google.protobuf.Timestamp
+	37, // 32: novam.insights.v1.RenderReportRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	38, // 33: novam.insights.v1.RenderReportRequest.period_start:type_name -> google.protobuf.Timestamp
+	38, // 34: novam.insights.v1.RenderReportRequest.period_end:type_name -> google.protobuf.Timestamp
+	38, // 35: novam.insights.v1.RenderReportRequest.generated_at:type_name -> google.protobuf.Timestamp
 	27, // 36: novam.insights.v1.RenderReportRequest.metrics:type_name -> novam.insights.v1.ReportMetric
-	1,  // 37: novam.insights.v1.InsightsService.GetFinanceSummary:input_type -> novam.insights.v1.GetFinanceSummaryRequest
-	9,  // 38: novam.insights.v1.InsightsService.Measure:input_type -> novam.insights.v1.MeasureRequest
-	13, // 39: novam.insights.v1.InsightsService.GetGoalStandings:input_type -> novam.insights.v1.GetGoalStandingsRequest
-	16, // 40: novam.insights.v1.InsightsService.GetSalesSummary:input_type -> novam.insights.v1.GetSalesSummaryRequest
-	20, // 41: novam.insights.v1.InsightsService.GetTipsSummary:input_type -> novam.insights.v1.GetTipsSummaryRequest
-	24, // 42: novam.insights.v1.InsightsService.GetChart:input_type -> novam.insights.v1.GetChartRequest
-	28, // 43: novam.insights.v1.InsightsService.ComputeReport:input_type -> novam.insights.v1.ComputeReportRequest
-	30, // 44: novam.insights.v1.InsightsService.RenderReport:input_type -> novam.insights.v1.RenderReportRequest
-	7,  // 45: novam.insights.v1.InsightsService.GetFinanceSummary:output_type -> novam.insights.v1.GetFinanceSummaryResponse
-	11, // 46: novam.insights.v1.InsightsService.Measure:output_type -> novam.insights.v1.MeasureResponse
-	15, // 47: novam.insights.v1.InsightsService.GetGoalStandings:output_type -> novam.insights.v1.GetGoalStandingsResponse
-	19, // 48: novam.insights.v1.InsightsService.GetSalesSummary:output_type -> novam.insights.v1.GetSalesSummaryResponse
-	23, // 49: novam.insights.v1.InsightsService.GetTipsSummary:output_type -> novam.insights.v1.GetTipsSummaryResponse
-	26, // 50: novam.insights.v1.InsightsService.GetChart:output_type -> novam.insights.v1.GetChartResponse
-	29, // 51: novam.insights.v1.InsightsService.ComputeReport:output_type -> novam.insights.v1.ComputeReportResponse
-	31, // 52: novam.insights.v1.InsightsService.RenderReport:output_type -> novam.insights.v1.RenderReportResponse
-	45, // [45:53] is the sub-list for method output_type
-	37, // [37:45] is the sub-list for method input_type
-	37, // [37:37] is the sub-list for extension type_name
-	37, // [37:37] is the sub-list for extension extendee
-	0,  // [0:37] is the sub-list for field type_name
+	38, // 37: novam.insights.v1.TimeRange.start:type_name -> google.protobuf.Timestamp
+	38, // 38: novam.insights.v1.TimeRange.end:type_name -> google.protobuf.Timestamp
+	37, // 39: novam.insights.v1.ListOpenTimesRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	32, // 40: novam.insights.v1.ListOpenTimesRequest.person_busy:type_name -> novam.insights.v1.TimeRange
+	38, // 41: novam.insights.v1.ListOpenTimesRequest.now:type_name -> google.protobuf.Timestamp
+	38, // 42: novam.insights.v1.OpenTime.start:type_name -> google.protobuf.Timestamp
+	38, // 43: novam.insights.v1.OpenTime.end:type_name -> google.protobuf.Timestamp
+	34, // 44: novam.insights.v1.ListOpenTimesResponse.times:type_name -> novam.insights.v1.OpenTime
+	1,  // 45: novam.insights.v1.InsightsService.GetFinanceSummary:input_type -> novam.insights.v1.GetFinanceSummaryRequest
+	9,  // 46: novam.insights.v1.InsightsService.Measure:input_type -> novam.insights.v1.MeasureRequest
+	13, // 47: novam.insights.v1.InsightsService.GetGoalStandings:input_type -> novam.insights.v1.GetGoalStandingsRequest
+	16, // 48: novam.insights.v1.InsightsService.GetSalesSummary:input_type -> novam.insights.v1.GetSalesSummaryRequest
+	20, // 49: novam.insights.v1.InsightsService.GetTipsSummary:input_type -> novam.insights.v1.GetTipsSummaryRequest
+	24, // 50: novam.insights.v1.InsightsService.GetChart:input_type -> novam.insights.v1.GetChartRequest
+	28, // 51: novam.insights.v1.InsightsService.ComputeReport:input_type -> novam.insights.v1.ComputeReportRequest
+	30, // 52: novam.insights.v1.InsightsService.RenderReport:input_type -> novam.insights.v1.RenderReportRequest
+	33, // 53: novam.insights.v1.InsightsService.ListOpenTimes:input_type -> novam.insights.v1.ListOpenTimesRequest
+	7,  // 54: novam.insights.v1.InsightsService.GetFinanceSummary:output_type -> novam.insights.v1.GetFinanceSummaryResponse
+	11, // 55: novam.insights.v1.InsightsService.Measure:output_type -> novam.insights.v1.MeasureResponse
+	15, // 56: novam.insights.v1.InsightsService.GetGoalStandings:output_type -> novam.insights.v1.GetGoalStandingsResponse
+	19, // 57: novam.insights.v1.InsightsService.GetSalesSummary:output_type -> novam.insights.v1.GetSalesSummaryResponse
+	23, // 58: novam.insights.v1.InsightsService.GetTipsSummary:output_type -> novam.insights.v1.GetTipsSummaryResponse
+	26, // 59: novam.insights.v1.InsightsService.GetChart:output_type -> novam.insights.v1.GetChartResponse
+	29, // 60: novam.insights.v1.InsightsService.ComputeReport:output_type -> novam.insights.v1.ComputeReportResponse
+	31, // 61: novam.insights.v1.InsightsService.RenderReport:output_type -> novam.insights.v1.RenderReportResponse
+	35, // 62: novam.insights.v1.InsightsService.ListOpenTimes:output_type -> novam.insights.v1.ListOpenTimesResponse
+	54, // [54:63] is the sub-list for method output_type
+	45, // [45:54] is the sub-list for method input_type
+	45, // [45:45] is the sub-list for extension type_name
+	45, // [45:45] is the sub-list for extension extendee
+	0,  // [0:45] is the sub-list for field type_name
 }
 
 func init() { file_novam_insights_v1_insights_service_proto_init() }
@@ -2559,7 +2887,7 @@ func file_novam_insights_v1_insights_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_insights_v1_insights_service_proto_rawDesc), len(file_novam_insights_v1_insights_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   32,
+			NumMessages:   36,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

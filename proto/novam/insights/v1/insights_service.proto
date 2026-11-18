@@ -28,6 +28,10 @@ service InsightsService {
   rpc ComputeReport(ComputeReportRequest) returns (ComputeReportResponse);
   // A report as a file: csv or pdf.
   rpc RenderReport(RenderReportRequest) returns (RenderReportResponse);
+  // Times a visit can be booked: inside the business's hours, off its holidays and breaks, while someone who takes
+  // bookings is working and free, leaving out visits, time off, busy calendars and times held or being confirmed.
+  // The Reception agent, booking steps and novam-data's booking pages all offer these.
+  rpc ListOpenTimes(ListOpenTimesRequest) returns (ListOpenTimesResponse);
 }
 
 message GetFinanceSummaryRequest {
@@ -290,4 +294,42 @@ message RenderReportRequest {
 message RenderReportResponse {
   bytes content = 1;
   string content_type = 2;
+}
+
+message TimeRange {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+}
+
+message ListOpenTimesRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // How long the visit is.
+  int32 minutes = 2;
+  // A day in the business's zone (YYYY-MM-DD), or an RFC 3339 time whose day there is used; today when empty or past.
+  string from_date = 3;
+  int32 limit = 4;
+  // At most this many times a day, spread from the day's first to its last; 3 when 0.
+  int32 per_day = 5;
+  // A Front Desk thread whose own hold doesn't count, so its visitor can move it.
+  string thread_id = 6;
+  // Also list the times inside the hours that are booked or held, marked taken.
+  bool with_taken = 7;
+  // The signed-in person's own busy times: left out for them, never shown taken.
+  repeated TimeRange person_busy = 8;
+  // Only this team member's times (the member a booking is for).
+  string member_id = 9;
+  // The moment to look from; now when unset.
+  google.protobuf.Timestamp now = 10;
+}
+
+message OpenTime {
+  google.protobuf.Timestamp start = 1;
+  google.protobuf.Timestamp end = 2;
+  bool taken = 3;
+}
+
+message ListOpenTimesResponse {
+  repeated OpenTime times = 1;
+  // The business's IANA time zone, the one the times are offered in.
+  string time_zone = 2;
 }
