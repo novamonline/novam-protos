@@ -20,6 +20,10 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	FinanceService_GetPayoutStatus_FullMethodName = "/novam.finance.v1.FinanceService/GetPayoutStatus"
+	FinanceService_CallStripe_FullMethodName      = "/novam.finance.v1.FinanceService/CallStripe"
+	FinanceService_CallSquare_FullMethodName      = "/novam.finance.v1.FinanceService/CallSquare"
+	FinanceService_CallPayPal_FullMethodName      = "/novam.finance.v1.FinanceService/CallPayPal"
+	FinanceService_VerifyWebhook_FullMethodName   = "/novam.finance.v1.FinanceService/VerifyWebhook"
 )
 
 // FinanceServiceClient is the client API for FinanceService service.
@@ -34,6 +38,18 @@ type FinanceServiceClient interface {
 	// Where the business's card money is: on its way to the bank, still processing, or on hold, read from its own
 	// processor account. A processor that can't be read just now comes back with readable false.
 	GetPayoutStatus(ctx context.Context, in *GetPayoutStatusRequest, opts ...grpc.CallOption) (*GetPayoutStatusResponse, error)
+	// One request to Stripe's API (v1 or v2), or a file Stripe hosts (an invoice PDF). The engine adds its platform key,
+	// or the connected account's own token when one is given, and answers with Stripe's status and body as they came.
+	// UNAVAILABLE: the engine has no Stripe key and the call brings no token. ABORTED: Stripe couldn't be reached.
+	CallStripe(ctx context.Context, in *CallStripeRequest, opts ...grpc.CallOption) (*CallStripeResponse, error)
+	// One request to Square's API, with the Authorization the call brings (a business's token, or Novam's client
+	// secret for OAuth). UNAVAILABLE: the engine isn't told which Square to use. ABORTED: Square couldn't be reached.
+	CallSquare(ctx context.Context, in *CallSquareRequest, opts ...grpc.CallOption) (*CallSquareResponse, error)
+	// One request to PayPal's API with Novam's app token, as a merchant when one is named. UNAVAILABLE: the engine has no
+	// PayPal app. FAILED_PRECONDITION: PayPal refused Novam's app credentials. ABORTED: PayPal couldn't be reached.
+	CallPayPal(ctx context.Context, in *CallPayPalRequest, opts ...grpc.CallOption) (*CallPayPalResponse, error)
+	// Whether a Stripe or Square webhook is signed by one of the secrets given, over its raw body.
+	VerifyWebhook(ctx context.Context, in *VerifyWebhookRequest, opts ...grpc.CallOption) (*VerifyWebhookResponse, error)
 }
 
 type financeServiceClient struct {
@@ -54,6 +70,46 @@ func (c *financeServiceClient) GetPayoutStatus(ctx context.Context, in *GetPayou
 	return out, nil
 }
 
+func (c *financeServiceClient) CallStripe(ctx context.Context, in *CallStripeRequest, opts ...grpc.CallOption) (*CallStripeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CallStripeResponse)
+	err := c.cc.Invoke(ctx, FinanceService_CallStripe_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) CallSquare(ctx context.Context, in *CallSquareRequest, opts ...grpc.CallOption) (*CallSquareResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CallSquareResponse)
+	err := c.cc.Invoke(ctx, FinanceService_CallSquare_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) CallPayPal(ctx context.Context, in *CallPayPalRequest, opts ...grpc.CallOption) (*CallPayPalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CallPayPalResponse)
+	err := c.cc.Invoke(ctx, FinanceService_CallPayPal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *financeServiceClient) VerifyWebhook(ctx context.Context, in *VerifyWebhookRequest, opts ...grpc.CallOption) (*VerifyWebhookResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(VerifyWebhookResponse)
+	err := c.cc.Invoke(ctx, FinanceService_VerifyWebhook_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // FinanceServiceServer is the server API for FinanceService service.
 // All implementations must embed UnimplementedFinanceServiceServer
 // for forward compatibility.
@@ -66,6 +122,18 @@ type FinanceServiceServer interface {
 	// Where the business's card money is: on its way to the bank, still processing, or on hold, read from its own
 	// processor account. A processor that can't be read just now comes back with readable false.
 	GetPayoutStatus(context.Context, *GetPayoutStatusRequest) (*GetPayoutStatusResponse, error)
+	// One request to Stripe's API (v1 or v2), or a file Stripe hosts (an invoice PDF). The engine adds its platform key,
+	// or the connected account's own token when one is given, and answers with Stripe's status and body as they came.
+	// UNAVAILABLE: the engine has no Stripe key and the call brings no token. ABORTED: Stripe couldn't be reached.
+	CallStripe(context.Context, *CallStripeRequest) (*CallStripeResponse, error)
+	// One request to Square's API, with the Authorization the call brings (a business's token, or Novam's client
+	// secret for OAuth). UNAVAILABLE: the engine isn't told which Square to use. ABORTED: Square couldn't be reached.
+	CallSquare(context.Context, *CallSquareRequest) (*CallSquareResponse, error)
+	// One request to PayPal's API with Novam's app token, as a merchant when one is named. UNAVAILABLE: the engine has no
+	// PayPal app. FAILED_PRECONDITION: PayPal refused Novam's app credentials. ABORTED: PayPal couldn't be reached.
+	CallPayPal(context.Context, *CallPayPalRequest) (*CallPayPalResponse, error)
+	// Whether a Stripe or Square webhook is signed by one of the secrets given, over its raw body.
+	VerifyWebhook(context.Context, *VerifyWebhookRequest) (*VerifyWebhookResponse, error)
 	mustEmbedUnimplementedFinanceServiceServer()
 }
 
@@ -78,6 +146,18 @@ type UnimplementedFinanceServiceServer struct{}
 
 func (UnimplementedFinanceServiceServer) GetPayoutStatus(context.Context, *GetPayoutStatusRequest) (*GetPayoutStatusResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method GetPayoutStatus not implemented")
+}
+func (UnimplementedFinanceServiceServer) CallStripe(context.Context, *CallStripeRequest) (*CallStripeResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CallStripe not implemented")
+}
+func (UnimplementedFinanceServiceServer) CallSquare(context.Context, *CallSquareRequest) (*CallSquareResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CallSquare not implemented")
+}
+func (UnimplementedFinanceServiceServer) CallPayPal(context.Context, *CallPayPalRequest) (*CallPayPalResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method CallPayPal not implemented")
+}
+func (UnimplementedFinanceServiceServer) VerifyWebhook(context.Context, *VerifyWebhookRequest) (*VerifyWebhookResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method VerifyWebhook not implemented")
 }
 func (UnimplementedFinanceServiceServer) mustEmbedUnimplementedFinanceServiceServer() {}
 func (UnimplementedFinanceServiceServer) testEmbeddedByValue()                        {}
@@ -118,6 +198,78 @@ func _FinanceService_GetPayoutStatus_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _FinanceService_CallStripe_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallStripeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).CallStripe(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_CallStripe_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).CallStripe(ctx, req.(*CallStripeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_CallSquare_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallSquareRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).CallSquare(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_CallSquare_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).CallSquare(ctx, req.(*CallSquareRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_CallPayPal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CallPayPalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).CallPayPal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_CallPayPal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).CallPayPal(ctx, req.(*CallPayPalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _FinanceService_VerifyWebhook_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(VerifyWebhookRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(FinanceServiceServer).VerifyWebhook(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: FinanceService_VerifyWebhook_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(FinanceServiceServer).VerifyWebhook(ctx, req.(*VerifyWebhookRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // FinanceService_ServiceDesc is the grpc.ServiceDesc for FinanceService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -128,6 +280,22 @@ var FinanceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetPayoutStatus",
 			Handler:    _FinanceService_GetPayoutStatus_Handler,
+		},
+		{
+			MethodName: "CallStripe",
+			Handler:    _FinanceService_CallStripe_Handler,
+		},
+		{
+			MethodName: "CallSquare",
+			Handler:    _FinanceService_CallSquare_Handler,
+		},
+		{
+			MethodName: "CallPayPal",
+			Handler:    _FinanceService_CallPayPal_Handler,
+		},
+		{
+			MethodName: "VerifyWebhook",
+			Handler:    _FinanceService_VerifyWebhook_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

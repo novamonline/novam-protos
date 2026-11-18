@@ -12,6 +12,328 @@ import type { RequestMetadata } from "../../common/v1/common_pb.js";
 export declare const file_novam_finance_v1_finance_service: GenFile;
 
 /**
+ * @generated from message novam.finance.v1.FormField
+ */
+export declare type FormField = Message<"novam.finance.v1.FormField"> & {
+  /**
+   * @generated from field: string name = 1;
+   */
+  name: string;
+
+  /**
+   * @generated from field: string value = 2;
+   */
+  value: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.FormField.
+ * Use `create(FormFieldSchema)` to create a new message.
+ */
+export declare const FormFieldSchema: GenMessage<FormField>;
+
+/**
+ * @generated from message novam.finance.v1.CallStripeRequest
+ */
+export declare type CallStripeRequest = Message<"novam.finance.v1.CallStripeRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * GET, POST or DELETE.
+   *
+   * @generated from field: string method = 2;
+   */
+  method: string;
+
+  /**
+   * From /v1/ or /v2/.
+   *
+   * @generated from field: string path = 3;
+   */
+  path: string;
+
+  /**
+   * In order, as the query string.
+   *
+   * @generated from field: repeated novam.finance.v1.FormField query = 4;
+   */
+  query: FormField[];
+
+  /**
+   * In order, as a form body (v1 POST).
+   *
+   * @generated from field: repeated novam.finance.v1.FormField form = 5;
+   */
+  form: FormField[];
+
+  /**
+   * A JSON body (v2).
+   *
+   * @generated from field: bytes json_body = 6;
+   */
+  jsonBody: Uint8Array;
+
+  /**
+   * A connected account, reached with the platform key and Stripe-Account.
+   *
+   * @generated from field: string account_id = 7;
+   */
+  accountId: string;
+
+  /**
+   * A connected account's own OAuth token, used instead of the platform key.
+   *
+   * @generated from field: string access_token = 8;
+   */
+  accessToken: string;
+
+  /**
+   * @generated from field: string idempotency_key = 9;
+   */
+  idempotencyKey: string;
+
+  /**
+   * Instead of path: a file Stripe hosts (https on a stripe.com host), fetched without a key.
+   *
+   * @generated from field: string file_url = 10;
+   */
+  fileUrl: string;
+
+  /**
+   * 15 seconds when 0.
+   *
+   * @generated from field: int32 timeout_ms = 11;
+   */
+  timeoutMs: number;
+};
+
+/**
+ * Describes the message novam.finance.v1.CallStripeRequest.
+ * Use `create(CallStripeRequestSchema)` to create a new message.
+ */
+export declare const CallStripeRequestSchema: GenMessage<CallStripeRequest>;
+
+/**
+ * @generated from message novam.finance.v1.CallStripeResponse
+ */
+export declare type CallStripeResponse = Message<"novam.finance.v1.CallStripeResponse"> & {
+  /**
+   * @generated from field: int32 status = 1;
+   */
+  status: number;
+
+  /**
+   * @generated from field: bytes body = 2;
+   */
+  body: Uint8Array;
+};
+
+/**
+ * Describes the message novam.finance.v1.CallStripeResponse.
+ * Use `create(CallStripeResponseSchema)` to create a new message.
+ */
+export declare const CallStripeResponseSchema: GenMessage<CallStripeResponse>;
+
+/**
+ * @generated from message novam.finance.v1.CallSquareRequest
+ */
+export declare type CallSquareRequest = Message<"novam.finance.v1.CallSquareRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * GET or POST.
+   *
+   * @generated from field: string method = 2;
+   */
+  method: string;
+
+  /**
+   * @generated from field: string path = 3;
+   */
+  path: string;
+
+  /**
+   * The whole Authorization header, e.g. "Bearer <token>" or "Client <secret>"; empty for none.
+   *
+   * @generated from field: string authorization = 4;
+   */
+  authorization: string;
+
+  /**
+   * @generated from field: bytes json_body = 5;
+   */
+  jsonBody: Uint8Array;
+};
+
+/**
+ * Describes the message novam.finance.v1.CallSquareRequest.
+ * Use `create(CallSquareRequestSchema)` to create a new message.
+ */
+export declare const CallSquareRequestSchema: GenMessage<CallSquareRequest>;
+
+/**
+ * @generated from message novam.finance.v1.CallSquareResponse
+ */
+export declare type CallSquareResponse = Message<"novam.finance.v1.CallSquareResponse"> & {
+  /**
+   * @generated from field: int32 status = 1;
+   */
+  status: number;
+
+  /**
+   * @generated from field: bytes body = 2;
+   */
+  body: Uint8Array;
+};
+
+/**
+ * Describes the message novam.finance.v1.CallSquareResponse.
+ * Use `create(CallSquareResponseSchema)` to create a new message.
+ */
+export declare const CallSquareResponseSchema: GenMessage<CallSquareResponse>;
+
+/**
+ * @generated from message novam.finance.v1.CallPayPalRequest
+ */
+export declare type CallPayPalRequest = Message<"novam.finance.v1.CallPayPalRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * GET or POST.
+   *
+   * @generated from field: string method = 2;
+   */
+  method: string;
+
+  /**
+   * @generated from field: string path = 3;
+   */
+  path: string;
+
+  /**
+   * Sent as it is, byte for byte (a webhook check signs the event's own bytes).
+   *
+   * @generated from field: bytes json_body = 4;
+   */
+  jsonBody: Uint8Array;
+
+  /**
+   * The merchant to act as (PayPal-Auth-Assertion).
+   *
+   * @generated from field: string as_merchant = 5;
+   */
+  asMerchant: string;
+
+  /**
+   * PayPal-Request-Id, so a repeat is answered with the first result.
+   *
+   * @generated from field: string request_id = 6;
+   */
+  requestId: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.CallPayPalRequest.
+ * Use `create(CallPayPalRequestSchema)` to create a new message.
+ */
+export declare const CallPayPalRequestSchema: GenMessage<CallPayPalRequest>;
+
+/**
+ * @generated from message novam.finance.v1.CallPayPalResponse
+ */
+export declare type CallPayPalResponse = Message<"novam.finance.v1.CallPayPalResponse"> & {
+  /**
+   * @generated from field: int32 status = 1;
+   */
+  status: number;
+
+  /**
+   * @generated from field: bytes body = 2;
+   */
+  body: Uint8Array;
+};
+
+/**
+ * Describes the message novam.finance.v1.CallPayPalResponse.
+ * Use `create(CallPayPalResponseSchema)` to create a new message.
+ */
+export declare const CallPayPalResponseSchema: GenMessage<CallPayPalResponse>;
+
+/**
+ * @generated from message novam.finance.v1.VerifyWebhookRequest
+ */
+export declare type VerifyWebhookRequest = Message<"novam.finance.v1.VerifyWebhookRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * stripe or square.
+   *
+   * @generated from field: string processor = 2;
+   */
+  processor: string;
+
+  /**
+   * @generated from field: bytes raw_body = 3;
+   */
+  rawBody: Uint8Array;
+
+  /**
+   * Stripe-Signature, or x-square-hmacsha256-signature.
+   *
+   * @generated from field: string signature = 4;
+   */
+  signature: string;
+
+  /**
+   * Stripe: every endpoint secret it may be signed with. Square: its one signature key.
+   *
+   * @generated from field: repeated string secrets = 5;
+   */
+  secrets: string[];
+
+  /**
+   * Square: the notification URL exactly as registered, which it signs too.
+   *
+   * @generated from field: string notification_url = 6;
+   */
+  notificationUrl: string;
+};
+
+/**
+ * Describes the message novam.finance.v1.VerifyWebhookRequest.
+ * Use `create(VerifyWebhookRequestSchema)` to create a new message.
+ */
+export declare const VerifyWebhookRequestSchema: GenMessage<VerifyWebhookRequest>;
+
+/**
+ * @generated from message novam.finance.v1.VerifyWebhookResponse
+ */
+export declare type VerifyWebhookResponse = Message<"novam.finance.v1.VerifyWebhookResponse"> & {
+  /**
+   * @generated from field: bool valid = 1;
+   */
+  valid: boolean;
+};
+
+/**
+ * Describes the message novam.finance.v1.VerifyWebhookResponse.
+ * Use `create(VerifyWebhookResponseSchema)` to create a new message.
+ */
+export declare const VerifyWebhookResponseSchema: GenMessage<VerifyWebhookResponse>;
+
+/**
  * @generated from message novam.finance.v1.GetPayoutStatusRequest
  */
 export declare type GetPayoutStatusRequest = Message<"novam.finance.v1.GetPayoutStatusRequest"> & {
@@ -224,6 +546,50 @@ export declare const FinanceService: GenService<{
     methodKind: "unary";
     input: typeof GetPayoutStatusRequestSchema;
     output: typeof GetPayoutStatusResponseSchema;
+  },
+  /**
+   * One request to Stripe's API (v1 or v2), or a file Stripe hosts (an invoice PDF). The engine adds its platform key,
+   * or the connected account's own token when one is given, and answers with Stripe's status and body as they came.
+   * UNAVAILABLE: the engine has no Stripe key and the call brings no token. ABORTED: Stripe couldn't be reached.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.CallStripe
+   */
+  callStripe: {
+    methodKind: "unary";
+    input: typeof CallStripeRequestSchema;
+    output: typeof CallStripeResponseSchema;
+  },
+  /**
+   * One request to Square's API, with the Authorization the call brings (a business's token, or Novam's client
+   * secret for OAuth). UNAVAILABLE: the engine isn't told which Square to use. ABORTED: Square couldn't be reached.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.CallSquare
+   */
+  callSquare: {
+    methodKind: "unary";
+    input: typeof CallSquareRequestSchema;
+    output: typeof CallSquareResponseSchema;
+  },
+  /**
+   * One request to PayPal's API with Novam's app token, as a merchant when one is named. UNAVAILABLE: the engine has no
+   * PayPal app. FAILED_PRECONDITION: PayPal refused Novam's app credentials. ABORTED: PayPal couldn't be reached.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.CallPayPal
+   */
+  callPayPal: {
+    methodKind: "unary";
+    input: typeof CallPayPalRequestSchema;
+    output: typeof CallPayPalResponseSchema;
+  },
+  /**
+   * Whether a Stripe or Square webhook is signed by one of the secrets given, over its raw body.
+   *
+   * @generated from rpc novam.finance.v1.FinanceService.VerifyWebhook
+   */
+  verifyWebhook: {
+    methodKind: "unary";
+    input: typeof VerifyWebhookRequestSchema;
+    output: typeof VerifyWebhookResponseSchema;
   },
 }>;
 

@@ -14,6 +14,101 @@ service FinanceService {
   // Where the business's card money is: on its way to the bank, still processing, or on hold, read from its own
   // processor account. A processor that can't be read just now comes back with readable false.
   rpc GetPayoutStatus(GetPayoutStatusRequest) returns (GetPayoutStatusResponse);
+  // One request to Stripe's API (v1 or v2), or a file Stripe hosts (an invoice PDF). The engine adds its platform key,
+  // or the connected account's own token when one is given, and answers with Stripe's status and body as they came.
+  // UNAVAILABLE: the engine has no Stripe key and the call brings no token. ABORTED: Stripe couldn't be reached.
+  rpc CallStripe(CallStripeRequest) returns (CallStripeResponse);
+  // One request to Square's API, with the Authorization the call brings (a business's token, or Novam's client
+  // secret for OAuth). UNAVAILABLE: the engine isn't told which Square to use. ABORTED: Square couldn't be reached.
+  rpc CallSquare(CallSquareRequest) returns (CallSquareResponse);
+  // One request to PayPal's API with Novam's app token, as a merchant when one is named. UNAVAILABLE: the engine has no
+  // PayPal app. FAILED_PRECONDITION: PayPal refused Novam's app credentials. ABORTED: PayPal couldn't be reached.
+  rpc CallPayPal(CallPayPalRequest) returns (CallPayPalResponse);
+  // Whether a Stripe or Square webhook is signed by one of the secrets given, over its raw body.
+  rpc VerifyWebhook(VerifyWebhookRequest) returns (VerifyWebhookResponse);
+}
+
+message FormField {
+  string name = 1;
+  string value = 2;
+}
+
+message CallStripeRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // GET, POST or DELETE.
+  string method = 2;
+  // From /v1/ or /v2/.
+  string path = 3;
+  // In order, as the query string.
+  repeated FormField query = 4;
+  // In order, as a form body (v1 POST).
+  repeated FormField form = 5;
+  // A JSON body (v2).
+  bytes json_body = 6;
+  // A connected account, reached with the platform key and Stripe-Account.
+  string account_id = 7;
+  // A connected account's own OAuth token, used instead of the platform key.
+  string access_token = 8;
+  string idempotency_key = 9;
+  // Instead of path: a file Stripe hosts (https on a stripe.com host), fetched without a key.
+  string file_url = 10;
+  // 15 seconds when 0.
+  int32 timeout_ms = 11;
+}
+
+message CallStripeResponse {
+  int32 status = 1;
+  bytes body = 2;
+}
+
+message CallSquareRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // GET or POST.
+  string method = 2;
+  string path = 3;
+  // The whole Authorization header, e.g. "Bearer <token>" or "Client <secret>"; empty for none.
+  string authorization = 4;
+  bytes json_body = 5;
+}
+
+message CallSquareResponse {
+  int32 status = 1;
+  bytes body = 2;
+}
+
+message CallPayPalRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // GET or POST.
+  string method = 2;
+  string path = 3;
+  // Sent as it is, byte for byte (a webhook check signs the event's own bytes).
+  bytes json_body = 4;
+  // The merchant to act as (PayPal-Auth-Assertion).
+  string as_merchant = 5;
+  // PayPal-Request-Id, so a repeat is answered with the first result.
+  string request_id = 6;
+}
+
+message CallPayPalResponse {
+  int32 status = 1;
+  bytes body = 2;
+}
+
+message VerifyWebhookRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // stripe or square.
+  string processor = 2;
+  bytes raw_body = 3;
+  // Stripe-Signature, or x-square-hmacsha256-signature.
+  string signature = 4;
+  // Stripe: every endpoint secret it may be signed with. Square: its one signature key.
+  repeated string secrets = 5;
+  // Square: the notification URL exactly as registered, which it signs too.
+  string notification_url = 6;
+}
+
+message VerifyWebhookResponse {
+  bool valid = 1;
 }
 
 message GetPayoutStatusRequest {
