@@ -32,6 +32,10 @@ service InsightsService {
   // bookings is working and free, leaving out visits, time off, busy calendars and times held or being confirmed.
   // The Reception agent, booking steps and novam-data's booking pages all offer these.
   rpc ListOpenTimes(ListOpenTimesRequest) returns (ListOpenTimesResponse);
+  // A tax year's 1099-NEC season: what each helper was paid, the part a 1099-NEC reports, and where their form stands.
+  rpc Get1099Season(Get1099SeasonRequest) returns (Get1099SeasonResponse);
+  // The accountant's .zip for a tax year: summary.pdf and a CSV per part.
+  rpc BuildTaxPackage(BuildTaxPackageRequest) returns (BuildTaxPackageResponse);
 }
 
 message GetFinanceSummaryRequest {
@@ -332,4 +336,49 @@ message ListOpenTimesResponse {
   repeated OpenTime times = 1;
   // The business's IANA time zone, the one the times are offered in.
   string time_zone = 2;
+}
+
+message Get1099SeasonRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The calendar year in the business's own time zone.
+  int32 tax_year = 2;
+}
+
+message Form1099Summary {
+  string helper_id = 1;
+  string display_name = 2;
+  // How they were paid, sorted.
+  repeated string methods = 3;
+  // Paid outside card and payment apps: what a 1099-NEC reports.
+  double nec_amount = 4;
+  // Paid by card or a payment app, which the processor reports on a 1099-K.
+  double third_party_amount = 5;
+  // missing, requested, on_file or not_needed; not_needed reads missing once nec_amount reaches the threshold.
+  string w9_status = 6;
+  // not_needed, needed, draft_ready, waiting_on_w9 or filed.
+  string form_status = 7;
+}
+
+message Get1099SeasonResponse {
+  int32 tax_year = 1;
+  double threshold = 2;
+  // When the forms are due, YYYY-MM-DD.
+  string due_date = 3;
+  // Largest nec_amount first.
+  repeated Form1099Summary summaries = 4;
+}
+
+message BuildTaxPackageRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  int32 tax_year = 2;
+  // income, expenses, payouts and form1099, in the order the files are wanted.
+  repeated string parts = 3;
+  // The plan has the 1099 tools: the summary lists the forms.
+  bool with_forms = 4;
+}
+
+message BuildTaxPackageResponse {
+  bytes zip = 1;
+  // The files in it, summary.pdf first.
+  repeated string files = 2;
 }

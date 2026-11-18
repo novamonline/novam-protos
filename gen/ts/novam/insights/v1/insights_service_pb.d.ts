@@ -1186,6 +1186,178 @@ export declare type ListOpenTimesResponse = Message<"novam.insights.v1.ListOpenT
 export declare const ListOpenTimesResponseSchema: GenMessage<ListOpenTimesResponse>;
 
 /**
+ * @generated from message novam.insights.v1.Get1099SeasonRequest
+ */
+export declare type Get1099SeasonRequest = Message<"novam.insights.v1.Get1099SeasonRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * The calendar year in the business's own time zone.
+   *
+   * @generated from field: int32 tax_year = 2;
+   */
+  taxYear: number;
+};
+
+/**
+ * Describes the message novam.insights.v1.Get1099SeasonRequest.
+ * Use `create(Get1099SeasonRequestSchema)` to create a new message.
+ */
+export declare const Get1099SeasonRequestSchema: GenMessage<Get1099SeasonRequest>;
+
+/**
+ * @generated from message novam.insights.v1.Form1099Summary
+ */
+export declare type Form1099Summary = Message<"novam.insights.v1.Form1099Summary"> & {
+  /**
+   * @generated from field: string helper_id = 1;
+   */
+  helperId: string;
+
+  /**
+   * @generated from field: string display_name = 2;
+   */
+  displayName: string;
+
+  /**
+   * How they were paid, sorted.
+   *
+   * @generated from field: repeated string methods = 3;
+   */
+  methods: string[];
+
+  /**
+   * Paid outside card and payment apps: what a 1099-NEC reports.
+   *
+   * @generated from field: double nec_amount = 4;
+   */
+  necAmount: number;
+
+  /**
+   * Paid by card or a payment app, which the processor reports on a 1099-K.
+   *
+   * @generated from field: double third_party_amount = 5;
+   */
+  thirdPartyAmount: number;
+
+  /**
+   * missing, requested, on_file or not_needed; not_needed reads missing once nec_amount reaches the threshold.
+   *
+   * @generated from field: string w9_status = 6;
+   */
+  w9Status: string;
+
+  /**
+   * not_needed, needed, draft_ready, waiting_on_w9 or filed.
+   *
+   * @generated from field: string form_status = 7;
+   */
+  formStatus: string;
+};
+
+/**
+ * Describes the message novam.insights.v1.Form1099Summary.
+ * Use `create(Form1099SummarySchema)` to create a new message.
+ */
+export declare const Form1099SummarySchema: GenMessage<Form1099Summary>;
+
+/**
+ * @generated from message novam.insights.v1.Get1099SeasonResponse
+ */
+export declare type Get1099SeasonResponse = Message<"novam.insights.v1.Get1099SeasonResponse"> & {
+  /**
+   * @generated from field: int32 tax_year = 1;
+   */
+  taxYear: number;
+
+  /**
+   * @generated from field: double threshold = 2;
+   */
+  threshold: number;
+
+  /**
+   * When the forms are due, YYYY-MM-DD.
+   *
+   * @generated from field: string due_date = 3;
+   */
+  dueDate: string;
+
+  /**
+   * Largest nec_amount first.
+   *
+   * @generated from field: repeated novam.insights.v1.Form1099Summary summaries = 4;
+   */
+  summaries: Form1099Summary[];
+};
+
+/**
+ * Describes the message novam.insights.v1.Get1099SeasonResponse.
+ * Use `create(Get1099SeasonResponseSchema)` to create a new message.
+ */
+export declare const Get1099SeasonResponseSchema: GenMessage<Get1099SeasonResponse>;
+
+/**
+ * @generated from message novam.insights.v1.BuildTaxPackageRequest
+ */
+export declare type BuildTaxPackageRequest = Message<"novam.insights.v1.BuildTaxPackageRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: int32 tax_year = 2;
+   */
+  taxYear: number;
+
+  /**
+   * income, expenses, payouts and form1099, in the order the files are wanted.
+   *
+   * @generated from field: repeated string parts = 3;
+   */
+  parts: string[];
+
+  /**
+   * The plan has the 1099 tools: the summary lists the forms.
+   *
+   * @generated from field: bool with_forms = 4;
+   */
+  withForms: boolean;
+};
+
+/**
+ * Describes the message novam.insights.v1.BuildTaxPackageRequest.
+ * Use `create(BuildTaxPackageRequestSchema)` to create a new message.
+ */
+export declare const BuildTaxPackageRequestSchema: GenMessage<BuildTaxPackageRequest>;
+
+/**
+ * @generated from message novam.insights.v1.BuildTaxPackageResponse
+ */
+export declare type BuildTaxPackageResponse = Message<"novam.insights.v1.BuildTaxPackageResponse"> & {
+  /**
+   * @generated from field: bytes zip = 1;
+   */
+  zip: Uint8Array;
+
+  /**
+   * The files in it, summary.pdf first.
+   *
+   * @generated from field: repeated string files = 2;
+   */
+  files: string[];
+};
+
+/**
+ * Describes the message novam.insights.v1.BuildTaxPackageResponse.
+ * Use `create(BuildTaxPackageResponseSchema)` to create a new message.
+ */
+export declare const BuildTaxPackageResponseSchema: GenMessage<BuildTaxPackageResponse>;
+
+/**
  * @generated from enum novam.insights.v1.ChartKind
  */
 export enum ChartKind {
@@ -1329,6 +1501,26 @@ export declare const InsightsService: GenService<{
     methodKind: "unary";
     input: typeof ListOpenTimesRequestSchema;
     output: typeof ListOpenTimesResponseSchema;
+  },
+  /**
+   * A tax year's 1099-NEC season: what each helper was paid, the part a 1099-NEC reports, and where their form stands.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.Get1099Season
+   */
+  get1099Season: {
+    methodKind: "unary";
+    input: typeof Get1099SeasonRequestSchema;
+    output: typeof Get1099SeasonResponseSchema;
+  },
+  /**
+   * The accountant's .zip for a tax year: summary.pdf and a CSV per part.
+   *
+   * @generated from rpc novam.insights.v1.InsightsService.BuildTaxPackage
+   */
+  buildTaxPackage: {
+    methodKind: "unary";
+    input: typeof BuildTaxPackageRequestSchema;
+    output: typeof BuildTaxPackageResponseSchema;
   },
 }>;
 
