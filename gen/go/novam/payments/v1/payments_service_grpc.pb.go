@@ -21,6 +21,13 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	PaymentsService_RecordPayment_FullMethodName     = "/novam.payments.v1.PaymentsService/RecordPayment"
 	PaymentsService_MarkPaidIfCovered_FullMethodName = "/novam.payments.v1.PaymentsService/MarkPaidIfCovered"
+	PaymentsService_ReopenIfOwed_FullMethodName      = "/novam.payments.v1.PaymentsService/ReopenIfOwed"
+	PaymentsService_FailPayment_FullMethodName       = "/novam.payments.v1.PaymentsService/FailPayment"
+	PaymentsService_RefundPayment_FullMethodName     = "/novam.payments.v1.PaymentsService/RefundPayment"
+	PaymentsService_DisputePayment_FullMethodName    = "/novam.payments.v1.PaymentsService/DisputePayment"
+	PaymentsService_DeletePayment_FullMethodName     = "/novam.payments.v1.PaymentsService/DeletePayment"
+	PaymentsService_RestorePayment_FullMethodName    = "/novam.payments.v1.PaymentsService/RestorePayment"
+	PaymentsService_RedeemGiftCard_FullMethodName    = "/novam.payments.v1.PaymentsService/RedeemGiftCard"
 )
 
 // PaymentsServiceClient is the client API for PaymentsService service.
@@ -38,6 +45,25 @@ type PaymentsServiceClient interface {
 	RecordPayment(ctx context.Context, in *RecordPaymentRequest, opts ...grpc.CallOption) (*RecordPaymentResponse, error)
 	// Marks an invoice paid once its payments cover it.
 	MarkPaidIfCovered(ctx context.Context, in *MarkPaidIfCoveredRequest, opts ...grpc.CallOption) (*MarkPaidIfCoveredResponse, error)
+	// An invoice paid by a payment that then failed is owed again: sent, or overdue once past its due date.
+	ReopenIfOwed(ctx context.Context, in *ReopenIfOwedRequest, opts ...grpc.CallOption) (*ReopenIfOwedResponse, error)
+	// A payment made through Stripe that didn't go through after all (a bank debit returned): it stops counting (failed
+	// and deleted), and an invoice it paid is owed again. Safe to repeat.
+	FailPayment(ctx context.Context, in *FailPaymentRequest, opts ...grpc.CallOption) (*FailPaymentResponse, error)
+	// A refund made in the processor: all of it marks the payment refunded and stops it counting; part of it leaves
+	// the payment counting for what is left. The invoice is left as it is.
+	RefundPayment(ctx context.Context, in *RefundPaymentRequest, opts ...grpc.CallOption) (*RefundPaymentResponse, error)
+	// The client disputed the charge with their bank: the payment is marked disputed.
+	DisputePayment(ctx context.Context, in *DisputePaymentRequest, opts ...grpc.CallOption) (*DisputePaymentResponse, error)
+	// Deletes a payment; a gift card payment's amount goes back on its card.
+	DeletePayment(ctx context.Context, in *DeletePaymentRequest, opts ...grpc.CallOption) (*DeletePaymentResponse, error)
+	// Restores a deleted payment; a gift card payment is taken off its card again, or FAILED_PRECONDITION when the
+	// card no longer has it.
+	RestorePayment(ctx context.Context, in *RestorePaymentRequest, opts ...grpc.CallOption) (*RestorePaymentResponse, error)
+	// Takes up to what is asked (all it can by default) off an invoice from a gift card: never more than the card
+	// holds or the invoice still owes. The invoice is paid when nothing is left. FAILED_PRECONDITION says why a card
+	// or invoice can't be used, NOT_FOUND an invoice that isn't there.
+	RedeemGiftCard(ctx context.Context, in *RedeemGiftCardRequest, opts ...grpc.CallOption) (*RedeemGiftCardResponse, error)
 }
 
 type paymentsServiceClient struct {
@@ -68,6 +94,76 @@ func (c *paymentsServiceClient) MarkPaidIfCovered(ctx context.Context, in *MarkP
 	return out, nil
 }
 
+func (c *paymentsServiceClient) ReopenIfOwed(ctx context.Context, in *ReopenIfOwedRequest, opts ...grpc.CallOption) (*ReopenIfOwedResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ReopenIfOwedResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ReopenIfOwed_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) FailPayment(ctx context.Context, in *FailPaymentRequest, opts ...grpc.CallOption) (*FailPaymentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FailPaymentResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_FailPayment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) RefundPayment(ctx context.Context, in *RefundPaymentRequest, opts ...grpc.CallOption) (*RefundPaymentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RefundPaymentResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_RefundPayment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) DisputePayment(ctx context.Context, in *DisputePaymentRequest, opts ...grpc.CallOption) (*DisputePaymentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DisputePaymentResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_DisputePayment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) DeletePayment(ctx context.Context, in *DeletePaymentRequest, opts ...grpc.CallOption) (*DeletePaymentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DeletePaymentResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_DeletePayment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) RestorePayment(ctx context.Context, in *RestorePaymentRequest, opts ...grpc.CallOption) (*RestorePaymentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RestorePaymentResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_RestorePayment_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) RedeemGiftCard(ctx context.Context, in *RedeemGiftCardRequest, opts ...grpc.CallOption) (*RedeemGiftCardResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(RedeemGiftCardResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_RedeemGiftCard_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentsServiceServer is the server API for PaymentsService service.
 // All implementations must embed UnimplementedPaymentsServiceServer
 // for forward compatibility.
@@ -83,6 +179,25 @@ type PaymentsServiceServer interface {
 	RecordPayment(context.Context, *RecordPaymentRequest) (*RecordPaymentResponse, error)
 	// Marks an invoice paid once its payments cover it.
 	MarkPaidIfCovered(context.Context, *MarkPaidIfCoveredRequest) (*MarkPaidIfCoveredResponse, error)
+	// An invoice paid by a payment that then failed is owed again: sent, or overdue once past its due date.
+	ReopenIfOwed(context.Context, *ReopenIfOwedRequest) (*ReopenIfOwedResponse, error)
+	// A payment made through Stripe that didn't go through after all (a bank debit returned): it stops counting (failed
+	// and deleted), and an invoice it paid is owed again. Safe to repeat.
+	FailPayment(context.Context, *FailPaymentRequest) (*FailPaymentResponse, error)
+	// A refund made in the processor: all of it marks the payment refunded and stops it counting; part of it leaves
+	// the payment counting for what is left. The invoice is left as it is.
+	RefundPayment(context.Context, *RefundPaymentRequest) (*RefundPaymentResponse, error)
+	// The client disputed the charge with their bank: the payment is marked disputed.
+	DisputePayment(context.Context, *DisputePaymentRequest) (*DisputePaymentResponse, error)
+	// Deletes a payment; a gift card payment's amount goes back on its card.
+	DeletePayment(context.Context, *DeletePaymentRequest) (*DeletePaymentResponse, error)
+	// Restores a deleted payment; a gift card payment is taken off its card again, or FAILED_PRECONDITION when the
+	// card no longer has it.
+	RestorePayment(context.Context, *RestorePaymentRequest) (*RestorePaymentResponse, error)
+	// Takes up to what is asked (all it can by default) off an invoice from a gift card: never more than the card
+	// holds or the invoice still owes. The invoice is paid when nothing is left. FAILED_PRECONDITION says why a card
+	// or invoice can't be used, NOT_FOUND an invoice that isn't there.
+	RedeemGiftCard(context.Context, *RedeemGiftCardRequest) (*RedeemGiftCardResponse, error)
 	mustEmbedUnimplementedPaymentsServiceServer()
 }
 
@@ -98,6 +213,27 @@ func (UnimplementedPaymentsServiceServer) RecordPayment(context.Context, *Record
 }
 func (UnimplementedPaymentsServiceServer) MarkPaidIfCovered(context.Context, *MarkPaidIfCoveredRequest) (*MarkPaidIfCoveredResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method MarkPaidIfCovered not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ReopenIfOwed(context.Context, *ReopenIfOwedRequest) (*ReopenIfOwedResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ReopenIfOwed not implemented")
+}
+func (UnimplementedPaymentsServiceServer) FailPayment(context.Context, *FailPaymentRequest) (*FailPaymentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method FailPayment not implemented")
+}
+func (UnimplementedPaymentsServiceServer) RefundPayment(context.Context, *RefundPaymentRequest) (*RefundPaymentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RefundPayment not implemented")
+}
+func (UnimplementedPaymentsServiceServer) DisputePayment(context.Context, *DisputePaymentRequest) (*DisputePaymentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DisputePayment not implemented")
+}
+func (UnimplementedPaymentsServiceServer) DeletePayment(context.Context, *DeletePaymentRequest) (*DeletePaymentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DeletePayment not implemented")
+}
+func (UnimplementedPaymentsServiceServer) RestorePayment(context.Context, *RestorePaymentRequest) (*RestorePaymentResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RestorePayment not implemented")
+}
+func (UnimplementedPaymentsServiceServer) RedeemGiftCard(context.Context, *RedeemGiftCardRequest) (*RedeemGiftCardResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method RedeemGiftCard not implemented")
 }
 func (UnimplementedPaymentsServiceServer) mustEmbedUnimplementedPaymentsServiceServer() {}
 func (UnimplementedPaymentsServiceServer) testEmbeddedByValue()                         {}
@@ -156,6 +292,132 @@ func _PaymentsService_MarkPaidIfCovered_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_ReopenIfOwed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ReopenIfOwedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ReopenIfOwed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ReopenIfOwed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ReopenIfOwed(ctx, req.(*ReopenIfOwedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_FailPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FailPaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).FailPayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_FailPayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).FailPayment(ctx, req.(*FailPaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_RefundPayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RefundPaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).RefundPayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_RefundPayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).RefundPayment(ctx, req.(*RefundPaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_DisputePayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DisputePaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).DisputePayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_DisputePayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).DisputePayment(ctx, req.(*DisputePaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_DeletePayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeletePaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).DeletePayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_DeletePayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).DeletePayment(ctx, req.(*DeletePaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_RestorePayment_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RestorePaymentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).RestorePayment(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_RestorePayment_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).RestorePayment(ctx, req.(*RestorePaymentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_RedeemGiftCard_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RedeemGiftCardRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).RedeemGiftCard(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_RedeemGiftCard_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).RedeemGiftCard(ctx, req.(*RedeemGiftCardRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentsService_ServiceDesc is the grpc.ServiceDesc for PaymentsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -170,6 +432,34 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MarkPaidIfCovered",
 			Handler:    _PaymentsService_MarkPaidIfCovered_Handler,
+		},
+		{
+			MethodName: "ReopenIfOwed",
+			Handler:    _PaymentsService_ReopenIfOwed_Handler,
+		},
+		{
+			MethodName: "FailPayment",
+			Handler:    _PaymentsService_FailPayment_Handler,
+		},
+		{
+			MethodName: "RefundPayment",
+			Handler:    _PaymentsService_RefundPayment_Handler,
+		},
+		{
+			MethodName: "DisputePayment",
+			Handler:    _PaymentsService_DisputePayment_Handler,
+		},
+		{
+			MethodName: "DeletePayment",
+			Handler:    _PaymentsService_DeletePayment_Handler,
+		},
+		{
+			MethodName: "RestorePayment",
+			Handler:    _PaymentsService_RestorePayment_Handler,
+		},
+		{
+			MethodName: "RedeemGiftCard",
+			Handler:    _PaymentsService_RedeemGiftCard_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

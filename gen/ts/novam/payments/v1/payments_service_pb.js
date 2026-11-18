@@ -10,7 +10,7 @@ import { file_novam_common_v1_common } from "../../common/v1/common_pb.js";
  * Describes the file novam/payments/v1/payments_service.proto.
  */
 export const file_novam_payments_v1_payments_service = /*@__PURE__*/
-  fileDesc("Cihub3ZhbS9wYXltZW50cy92MS9wYXltZW50c19zZXJ2aWNlLnByb3RvEhFub3ZhbS5wYXltZW50cy52MSKzAgoUUmVjb3JkUGF5bWVudFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhIKCnBheW1lbnRfaWQYAiABKAkSGQoRY2xpZW50X2ludm9pY2VfaWQYAyABKAkSDgoGYW1vdW50GAQgASgBEg4KBm1ldGhvZBgFIAEoCRIrCgdwYWlkX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBINCgVub3RlcxgHIAEoCRILCgN0aXAYCCABKAESFQoNdGlwX21lbWJlcl9pZBgJIAEoCRIaChJyZWNvcmRlZF9ieV9yZW50ZXIYCiABKAgSHAoUbWFya19wYWlkX2lmX2NvdmVyZWQYCyABKAgiQQoVUmVjb3JkUGF5bWVudFJlc3BvbnNlEhIKCnBheW1lbnRfaWQYASABKAkSFAoMaW52b2ljZV9wYWlkGAIgASgIImkKGE1hcmtQYWlkSWZDb3ZlcmVkUmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESGQoRY2xpZW50X2ludm9pY2VfaWQYAiABKAkiMQoZTWFya1BhaWRJZkNvdmVyZWRSZXNwb25zZRIUCgxpbnZvaWNlX3BhaWQYASABKAgy5QEKD1BheW1lbnRzU2VydmljZRJiCg1SZWNvcmRQYXltZW50Eicubm92YW0ucGF5bWVudHMudjEuUmVjb3JkUGF5bWVudFJlcXVlc3QaKC5ub3ZhbS5wYXltZW50cy52MS5SZWNvcmRQYXltZW50UmVzcG9uc2USbgoRTWFya1BhaWRJZkNvdmVyZWQSKy5ub3ZhbS5wYXltZW50cy52MS5NYXJrUGFpZElmQ292ZXJlZFJlcXVlc3QaLC5ub3ZhbS5wYXltZW50cy52MS5NYXJrUGFpZElmQ292ZXJlZFJlc3BvbnNlQklaR2dpdGh1Yi5jb20vbm92YW1vbmxpbmUvbm92YW0tcHJvdG9zL2dlbi9nby9ub3ZhbS9wYXltZW50cy92MTtwYXltZW50c3YxYgZwcm90bzM", [file_google_protobuf_timestamp, file_novam_common_v1_common]);
+  fileDesc("Cihub3ZhbS9wYXltZW50cy92MS9wYXltZW50c19zZXJ2aWNlLnByb3RvEhFub3ZhbS5wYXltZW50cy52MSKzAgoUUmVjb3JkUGF5bWVudFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhIKCnBheW1lbnRfaWQYAiABKAkSGQoRY2xpZW50X2ludm9pY2VfaWQYAyABKAkSDgoGYW1vdW50GAQgASgBEg4KBm1ldGhvZBgFIAEoCRIrCgdwYWlkX2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcBINCgVub3RlcxgHIAEoCRILCgN0aXAYCCABKAESFQoNdGlwX21lbWJlcl9pZBgJIAEoCRIaChJyZWNvcmRlZF9ieV9yZW50ZXIYCiABKAgSHAoUbWFya19wYWlkX2lmX2NvdmVyZWQYCyABKAgiQQoVUmVjb3JkUGF5bWVudFJlc3BvbnNlEhIKCnBheW1lbnRfaWQYASABKAkSFAoMaW52b2ljZV9wYWlkGAIgASgIIoQBChhNYXJrUGFpZElmQ292ZXJlZFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhkKEWNsaWVudF9pbnZvaWNlX2lkGAIgASgJEhkKEWV2ZW5faWZfY2FuY2VsbGVkGAMgASgIIjEKGU1hcmtQYWlkSWZDb3ZlcmVkUmVzcG9uc2USFAoMaW52b2ljZV9wYWlkGAEgASgIImQKE1Jlb3BlbklmT3dlZFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhkKEWNsaWVudF9pbnZvaWNlX2lkGAIgASgJIigKFFJlb3BlbklmT3dlZFJlc3BvbnNlEhAKCHJlb3BlbmVkGAEgASgIInoKEkZhaWxQYXltZW50UmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESIAoYc3RyaXBlX3BheW1lbnRfaW50ZW50X2lkGAIgASgJEg4KBnJlYXNvbhgDIAEoCSJkChNGYWlsUGF5bWVudFJlc3BvbnNlEg4KBmZhaWxlZBgBIAEoCBISCgpwYXltZW50X2lkGAIgASgJEhkKEWNsaWVudF9pbnZvaWNlX2lkGAMgASgJEg4KBmFtb3VudBgEIAEoASK3AQoUUmVmdW5kUGF5bWVudFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhIKCnBheW1lbnRfaWQYAiABKAkSGwoTY2hhcmdlX2Ftb3VudF9jZW50cxgDIAEoAxIWCg5yZWZ1bmRlZF9jZW50cxgEIAEoAxIQCghyZWZ1bmRlZBgFIAEoCBIQCghjdXJyZW5jeRgGIAEoCSI2ChVSZWZ1bmRQYXltZW50UmVzcG9uc2USDAoEZnVsbBgBIAEoCBIPCgdjaGFuZ2VkGAIgASgIIl8KFURpc3B1dGVQYXltZW50UmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESEgoKcGF5bWVudF9pZBgCIAEoCSIpChZEaXNwdXRlUGF5bWVudFJlc3BvbnNlEg8KB2NoYW5nZWQYASABKAgiXgoURGVsZXRlUGF5bWVudFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhIKCnBheW1lbnRfaWQYAiABKAkiFwoVRGVsZXRlUGF5bWVudFJlc3BvbnNlIl8KFVJlc3RvcmVQYXltZW50UmVxdWVzdBIyCghtZXRhZGF0YRgBIAEoCzIgLm5vdmFtLmNvbW1vbi52MS5SZXF1ZXN0TWV0YWRhdGESEgoKcGF5bWVudF9pZBgCIAEoCSIYChZSZXN0b3JlUGF5bWVudFJlc3BvbnNlIs8BChVSZWRlZW1HaWZ0Q2FyZFJlcXVlc3QSMgoIbWV0YWRhdGEYASABKAsyIC5ub3ZhbS5jb21tb24udjEuUmVxdWVzdE1ldGFkYXRhEhIKCnBheW1lbnRfaWQYAiABKAkSGQoRY2xpZW50X2ludm9pY2VfaWQYAyABKAkSDAoEY29kZRgEIAEoCRIWCglyZXF1ZXN0ZWQYBSABKAFIAIgBARIRCgljbGllbnRfaWQYBiABKAkSDAoEbm90ZRgHIAEoCUIMCgpfcmVxdWVzdGVkIooBChZSZWRlZW1HaWZ0Q2FyZFJlc3BvbnNlEhIKCnBheW1lbnRfaWQYASABKAkSDgoGYW1vdW50GAIgASgBEg8KB2JhbGFuY2UYAyABKAESFwoPaW52b2ljZV9iYWxhbmNlGAQgASgBEgwKBGNvZGUYBSABKAkSFAoMaW52b2ljZV9wYWlkGAYgASgIMqEHCg9QYXltZW50c1NlcnZpY2USYgoNUmVjb3JkUGF5bWVudBInLm5vdmFtLnBheW1lbnRzLnYxLlJlY29yZFBheW1lbnRSZXF1ZXN0Gigubm92YW0ucGF5bWVudHMudjEuUmVjb3JkUGF5bWVudFJlc3BvbnNlEm4KEU1hcmtQYWlkSWZDb3ZlcmVkEisubm92YW0ucGF5bWVudHMudjEuTWFya1BhaWRJZkNvdmVyZWRSZXF1ZXN0Giwubm92YW0ucGF5bWVudHMudjEuTWFya1BhaWRJZkNvdmVyZWRSZXNwb25zZRJfCgxSZW9wZW5JZk93ZWQSJi5ub3ZhbS5wYXltZW50cy52MS5SZW9wZW5JZk93ZWRSZXF1ZXN0Gicubm92YW0ucGF5bWVudHMudjEuUmVvcGVuSWZPd2VkUmVzcG9uc2USXAoLRmFpbFBheW1lbnQSJS5ub3ZhbS5wYXltZW50cy52MS5GYWlsUGF5bWVudFJlcXVlc3QaJi5ub3ZhbS5wYXltZW50cy52MS5GYWlsUGF5bWVudFJlc3BvbnNlEmIKDVJlZnVuZFBheW1lbnQSJy5ub3ZhbS5wYXltZW50cy52MS5SZWZ1bmRQYXltZW50UmVxdWVzdBooLm5vdmFtLnBheW1lbnRzLnYxLlJlZnVuZFBheW1lbnRSZXNwb25zZRJlCg5EaXNwdXRlUGF5bWVudBIoLm5vdmFtLnBheW1lbnRzLnYxLkRpc3B1dGVQYXltZW50UmVxdWVzdBopLm5vdmFtLnBheW1lbnRzLnYxLkRpc3B1dGVQYXltZW50UmVzcG9uc2USYgoNRGVsZXRlUGF5bWVudBInLm5vdmFtLnBheW1lbnRzLnYxLkRlbGV0ZVBheW1lbnRSZXF1ZXN0Gigubm92YW0ucGF5bWVudHMudjEuRGVsZXRlUGF5bWVudFJlc3BvbnNlEmUKDlJlc3RvcmVQYXltZW50Eigubm92YW0ucGF5bWVudHMudjEuUmVzdG9yZVBheW1lbnRSZXF1ZXN0Gikubm92YW0ucGF5bWVudHMudjEuUmVzdG9yZVBheW1lbnRSZXNwb25zZRJlCg5SZWRlZW1HaWZ0Q2FyZBIoLm5vdmFtLnBheW1lbnRzLnYxLlJlZGVlbUdpZnRDYXJkUmVxdWVzdBopLm5vdmFtLnBheW1lbnRzLnYxLlJlZGVlbUdpZnRDYXJkUmVzcG9uc2VCSVpHZ2l0aHViLmNvbS9ub3ZhbW9ubGluZS9ub3ZhbS1wcm90b3MvZ2VuL2dvL25vdmFtL3BheW1lbnRzL3YxO3BheW1lbnRzdjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_novam_common_v1_common]);
 
 /**
  * Describes the message novam.payments.v1.RecordPaymentRequest.
@@ -39,6 +39,104 @@ export const MarkPaidIfCoveredRequestSchema = /*@__PURE__*/
  */
 export const MarkPaidIfCoveredResponseSchema = /*@__PURE__*/
   messageDesc(file_novam_payments_v1_payments_service, 3);
+
+/**
+ * Describes the message novam.payments.v1.ReopenIfOwedRequest.
+ * Use `create(ReopenIfOwedRequestSchema)` to create a new message.
+ */
+export const ReopenIfOwedRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 4);
+
+/**
+ * Describes the message novam.payments.v1.ReopenIfOwedResponse.
+ * Use `create(ReopenIfOwedResponseSchema)` to create a new message.
+ */
+export const ReopenIfOwedResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 5);
+
+/**
+ * Describes the message novam.payments.v1.FailPaymentRequest.
+ * Use `create(FailPaymentRequestSchema)` to create a new message.
+ */
+export const FailPaymentRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 6);
+
+/**
+ * Describes the message novam.payments.v1.FailPaymentResponse.
+ * Use `create(FailPaymentResponseSchema)` to create a new message.
+ */
+export const FailPaymentResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 7);
+
+/**
+ * Describes the message novam.payments.v1.RefundPaymentRequest.
+ * Use `create(RefundPaymentRequestSchema)` to create a new message.
+ */
+export const RefundPaymentRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 8);
+
+/**
+ * Describes the message novam.payments.v1.RefundPaymentResponse.
+ * Use `create(RefundPaymentResponseSchema)` to create a new message.
+ */
+export const RefundPaymentResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 9);
+
+/**
+ * Describes the message novam.payments.v1.DisputePaymentRequest.
+ * Use `create(DisputePaymentRequestSchema)` to create a new message.
+ */
+export const DisputePaymentRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 10);
+
+/**
+ * Describes the message novam.payments.v1.DisputePaymentResponse.
+ * Use `create(DisputePaymentResponseSchema)` to create a new message.
+ */
+export const DisputePaymentResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 11);
+
+/**
+ * Describes the message novam.payments.v1.DeletePaymentRequest.
+ * Use `create(DeletePaymentRequestSchema)` to create a new message.
+ */
+export const DeletePaymentRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 12);
+
+/**
+ * Describes the message novam.payments.v1.DeletePaymentResponse.
+ * Use `create(DeletePaymentResponseSchema)` to create a new message.
+ */
+export const DeletePaymentResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 13);
+
+/**
+ * Describes the message novam.payments.v1.RestorePaymentRequest.
+ * Use `create(RestorePaymentRequestSchema)` to create a new message.
+ */
+export const RestorePaymentRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 14);
+
+/**
+ * Describes the message novam.payments.v1.RestorePaymentResponse.
+ * Use `create(RestorePaymentResponseSchema)` to create a new message.
+ */
+export const RestorePaymentResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 15);
+
+/**
+ * Describes the message novam.payments.v1.RedeemGiftCardRequest.
+ * Use `create(RedeemGiftCardRequestSchema)` to create a new message.
+ */
+export const RedeemGiftCardRequestSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 16);
+
+/**
+ * Describes the message novam.payments.v1.RedeemGiftCardResponse.
+ * Use `create(RedeemGiftCardResponseSchema)` to create a new message.
+ */
+export const RedeemGiftCardResponseSchema = /*@__PURE__*/
+  messageDesc(file_novam_payments_v1_payments_service, 17);
 
 /**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and

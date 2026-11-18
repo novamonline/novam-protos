@@ -207,6 +207,8 @@ type MarkPaidIfCoveredRequest struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
 	Metadata        *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
 	ClientInvoiceId string                 `protobuf:"bytes,2,opt,name=client_invoice_id,json=clientInvoiceId,proto3" json:"client_invoice_id,omitempty"`
+	// Mark a cancelled invoice paid too, as the pay page does when the money came in anyway.
+	EvenIfCancelled bool `protobuf:"varint,3,opt,name=even_if_cancelled,json=evenIfCancelled,proto3" json:"even_if_cancelled,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -255,6 +257,13 @@ func (x *MarkPaidIfCoveredRequest) GetClientInvoiceId() string {
 	return ""
 }
 
+func (x *MarkPaidIfCoveredRequest) GetEvenIfCancelled() bool {
+	if x != nil {
+		return x.EvenIfCancelled
+	}
+	return false
+}
+
 type MarkPaidIfCoveredResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	InvoicePaid   bool                   `protobuf:"varint,1,opt,name=invoice_paid,json=invoicePaid,proto3" json:"invoice_paid,omitempty"`
@@ -299,6 +308,825 @@ func (x *MarkPaidIfCoveredResponse) GetInvoicePaid() bool {
 	return false
 }
 
+type ReopenIfOwedRequest struct {
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Metadata        *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	ClientInvoiceId string                 `protobuf:"bytes,2,opt,name=client_invoice_id,json=clientInvoiceId,proto3" json:"client_invoice_id,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *ReopenIfOwedRequest) Reset() {
+	*x = ReopenIfOwedRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReopenIfOwedRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReopenIfOwedRequest) ProtoMessage() {}
+
+func (x *ReopenIfOwedRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReopenIfOwedRequest.ProtoReflect.Descriptor instead.
+func (*ReopenIfOwedRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ReopenIfOwedRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ReopenIfOwedRequest) GetClientInvoiceId() string {
+	if x != nil {
+		return x.ClientInvoiceId
+	}
+	return ""
+}
+
+type ReopenIfOwedResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Reopened      bool                   `protobuf:"varint,1,opt,name=reopened,proto3" json:"reopened,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ReopenIfOwedResponse) Reset() {
+	*x = ReopenIfOwedResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ReopenIfOwedResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ReopenIfOwedResponse) ProtoMessage() {}
+
+func (x *ReopenIfOwedResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ReopenIfOwedResponse.ProtoReflect.Descriptor instead.
+func (*ReopenIfOwedResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ReopenIfOwedResponse) GetReopened() bool {
+	if x != nil {
+		return x.Reopened
+	}
+	return false
+}
+
+type FailPaymentRequest struct {
+	state                 protoimpl.MessageState `protogen:"open.v1"`
+	Metadata              *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	StripePaymentIntentId string                 `protobuf:"bytes,2,opt,name=stripe_payment_intent_id,json=stripePaymentIntentId,proto3" json:"stripe_payment_intent_id,omitempty"`
+	Reason                string                 `protobuf:"bytes,3,opt,name=reason,proto3" json:"reason,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *FailPaymentRequest) Reset() {
+	*x = FailPaymentRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FailPaymentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FailPaymentRequest) ProtoMessage() {}
+
+func (x *FailPaymentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FailPaymentRequest.ProtoReflect.Descriptor instead.
+func (*FailPaymentRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *FailPaymentRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *FailPaymentRequest) GetStripePaymentIntentId() string {
+	if x != nil {
+		return x.StripePaymentIntentId
+	}
+	return ""
+}
+
+func (x *FailPaymentRequest) GetReason() string {
+	if x != nil {
+		return x.Reason
+	}
+	return ""
+}
+
+type FailPaymentResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// False when there was no counting payment for the intent (already failed, or none).
+	Failed          bool    `protobuf:"varint,1,opt,name=failed,proto3" json:"failed,omitempty"`
+	PaymentId       string  `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	ClientInvoiceId string  `protobuf:"bytes,3,opt,name=client_invoice_id,json=clientInvoiceId,proto3" json:"client_invoice_id,omitempty"`
+	Amount          float64 `protobuf:"fixed64,4,opt,name=amount,proto3" json:"amount,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
+}
+
+func (x *FailPaymentResponse) Reset() {
+	*x = FailPaymentResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *FailPaymentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*FailPaymentResponse) ProtoMessage() {}
+
+func (x *FailPaymentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use FailPaymentResponse.ProtoReflect.Descriptor instead.
+func (*FailPaymentResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *FailPaymentResponse) GetFailed() bool {
+	if x != nil {
+		return x.Failed
+	}
+	return false
+}
+
+func (x *FailPaymentResponse) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+func (x *FailPaymentResponse) GetClientInvoiceId() string {
+	if x != nil {
+		return x.ClientInvoiceId
+	}
+	return ""
+}
+
+func (x *FailPaymentResponse) GetAmount() float64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+type RefundPaymentRequest struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	Metadata  *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	PaymentId string                 `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	// What the charge took and what went back, in cents.
+	ChargeAmountCents int64 `protobuf:"varint,3,opt,name=charge_amount_cents,json=chargeAmountCents,proto3" json:"charge_amount_cents,omitempty"`
+	RefundedCents     int64 `protobuf:"varint,4,opt,name=refunded_cents,json=refundedCents,proto3" json:"refunded_cents,omitempty"`
+	// The processor says all of it went back.
+	Refunded bool `protobuf:"varint,5,opt,name=refunded,proto3" json:"refunded,omitempty"`
+	// ISO 4217, for the note on a part refund.
+	Currency      string `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RefundPaymentRequest) Reset() {
+	*x = RefundPaymentRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RefundPaymentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RefundPaymentRequest) ProtoMessage() {}
+
+func (x *RefundPaymentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RefundPaymentRequest.ProtoReflect.Descriptor instead.
+func (*RefundPaymentRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *RefundPaymentRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *RefundPaymentRequest) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+func (x *RefundPaymentRequest) GetChargeAmountCents() int64 {
+	if x != nil {
+		return x.ChargeAmountCents
+	}
+	return 0
+}
+
+func (x *RefundPaymentRequest) GetRefundedCents() int64 {
+	if x != nil {
+		return x.RefundedCents
+	}
+	return 0
+}
+
+func (x *RefundPaymentRequest) GetRefunded() bool {
+	if x != nil {
+		return x.Refunded
+	}
+	return false
+}
+
+func (x *RefundPaymentRequest) GetCurrency() string {
+	if x != nil {
+		return x.Currency
+	}
+	return ""
+}
+
+type RefundPaymentResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	Full  bool                   `protobuf:"varint,1,opt,name=full,proto3" json:"full,omitempty"`
+	// This call changed the payment (the first report of this refund).
+	Changed       bool `protobuf:"varint,2,opt,name=changed,proto3" json:"changed,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RefundPaymentResponse) Reset() {
+	*x = RefundPaymentResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RefundPaymentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RefundPaymentResponse) ProtoMessage() {}
+
+func (x *RefundPaymentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RefundPaymentResponse.ProtoReflect.Descriptor instead.
+func (*RefundPaymentResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *RefundPaymentResponse) GetFull() bool {
+	if x != nil {
+		return x.Full
+	}
+	return false
+}
+
+func (x *RefundPaymentResponse) GetChanged() bool {
+	if x != nil {
+		return x.Changed
+	}
+	return false
+}
+
+type DisputePaymentRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	PaymentId     string                 `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DisputePaymentRequest) Reset() {
+	*x = DisputePaymentRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DisputePaymentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DisputePaymentRequest) ProtoMessage() {}
+
+func (x *DisputePaymentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DisputePaymentRequest.ProtoReflect.Descriptor instead.
+func (*DisputePaymentRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *DisputePaymentRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *DisputePaymentRequest) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+type DisputePaymentResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Changed       bool                   `protobuf:"varint,1,opt,name=changed,proto3" json:"changed,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DisputePaymentResponse) Reset() {
+	*x = DisputePaymentResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DisputePaymentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DisputePaymentResponse) ProtoMessage() {}
+
+func (x *DisputePaymentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DisputePaymentResponse.ProtoReflect.Descriptor instead.
+func (*DisputePaymentResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *DisputePaymentResponse) GetChanged() bool {
+	if x != nil {
+		return x.Changed
+	}
+	return false
+}
+
+type DeletePaymentRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	PaymentId     string                 `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePaymentRequest) Reset() {
+	*x = DeletePaymentRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePaymentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePaymentRequest) ProtoMessage() {}
+
+func (x *DeletePaymentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePaymentRequest.ProtoReflect.Descriptor instead.
+func (*DeletePaymentRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *DeletePaymentRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *DeletePaymentRequest) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+type DeletePaymentResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DeletePaymentResponse) Reset() {
+	*x = DeletePaymentResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DeletePaymentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DeletePaymentResponse) ProtoMessage() {}
+
+func (x *DeletePaymentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DeletePaymentResponse.ProtoReflect.Descriptor instead.
+func (*DeletePaymentResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{13}
+}
+
+type RestorePaymentRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	PaymentId     string                 `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RestorePaymentRequest) Reset() {
+	*x = RestorePaymentRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RestorePaymentRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RestorePaymentRequest) ProtoMessage() {}
+
+func (x *RestorePaymentRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RestorePaymentRequest.ProtoReflect.Descriptor instead.
+func (*RestorePaymentRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *RestorePaymentRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *RestorePaymentRequest) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+type RestorePaymentResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RestorePaymentResponse) Reset() {
+	*x = RestorePaymentResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RestorePaymentResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RestorePaymentResponse) ProtoMessage() {}
+
+func (x *RestorePaymentResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RestorePaymentResponse.ProtoReflect.Descriptor instead.
+func (*RestorePaymentResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{15}
+}
+
+type RedeemGiftCardRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// Chosen by novam-data.
+	PaymentId       string `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	ClientInvoiceId string `protobuf:"bytes,3,opt,name=client_invoice_id,json=clientInvoiceId,proto3" json:"client_invoice_id,omitempty"`
+	Code            string `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`
+	// Unset takes all it can.
+	Requested *float64 `protobuf:"fixed64,5,opt,name=requested,proto3,oneof" json:"requested,omitempty"`
+	// Only an invoice of this client (a client paying their own).
+	ClientId string `protobuf:"bytes,6,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	// The payment's note; "Gift card <code>" when empty.
+	Note          string `protobuf:"bytes,7,opt,name=note,proto3" json:"note,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RedeemGiftCardRequest) Reset() {
+	*x = RedeemGiftCardRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[16]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RedeemGiftCardRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RedeemGiftCardRequest) ProtoMessage() {}
+
+func (x *RedeemGiftCardRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[16]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RedeemGiftCardRequest.ProtoReflect.Descriptor instead.
+func (*RedeemGiftCardRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{16}
+}
+
+func (x *RedeemGiftCardRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *RedeemGiftCardRequest) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+func (x *RedeemGiftCardRequest) GetClientInvoiceId() string {
+	if x != nil {
+		return x.ClientInvoiceId
+	}
+	return ""
+}
+
+func (x *RedeemGiftCardRequest) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *RedeemGiftCardRequest) GetRequested() float64 {
+	if x != nil && x.Requested != nil {
+		return *x.Requested
+	}
+	return 0
+}
+
+func (x *RedeemGiftCardRequest) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *RedeemGiftCardRequest) GetNote() string {
+	if x != nil {
+		return x.Note
+	}
+	return ""
+}
+
+type RedeemGiftCardResponse struct {
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	PaymentId string                 `protobuf:"bytes,1,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`
+	Amount    float64                `protobuf:"fixed64,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	// Left on the card.
+	Balance float64 `protobuf:"fixed64,3,opt,name=balance,proto3" json:"balance,omitempty"`
+	// Left to pay on the invoice.
+	InvoiceBalance float64 `protobuf:"fixed64,4,opt,name=invoice_balance,json=invoiceBalance,proto3" json:"invoice_balance,omitempty"`
+	Code           string  `protobuf:"bytes,5,opt,name=code,proto3" json:"code,omitempty"`
+	InvoicePaid    bool    `protobuf:"varint,6,opt,name=invoice_paid,json=invoicePaid,proto3" json:"invoice_paid,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *RedeemGiftCardResponse) Reset() {
+	*x = RedeemGiftCardResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[17]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RedeemGiftCardResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RedeemGiftCardResponse) ProtoMessage() {}
+
+func (x *RedeemGiftCardResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[17]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RedeemGiftCardResponse.ProtoReflect.Descriptor instead.
+func (*RedeemGiftCardResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{17}
+}
+
+func (x *RedeemGiftCardResponse) GetPaymentId() string {
+	if x != nil {
+		return x.PaymentId
+	}
+	return ""
+}
+
+func (x *RedeemGiftCardResponse) GetAmount() float64 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+func (x *RedeemGiftCardResponse) GetBalance() float64 {
+	if x != nil {
+		return x.Balance
+	}
+	return 0
+}
+
+func (x *RedeemGiftCardResponse) GetInvoiceBalance() float64 {
+	if x != nil {
+		return x.InvoiceBalance
+	}
+	return 0
+}
+
+func (x *RedeemGiftCardResponse) GetCode() string {
+	if x != nil {
+		return x.Code
+	}
+	return ""
+}
+
+func (x *RedeemGiftCardResponse) GetInvoicePaid() bool {
+	if x != nil {
+		return x.InvoicePaid
+	}
+	return false
+}
+
 var File_novam_payments_v1_payments_service_proto protoreflect.FileDescriptor
 
 const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
@@ -321,15 +1149,84 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\x15RecordPaymentResponse\x12\x1d\n" +
 	"\n" +
 	"payment_id\x18\x01 \x01(\tR\tpaymentId\x12!\n" +
-	"\finvoice_paid\x18\x02 \x01(\bR\vinvoicePaid\"\x84\x01\n" +
+	"\finvoice_paid\x18\x02 \x01(\bR\vinvoicePaid\"\xb0\x01\n" +
 	"\x18MarkPaidIfCoveredRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12*\n" +
-	"\x11client_invoice_id\x18\x02 \x01(\tR\x0fclientInvoiceId\">\n" +
+	"\x11client_invoice_id\x18\x02 \x01(\tR\x0fclientInvoiceId\x12*\n" +
+	"\x11even_if_cancelled\x18\x03 \x01(\bR\x0fevenIfCancelled\">\n" +
 	"\x19MarkPaidIfCoveredResponse\x12!\n" +
-	"\finvoice_paid\x18\x01 \x01(\bR\vinvoicePaid2\xe5\x01\n" +
+	"\finvoice_paid\x18\x01 \x01(\bR\vinvoicePaid\"\x7f\n" +
+	"\x13ReopenIfOwedRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12*\n" +
+	"\x11client_invoice_id\x18\x02 \x01(\tR\x0fclientInvoiceId\"2\n" +
+	"\x14ReopenIfOwedResponse\x12\x1a\n" +
+	"\breopened\x18\x01 \x01(\bR\breopened\"\xa3\x01\n" +
+	"\x12FailPaymentRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x127\n" +
+	"\x18stripe_payment_intent_id\x18\x02 \x01(\tR\x15stripePaymentIntentId\x12\x16\n" +
+	"\x06reason\x18\x03 \x01(\tR\x06reason\"\x90\x01\n" +
+	"\x13FailPaymentResponse\x12\x16\n" +
+	"\x06failed\x18\x01 \x01(\bR\x06failed\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x02 \x01(\tR\tpaymentId\x12*\n" +
+	"\x11client_invoice_id\x18\x03 \x01(\tR\x0fclientInvoiceId\x12\x16\n" +
+	"\x06amount\x18\x04 \x01(\x01R\x06amount\"\x82\x02\n" +
+	"\x14RefundPaymentRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x02 \x01(\tR\tpaymentId\x12.\n" +
+	"\x13charge_amount_cents\x18\x03 \x01(\x03R\x11chargeAmountCents\x12%\n" +
+	"\x0erefunded_cents\x18\x04 \x01(\x03R\rrefundedCents\x12\x1a\n" +
+	"\brefunded\x18\x05 \x01(\bR\brefunded\x12\x1a\n" +
+	"\bcurrency\x18\x06 \x01(\tR\bcurrency\"E\n" +
+	"\x15RefundPaymentResponse\x12\x12\n" +
+	"\x04full\x18\x01 \x01(\bR\x04full\x12\x18\n" +
+	"\achanged\x18\x02 \x01(\bR\achanged\"t\n" +
+	"\x15DisputePaymentRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x02 \x01(\tR\tpaymentId\"2\n" +
+	"\x16DisputePaymentResponse\x12\x18\n" +
+	"\achanged\x18\x01 \x01(\bR\achanged\"s\n" +
+	"\x14DeletePaymentRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x02 \x01(\tR\tpaymentId\"\x17\n" +
+	"\x15DeletePaymentResponse\"t\n" +
+	"\x15RestorePaymentRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x02 \x01(\tR\tpaymentId\"\x18\n" +
+	"\x16RestorePaymentResponse\"\x96\x02\n" +
+	"\x15RedeemGiftCardRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x02 \x01(\tR\tpaymentId\x12*\n" +
+	"\x11client_invoice_id\x18\x03 \x01(\tR\x0fclientInvoiceId\x12\x12\n" +
+	"\x04code\x18\x04 \x01(\tR\x04code\x12!\n" +
+	"\trequested\x18\x05 \x01(\x01H\x00R\trequested\x88\x01\x01\x12\x1b\n" +
+	"\tclient_id\x18\x06 \x01(\tR\bclientId\x12\x12\n" +
+	"\x04note\x18\a \x01(\tR\x04noteB\f\n" +
+	"\n" +
+	"_requested\"\xc9\x01\n" +
+	"\x16RedeemGiftCardResponse\x12\x1d\n" +
+	"\n" +
+	"payment_id\x18\x01 \x01(\tR\tpaymentId\x12\x16\n" +
+	"\x06amount\x18\x02 \x01(\x01R\x06amount\x12\x18\n" +
+	"\abalance\x18\x03 \x01(\x01R\abalance\x12'\n" +
+	"\x0finvoice_balance\x18\x04 \x01(\x01R\x0einvoiceBalance\x12\x12\n" +
+	"\x04code\x18\x05 \x01(\tR\x04code\x12!\n" +
+	"\finvoice_paid\x18\x06 \x01(\bR\vinvoicePaid2\xa1\a\n" +
 	"\x0fPaymentsService\x12b\n" +
 	"\rRecordPayment\x12'.novam.payments.v1.RecordPaymentRequest\x1a(.novam.payments.v1.RecordPaymentResponse\x12n\n" +
-	"\x11MarkPaidIfCovered\x12+.novam.payments.v1.MarkPaidIfCoveredRequest\x1a,.novam.payments.v1.MarkPaidIfCoveredResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/payments/v1;paymentsv1b\x06proto3"
+	"\x11MarkPaidIfCovered\x12+.novam.payments.v1.MarkPaidIfCoveredRequest\x1a,.novam.payments.v1.MarkPaidIfCoveredResponse\x12_\n" +
+	"\fReopenIfOwed\x12&.novam.payments.v1.ReopenIfOwedRequest\x1a'.novam.payments.v1.ReopenIfOwedResponse\x12\\\n" +
+	"\vFailPayment\x12%.novam.payments.v1.FailPaymentRequest\x1a&.novam.payments.v1.FailPaymentResponse\x12b\n" +
+	"\rRefundPayment\x12'.novam.payments.v1.RefundPaymentRequest\x1a(.novam.payments.v1.RefundPaymentResponse\x12e\n" +
+	"\x0eDisputePayment\x12(.novam.payments.v1.DisputePaymentRequest\x1a).novam.payments.v1.DisputePaymentResponse\x12b\n" +
+	"\rDeletePayment\x12'.novam.payments.v1.DeletePaymentRequest\x1a(.novam.payments.v1.DeletePaymentResponse\x12e\n" +
+	"\x0eRestorePayment\x12(.novam.payments.v1.RestorePaymentRequest\x1a).novam.payments.v1.RestorePaymentResponse\x12e\n" +
+	"\x0eRedeemGiftCard\x12(.novam.payments.v1.RedeemGiftCardRequest\x1a).novam.payments.v1.RedeemGiftCardResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/payments/v1;paymentsv1b\x06proto3"
 
 var (
 	file_novam_payments_v1_payments_service_proto_rawDescOnce sync.Once
@@ -343,28 +1240,63 @@ func file_novam_payments_v1_payments_service_proto_rawDescGZIP() []byte {
 	return file_novam_payments_v1_payments_service_proto_rawDescData
 }
 
-var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 18)
 var file_novam_payments_v1_payments_service_proto_goTypes = []any{
 	(*RecordPaymentRequest)(nil),      // 0: novam.payments.v1.RecordPaymentRequest
 	(*RecordPaymentResponse)(nil),     // 1: novam.payments.v1.RecordPaymentResponse
 	(*MarkPaidIfCoveredRequest)(nil),  // 2: novam.payments.v1.MarkPaidIfCoveredRequest
 	(*MarkPaidIfCoveredResponse)(nil), // 3: novam.payments.v1.MarkPaidIfCoveredResponse
-	(*v1.RequestMetadata)(nil),        // 4: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),     // 5: google.protobuf.Timestamp
+	(*ReopenIfOwedRequest)(nil),       // 4: novam.payments.v1.ReopenIfOwedRequest
+	(*ReopenIfOwedResponse)(nil),      // 5: novam.payments.v1.ReopenIfOwedResponse
+	(*FailPaymentRequest)(nil),        // 6: novam.payments.v1.FailPaymentRequest
+	(*FailPaymentResponse)(nil),       // 7: novam.payments.v1.FailPaymentResponse
+	(*RefundPaymentRequest)(nil),      // 8: novam.payments.v1.RefundPaymentRequest
+	(*RefundPaymentResponse)(nil),     // 9: novam.payments.v1.RefundPaymentResponse
+	(*DisputePaymentRequest)(nil),     // 10: novam.payments.v1.DisputePaymentRequest
+	(*DisputePaymentResponse)(nil),    // 11: novam.payments.v1.DisputePaymentResponse
+	(*DeletePaymentRequest)(nil),      // 12: novam.payments.v1.DeletePaymentRequest
+	(*DeletePaymentResponse)(nil),     // 13: novam.payments.v1.DeletePaymentResponse
+	(*RestorePaymentRequest)(nil),     // 14: novam.payments.v1.RestorePaymentRequest
+	(*RestorePaymentResponse)(nil),    // 15: novam.payments.v1.RestorePaymentResponse
+	(*RedeemGiftCardRequest)(nil),     // 16: novam.payments.v1.RedeemGiftCardRequest
+	(*RedeemGiftCardResponse)(nil),    // 17: novam.payments.v1.RedeemGiftCardResponse
+	(*v1.RequestMetadata)(nil),        // 18: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),     // 19: google.protobuf.Timestamp
 }
 var file_novam_payments_v1_payments_service_proto_depIdxs = []int32{
-	4, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	5, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
-	4, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0, // 3: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
-	2, // 4: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
-	1, // 5: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
-	3, // 6: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
-	5, // [5:7] is the sub-list for method output_type
-	3, // [3:5] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	18, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	19, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
+	18, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 3: novam.payments.v1.ReopenIfOwedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 4: novam.payments.v1.FailPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 5: novam.payments.v1.RefundPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 6: novam.payments.v1.DisputePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 7: novam.payments.v1.DeletePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 8: novam.payments.v1.RestorePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	18, // 9: novam.payments.v1.RedeemGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 10: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
+	2,  // 11: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
+	4,  // 12: novam.payments.v1.PaymentsService.ReopenIfOwed:input_type -> novam.payments.v1.ReopenIfOwedRequest
+	6,  // 13: novam.payments.v1.PaymentsService.FailPayment:input_type -> novam.payments.v1.FailPaymentRequest
+	8,  // 14: novam.payments.v1.PaymentsService.RefundPayment:input_type -> novam.payments.v1.RefundPaymentRequest
+	10, // 15: novam.payments.v1.PaymentsService.DisputePayment:input_type -> novam.payments.v1.DisputePaymentRequest
+	12, // 16: novam.payments.v1.PaymentsService.DeletePayment:input_type -> novam.payments.v1.DeletePaymentRequest
+	14, // 17: novam.payments.v1.PaymentsService.RestorePayment:input_type -> novam.payments.v1.RestorePaymentRequest
+	16, // 18: novam.payments.v1.PaymentsService.RedeemGiftCard:input_type -> novam.payments.v1.RedeemGiftCardRequest
+	1,  // 19: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
+	3,  // 20: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
+	5,  // 21: novam.payments.v1.PaymentsService.ReopenIfOwed:output_type -> novam.payments.v1.ReopenIfOwedResponse
+	7,  // 22: novam.payments.v1.PaymentsService.FailPayment:output_type -> novam.payments.v1.FailPaymentResponse
+	9,  // 23: novam.payments.v1.PaymentsService.RefundPayment:output_type -> novam.payments.v1.RefundPaymentResponse
+	11, // 24: novam.payments.v1.PaymentsService.DisputePayment:output_type -> novam.payments.v1.DisputePaymentResponse
+	13, // 25: novam.payments.v1.PaymentsService.DeletePayment:output_type -> novam.payments.v1.DeletePaymentResponse
+	15, // 26: novam.payments.v1.PaymentsService.RestorePayment:output_type -> novam.payments.v1.RestorePaymentResponse
+	17, // 27: novam.payments.v1.PaymentsService.RedeemGiftCard:output_type -> novam.payments.v1.RedeemGiftCardResponse
+	19, // [19:28] is the sub-list for method output_type
+	10, // [10:19] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_novam_payments_v1_payments_service_proto_init() }
@@ -372,13 +1304,14 @@ func file_novam_payments_v1_payments_service_proto_init() {
 	if File_novam_payments_v1_payments_service_proto != nil {
 		return
 	}
+	file_novam_payments_v1_payments_service_proto_msgTypes[16].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_payments_v1_payments_service_proto_rawDesc), len(file_novam_payments_v1_payments_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   18,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

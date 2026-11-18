@@ -18,6 +18,25 @@ service PaymentsService {
   rpc RecordPayment(RecordPaymentRequest) returns (RecordPaymentResponse);
   // Marks an invoice paid once its payments cover it.
   rpc MarkPaidIfCovered(MarkPaidIfCoveredRequest) returns (MarkPaidIfCoveredResponse);
+  // An invoice paid by a payment that then failed is owed again: sent, or overdue once past its due date.
+  rpc ReopenIfOwed(ReopenIfOwedRequest) returns (ReopenIfOwedResponse);
+  // A payment made through Stripe that didn't go through after all (a bank debit returned): it stops counting (failed
+  // and deleted), and an invoice it paid is owed again. Safe to repeat.
+  rpc FailPayment(FailPaymentRequest) returns (FailPaymentResponse);
+  // A refund made in the processor: all of it marks the payment refunded and stops it counting; part of it leaves
+  // the payment counting for what is left. The invoice is left as it is.
+  rpc RefundPayment(RefundPaymentRequest) returns (RefundPaymentResponse);
+  // The client disputed the charge with their bank: the payment is marked disputed.
+  rpc DisputePayment(DisputePaymentRequest) returns (DisputePaymentResponse);
+  // Deletes a payment; a gift card payment's amount goes back on its card.
+  rpc DeletePayment(DeletePaymentRequest) returns (DeletePaymentResponse);
+  // Restores a deleted payment; a gift card payment is taken off its card again, or FAILED_PRECONDITION when the
+  // card no longer has it.
+  rpc RestorePayment(RestorePaymentRequest) returns (RestorePaymentResponse);
+  // Takes up to what is asked (all it can by default) off an invoice from a gift card: never more than the card
+  // holds or the invoice still owes. The invoice is paid when nothing is left. FAILED_PRECONDITION says why a card
+  // or invoice can't be used, NOT_FOUND an invoice that isn't there.
+  rpc RedeemGiftCard(RedeemGiftCardRequest) returns (RedeemGiftCardResponse);
 }
 
 message RecordPaymentRequest {
@@ -46,8 +65,99 @@ message RecordPaymentResponse {
 message MarkPaidIfCoveredRequest {
   novam.common.v1.RequestMetadata metadata = 1;
   string client_invoice_id = 2;
+  // Mark a cancelled invoice paid too, as the pay page does when the money came in anyway.
+  bool even_if_cancelled = 3;
 }
 
 message MarkPaidIfCoveredResponse {
   bool invoice_paid = 1;
+}
+
+message ReopenIfOwedRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string client_invoice_id = 2;
+}
+
+message ReopenIfOwedResponse {
+  bool reopened = 1;
+}
+
+message FailPaymentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string stripe_payment_intent_id = 2;
+  string reason = 3;
+}
+
+message FailPaymentResponse {
+  // False when there was no counting payment for the intent (already failed, or none).
+  bool failed = 1;
+  string payment_id = 2;
+  string client_invoice_id = 3;
+  double amount = 4;
+}
+
+message RefundPaymentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string payment_id = 2;
+  // What the charge took and what went back, in cents.
+  int64 charge_amount_cents = 3;
+  int64 refunded_cents = 4;
+  // The processor says all of it went back.
+  bool refunded = 5;
+  // ISO 4217, for the note on a part refund.
+  string currency = 6;
+}
+
+message RefundPaymentResponse {
+  bool full = 1;
+  // This call changed the payment (the first report of this refund).
+  bool changed = 2;
+}
+
+message DisputePaymentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string payment_id = 2;
+}
+
+message DisputePaymentResponse {
+  bool changed = 1;
+}
+
+message DeletePaymentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string payment_id = 2;
+}
+
+message DeletePaymentResponse {}
+
+message RestorePaymentRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string payment_id = 2;
+}
+
+message RestorePaymentResponse {}
+
+message RedeemGiftCardRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // Chosen by novam-data.
+  string payment_id = 2;
+  string client_invoice_id = 3;
+  string code = 4;
+  // Unset takes all it can.
+  optional double requested = 5;
+  // Only an invoice of this client (a client paying their own).
+  string client_id = 6;
+  // The payment's note; "Gift card <code>" when empty.
+  string note = 7;
+}
+
+message RedeemGiftCardResponse {
+  string payment_id = 1;
+  double amount = 2;
+  // Left on the card.
+  double balance = 3;
+  // Left to pay on the invoice.
+  double invoice_balance = 4;
+  string code = 5;
+  bool invoice_paid = 6;
 }

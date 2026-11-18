@@ -120,6 +120,13 @@ export declare type MarkPaidIfCoveredRequest = Message<"novam.payments.v1.MarkPa
    * @generated from field: string client_invoice_id = 2;
    */
   clientInvoiceId: string;
+
+  /**
+   * Mark a cancelled invoice paid too, as the pay page does when the money came in anyway.
+   *
+   * @generated from field: bool even_if_cancelled = 3;
+   */
+  evenIfCancelled: boolean;
 };
 
 /**
@@ -143,6 +150,374 @@ export declare type MarkPaidIfCoveredResponse = Message<"novam.payments.v1.MarkP
  * Use `create(MarkPaidIfCoveredResponseSchema)` to create a new message.
  */
 export declare const MarkPaidIfCoveredResponseSchema: GenMessage<MarkPaidIfCoveredResponse>;
+
+/**
+ * @generated from message novam.payments.v1.ReopenIfOwedRequest
+ */
+export declare type ReopenIfOwedRequest = Message<"novam.payments.v1.ReopenIfOwedRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string client_invoice_id = 2;
+   */
+  clientInvoiceId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ReopenIfOwedRequest.
+ * Use `create(ReopenIfOwedRequestSchema)` to create a new message.
+ */
+export declare const ReopenIfOwedRequestSchema: GenMessage<ReopenIfOwedRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ReopenIfOwedResponse
+ */
+export declare type ReopenIfOwedResponse = Message<"novam.payments.v1.ReopenIfOwedResponse"> & {
+  /**
+   * @generated from field: bool reopened = 1;
+   */
+  reopened: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.ReopenIfOwedResponse.
+ * Use `create(ReopenIfOwedResponseSchema)` to create a new message.
+ */
+export declare const ReopenIfOwedResponseSchema: GenMessage<ReopenIfOwedResponse>;
+
+/**
+ * @generated from message novam.payments.v1.FailPaymentRequest
+ */
+export declare type FailPaymentRequest = Message<"novam.payments.v1.FailPaymentRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string stripe_payment_intent_id = 2;
+   */
+  stripePaymentIntentId: string;
+
+  /**
+   * @generated from field: string reason = 3;
+   */
+  reason: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.FailPaymentRequest.
+ * Use `create(FailPaymentRequestSchema)` to create a new message.
+ */
+export declare const FailPaymentRequestSchema: GenMessage<FailPaymentRequest>;
+
+/**
+ * @generated from message novam.payments.v1.FailPaymentResponse
+ */
+export declare type FailPaymentResponse = Message<"novam.payments.v1.FailPaymentResponse"> & {
+  /**
+   * False when there was no counting payment for the intent (already failed, or none).
+   *
+   * @generated from field: bool failed = 1;
+   */
+  failed: boolean;
+
+  /**
+   * @generated from field: string payment_id = 2;
+   */
+  paymentId: string;
+
+  /**
+   * @generated from field: string client_invoice_id = 3;
+   */
+  clientInvoiceId: string;
+
+  /**
+   * @generated from field: double amount = 4;
+   */
+  amount: number;
+};
+
+/**
+ * Describes the message novam.payments.v1.FailPaymentResponse.
+ * Use `create(FailPaymentResponseSchema)` to create a new message.
+ */
+export declare const FailPaymentResponseSchema: GenMessage<FailPaymentResponse>;
+
+/**
+ * @generated from message novam.payments.v1.RefundPaymentRequest
+ */
+export declare type RefundPaymentRequest = Message<"novam.payments.v1.RefundPaymentRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string payment_id = 2;
+   */
+  paymentId: string;
+
+  /**
+   * What the charge took and what went back, in cents.
+   *
+   * @generated from field: int64 charge_amount_cents = 3;
+   */
+  chargeAmountCents: bigint;
+
+  /**
+   * @generated from field: int64 refunded_cents = 4;
+   */
+  refundedCents: bigint;
+
+  /**
+   * The processor says all of it went back.
+   *
+   * @generated from field: bool refunded = 5;
+   */
+  refunded: boolean;
+
+  /**
+   * ISO 4217, for the note on a part refund.
+   *
+   * @generated from field: string currency = 6;
+   */
+  currency: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.RefundPaymentRequest.
+ * Use `create(RefundPaymentRequestSchema)` to create a new message.
+ */
+export declare const RefundPaymentRequestSchema: GenMessage<RefundPaymentRequest>;
+
+/**
+ * @generated from message novam.payments.v1.RefundPaymentResponse
+ */
+export declare type RefundPaymentResponse = Message<"novam.payments.v1.RefundPaymentResponse"> & {
+  /**
+   * @generated from field: bool full = 1;
+   */
+  full: boolean;
+
+  /**
+   * This call changed the payment (the first report of this refund).
+   *
+   * @generated from field: bool changed = 2;
+   */
+  changed: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.RefundPaymentResponse.
+ * Use `create(RefundPaymentResponseSchema)` to create a new message.
+ */
+export declare const RefundPaymentResponseSchema: GenMessage<RefundPaymentResponse>;
+
+/**
+ * @generated from message novam.payments.v1.DisputePaymentRequest
+ */
+export declare type DisputePaymentRequest = Message<"novam.payments.v1.DisputePaymentRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string payment_id = 2;
+   */
+  paymentId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.DisputePaymentRequest.
+ * Use `create(DisputePaymentRequestSchema)` to create a new message.
+ */
+export declare const DisputePaymentRequestSchema: GenMessage<DisputePaymentRequest>;
+
+/**
+ * @generated from message novam.payments.v1.DisputePaymentResponse
+ */
+export declare type DisputePaymentResponse = Message<"novam.payments.v1.DisputePaymentResponse"> & {
+  /**
+   * @generated from field: bool changed = 1;
+   */
+  changed: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.DisputePaymentResponse.
+ * Use `create(DisputePaymentResponseSchema)` to create a new message.
+ */
+export declare const DisputePaymentResponseSchema: GenMessage<DisputePaymentResponse>;
+
+/**
+ * @generated from message novam.payments.v1.DeletePaymentRequest
+ */
+export declare type DeletePaymentRequest = Message<"novam.payments.v1.DeletePaymentRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string payment_id = 2;
+   */
+  paymentId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.DeletePaymentRequest.
+ * Use `create(DeletePaymentRequestSchema)` to create a new message.
+ */
+export declare const DeletePaymentRequestSchema: GenMessage<DeletePaymentRequest>;
+
+/**
+ * @generated from message novam.payments.v1.DeletePaymentResponse
+ */
+export declare type DeletePaymentResponse = Message<"novam.payments.v1.DeletePaymentResponse"> & {
+};
+
+/**
+ * Describes the message novam.payments.v1.DeletePaymentResponse.
+ * Use `create(DeletePaymentResponseSchema)` to create a new message.
+ */
+export declare const DeletePaymentResponseSchema: GenMessage<DeletePaymentResponse>;
+
+/**
+ * @generated from message novam.payments.v1.RestorePaymentRequest
+ */
+export declare type RestorePaymentRequest = Message<"novam.payments.v1.RestorePaymentRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string payment_id = 2;
+   */
+  paymentId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.RestorePaymentRequest.
+ * Use `create(RestorePaymentRequestSchema)` to create a new message.
+ */
+export declare const RestorePaymentRequestSchema: GenMessage<RestorePaymentRequest>;
+
+/**
+ * @generated from message novam.payments.v1.RestorePaymentResponse
+ */
+export declare type RestorePaymentResponse = Message<"novam.payments.v1.RestorePaymentResponse"> & {
+};
+
+/**
+ * Describes the message novam.payments.v1.RestorePaymentResponse.
+ * Use `create(RestorePaymentResponseSchema)` to create a new message.
+ */
+export declare const RestorePaymentResponseSchema: GenMessage<RestorePaymentResponse>;
+
+/**
+ * @generated from message novam.payments.v1.RedeemGiftCardRequest
+ */
+export declare type RedeemGiftCardRequest = Message<"novam.payments.v1.RedeemGiftCardRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * Chosen by novam-data.
+   *
+   * @generated from field: string payment_id = 2;
+   */
+  paymentId: string;
+
+  /**
+   * @generated from field: string client_invoice_id = 3;
+   */
+  clientInvoiceId: string;
+
+  /**
+   * @generated from field: string code = 4;
+   */
+  code: string;
+
+  /**
+   * Unset takes all it can.
+   *
+   * @generated from field: optional double requested = 5;
+   */
+  requested?: number;
+
+  /**
+   * Only an invoice of this client (a client paying their own).
+   *
+   * @generated from field: string client_id = 6;
+   */
+  clientId: string;
+
+  /**
+   * The payment's note; "Gift card <code>" when empty.
+   *
+   * @generated from field: string note = 7;
+   */
+  note: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.RedeemGiftCardRequest.
+ * Use `create(RedeemGiftCardRequestSchema)` to create a new message.
+ */
+export declare const RedeemGiftCardRequestSchema: GenMessage<RedeemGiftCardRequest>;
+
+/**
+ * @generated from message novam.payments.v1.RedeemGiftCardResponse
+ */
+export declare type RedeemGiftCardResponse = Message<"novam.payments.v1.RedeemGiftCardResponse"> & {
+  /**
+   * @generated from field: string payment_id = 1;
+   */
+  paymentId: string;
+
+  /**
+   * @generated from field: double amount = 2;
+   */
+  amount: number;
+
+  /**
+   * Left on the card.
+   *
+   * @generated from field: double balance = 3;
+   */
+  balance: number;
+
+  /**
+   * Left to pay on the invoice.
+   *
+   * @generated from field: double invoice_balance = 4;
+   */
+  invoiceBalance: number;
+
+  /**
+   * @generated from field: string code = 5;
+   */
+  code: string;
+
+  /**
+   * @generated from field: bool invoice_paid = 6;
+   */
+  invoicePaid: boolean;
+};
+
+/**
+ * Describes the message novam.payments.v1.RedeemGiftCardResponse.
+ * Use `create(RedeemGiftCardResponseSchema)` to create a new message.
+ */
+export declare const RedeemGiftCardResponseSchema: GenMessage<RedeemGiftCardResponse>;
 
 /**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
@@ -174,6 +549,81 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof MarkPaidIfCoveredRequestSchema;
     output: typeof MarkPaidIfCoveredResponseSchema;
+  },
+  /**
+   * An invoice paid by a payment that then failed is owed again: sent, or overdue once past its due date.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ReopenIfOwed
+   */
+  reopenIfOwed: {
+    methodKind: "unary";
+    input: typeof ReopenIfOwedRequestSchema;
+    output: typeof ReopenIfOwedResponseSchema;
+  },
+  /**
+   * A payment made through Stripe that didn't go through after all (a bank debit returned): it stops counting (failed
+   * and deleted), and an invoice it paid is owed again. Safe to repeat.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.FailPayment
+   */
+  failPayment: {
+    methodKind: "unary";
+    input: typeof FailPaymentRequestSchema;
+    output: typeof FailPaymentResponseSchema;
+  },
+  /**
+   * A refund made in the processor: all of it marks the payment refunded and stops it counting; part of it leaves
+   * the payment counting for what is left. The invoice is left as it is.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.RefundPayment
+   */
+  refundPayment: {
+    methodKind: "unary";
+    input: typeof RefundPaymentRequestSchema;
+    output: typeof RefundPaymentResponseSchema;
+  },
+  /**
+   * The client disputed the charge with their bank: the payment is marked disputed.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.DisputePayment
+   */
+  disputePayment: {
+    methodKind: "unary";
+    input: typeof DisputePaymentRequestSchema;
+    output: typeof DisputePaymentResponseSchema;
+  },
+  /**
+   * Deletes a payment; a gift card payment's amount goes back on its card.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.DeletePayment
+   */
+  deletePayment: {
+    methodKind: "unary";
+    input: typeof DeletePaymentRequestSchema;
+    output: typeof DeletePaymentResponseSchema;
+  },
+  /**
+   * Restores a deleted payment; a gift card payment is taken off its card again, or FAILED_PRECONDITION when the
+   * card no longer has it.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.RestorePayment
+   */
+  restorePayment: {
+    methodKind: "unary";
+    input: typeof RestorePaymentRequestSchema;
+    output: typeof RestorePaymentResponseSchema;
+  },
+  /**
+   * Takes up to what is asked (all it can by default) off an invoice from a gift card: never more than the card
+   * holds or the invoice still owes. The invoice is paid when nothing is left. FAILED_PRECONDITION says why a card
+   * or invoice can't be used, NOT_FOUND an invoice that isn't there.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.RedeemGiftCard
+   */
+  redeemGiftCard: {
+    methodKind: "unary";
+    input: typeof RedeemGiftCardRequestSchema;
+    output: typeof RedeemGiftCardResponseSchema;
   },
 }>;
 
