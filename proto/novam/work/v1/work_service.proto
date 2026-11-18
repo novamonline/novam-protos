@@ -1,0 +1,167 @@
+syntax = "proto3";
+
+package novam.work.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/work/v1;workv1";
+
+// WorkService writes At work (ADR-0009): the spans of time someone at a business is working, serving a client,
+// driving or on a break, and what each day keeps (when they first opened Novam, the suggestions they answered, the
+// owner's changes to today). novam-data reads the day and works out its suggestions; the engine writes, under the
+// person's lock, and tells the business's open apps. Times are RFC 3339 and now when empty; days are YYYY-MM-DD on
+// the business's clock. Each call is for the business in the caller's token.
+service WorkService {
+  // Ends what someone is doing and starts the next; status off ends it with nothing next. Setting what is already on
+  // changes only its note. With fix, serving while already serving corrects who it is with instead.
+  rpc SetStatus(SetStatusRequest) returns (SetStatusResponse);
+  // Fixes one of someone's times by hand, adds one they forgot, or takes one out; the times around it are trimmed or
+  // cut, each time moved keeps who fixed it, when, why and what it was, and the fix is audited.
+  rpc FixTime(FixTimeRequest) returns (FixTimeResponse);
+  // Puts a time in place of whatever it covers, as taking one of Novam's suggestions does.
+  rpc PlaceTime(PlaceTimeRequest) returns (PlaceTimeResponse);
+  // Ends whatever is open at a time.
+  rpc EndDay(EndDayRequest) returns (EndDayResponse);
+  // Notes the first time today someone opened Novam, and a suggestion they answered.
+  rpc NoteDay(NoteDayRequest) returns (NoteDayResponse);
+  // The owner's today-only changes to their plan: a later start, a day off, no break.
+  rpc ChangeToday(ChangeTodayRequest) returns (ChangeTodayResponse);
+  // Acts on today's plan from the business's hours for its owner, as the work hours sweep does.
+  rpc ApplyHours(ApplyHoursRequest) returns (ApplyHoursResponse);
+  // A visit checked in starts serving its client for whoever it is for, while they're off work (work.autoVisitIn).
+  rpc VisitCheckedIn(VisitCheckedInRequest) returns (VisitCheckedInResponse);
+  // A visit finished ends serving it and starts working then.
+  rpc VisitFinished(VisitFinishedRequest) returns (VisitFinishedResponse);
+  // The phone says its person got to the business's place or left it (work.autoArrive, work.autoLeave).
+  rpc AtPlace(AtPlaceRequest) returns (AtPlaceResponse);
+}
+
+message Links {
+  string client_id = 1;
+  string appointment_id = 2;
+  string mileage_trip_id = 3;
+}
+
+message SetStatusRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  // working, serving, driving, break, or off.
+  string status = 3;
+  Links links = 4;
+  optional string note = 5;
+  bool fix = 6;
+  string at = 7;
+}
+
+message SetStatusResponse {}
+
+message FixTimeRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // Whose time it is, and who is fixing it (themselves, or the owner or an admin).
+  string user_id = 2;
+  string by_user_id = 3;
+  // The time being fixed; empty to add one.
+  string span_id = 4;
+  bool remove = 5;
+  string status = 6;
+  Links links = 7;
+  string from = 8;
+  // Required for a finished time; a time still running keeps running.
+  string to = 9;
+  string note = 10;
+  string now = 11;
+}
+
+message FixTimeResponse {
+  // What was done, as the activity log says it.
+  string line = 1;
+}
+
+message PlaceTimeRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string status = 3;
+  Links links = 4;
+  string from = 5;
+  // Empty for a time left open.
+  string to = 6;
+}
+
+message PlaceTimeResponse {}
+
+message EndDayRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string at = 3;
+}
+
+message EndDayResponse {}
+
+message NoteDayRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string day = 3;
+  // When they first opened Novam that day; kept only the first time.
+  string first_seen_at = 4;
+  // A suggestion answered, by its key.
+  string answered = 5;
+}
+
+message NoteDayResponse {}
+
+message ChangeTodayRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string day = 3;
+  // set_start changes the day's start to start_at; an empty start_at puts it back to the hours'.
+  bool set_start = 4;
+  string start_at = 5;
+  optional bool day_off = 6;
+  optional bool skip_break = 7;
+  string now = 8;
+}
+
+message ChangeTodayResponse {}
+
+message ApplyHoursRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  string day = 3;
+}
+
+message ApplyHoursResponse {
+  // Whether the day started, ended or took its break.
+  bool applied = 1;
+}
+
+message VisitCheckedInRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string appointment_id = 2;
+  string at = 3;
+}
+
+message VisitCheckedInResponse {
+  // Whose time moved; empty when nobody's did.
+  string user_id = 1;
+}
+
+message VisitFinishedRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string appointment_id = 2;
+  string at = 3;
+}
+
+message VisitFinishedResponse {
+  // Whose time moved; empty when nobody's did.
+  string user_id = 1;
+}
+
+message AtPlaceRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string user_id = 2;
+  bool arrived = 3;
+}
+
+message AtPlaceResponse {
+  bool changed = 1;
+}
