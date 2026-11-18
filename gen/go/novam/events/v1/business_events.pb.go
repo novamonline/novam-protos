@@ -933,6 +933,315 @@ func (x *SubscriptionEvent) GetSubscription() *Subscription {
 	return nil
 }
 
+// A record's copy to the business's books (QuickBooks, Xero; ADR-0008 in novam-engine) changing state. Emitted
+// when the copy's status changes, not on each retry, so workflows can tell someone when a copy fails or a payment
+// is held back as possibly counted twice. id is <provider>:<entity>:<local_id>.
+type AccountingSync struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrgId         string                 `protobuf:"bytes,2,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
+	Provider      string                 `protobuf:"bytes,3,opt,name=provider,proto3" json:"provider,omitempty"`                        // quickbooks, xero
+	Entity        string                 `protobuf:"bytes,4,opt,name=entity,proto3" json:"entity,omitempty"`                            // client, invoice, payment, bill
+	LocalId       string                 `protobuf:"bytes,5,opt,name=local_id,json=localId,proto3" json:"local_id,omitempty"`           // the Novam record's id
+	Origin        string                 `protobuf:"bytes,6,opt,name=origin,proto3" json:"origin,omitempty"`                            // novam: copied from Novam; books: a payment made in the books
+	Status        string                 `protobuf:"bytes,7,opt,name=status,proto3" json:"status,omitempty"`                            // pending, synced, error, skipped, removed
+	ErrorCode     string                 `protobuf:"bytes,8,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`     // with error: auth, rate_limited, unavailable, stale, not_found, invalid, setup
+	Message       string                 `protobuf:"bytes,9,opt,name=message,proto3" json:"message,omitempty"`                          // why, as the owner reads it: the error, or why it was skipped
+	ExternalId    string                 `protobuf:"bytes,10,opt,name=external_id,json=externalId,proto3" json:"external_id,omitempty"` // the record's id in the books, once copied
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountingSync) Reset() {
+	*x = AccountingSync{}
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountingSync) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountingSync) ProtoMessage() {}
+
+func (x *AccountingSync) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountingSync.ProtoReflect.Descriptor instead.
+func (*AccountingSync) Descriptor() ([]byte, []int) {
+	return file_novam_events_v1_business_events_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AccountingSync) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetOrgId() string {
+	if x != nil {
+		return x.OrgId
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetEntity() string {
+	if x != nil {
+		return x.Entity
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetLocalId() string {
+	if x != nil {
+		return x.LocalId
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetOrigin() string {
+	if x != nil {
+		return x.Origin
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *AccountingSync) GetExternalId() string {
+	if x != nil {
+		return x.ExternalId
+	}
+	return ""
+}
+
+type AccountingSyncEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Change        ChangeType             `protobuf:"varint,1,opt,name=change,proto3,enum=novam.events.v1.ChangeType" json:"change,omitempty"`
+	Sync          *AccountingSync        `protobuf:"bytes,2,opt,name=sync,proto3" json:"sync,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountingSyncEvent) Reset() {
+	*x = AccountingSyncEvent{}
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountingSyncEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountingSyncEvent) ProtoMessage() {}
+
+func (x *AccountingSyncEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountingSyncEvent.ProtoReflect.Descriptor instead.
+func (*AccountingSyncEvent) Descriptor() ([]byte, []int) {
+	return file_novam_events_v1_business_events_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *AccountingSyncEvent) GetChange() ChangeType {
+	if x != nil {
+		return x.Change
+	}
+	return ChangeType_CHANGE_TYPE_UNSPECIFIED
+}
+
+func (x *AccountingSyncEvent) GetSync() *AccountingSync {
+	if x != nil {
+		return x.Sync
+	}
+	return nil
+}
+
+// The business's connection to its books: connected (a company picked), broken (the books stopped taking
+// Novam's token; the owner must connect again) or disconnected. id is the provider.
+type AccountingConnection struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	OrgId         string                 `protobuf:"bytes,2,opt,name=org_id,json=orgId,proto3" json:"org_id,omitempty"`
+	Provider      string                 `protobuf:"bytes,3,opt,name=provider,proto3" json:"provider,omitempty"` // quickbooks, xero
+	CompanyName   string                 `protobuf:"bytes,4,opt,name=company_name,json=companyName,proto3" json:"company_name,omitempty"`
+	Status        string                 `protobuf:"bytes,5,opt,name=status,proto3" json:"status,omitempty"` // connected, broken, disconnected
+	Error         string                 `protobuf:"bytes,6,opt,name=error,proto3" json:"error,omitempty"`   // with broken: what the books said
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountingConnection) Reset() {
+	*x = AccountingConnection{}
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountingConnection) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountingConnection) ProtoMessage() {}
+
+func (x *AccountingConnection) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountingConnection.ProtoReflect.Descriptor instead.
+func (*AccountingConnection) Descriptor() ([]byte, []int) {
+	return file_novam_events_v1_business_events_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *AccountingConnection) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *AccountingConnection) GetOrgId() string {
+	if x != nil {
+		return x.OrgId
+	}
+	return ""
+}
+
+func (x *AccountingConnection) GetProvider() string {
+	if x != nil {
+		return x.Provider
+	}
+	return ""
+}
+
+func (x *AccountingConnection) GetCompanyName() string {
+	if x != nil {
+		return x.CompanyName
+	}
+	return ""
+}
+
+func (x *AccountingConnection) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *AccountingConnection) GetError() string {
+	if x != nil {
+		return x.Error
+	}
+	return ""
+}
+
+type AccountingConnectionEvent struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Change        ChangeType             `protobuf:"varint,1,opt,name=change,proto3,enum=novam.events.v1.ChangeType" json:"change,omitempty"`
+	Connection    *AccountingConnection  `protobuf:"bytes,2,opt,name=connection,proto3" json:"connection,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AccountingConnectionEvent) Reset() {
+	*x = AccountingConnectionEvent{}
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AccountingConnectionEvent) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AccountingConnectionEvent) ProtoMessage() {}
+
+func (x *AccountingConnectionEvent) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_events_v1_business_events_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AccountingConnectionEvent.ProtoReflect.Descriptor instead.
+func (*AccountingConnectionEvent) Descriptor() ([]byte, []int) {
+	return file_novam_events_v1_business_events_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *AccountingConnectionEvent) GetChange() ChangeType {
+	if x != nil {
+		return x.Change
+	}
+	return ChangeType_CHANGE_TYPE_UNSPECIFIED
+}
+
+func (x *AccountingConnectionEvent) GetConnection() *AccountingConnection {
+	if x != nil {
+		return x.Connection
+	}
+	return nil
+}
+
 var File_novam_events_v1_business_events_proto protoreflect.FileDescriptor
 
 const file_novam_events_v1_business_events_proto_rawDesc = "" +
@@ -1006,7 +1315,36 @@ const file_novam_events_v1_business_events_proto_rawDesc = "" +
 	"\rprevious_plan\x18\x05 \x01(\tR\fpreviousPlan\"\x8b\x01\n" +
 	"\x11SubscriptionEvent\x123\n" +
 	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x12A\n" +
-	"\fsubscription\x18\x02 \x01(\v2\x1d.novam.events.v1.SubscriptionR\fsubscription*t\n" +
+	"\fsubscription\x18\x02 \x01(\v2\x1d.novam.events.v1.SubscriptionR\fsubscription\"\x90\x02\n" +
+	"\x0eAccountingSync\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
+	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x1a\n" +
+	"\bprovider\x18\x03 \x01(\tR\bprovider\x12\x16\n" +
+	"\x06entity\x18\x04 \x01(\tR\x06entity\x12\x19\n" +
+	"\blocal_id\x18\x05 \x01(\tR\alocalId\x12\x16\n" +
+	"\x06origin\x18\x06 \x01(\tR\x06origin\x12\x16\n" +
+	"\x06status\x18\a \x01(\tR\x06status\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\b \x01(\tR\terrorCode\x12\x18\n" +
+	"\amessage\x18\t \x01(\tR\amessage\x12\x1f\n" +
+	"\vexternal_id\x18\n" +
+	" \x01(\tR\n" +
+	"externalId\"\x7f\n" +
+	"\x13AccountingSyncEvent\x123\n" +
+	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x123\n" +
+	"\x04sync\x18\x02 \x01(\v2\x1f.novam.events.v1.AccountingSyncR\x04sync\"\xaa\x01\n" +
+	"\x14AccountingConnection\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x15\n" +
+	"\x06org_id\x18\x02 \x01(\tR\x05orgId\x12\x1a\n" +
+	"\bprovider\x18\x03 \x01(\tR\bprovider\x12!\n" +
+	"\fcompany_name\x18\x04 \x01(\tR\vcompanyName\x12\x16\n" +
+	"\x06status\x18\x05 \x01(\tR\x06status\x12\x14\n" +
+	"\x05error\x18\x06 \x01(\tR\x05error\"\x97\x01\n" +
+	"\x19AccountingConnectionEvent\x123\n" +
+	"\x06change\x18\x01 \x01(\x0e2\x1b.novam.events.v1.ChangeTypeR\x06change\x12E\n" +
+	"\n" +
+	"connection\x18\x02 \x01(\v2%.novam.events.v1.AccountingConnectionR\n" +
+	"connection*t\n" +
 	"\n" +
 	"ChangeType\x12\x1b\n" +
 	"\x17CHANGE_TYPE_UNSPECIFIED\x10\x00\x12\x17\n" +
@@ -1027,26 +1365,30 @@ func file_novam_events_v1_business_events_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_events_v1_business_events_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_events_v1_business_events_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_novam_events_v1_business_events_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_novam_events_v1_business_events_proto_goTypes = []any{
-	(ChangeType)(0),               // 0: novam.events.v1.ChangeType
-	(*Appointment)(nil),           // 1: novam.events.v1.Appointment
-	(*AppointmentEvent)(nil),      // 2: novam.events.v1.AppointmentEvent
-	(*ClientInvoice)(nil),         // 3: novam.events.v1.ClientInvoice
-	(*ClientInvoiceEvent)(nil),    // 4: novam.events.v1.ClientInvoiceEvent
-	(*Client)(nil),                // 5: novam.events.v1.Client
-	(*ClientEvent)(nil),           // 6: novam.events.v1.ClientEvent
-	(*ReminderRule)(nil),          // 7: novam.events.v1.ReminderRule
-	(*ReminderRuleEvent)(nil),     // 8: novam.events.v1.ReminderRuleEvent
-	(*Message)(nil),               // 9: novam.events.v1.Message
-	(*MessageEvent)(nil),          // 10: novam.events.v1.MessageEvent
-	(*Subscription)(nil),          // 11: novam.events.v1.Subscription
-	(*SubscriptionEvent)(nil),     // 12: novam.events.v1.SubscriptionEvent
-	(*timestamppb.Timestamp)(nil), // 13: google.protobuf.Timestamp
+	(ChangeType)(0),                   // 0: novam.events.v1.ChangeType
+	(*Appointment)(nil),               // 1: novam.events.v1.Appointment
+	(*AppointmentEvent)(nil),          // 2: novam.events.v1.AppointmentEvent
+	(*ClientInvoice)(nil),             // 3: novam.events.v1.ClientInvoice
+	(*ClientInvoiceEvent)(nil),        // 4: novam.events.v1.ClientInvoiceEvent
+	(*Client)(nil),                    // 5: novam.events.v1.Client
+	(*ClientEvent)(nil),               // 6: novam.events.v1.ClientEvent
+	(*ReminderRule)(nil),              // 7: novam.events.v1.ReminderRule
+	(*ReminderRuleEvent)(nil),         // 8: novam.events.v1.ReminderRuleEvent
+	(*Message)(nil),                   // 9: novam.events.v1.Message
+	(*MessageEvent)(nil),              // 10: novam.events.v1.MessageEvent
+	(*Subscription)(nil),              // 11: novam.events.v1.Subscription
+	(*SubscriptionEvent)(nil),         // 12: novam.events.v1.SubscriptionEvent
+	(*AccountingSync)(nil),            // 13: novam.events.v1.AccountingSync
+	(*AccountingSyncEvent)(nil),       // 14: novam.events.v1.AccountingSyncEvent
+	(*AccountingConnection)(nil),      // 15: novam.events.v1.AccountingConnection
+	(*AccountingConnectionEvent)(nil), // 16: novam.events.v1.AccountingConnectionEvent
+	(*timestamppb.Timestamp)(nil),     // 17: google.protobuf.Timestamp
 }
 var file_novam_events_v1_business_events_proto_depIdxs = []int32{
-	13, // 0: novam.events.v1.Appointment.start_time:type_name -> google.protobuf.Timestamp
-	13, // 1: novam.events.v1.Appointment.end_time:type_name -> google.protobuf.Timestamp
+	17, // 0: novam.events.v1.Appointment.start_time:type_name -> google.protobuf.Timestamp
+	17, // 1: novam.events.v1.Appointment.end_time:type_name -> google.protobuf.Timestamp
 	0,  // 2: novam.events.v1.AppointmentEvent.change:type_name -> novam.events.v1.ChangeType
 	1,  // 3: novam.events.v1.AppointmentEvent.appointment:type_name -> novam.events.v1.Appointment
 	0,  // 4: novam.events.v1.ClientInvoiceEvent.change:type_name -> novam.events.v1.ChangeType
@@ -1055,16 +1397,20 @@ var file_novam_events_v1_business_events_proto_depIdxs = []int32{
 	5,  // 7: novam.events.v1.ClientEvent.client:type_name -> novam.events.v1.Client
 	0,  // 8: novam.events.v1.ReminderRuleEvent.change:type_name -> novam.events.v1.ChangeType
 	7,  // 9: novam.events.v1.ReminderRuleEvent.rule:type_name -> novam.events.v1.ReminderRule
-	13, // 10: novam.events.v1.Message.created_at:type_name -> google.protobuf.Timestamp
+	17, // 10: novam.events.v1.Message.created_at:type_name -> google.protobuf.Timestamp
 	0,  // 11: novam.events.v1.MessageEvent.change:type_name -> novam.events.v1.ChangeType
 	9,  // 12: novam.events.v1.MessageEvent.message:type_name -> novam.events.v1.Message
 	0,  // 13: novam.events.v1.SubscriptionEvent.change:type_name -> novam.events.v1.ChangeType
 	11, // 14: novam.events.v1.SubscriptionEvent.subscription:type_name -> novam.events.v1.Subscription
-	15, // [15:15] is the sub-list for method output_type
-	15, // [15:15] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	0,  // 15: novam.events.v1.AccountingSyncEvent.change:type_name -> novam.events.v1.ChangeType
+	13, // 16: novam.events.v1.AccountingSyncEvent.sync:type_name -> novam.events.v1.AccountingSync
+	0,  // 17: novam.events.v1.AccountingConnectionEvent.change:type_name -> novam.events.v1.ChangeType
+	15, // 18: novam.events.v1.AccountingConnectionEvent.connection:type_name -> novam.events.v1.AccountingConnection
+	19, // [19:19] is the sub-list for method output_type
+	19, // [19:19] is the sub-list for method input_type
+	19, // [19:19] is the sub-list for extension type_name
+	19, // [19:19] is the sub-list for extension extendee
+	0,  // [0:19] is the sub-list for field type_name
 }
 
 func init() { file_novam_events_v1_business_events_proto_init() }
@@ -1078,7 +1424,7 @@ func file_novam_events_v1_business_events_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_events_v1_business_events_proto_rawDesc), len(file_novam_events_v1_business_events_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   12,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

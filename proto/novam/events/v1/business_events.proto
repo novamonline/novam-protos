@@ -123,3 +123,40 @@ message SubscriptionEvent {
   ChangeType change = 1;
   Subscription subscription = 2;
 }
+
+// A record's copy to the business's books (QuickBooks, Xero; ADR-0008 in novam-engine) changing state. Emitted
+// when the copy's status changes, not on each retry, so workflows can tell someone when a copy fails or a payment
+// is held back as possibly counted twice. id is <provider>:<entity>:<local_id>.
+message AccountingSync {
+  string id = 1;
+  string org_id = 2;
+  string provider = 3; // quickbooks, xero
+  string entity = 4; // client, invoice, payment, bill
+  string local_id = 5; // the Novam record's id
+  string origin = 6; // novam: copied from Novam; books: a payment made in the books
+  string status = 7; // pending, synced, error, skipped, removed
+  string error_code = 8; // with error: auth, rate_limited, unavailable, stale, not_found, invalid, setup
+  string message = 9; // why, as the owner reads it: the error, or why it was skipped
+  string external_id = 10; // the record's id in the books, once copied
+}
+
+message AccountingSyncEvent {
+  ChangeType change = 1;
+  AccountingSync sync = 2;
+}
+
+// The business's connection to its books: connected (a company picked), broken (the books stopped taking
+// Novam's token; the owner must connect again) or disconnected. id is the provider.
+message AccountingConnection {
+  string id = 1;
+  string org_id = 2;
+  string provider = 3; // quickbooks, xero
+  string company_name = 4;
+  string status = 5; // connected, broken, disconnected
+  string error = 6; // with broken: what the books said
+}
+
+message AccountingConnectionEvent {
+  ChangeType change = 1;
+  AccountingConnection connection = 2;
+}

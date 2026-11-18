@@ -446,6 +446,179 @@ export declare type SubscriptionEvent = Message$1<"novam.events.v1.SubscriptionE
 export declare const SubscriptionEventSchema: GenMessage<SubscriptionEvent>;
 
 /**
+ * A record's copy to the business's books (QuickBooks, Xero; ADR-0008 in novam-engine) changing state. Emitted
+ * when the copy's status changes, not on each retry, so workflows can tell someone when a copy fails or a payment
+ * is held back as possibly counted twice. id is <provider>:<entity>:<local_id>.
+ *
+ * @generated from message novam.events.v1.AccountingSync
+ */
+export declare type AccountingSync = Message$1<"novam.events.v1.AccountingSync"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string org_id = 2;
+   */
+  orgId: string;
+
+  /**
+   * quickbooks, xero
+   *
+   * @generated from field: string provider = 3;
+   */
+  provider: string;
+
+  /**
+   * client, invoice, payment, bill
+   *
+   * @generated from field: string entity = 4;
+   */
+  entity: string;
+
+  /**
+   * the Novam record's id
+   *
+   * @generated from field: string local_id = 5;
+   */
+  localId: string;
+
+  /**
+   * novam: copied from Novam; books: a payment made in the books
+   *
+   * @generated from field: string origin = 6;
+   */
+  origin: string;
+
+  /**
+   * pending, synced, error, skipped, removed
+   *
+   * @generated from field: string status = 7;
+   */
+  status: string;
+
+  /**
+   * with error: auth, rate_limited, unavailable, stale, not_found, invalid, setup
+   *
+   * @generated from field: string error_code = 8;
+   */
+  errorCode: string;
+
+  /**
+   * why, as the owner reads it: the error, or why it was skipped
+   *
+   * @generated from field: string message = 9;
+   */
+  message: string;
+
+  /**
+   * the record's id in the books, once copied
+   *
+   * @generated from field: string external_id = 10;
+   */
+  externalId: string;
+};
+
+/**
+ * Describes the message novam.events.v1.AccountingSync.
+ * Use `create(AccountingSyncSchema)` to create a new message.
+ */
+export declare const AccountingSyncSchema: GenMessage<AccountingSync>;
+
+/**
+ * @generated from message novam.events.v1.AccountingSyncEvent
+ */
+export declare type AccountingSyncEvent = Message$1<"novam.events.v1.AccountingSyncEvent"> & {
+  /**
+   * @generated from field: novam.events.v1.ChangeType change = 1;
+   */
+  change: ChangeType;
+
+  /**
+   * @generated from field: novam.events.v1.AccountingSync sync = 2;
+   */
+  sync?: AccountingSync;
+};
+
+/**
+ * Describes the message novam.events.v1.AccountingSyncEvent.
+ * Use `create(AccountingSyncEventSchema)` to create a new message.
+ */
+export declare const AccountingSyncEventSchema: GenMessage<AccountingSyncEvent>;
+
+/**
+ * The business's connection to its books: connected (a company picked), broken (the books stopped taking
+ * Novam's token; the owner must connect again) or disconnected. id is the provider.
+ *
+ * @generated from message novam.events.v1.AccountingConnection
+ */
+export declare type AccountingConnection = Message$1<"novam.events.v1.AccountingConnection"> & {
+  /**
+   * @generated from field: string id = 1;
+   */
+  id: string;
+
+  /**
+   * @generated from field: string org_id = 2;
+   */
+  orgId: string;
+
+  /**
+   * quickbooks, xero
+   *
+   * @generated from field: string provider = 3;
+   */
+  provider: string;
+
+  /**
+   * @generated from field: string company_name = 4;
+   */
+  companyName: string;
+
+  /**
+   * connected, broken, disconnected
+   *
+   * @generated from field: string status = 5;
+   */
+  status: string;
+
+  /**
+   * with broken: what the books said
+   *
+   * @generated from field: string error = 6;
+   */
+  error: string;
+};
+
+/**
+ * Describes the message novam.events.v1.AccountingConnection.
+ * Use `create(AccountingConnectionSchema)` to create a new message.
+ */
+export declare const AccountingConnectionSchema: GenMessage<AccountingConnection>;
+
+/**
+ * @generated from message novam.events.v1.AccountingConnectionEvent
+ */
+export declare type AccountingConnectionEvent = Message$1<"novam.events.v1.AccountingConnectionEvent"> & {
+  /**
+   * @generated from field: novam.events.v1.ChangeType change = 1;
+   */
+  change: ChangeType;
+
+  /**
+   * @generated from field: novam.events.v1.AccountingConnection connection = 2;
+   */
+  connection?: AccountingConnection;
+};
+
+/**
+ * Describes the message novam.events.v1.AccountingConnectionEvent.
+ * Use `create(AccountingConnectionEventSchema)` to create a new message.
+ */
+export declare const AccountingConnectionEventSchema: GenMessage<AccountingConnectionEvent>;
+
+/**
  * What happened to the entity.
  *
  * @generated from enum novam.events.v1.ChangeType
