@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package novam.plaid.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/plaid/v1;plaidv1";
+
+// PlaidService makes novam-data's calls to Plaid (https://plaid.com/docs/api/) from novam-engine's workflows server
+// (ADR-0002 phase 3). It keeps nothing: novam-data holds the keys and access tokens, sends the ones a call needs,
+// and writes what comes back. When Plaid refuses or can't be reached, the response's failure says so; a gRPC error
+// means the engine couldn't make the call at all.
+service PlaidService {
+  // A link token for Plaid Link; with an access token, for Link's update mode on a bank already linked.
+  rpc CreateLinkToken(CreateLinkTokenRequest) returns (CreateLinkTokenResponse);
+  // Exchanges Link's public token for the item's access token, with its checking, savings and credit card accounts
+  // and the bank's name.
+  rpc ExchangePublicToken(ExchangePublicTokenRequest) returns (ExchangePublicTokenResponse);
+  // One page of /transactions/sync after the cursor.
+  rpc SyncTransactions(SyncTransactionsRequest) returns (SyncTransactionsResponse);
+  // Ends the item at Plaid, which invalidates its access token.
+  rpc RemoveItem(RemoveItemRequest) returns (RemoveItemResponse);
+  // Whether Plaid takes a pair of keys.
+  rpc CheckKeys(CheckKeysRequest) returns (CheckKeysResponse);
+  // Whether a webhook came from Plaid: its Plaid-Verification JWT, signed by a key Plaid serves, recent, and over
+  // this exact body.
+  rpc VerifyWebhook(VerifyWebhookRequest) returns (VerifyWebhookResponse);
+}
+
+// The Plaid account a call is made with: Novam's or a business's own.
+message Credentials {
+  string client_id = 1;
+  string secret = 2;
+  // sandbox, development or production.
+  string env = 3;
+  // Instead of the environment's host (tests).
+  string base_url = 4;
+}
+
+// What Plaid said when it refused, or that it couldn't be reached.
+message Failure {
+  // Plaid's display_message when it has one, else its error_message.
+  string message = 1;
+  // 400 for a refusal, 502 when Plaid failed, 503 when it couldn't be reached.
+  int32 http_status = 2;
+  // Plaid's error_code, e.g. ITEM_LOGIN_REQUIRED.
+  string code = 3;
+}
+
+message Account {
+  string account_id = 1;
+  string name = 2;
+  string mask = 3;
+  // The settled balance (Plaid's current), else the available one.
+  double balance = 4;
+}
+
+message Transaction {
+  string transaction_id = 1;
+  string account_id = 2;
+  // YYYY-MM-DD.
+  string date = 3;
+  string description = 4;
+  // Money in is positive; Plaid's own sign is the opposite.
+  double amount = 5;
+  // A Banking or Expenses category when Plaid's has a clear business meaning; empty to sort.
+  string category = 6;
+  bool pending = 7;
+}
+
+message CreateLinkTokenRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  Credentials credentials = 2;
+  string user_id = 3;
+  string client_name = 4;
+  // Update mode for this item.
+  string access_token = 5;
+  // Where Plaid sends the item's webhooks; none when empty.
+  string webhook_url = 6;
+}
+
+message CreateLinkTokenResponse {
+  string link_token = 1;
+  Failure failure = 2;
+}
+
+message ExchangePublicTokenRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  Credentials credentials = 2;
+  string public_token = 3;
+}
+
+message ExchangePublicTokenResponse {
+  string item_id = 1;
+  string access_token = 2;
+  // Empty when Plaid can't say.
+  string institution_name = 3;
+  repeated Account accounts = 4;
+  Failure failure = 5;
+}
+
+message SyncTransactionsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  Credentials credentials = 2;
+  string access_token = 3;
+  // Empty for the first sync.
+  string cursor = 4;
+}
+
+message SyncTransactionsResponse {
+  repeated Transaction added = 1;
+  repeated Transaction modified = 2;
+  repeated string removed = 3;
+  repeated Account accounts = 4;
+  string next_cursor = 5;
+  bool has_more = 6;
+  Failure failure = 7;
+}
+
+message RemoveItemRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  Credentials credentials = 2;
+  string access_token = 3;
+}
+
+message RemoveItemResponse {
+  Failure failure = 1;
+}
+
+message CheckKeysRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  Credentials credentials = 2;
+}
+
+message CheckKeysResponse {
+  Failure failure = 1;
+}
+
+message VerifyWebhookRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The keys of the Plaid account the item was linked with.
+  Credentials credentials = 2;
+  // The body exactly as sent.
+  bytes raw_body = 3;
+  // The Plaid-Verification header.
+  string jwt = 4;
+}
+
+message VerifyWebhookResponse {
+  bool valid = 1;
+}
