@@ -3,7 +3,7 @@
 /* eslint-disable */
 
 import type { GenFile, GenMessage, GenService } from "@bufbuild/protobuf/codegenv2";
-import type { Message } from "@bufbuild/protobuf";
+import type { JsonObject, Message } from "@bufbuild/protobuf";
 import type { RequestMetadata } from "../../common/v1/common_pb.js";
 
 /**
@@ -132,6 +132,144 @@ export declare type FetchResponse = Message<"novam.connectors.v1.FetchResponse">
 export declare const FetchResponseSchema: GenMessage<FetchResponse>;
 
 /**
+ * @generated from message novam.connectors.v1.GetSiteSearchRequest
+ */
+export declare type GetSiteSearchRequest = Message<"novam.connectors.v1.GetSiteSearchRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * 7d, 28d or 90d.
+   *
+   * @generated from field: string range = 2;
+   */
+  range: string;
+};
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSearchRequest.
+ * Use `create(GetSiteSearchRequestSchema)` to create a new message.
+ */
+export declare const GetSiteSearchRequestSchema: GenMessage<GetSiteSearchRequest>;
+
+/**
+ * @generated from message novam.connectors.v1.GetSiteSearchResponse
+ */
+export declare type GetSiteSearchResponse = Message<"novam.connectors.v1.GetSiteSearchResponse"> & {
+  /**
+   * As novam-data's SiteSearch: range, startDate, endDate, totals, queries, pages.
+   *
+   * @generated from field: google.protobuf.Struct search = 1;
+   */
+  search?: JsonObject;
+};
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSearchResponse.
+ * Use `create(GetSiteSearchResponseSchema)` to create a new message.
+ */
+export declare const GetSiteSearchResponseSchema: GenMessage<GetSiteSearchResponse>;
+
+/**
+ * @generated from message novam.connectors.v1.GetSiteSpeedRequest
+ */
+export declare type GetSiteSpeedRequest = Message<"novam.connectors.v1.GetSiteSpeedRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * A path on the marketing site.
+   *
+   * @generated from field: string path = 2;
+   */
+  path: string;
+
+  /**
+   * mobile or desktop.
+   *
+   * @generated from field: string strategy = 3;
+   */
+  strategy: string;
+};
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSpeedRequest.
+ * Use `create(GetSiteSpeedRequestSchema)` to create a new message.
+ */
+export declare const GetSiteSpeedRequestSchema: GenMessage<GetSiteSpeedRequest>;
+
+/**
+ * @generated from message novam.connectors.v1.GetSiteSpeedResponse
+ */
+export declare type GetSiteSpeedResponse = Message<"novam.connectors.v1.GetSiteSpeedResponse"> & {
+  /**
+   * As novam-data's SiteSpeed: url, strategy, score, field, lab, fetchedAt.
+   *
+   * @generated from field: google.protobuf.Struct speed = 1;
+   */
+  speed?: JsonObject;
+};
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteSpeedResponse.
+ * Use `create(GetSiteSpeedResponseSchema)` to create a new message.
+ */
+export declare const GetSiteSpeedResponseSchema: GenMessage<GetSiteSpeedResponse>;
+
+/**
+ * @generated from message novam.connectors.v1.GetSiteTrafficRequest
+ */
+export declare type GetSiteTrafficRequest = Message<"novam.connectors.v1.GetSiteTrafficRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * today, 7d, 28d or 90d.
+   *
+   * @generated from field: string range = 2;
+   */
+  range: string;
+
+  /**
+   * IANA zone for today's midnight and hours; UTC when empty.
+   *
+   * @generated from field: string time_zone = 3;
+   */
+  timeZone: string;
+};
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteTrafficRequest.
+ * Use `create(GetSiteTrafficRequestSchema)` to create a new message.
+ */
+export declare const GetSiteTrafficRequestSchema: GenMessage<GetSiteTrafficRequest>;
+
+/**
+ * @generated from message novam.connectors.v1.GetSiteTrafficResponse
+ */
+export declare type GetSiteTrafficResponse = Message<"novam.connectors.v1.GetSiteTrafficResponse"> & {
+  /**
+   * As novam-data's SiteTraffic: range, from, to, totals, previous, daily, hourly (today), topPages, languages,
+   * referrers, events.
+   *
+   * @generated from field: google.protobuf.Struct traffic = 1;
+   */
+  traffic?: JsonObject;
+};
+
+/**
+ * Describes the message novam.connectors.v1.GetSiteTrafficResponse.
+ * Use `create(GetSiteTrafficResponseSchema)` to create a new message.
+ */
+export declare const GetSiteTrafficResponseSchema: GenMessage<GetSiteTrafficResponse>;
+
+/**
  * ConnectorsService runs in novam-engine's workflows server. It reaches the hosts businesses name (iCal feeds, their
  * sites, webhook endpoints, data sources), so novam-data, the gateway, never opens a socket to one.
  *
@@ -150,6 +288,37 @@ export declare const ConnectorsService: GenService<{
     methodKind: "unary";
     input: typeof FetchRequestSchema;
     output: typeof FetchResponseSchema;
+  },
+  /**
+   * How the marketing site shows in Google search (Search Console), with Novam's own service account.
+   *
+   * @generated from rpc novam.connectors.v1.ConnectorsService.GetSiteSearch
+   */
+  getSiteSearch: {
+    methodKind: "unary";
+    input: typeof GetSiteSearchRequestSchema;
+    output: typeof GetSiteSearchResponseSchema;
+  },
+  /**
+   * How fast a marketing page is (PageSpeed Insights). Takes 10 to 40 seconds; callers cache it.
+   *
+   * @generated from rpc novam.connectors.v1.ConnectorsService.GetSiteSpeed
+   */
+  getSiteSpeed: {
+    methodKind: "unary";
+    input: typeof GetSiteSpeedRequestSchema;
+    output: typeof GetSiteSpeedResponseSchema;
+  },
+  /**
+   * The marketing site's traffic from Novam's Umami. NOT_FOUND: Umami has no such website. PERMISSION_DENIED: it
+   * refused the key or sign-in. ABORTED: it couldn't be reached or failed.
+   *
+   * @generated from rpc novam.connectors.v1.ConnectorsService.GetSiteTraffic
+   */
+  getSiteTraffic: {
+    methodKind: "unary";
+    input: typeof GetSiteTrafficRequestSchema;
+    output: typeof GetSiteTrafficResponseSchema;
   },
 }>;
 

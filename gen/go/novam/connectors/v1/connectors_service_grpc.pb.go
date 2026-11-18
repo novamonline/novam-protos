@@ -19,7 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	ConnectorsService_Fetch_FullMethodName = "/novam.connectors.v1.ConnectorsService/Fetch"
+	ConnectorsService_Fetch_FullMethodName          = "/novam.connectors.v1.ConnectorsService/Fetch"
+	ConnectorsService_GetSiteSearch_FullMethodName  = "/novam.connectors.v1.ConnectorsService/GetSiteSearch"
+	ConnectorsService_GetSiteSpeed_FullMethodName   = "/novam.connectors.v1.ConnectorsService/GetSiteSpeed"
+	ConnectorsService_GetSiteTraffic_FullMethodName = "/novam.connectors.v1.ConnectorsService/GetSiteTraffic"
 )
 
 // ConnectorsServiceClient is the client API for ConnectorsService service.
@@ -34,6 +37,13 @@ type ConnectorsServiceClient interface {
 	// FAILED_PRECONDITION: a private or unresolvable host, a body over max_bytes, too many redirects. INVALID_ARGUMENT:
 	// not an http or https URL. ABORTED: the host couldn't be reached or didn't answer in time.
 	Fetch(ctx context.Context, in *FetchRequest, opts ...grpc.CallOption) (*FetchResponse, error)
+	// How the marketing site shows in Google search (Search Console), with Novam's own service account.
+	GetSiteSearch(ctx context.Context, in *GetSiteSearchRequest, opts ...grpc.CallOption) (*GetSiteSearchResponse, error)
+	// How fast a marketing page is (PageSpeed Insights). Takes 10 to 40 seconds; callers cache it.
+	GetSiteSpeed(ctx context.Context, in *GetSiteSpeedRequest, opts ...grpc.CallOption) (*GetSiteSpeedResponse, error)
+	// The marketing site's traffic from Novam's Umami. NOT_FOUND: Umami has no such website. PERMISSION_DENIED: it
+	// refused the key or sign-in. ABORTED: it couldn't be reached or failed.
+	GetSiteTraffic(ctx context.Context, in *GetSiteTrafficRequest, opts ...grpc.CallOption) (*GetSiteTrafficResponse, error)
 }
 
 type connectorsServiceClient struct {
@@ -54,6 +64,36 @@ func (c *connectorsServiceClient) Fetch(ctx context.Context, in *FetchRequest, o
 	return out, nil
 }
 
+func (c *connectorsServiceClient) GetSiteSearch(ctx context.Context, in *GetSiteSearchRequest, opts ...grpc.CallOption) (*GetSiteSearchResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSiteSearchResponse)
+	err := c.cc.Invoke(ctx, ConnectorsService_GetSiteSearch_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *connectorsServiceClient) GetSiteSpeed(ctx context.Context, in *GetSiteSpeedRequest, opts ...grpc.CallOption) (*GetSiteSpeedResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSiteSpeedResponse)
+	err := c.cc.Invoke(ctx, ConnectorsService_GetSiteSpeed_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *connectorsServiceClient) GetSiteTraffic(ctx context.Context, in *GetSiteTrafficRequest, opts ...grpc.CallOption) (*GetSiteTrafficResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetSiteTrafficResponse)
+	err := c.cc.Invoke(ctx, ConnectorsService_GetSiteTraffic_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ConnectorsServiceServer is the server API for ConnectorsService service.
 // All implementations must embed UnimplementedConnectorsServiceServer
 // for forward compatibility.
@@ -66,6 +106,13 @@ type ConnectorsServiceServer interface {
 	// FAILED_PRECONDITION: a private or unresolvable host, a body over max_bytes, too many redirects. INVALID_ARGUMENT:
 	// not an http or https URL. ABORTED: the host couldn't be reached or didn't answer in time.
 	Fetch(context.Context, *FetchRequest) (*FetchResponse, error)
+	// How the marketing site shows in Google search (Search Console), with Novam's own service account.
+	GetSiteSearch(context.Context, *GetSiteSearchRequest) (*GetSiteSearchResponse, error)
+	// How fast a marketing page is (PageSpeed Insights). Takes 10 to 40 seconds; callers cache it.
+	GetSiteSpeed(context.Context, *GetSiteSpeedRequest) (*GetSiteSpeedResponse, error)
+	// The marketing site's traffic from Novam's Umami. NOT_FOUND: Umami has no such website. PERMISSION_DENIED: it
+	// refused the key or sign-in. ABORTED: it couldn't be reached or failed.
+	GetSiteTraffic(context.Context, *GetSiteTrafficRequest) (*GetSiteTrafficResponse, error)
 	mustEmbedUnimplementedConnectorsServiceServer()
 }
 
@@ -78,6 +125,15 @@ type UnimplementedConnectorsServiceServer struct{}
 
 func (UnimplementedConnectorsServiceServer) Fetch(context.Context, *FetchRequest) (*FetchResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method Fetch not implemented")
+}
+func (UnimplementedConnectorsServiceServer) GetSiteSearch(context.Context, *GetSiteSearchRequest) (*GetSiteSearchResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSiteSearch not implemented")
+}
+func (UnimplementedConnectorsServiceServer) GetSiteSpeed(context.Context, *GetSiteSpeedRequest) (*GetSiteSpeedResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSiteSpeed not implemented")
+}
+func (UnimplementedConnectorsServiceServer) GetSiteTraffic(context.Context, *GetSiteTrafficRequest) (*GetSiteTrafficResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method GetSiteTraffic not implemented")
 }
 func (UnimplementedConnectorsServiceServer) mustEmbedUnimplementedConnectorsServiceServer() {}
 func (UnimplementedConnectorsServiceServer) testEmbeddedByValue()                           {}
@@ -118,6 +174,60 @@ func _ConnectorsService_Fetch_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ConnectorsService_GetSiteSearch_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSiteSearchRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectorsServiceServer).GetSiteSearch(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConnectorsService_GetSiteSearch_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectorsServiceServer).GetSiteSearch(ctx, req.(*GetSiteSearchRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ConnectorsService_GetSiteSpeed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSiteSpeedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectorsServiceServer).GetSiteSpeed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConnectorsService_GetSiteSpeed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectorsServiceServer).GetSiteSpeed(ctx, req.(*GetSiteSpeedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ConnectorsService_GetSiteTraffic_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetSiteTrafficRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ConnectorsServiceServer).GetSiteTraffic(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ConnectorsService_GetSiteTraffic_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ConnectorsServiceServer).GetSiteTraffic(ctx, req.(*GetSiteTrafficRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ConnectorsService_ServiceDesc is the grpc.ServiceDesc for ConnectorsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -128,6 +238,18 @@ var ConnectorsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Fetch",
 			Handler:    _ConnectorsService_Fetch_Handler,
+		},
+		{
+			MethodName: "GetSiteSearch",
+			Handler:    _ConnectorsService_GetSiteSearch_Handler,
+		},
+		{
+			MethodName: "GetSiteSpeed",
+			Handler:    _ConnectorsService_GetSiteSpeed_Handler,
+		},
+		{
+			MethodName: "GetSiteTraffic",
+			Handler:    _ConnectorsService_GetSiteTraffic_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

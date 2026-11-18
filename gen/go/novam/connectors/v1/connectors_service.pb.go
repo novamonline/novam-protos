@@ -10,6 +10,7 @@ import (
 	v1 "github.com/novamonline/novam-protos/gen/go/novam/common/v1"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	structpb "google.golang.org/protobuf/types/known/structpb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -256,11 +257,324 @@ func (x *FetchResponse) GetElapsedMs() int32 {
 	return 0
 }
 
+type GetSiteSearchRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// 7d, 28d or 90d.
+	Range         string `protobuf:"bytes,2,opt,name=range,proto3" json:"range,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSiteSearchRequest) Reset() {
+	*x = GetSiteSearchRequest{}
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSiteSearchRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSiteSearchRequest) ProtoMessage() {}
+
+func (x *GetSiteSearchRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSiteSearchRequest.ProtoReflect.Descriptor instead.
+func (*GetSiteSearchRequest) Descriptor() ([]byte, []int) {
+	return file_novam_connectors_v1_connectors_service_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetSiteSearchRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetSiteSearchRequest) GetRange() string {
+	if x != nil {
+		return x.Range
+	}
+	return ""
+}
+
+type GetSiteSearchResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's SiteSearch: range, startDate, endDate, totals, queries, pages.
+	Search        *structpb.Struct `protobuf:"bytes,1,opt,name=search,proto3" json:"search,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSiteSearchResponse) Reset() {
+	*x = GetSiteSearchResponse{}
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSiteSearchResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSiteSearchResponse) ProtoMessage() {}
+
+func (x *GetSiteSearchResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSiteSearchResponse.ProtoReflect.Descriptor instead.
+func (*GetSiteSearchResponse) Descriptor() ([]byte, []int) {
+	return file_novam_connectors_v1_connectors_service_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetSiteSearchResponse) GetSearch() *structpb.Struct {
+	if x != nil {
+		return x.Search
+	}
+	return nil
+}
+
+type GetSiteSpeedRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// A path on the marketing site.
+	Path string `protobuf:"bytes,2,opt,name=path,proto3" json:"path,omitempty"`
+	// mobile or desktop.
+	Strategy      string `protobuf:"bytes,3,opt,name=strategy,proto3" json:"strategy,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSiteSpeedRequest) Reset() {
+	*x = GetSiteSpeedRequest{}
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSiteSpeedRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSiteSpeedRequest) ProtoMessage() {}
+
+func (x *GetSiteSpeedRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSiteSpeedRequest.ProtoReflect.Descriptor instead.
+func (*GetSiteSpeedRequest) Descriptor() ([]byte, []int) {
+	return file_novam_connectors_v1_connectors_service_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *GetSiteSpeedRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetSiteSpeedRequest) GetPath() string {
+	if x != nil {
+		return x.Path
+	}
+	return ""
+}
+
+func (x *GetSiteSpeedRequest) GetStrategy() string {
+	if x != nil {
+		return x.Strategy
+	}
+	return ""
+}
+
+type GetSiteSpeedResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's SiteSpeed: url, strategy, score, field, lab, fetchedAt.
+	Speed         *structpb.Struct `protobuf:"bytes,1,opt,name=speed,proto3" json:"speed,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSiteSpeedResponse) Reset() {
+	*x = GetSiteSpeedResponse{}
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSiteSpeedResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSiteSpeedResponse) ProtoMessage() {}
+
+func (x *GetSiteSpeedResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSiteSpeedResponse.ProtoReflect.Descriptor instead.
+func (*GetSiteSpeedResponse) Descriptor() ([]byte, []int) {
+	return file_novam_connectors_v1_connectors_service_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *GetSiteSpeedResponse) GetSpeed() *structpb.Struct {
+	if x != nil {
+		return x.Speed
+	}
+	return nil
+}
+
+type GetSiteTrafficRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// today, 7d, 28d or 90d.
+	Range string `protobuf:"bytes,2,opt,name=range,proto3" json:"range,omitempty"`
+	// IANA zone for today's midnight and hours; UTC when empty.
+	TimeZone      string `protobuf:"bytes,3,opt,name=time_zone,json=timeZone,proto3" json:"time_zone,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSiteTrafficRequest) Reset() {
+	*x = GetSiteTrafficRequest{}
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSiteTrafficRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSiteTrafficRequest) ProtoMessage() {}
+
+func (x *GetSiteTrafficRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSiteTrafficRequest.ProtoReflect.Descriptor instead.
+func (*GetSiteTrafficRequest) Descriptor() ([]byte, []int) {
+	return file_novam_connectors_v1_connectors_service_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GetSiteTrafficRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *GetSiteTrafficRequest) GetRange() string {
+	if x != nil {
+		return x.Range
+	}
+	return ""
+}
+
+func (x *GetSiteTrafficRequest) GetTimeZone() string {
+	if x != nil {
+		return x.TimeZone
+	}
+	return ""
+}
+
+type GetSiteTrafficResponse struct {
+	state protoimpl.MessageState `protogen:"open.v1"`
+	// As novam-data's SiteTraffic: range, from, to, totals, previous, daily, hourly (today), topPages, languages,
+	// referrers, events.
+	Traffic       *structpb.Struct `protobuf:"bytes,1,opt,name=traffic,proto3" json:"traffic,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetSiteTrafficResponse) Reset() {
+	*x = GetSiteTrafficResponse{}
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetSiteTrafficResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetSiteTrafficResponse) ProtoMessage() {}
+
+func (x *GetSiteTrafficResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_connectors_v1_connectors_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetSiteTrafficResponse.ProtoReflect.Descriptor instead.
+func (*GetSiteTrafficResponse) Descriptor() ([]byte, []int) {
+	return file_novam_connectors_v1_connectors_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *GetSiteTrafficResponse) GetTraffic() *structpb.Struct {
+	if x != nil {
+		return x.Traffic
+	}
+	return nil
+}
+
 var File_novam_connectors_v1_connectors_service_proto protoreflect.FileDescriptor
 
 const file_novam_connectors_v1_connectors_service_proto_rawDesc = "" +
 	"\n" +
-	",novam/connectors/v1/connectors_service.proto\x12\x13novam.connectors.v1\x1a\x1cnovam/common/v1/common.proto\"\xef\x02\n" +
+	",novam/connectors/v1/connectors_service.proto\x12\x13novam.connectors.v1\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1cnovam/common/v1/common.proto\"\xef\x02\n" +
 	"\fFetchRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x10\n" +
 	"\x03url\x18\x02 \x01(\tR\x03url\x12\x16\n" +
@@ -283,9 +597,29 @@ const file_novam_connectors_v1_connectors_service_proto_rawDesc = "" +
 	"\x04body\x18\x03 \x01(\fR\x04body\x12\x10\n" +
 	"\x03url\x18\x04 \x01(\tR\x03url\x12\x1d\n" +
 	"\n" +
-	"elapsed_ms\x18\x05 \x01(\x05R\telapsedMs2c\n" +
+	"elapsed_ms\x18\x05 \x01(\x05R\telapsedMs\"j\n" +
+	"\x14GetSiteSearchRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x14\n" +
+	"\x05range\x18\x02 \x01(\tR\x05range\"H\n" +
+	"\x15GetSiteSearchResponse\x12/\n" +
+	"\x06search\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x06search\"\x83\x01\n" +
+	"\x13GetSiteSpeedRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x12\n" +
+	"\x04path\x18\x02 \x01(\tR\x04path\x12\x1a\n" +
+	"\bstrategy\x18\x03 \x01(\tR\bstrategy\"E\n" +
+	"\x14GetSiteSpeedResponse\x12-\n" +
+	"\x05speed\x18\x01 \x01(\v2\x17.google.protobuf.StructR\x05speed\"\x88\x01\n" +
+	"\x15GetSiteTrafficRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x14\n" +
+	"\x05range\x18\x02 \x01(\tR\x05range\x12\x1b\n" +
+	"\ttime_zone\x18\x03 \x01(\tR\btimeZone\"K\n" +
+	"\x16GetSiteTrafficResponse\x121\n" +
+	"\atraffic\x18\x01 \x01(\v2\x17.google.protobuf.StructR\atraffic2\x9b\x03\n" +
 	"\x11ConnectorsService\x12N\n" +
-	"\x05Fetch\x12!.novam.connectors.v1.FetchRequest\x1a\".novam.connectors.v1.FetchResponseBMZKgithub.com/novamonline/novam-protos/gen/go/novam/connectors/v1;connectorsv1b\x06proto3"
+	"\x05Fetch\x12!.novam.connectors.v1.FetchRequest\x1a\".novam.connectors.v1.FetchResponse\x12f\n" +
+	"\rGetSiteSearch\x12).novam.connectors.v1.GetSiteSearchRequest\x1a*.novam.connectors.v1.GetSiteSearchResponse\x12c\n" +
+	"\fGetSiteSpeed\x12(.novam.connectors.v1.GetSiteSpeedRequest\x1a).novam.connectors.v1.GetSiteSpeedResponse\x12i\n" +
+	"\x0eGetSiteTraffic\x12*.novam.connectors.v1.GetSiteTrafficRequest\x1a+.novam.connectors.v1.GetSiteTrafficResponseBMZKgithub.com/novamonline/novam-protos/gen/go/novam/connectors/v1;connectorsv1b\x06proto3"
 
 var (
 	file_novam_connectors_v1_connectors_service_proto_rawDescOnce sync.Once
@@ -299,25 +633,44 @@ func file_novam_connectors_v1_connectors_service_proto_rawDescGZIP() []byte {
 	return file_novam_connectors_v1_connectors_service_proto_rawDescData
 }
 
-var file_novam_connectors_v1_connectors_service_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
+var file_novam_connectors_v1_connectors_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_novam_connectors_v1_connectors_service_proto_goTypes = []any{
-	(*FetchRequest)(nil),       // 0: novam.connectors.v1.FetchRequest
-	(*Header)(nil),             // 1: novam.connectors.v1.Header
-	(*FetchResponse)(nil),      // 2: novam.connectors.v1.FetchResponse
-	nil,                        // 3: novam.connectors.v1.FetchRequest.HeadersEntry
-	(*v1.RequestMetadata)(nil), // 4: novam.common.v1.RequestMetadata
+	(*FetchRequest)(nil),           // 0: novam.connectors.v1.FetchRequest
+	(*Header)(nil),                 // 1: novam.connectors.v1.Header
+	(*FetchResponse)(nil),          // 2: novam.connectors.v1.FetchResponse
+	(*GetSiteSearchRequest)(nil),   // 3: novam.connectors.v1.GetSiteSearchRequest
+	(*GetSiteSearchResponse)(nil),  // 4: novam.connectors.v1.GetSiteSearchResponse
+	(*GetSiteSpeedRequest)(nil),    // 5: novam.connectors.v1.GetSiteSpeedRequest
+	(*GetSiteSpeedResponse)(nil),   // 6: novam.connectors.v1.GetSiteSpeedResponse
+	(*GetSiteTrafficRequest)(nil),  // 7: novam.connectors.v1.GetSiteTrafficRequest
+	(*GetSiteTrafficResponse)(nil), // 8: novam.connectors.v1.GetSiteTrafficResponse
+	nil,                            // 9: novam.connectors.v1.FetchRequest.HeadersEntry
+	(*v1.RequestMetadata)(nil),     // 10: novam.common.v1.RequestMetadata
+	(*structpb.Struct)(nil),        // 11: google.protobuf.Struct
 }
 var file_novam_connectors_v1_connectors_service_proto_depIdxs = []int32{
-	4, // 0: novam.connectors.v1.FetchRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	3, // 1: novam.connectors.v1.FetchRequest.headers:type_name -> novam.connectors.v1.FetchRequest.HeadersEntry
-	1, // 2: novam.connectors.v1.FetchResponse.headers:type_name -> novam.connectors.v1.Header
-	0, // 3: novam.connectors.v1.ConnectorsService.Fetch:input_type -> novam.connectors.v1.FetchRequest
-	2, // 4: novam.connectors.v1.ConnectorsService.Fetch:output_type -> novam.connectors.v1.FetchResponse
-	4, // [4:5] is the sub-list for method output_type
-	3, // [3:4] is the sub-list for method input_type
-	3, // [3:3] is the sub-list for extension type_name
-	3, // [3:3] is the sub-list for extension extendee
-	0, // [0:3] is the sub-list for field type_name
+	10, // 0: novam.connectors.v1.FetchRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	9,  // 1: novam.connectors.v1.FetchRequest.headers:type_name -> novam.connectors.v1.FetchRequest.HeadersEntry
+	1,  // 2: novam.connectors.v1.FetchResponse.headers:type_name -> novam.connectors.v1.Header
+	10, // 3: novam.connectors.v1.GetSiteSearchRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 4: novam.connectors.v1.GetSiteSearchResponse.search:type_name -> google.protobuf.Struct
+	10, // 5: novam.connectors.v1.GetSiteSpeedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 6: novam.connectors.v1.GetSiteSpeedResponse.speed:type_name -> google.protobuf.Struct
+	10, // 7: novam.connectors.v1.GetSiteTrafficRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 8: novam.connectors.v1.GetSiteTrafficResponse.traffic:type_name -> google.protobuf.Struct
+	0,  // 9: novam.connectors.v1.ConnectorsService.Fetch:input_type -> novam.connectors.v1.FetchRequest
+	3,  // 10: novam.connectors.v1.ConnectorsService.GetSiteSearch:input_type -> novam.connectors.v1.GetSiteSearchRequest
+	5,  // 11: novam.connectors.v1.ConnectorsService.GetSiteSpeed:input_type -> novam.connectors.v1.GetSiteSpeedRequest
+	7,  // 12: novam.connectors.v1.ConnectorsService.GetSiteTraffic:input_type -> novam.connectors.v1.GetSiteTrafficRequest
+	2,  // 13: novam.connectors.v1.ConnectorsService.Fetch:output_type -> novam.connectors.v1.FetchResponse
+	4,  // 14: novam.connectors.v1.ConnectorsService.GetSiteSearch:output_type -> novam.connectors.v1.GetSiteSearchResponse
+	6,  // 15: novam.connectors.v1.ConnectorsService.GetSiteSpeed:output_type -> novam.connectors.v1.GetSiteSpeedResponse
+	8,  // 16: novam.connectors.v1.ConnectorsService.GetSiteTraffic:output_type -> novam.connectors.v1.GetSiteTrafficResponse
+	13, // [13:17] is the sub-list for method output_type
+	9,  // [9:13] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_novam_connectors_v1_connectors_service_proto_init() }
@@ -331,7 +684,7 @@ func file_novam_connectors_v1_connectors_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_connectors_v1_connectors_service_proto_rawDesc), len(file_novam_connectors_v1_connectors_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   4,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
