@@ -393,6 +393,13 @@ export declare type HoldTime = Message<"novam.commands.v1.HoldTime"> & {
    * @generated from field: string notes = 4;
    */
   notes: string;
+
+  /**
+   * The team member the visitor chose, at a business that lets clients choose who they see; empty for anyone.
+   *
+   * @generated from field: string member_id = 5;
+   */
+  memberId: string;
 };
 
 /**

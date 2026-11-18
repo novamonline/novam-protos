@@ -110,6 +110,8 @@ message HoldTime {
   string service_id = 2; // empty when the visitor didn't pick one
   google.protobuf.Timestamp start = 3;
   string notes = 4; // what the visitor said about the job
+  // The team member the visitor chose, at a business that lets clients choose who they see; empty for anyone.
+  string member_id = 5;
 }
 
 // frontDeskThreads.saveContact.

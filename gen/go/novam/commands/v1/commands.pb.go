@@ -861,11 +861,13 @@ func (x *InvoiceCreate) GetStatus() string {
 
 // frontDeskThreads.holdTime: holds an open time on the thread for the owner to confirm; a later hold replaces it.
 type HoldTime struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ThreadId      string                 `protobuf:"bytes,1,opt,name=thread_id,json=threadId,proto3" json:"thread_id,omitempty"`
-	ServiceId     string                 `protobuf:"bytes,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"` // empty when the visitor didn't pick one
-	Start         *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=start,proto3" json:"start,omitempty"`
-	Notes         string                 `protobuf:"bytes,4,opt,name=notes,proto3" json:"notes,omitempty"` // what the visitor said about the job
+	state     protoimpl.MessageState `protogen:"open.v1"`
+	ThreadId  string                 `protobuf:"bytes,1,opt,name=thread_id,json=threadId,proto3" json:"thread_id,omitempty"`
+	ServiceId string                 `protobuf:"bytes,2,opt,name=service_id,json=serviceId,proto3" json:"service_id,omitempty"` // empty when the visitor didn't pick one
+	Start     *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=start,proto3" json:"start,omitempty"`
+	Notes     string                 `protobuf:"bytes,4,opt,name=notes,proto3" json:"notes,omitempty"` // what the visitor said about the job
+	// The team member the visitor chose, at a business that lets clients choose who they see; empty for anyone.
+	MemberId      string `protobuf:"bytes,5,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -924,6 +926,13 @@ func (x *HoldTime) GetStart() *timestamppb.Timestamp {
 func (x *HoldTime) GetNotes() string {
 	if x != nil {
 		return x.Notes
+	}
+	return ""
+}
+
+func (x *HoldTime) GetMemberId() string {
+	if x != nil {
+		return x.MemberId
 	}
 	return ""
 }
@@ -1704,13 +1713,14 @@ const file_novam_commands_v1_commands_proto_rawDesc = "" +
 	"\rInvoiceCreate\x12\x1b\n" +
 	"\tclient_id\x18\x01 \x01(\tR\bclientId\x12%\n" +
 	"\x0eappointment_id\x18\x02 \x01(\tR\rappointmentId\x12\x16\n" +
-	"\x06status\x18\x03 \x01(\tR\x06status\"\x8e\x01\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\"\xab\x01\n" +
 	"\bHoldTime\x12\x1b\n" +
 	"\tthread_id\x18\x01 \x01(\tR\bthreadId\x12\x1d\n" +
 	"\n" +
 	"service_id\x18\x02 \x01(\tR\tserviceId\x120\n" +
 	"\x05start\x18\x03 \x01(\v2\x1a.google.protobuf.TimestampR\x05start\x12\x14\n" +
-	"\x05notes\x18\x04 \x01(\tR\x05notes\"j\n" +
+	"\x05notes\x18\x04 \x01(\tR\x05notes\x12\x1b\n" +
+	"\tmember_id\x18\x05 \x01(\tR\bmemberId\"j\n" +
 	"\vSaveContact\x12\x1b\n" +
 	"\tthread_id\x18\x01 \x01(\tR\bthreadId\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x14\n" +
