@@ -255,6 +255,53 @@ export declare type RemoveLinkResponse = Message<"novam.banking.v1.RemoveLinkRes
 export declare const RemoveLinkResponseSchema: GenMessage<RemoveLinkResponse>;
 
 /**
+ * @generated from message novam.banking.v1.SetItemStatusRequest
+ */
+export declare type SetItemStatusRequest = Message<"novam.banking.v1.SetItemStatusRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string id = 2;
+   */
+  id: string;
+
+  /**
+   * ok, needs_reconnect or expiring.
+   *
+   * @generated from field: string status = 3;
+   */
+  status: string;
+
+  /**
+   * Plaid's code; empty to clear it.
+   *
+   * @generated from field: string error_code = 4;
+   */
+  errorCode: string;
+};
+
+/**
+ * Describes the message novam.banking.v1.SetItemStatusRequest.
+ * Use `create(SetItemStatusRequestSchema)` to create a new message.
+ */
+export declare const SetItemStatusRequestSchema: GenMessage<SetItemStatusRequest>;
+
+/**
+ * @generated from message novam.banking.v1.SetItemStatusResponse
+ */
+export declare type SetItemStatusResponse = Message<"novam.banking.v1.SetItemStatusResponse"> & {
+};
+
+/**
+ * Describes the message novam.banking.v1.SetItemStatusResponse.
+ * Use `create(SetItemStatusResponseSchema)` to create a new message.
+ */
+export declare const SetItemStatusResponseSchema: GenMessage<SetItemStatusResponse>;
+
+/**
  * BankingService runs in novam-engine's workflows server and owns a business's linked banks (ADR-0009): it stores
  * a bank login (plaid_items, its access token encrypted with novam-data's ENCRYPTION_KEY), syncs its accounts and
  * transactions from Plaid, files new lines by the owner's merchant rules, and unlinks it. novam-data's Plaid routes
@@ -305,6 +352,16 @@ export declare const BankingService: GenService<{
     methodKind: "unary";
     input: typeof RemoveLinkRequestSchema;
     output: typeof RemoveLinkResponseSchema;
+  },
+  /**
+   * Records what Plaid's webhook said about a login: ok, needs_reconnect or expiring, with Plaid's code.
+   *
+   * @generated from rpc novam.banking.v1.BankingService.SetItemStatus
+   */
+  setItemStatus: {
+    methodKind: "unary";
+    input: typeof SetItemStatusRequestSchema;
+    output: typeof SetItemStatusResponseSchema;
   },
 }>;
 

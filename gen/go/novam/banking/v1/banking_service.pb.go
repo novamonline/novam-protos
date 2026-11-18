@@ -536,6 +536,112 @@ func (x *RemoveLinkResponse) GetFailure() *v11.Failure {
 	return nil
 }
 
+type SetItemStatusRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	Id       string                 `protobuf:"bytes,2,opt,name=id,proto3" json:"id,omitempty"`
+	// ok, needs_reconnect or expiring.
+	Status string `protobuf:"bytes,3,opt,name=status,proto3" json:"status,omitempty"`
+	// Plaid's code; empty to clear it.
+	ErrorCode     string `protobuf:"bytes,4,opt,name=error_code,json=errorCode,proto3" json:"error_code,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetItemStatusRequest) Reset() {
+	*x = SetItemStatusRequest{}
+	mi := &file_novam_banking_v1_banking_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetItemStatusRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetItemStatusRequest) ProtoMessage() {}
+
+func (x *SetItemStatusRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_banking_v1_banking_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetItemStatusRequest.ProtoReflect.Descriptor instead.
+func (*SetItemStatusRequest) Descriptor() ([]byte, []int) {
+	return file_novam_banking_v1_banking_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *SetItemStatusRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *SetItemStatusRequest) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+func (x *SetItemStatusRequest) GetStatus() string {
+	if x != nil {
+		return x.Status
+	}
+	return ""
+}
+
+func (x *SetItemStatusRequest) GetErrorCode() string {
+	if x != nil {
+		return x.ErrorCode
+	}
+	return ""
+}
+
+type SetItemStatusResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SetItemStatusResponse) Reset() {
+	*x = SetItemStatusResponse{}
+	mi := &file_novam_banking_v1_banking_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SetItemStatusResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SetItemStatusResponse) ProtoMessage() {}
+
+func (x *SetItemStatusResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_banking_v1_banking_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SetItemStatusResponse.ProtoReflect.Descriptor instead.
+func (*SetItemStatusResponse) Descriptor() ([]byte, []int) {
+	return file_novam_banking_v1_banking_service_proto_rawDescGZIP(), []int{9}
+}
+
 var File_novam_banking_v1_banking_service_proto protoreflect.FileDescriptor
 
 const file_novam_banking_v1_banking_service_proto_rawDesc = "" +
@@ -579,13 +685,21 @@ const file_novam_banking_v1_banking_service_proto_rawDesc = "" +
 	"novam_keys\x18\x03 \x01(\v2\x1b.novam.plaid.v1.CredentialsR\tnovamKeys\"a\n" +
 	"\x12RemoveLinkResponse\x12\x18\n" +
 	"\aremoved\x18\x01 \x01(\bR\aremoved\x121\n" +
-	"\afailure\x18\x02 \x01(\v2\x17.novam.plaid.v1.FailureR\afailure2\xe5\x02\n" +
+	"\afailure\x18\x02 \x01(\v2\x17.novam.plaid.v1.FailureR\afailure\"\x9b\x01\n" +
+	"\x14SetItemStatusRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\tR\x02id\x12\x16\n" +
+	"\x06status\x18\x03 \x01(\tR\x06status\x12\x1d\n" +
+	"\n" +
+	"error_code\x18\x04 \x01(\tR\terrorCode\"\x17\n" +
+	"\x15SetItemStatusResponse2\xc7\x03\n" +
 	"\x0eBankingService\x12Q\n" +
 	"\bSaveLink\x12!.novam.banking.v1.SaveLinkRequest\x1a\".novam.banking.v1.SaveLinkResponse\x12Q\n" +
 	"\bSyncItem\x12!.novam.banking.v1.SyncItemRequest\x1a\".novam.banking.v1.SyncItemResponse\x12T\n" +
 	"\tSyncLater\x12\".novam.banking.v1.SyncLaterRequest\x1a#.novam.banking.v1.SyncLaterResponse\x12W\n" +
 	"\n" +
-	"RemoveLink\x12#.novam.banking.v1.RemoveLinkRequest\x1a$.novam.banking.v1.RemoveLinkResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/banking/v1;bankingv1b\x06proto3"
+	"RemoveLink\x12#.novam.banking.v1.RemoveLinkRequest\x1a$.novam.banking.v1.RemoveLinkResponse\x12`\n" +
+	"\rSetItemStatus\x12&.novam.banking.v1.SetItemStatusRequest\x1a'.novam.banking.v1.SetItemStatusResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/banking/v1;bankingv1b\x06proto3"
 
 var (
 	file_novam_banking_v1_banking_service_proto_rawDescOnce sync.Once
@@ -599,47 +713,52 @@ func file_novam_banking_v1_banking_service_proto_rawDescGZIP() []byte {
 	return file_novam_banking_v1_banking_service_proto_rawDescData
 }
 
-var file_novam_banking_v1_banking_service_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_novam_banking_v1_banking_service_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_novam_banking_v1_banking_service_proto_goTypes = []any{
-	(*SaveLinkRequest)(nil),    // 0: novam.banking.v1.SaveLinkRequest
-	(*SaveLinkResponse)(nil),   // 1: novam.banking.v1.SaveLinkResponse
-	(*SyncItemRequest)(nil),    // 2: novam.banking.v1.SyncItemRequest
-	(*SyncItemResponse)(nil),   // 3: novam.banking.v1.SyncItemResponse
-	(*SyncLaterRequest)(nil),   // 4: novam.banking.v1.SyncLaterRequest
-	(*SyncLaterResponse)(nil),  // 5: novam.banking.v1.SyncLaterResponse
-	(*RemoveLinkRequest)(nil),  // 6: novam.banking.v1.RemoveLinkRequest
-	(*RemoveLinkResponse)(nil), // 7: novam.banking.v1.RemoveLinkResponse
-	(*v1.RequestMetadata)(nil), // 8: novam.common.v1.RequestMetadata
-	(*v11.Credentials)(nil),    // 9: novam.plaid.v1.Credentials
-	(*v11.Account)(nil),        // 10: novam.plaid.v1.Account
-	(*v11.Failure)(nil),        // 11: novam.plaid.v1.Failure
+	(*SaveLinkRequest)(nil),       // 0: novam.banking.v1.SaveLinkRequest
+	(*SaveLinkResponse)(nil),      // 1: novam.banking.v1.SaveLinkResponse
+	(*SyncItemRequest)(nil),       // 2: novam.banking.v1.SyncItemRequest
+	(*SyncItemResponse)(nil),      // 3: novam.banking.v1.SyncItemResponse
+	(*SyncLaterRequest)(nil),      // 4: novam.banking.v1.SyncLaterRequest
+	(*SyncLaterResponse)(nil),     // 5: novam.banking.v1.SyncLaterResponse
+	(*RemoveLinkRequest)(nil),     // 6: novam.banking.v1.RemoveLinkRequest
+	(*RemoveLinkResponse)(nil),    // 7: novam.banking.v1.RemoveLinkResponse
+	(*SetItemStatusRequest)(nil),  // 8: novam.banking.v1.SetItemStatusRequest
+	(*SetItemStatusResponse)(nil), // 9: novam.banking.v1.SetItemStatusResponse
+	(*v1.RequestMetadata)(nil),    // 10: novam.common.v1.RequestMetadata
+	(*v11.Credentials)(nil),       // 11: novam.plaid.v1.Credentials
+	(*v11.Account)(nil),           // 12: novam.plaid.v1.Account
+	(*v11.Failure)(nil),           // 13: novam.plaid.v1.Failure
 }
 var file_novam_banking_v1_banking_service_proto_depIdxs = []int32{
-	8,  // 0: novam.banking.v1.SaveLinkRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	9,  // 1: novam.banking.v1.SaveLinkRequest.own_keys:type_name -> novam.plaid.v1.Credentials
-	10, // 2: novam.banking.v1.SaveLinkRequest.accounts:type_name -> novam.plaid.v1.Account
-	9,  // 3: novam.banking.v1.SaveLinkRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
-	8,  // 4: novam.banking.v1.SyncItemRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	9,  // 5: novam.banking.v1.SyncItemRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
-	11, // 6: novam.banking.v1.SyncItemResponse.failure:type_name -> novam.plaid.v1.Failure
-	8,  // 7: novam.banking.v1.SyncLaterRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	9,  // 8: novam.banking.v1.SyncLaterRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
-	8,  // 9: novam.banking.v1.RemoveLinkRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	9,  // 10: novam.banking.v1.RemoveLinkRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
-	11, // 11: novam.banking.v1.RemoveLinkResponse.failure:type_name -> novam.plaid.v1.Failure
-	0,  // 12: novam.banking.v1.BankingService.SaveLink:input_type -> novam.banking.v1.SaveLinkRequest
-	2,  // 13: novam.banking.v1.BankingService.SyncItem:input_type -> novam.banking.v1.SyncItemRequest
-	4,  // 14: novam.banking.v1.BankingService.SyncLater:input_type -> novam.banking.v1.SyncLaterRequest
-	6,  // 15: novam.banking.v1.BankingService.RemoveLink:input_type -> novam.banking.v1.RemoveLinkRequest
-	1,  // 16: novam.banking.v1.BankingService.SaveLink:output_type -> novam.banking.v1.SaveLinkResponse
-	3,  // 17: novam.banking.v1.BankingService.SyncItem:output_type -> novam.banking.v1.SyncItemResponse
-	5,  // 18: novam.banking.v1.BankingService.SyncLater:output_type -> novam.banking.v1.SyncLaterResponse
-	7,  // 19: novam.banking.v1.BankingService.RemoveLink:output_type -> novam.banking.v1.RemoveLinkResponse
-	16, // [16:20] is the sub-list for method output_type
-	12, // [12:16] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	10, // 0: novam.banking.v1.SaveLinkRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 1: novam.banking.v1.SaveLinkRequest.own_keys:type_name -> novam.plaid.v1.Credentials
+	12, // 2: novam.banking.v1.SaveLinkRequest.accounts:type_name -> novam.plaid.v1.Account
+	11, // 3: novam.banking.v1.SaveLinkRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
+	10, // 4: novam.banking.v1.SyncItemRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 5: novam.banking.v1.SyncItemRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
+	13, // 6: novam.banking.v1.SyncItemResponse.failure:type_name -> novam.plaid.v1.Failure
+	10, // 7: novam.banking.v1.SyncLaterRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 8: novam.banking.v1.SyncLaterRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
+	10, // 9: novam.banking.v1.RemoveLinkRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	11, // 10: novam.banking.v1.RemoveLinkRequest.novam_keys:type_name -> novam.plaid.v1.Credentials
+	13, // 11: novam.banking.v1.RemoveLinkResponse.failure:type_name -> novam.plaid.v1.Failure
+	10, // 12: novam.banking.v1.SetItemStatusRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 13: novam.banking.v1.BankingService.SaveLink:input_type -> novam.banking.v1.SaveLinkRequest
+	2,  // 14: novam.banking.v1.BankingService.SyncItem:input_type -> novam.banking.v1.SyncItemRequest
+	4,  // 15: novam.banking.v1.BankingService.SyncLater:input_type -> novam.banking.v1.SyncLaterRequest
+	6,  // 16: novam.banking.v1.BankingService.RemoveLink:input_type -> novam.banking.v1.RemoveLinkRequest
+	8,  // 17: novam.banking.v1.BankingService.SetItemStatus:input_type -> novam.banking.v1.SetItemStatusRequest
+	1,  // 18: novam.banking.v1.BankingService.SaveLink:output_type -> novam.banking.v1.SaveLinkResponse
+	3,  // 19: novam.banking.v1.BankingService.SyncItem:output_type -> novam.banking.v1.SyncItemResponse
+	5,  // 20: novam.banking.v1.BankingService.SyncLater:output_type -> novam.banking.v1.SyncLaterResponse
+	7,  // 21: novam.banking.v1.BankingService.RemoveLink:output_type -> novam.banking.v1.RemoveLinkResponse
+	9,  // 22: novam.banking.v1.BankingService.SetItemStatus:output_type -> novam.banking.v1.SetItemStatusResponse
+	18, // [18:23] is the sub-list for method output_type
+	13, // [13:18] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_novam_banking_v1_banking_service_proto_init() }
@@ -653,7 +772,7 @@ func file_novam_banking_v1_banking_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_banking_v1_banking_service_proto_rawDesc), len(file_novam_banking_v1_banking_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   10,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

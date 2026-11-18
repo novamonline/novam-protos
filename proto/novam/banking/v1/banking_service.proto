@@ -23,7 +23,12 @@ service BankingService {
   rpc SyncLater(SyncLaterRequest) returns (SyncLaterResponse);
   // Ends a login at Plaid and deletes it with its token; its accounts and transactions stay, unlinked.
   rpc RemoveLink(RemoveLinkRequest) returns (RemoveLinkResponse);
+  // Records what Plaid's webhook said about a login: ok, needs_reconnect or expiring, with Plaid's code.
+  rpc SetItemStatus(SetItemStatusRequest) returns (SetItemStatusResponse);
 }
+
+// Every call answers UNAVAILABLE when the engine's ENCRYPTION_KEY can't read the tokens novam-data stored, so
+// novam-data keeps the banks until the keys match.
 
 message SaveLinkRequest {
   novam.common.v1.RequestMetadata metadata = 1;
@@ -83,3 +88,14 @@ message RemoveLinkResponse {
   bool removed = 1;
   novam.plaid.v1.Failure failure = 2;
 }
+
+message SetItemStatusRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string id = 2;
+  // ok, needs_reconnect or expiring.
+  string status = 3;
+  // Plaid's code; empty to clear it.
+  string error_code = 4;
+}
+
+message SetItemStatusResponse {}

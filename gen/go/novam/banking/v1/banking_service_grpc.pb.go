@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	BankingService_SaveLink_FullMethodName   = "/novam.banking.v1.BankingService/SaveLink"
-	BankingService_SyncItem_FullMethodName   = "/novam.banking.v1.BankingService/SyncItem"
-	BankingService_SyncLater_FullMethodName  = "/novam.banking.v1.BankingService/SyncLater"
-	BankingService_RemoveLink_FullMethodName = "/novam.banking.v1.BankingService/RemoveLink"
+	BankingService_SaveLink_FullMethodName      = "/novam.banking.v1.BankingService/SaveLink"
+	BankingService_SyncItem_FullMethodName      = "/novam.banking.v1.BankingService/SyncItem"
+	BankingService_SyncLater_FullMethodName     = "/novam.banking.v1.BankingService/SyncLater"
+	BankingService_RemoveLink_FullMethodName    = "/novam.banking.v1.BankingService/RemoveLink"
+	BankingService_SetItemStatus_FullMethodName = "/novam.banking.v1.BankingService/SetItemStatus"
 )
 
 // BankingServiceClient is the client API for BankingService service.
@@ -45,6 +46,8 @@ type BankingServiceClient interface {
 	SyncLater(ctx context.Context, in *SyncLaterRequest, opts ...grpc.CallOption) (*SyncLaterResponse, error)
 	// Ends a login at Plaid and deletes it with its token; its accounts and transactions stay, unlinked.
 	RemoveLink(ctx context.Context, in *RemoveLinkRequest, opts ...grpc.CallOption) (*RemoveLinkResponse, error)
+	// Records what Plaid's webhook said about a login: ok, needs_reconnect or expiring, with Plaid's code.
+	SetItemStatus(ctx context.Context, in *SetItemStatusRequest, opts ...grpc.CallOption) (*SetItemStatusResponse, error)
 }
 
 type bankingServiceClient struct {
@@ -95,6 +98,16 @@ func (c *bankingServiceClient) RemoveLink(ctx context.Context, in *RemoveLinkReq
 	return out, nil
 }
 
+func (c *bankingServiceClient) SetItemStatus(ctx context.Context, in *SetItemStatusRequest, opts ...grpc.CallOption) (*SetItemStatusResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetItemStatusResponse)
+	err := c.cc.Invoke(ctx, BankingService_SetItemStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BankingServiceServer is the server API for BankingService service.
 // All implementations must embed UnimplementedBankingServiceServer
 // for forward compatibility.
@@ -115,6 +128,8 @@ type BankingServiceServer interface {
 	SyncLater(context.Context, *SyncLaterRequest) (*SyncLaterResponse, error)
 	// Ends a login at Plaid and deletes it with its token; its accounts and transactions stay, unlinked.
 	RemoveLink(context.Context, *RemoveLinkRequest) (*RemoveLinkResponse, error)
+	// Records what Plaid's webhook said about a login: ok, needs_reconnect or expiring, with Plaid's code.
+	SetItemStatus(context.Context, *SetItemStatusRequest) (*SetItemStatusResponse, error)
 	mustEmbedUnimplementedBankingServiceServer()
 }
 
@@ -136,6 +151,9 @@ func (UnimplementedBankingServiceServer) SyncLater(context.Context, *SyncLaterRe
 }
 func (UnimplementedBankingServiceServer) RemoveLink(context.Context, *RemoveLinkRequest) (*RemoveLinkResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method RemoveLink not implemented")
+}
+func (UnimplementedBankingServiceServer) SetItemStatus(context.Context, *SetItemStatusRequest) (*SetItemStatusResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SetItemStatus not implemented")
 }
 func (UnimplementedBankingServiceServer) mustEmbedUnimplementedBankingServiceServer() {}
 func (UnimplementedBankingServiceServer) testEmbeddedByValue()                        {}
@@ -230,6 +248,24 @@ func _BankingService_RemoveLink_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BankingService_SetItemStatus_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetItemStatusRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BankingServiceServer).SetItemStatus(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BankingService_SetItemStatus_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BankingServiceServer).SetItemStatus(ctx, req.(*SetItemStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BankingService_ServiceDesc is the grpc.ServiceDesc for BankingService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -252,6 +288,10 @@ var BankingService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveLink",
 			Handler:    _BankingService_RemoveLink_Handler,
+		},
+		{
+			MethodName: "SetItemStatus",
+			Handler:    _BankingService_SetItemStatus_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
