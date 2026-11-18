@@ -555,6 +555,128 @@ func (*SkipSplitResponse) Descriptor() ([]byte, []int) {
 	return file_novam_records_v1_money_records_service_proto_rawDescGZIP(), []int{7}
 }
 
+type ConvertEstimateRequest struct {
+	state      protoimpl.MessageState `protogen:"open.v1"`
+	Metadata   *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	EstimateId string                 `protobuf:"bytes,2,opt,name=estimate_id,json=estimateId,proto3" json:"estimate_id,omitempty"`
+	InvoiceId  string                 `protobuf:"bytes,3,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty"`
+	// The invoice's wire fields as JSON, as InvoicesService.CreateInvoice takes them; numbered when invoice_number is empty.
+	InvoiceJson string `protobuf:"bytes,4,opt,name=invoice_json,json=invoiceJson,proto3" json:"invoice_json,omitempty"`
+	// The approved change orders its lines carry; refused when one was billed or changed meanwhile.
+	ChangeOrderIds       []string `protobuf:"bytes,5,rep,name=change_order_ids,json=changeOrderIds,proto3" json:"change_order_ids,omitempty"`
+	EstimateResourceName string   `protobuf:"bytes,6,opt,name=estimate_resource_name,json=estimateResourceName,proto3" json:"estimate_resource_name,omitempty"`
+	unknownFields        protoimpl.UnknownFields
+	sizeCache            protoimpl.SizeCache
+}
+
+func (x *ConvertEstimateRequest) Reset() {
+	*x = ConvertEstimateRequest{}
+	mi := &file_novam_records_v1_money_records_service_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConvertEstimateRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConvertEstimateRequest) ProtoMessage() {}
+
+func (x *ConvertEstimateRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_records_v1_money_records_service_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConvertEstimateRequest.ProtoReflect.Descriptor instead.
+func (*ConvertEstimateRequest) Descriptor() ([]byte, []int) {
+	return file_novam_records_v1_money_records_service_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ConvertEstimateRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ConvertEstimateRequest) GetEstimateId() string {
+	if x != nil {
+		return x.EstimateId
+	}
+	return ""
+}
+
+func (x *ConvertEstimateRequest) GetInvoiceId() string {
+	if x != nil {
+		return x.InvoiceId
+	}
+	return ""
+}
+
+func (x *ConvertEstimateRequest) GetInvoiceJson() string {
+	if x != nil {
+		return x.InvoiceJson
+	}
+	return ""
+}
+
+func (x *ConvertEstimateRequest) GetChangeOrderIds() []string {
+	if x != nil {
+		return x.ChangeOrderIds
+	}
+	return nil
+}
+
+func (x *ConvertEstimateRequest) GetEstimateResourceName() string {
+	if x != nil {
+		return x.EstimateResourceName
+	}
+	return ""
+}
+
+type ConvertEstimateResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConvertEstimateResponse) Reset() {
+	*x = ConvertEstimateResponse{}
+	mi := &file_novam_records_v1_money_records_service_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConvertEstimateResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConvertEstimateResponse) ProtoMessage() {}
+
+func (x *ConvertEstimateResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_records_v1_money_records_service_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConvertEstimateResponse.ProtoReflect.Descriptor instead.
+func (*ConvertEstimateResponse) Descriptor() ([]byte, []int) {
+	return file_novam_records_v1_money_records_service_proto_rawDescGZIP(), []int{9}
+}
+
 var File_novam_records_v1_money_records_service_proto protoreflect.FileDescriptor
 
 const file_novam_records_v1_money_records_service_proto_rawDesc = "" +
@@ -595,18 +717,29 @@ const file_novam_records_v1_money_records_service_proto_rawDesc = "" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\tR\x02id\x12#\n" +
 	"\rresource_name\x18\x03 \x01(\tR\fresourceName\"\x13\n" +
-	"\x11SkipSplitResponse*y\n" +
+	"\x11SkipSplitResponse\"\x99\x02\n" +
+	"\x16ConvertEstimateRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x1f\n" +
+	"\vestimate_id\x18\x02 \x01(\tR\n" +
+	"estimateId\x12\x1d\n" +
+	"\n" +
+	"invoice_id\x18\x03 \x01(\tR\tinvoiceId\x12!\n" +
+	"\finvoice_json\x18\x04 \x01(\tR\vinvoiceJson\x12(\n" +
+	"\x10change_order_ids\x18\x05 \x03(\tR\x0echangeOrderIds\x124\n" +
+	"\x16estimate_resource_name\x18\x06 \x01(\tR\x14estimateResourceName\"\x19\n" +
+	"\x17ConvertEstimateResponse*y\n" +
 	"\aWriteOp\x12\x18\n" +
 	"\x14WRITE_OP_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fWRITE_OP_CREATE\x10\x01\x12\x13\n" +
 	"\x0fWRITE_OP_UPDATE\x10\x02\x12\x13\n" +
 	"\x0fWRITE_OP_DELETE\x10\x03\x12\x15\n" +
-	"\x11WRITE_OP_UNDELETE\x10\x042\xff\x02\n" +
+	"\x11WRITE_OP_UNDELETE\x10\x042\xe7\x03\n" +
 	"\x13MoneyRecordsService\x12Q\n" +
 	"\bWriteRow\x12!.novam.records.v1.WriteRowRequest\x1a\".novam.records.v1.WriteRowResponse\x12]\n" +
 	"\fVoidGiftCard\x12%.novam.records.v1.VoidGiftCardRequest\x1a&.novam.records.v1.VoidGiftCardResponse\x12`\n" +
 	"\rMarkSplitPaid\x12&.novam.records.v1.MarkSplitPaidRequest\x1a'.novam.records.v1.MarkSplitPaidResponse\x12T\n" +
-	"\tSkipSplit\x12\".novam.records.v1.SkipSplitRequest\x1a#.novam.records.v1.SkipSplitResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/records/v1;recordsv1b\x06proto3"
+	"\tSkipSplit\x12\".novam.records.v1.SkipSplitRequest\x1a#.novam.records.v1.SkipSplitResponse\x12f\n" +
+	"\x0fConvertEstimate\x12(.novam.records.v1.ConvertEstimateRequest\x1a).novam.records.v1.ConvertEstimateResponseBGZEgithub.com/novamonline/novam-protos/gen/go/novam/records/v1;recordsv1b\x06proto3"
 
 var (
 	file_novam_records_v1_money_records_service_proto_rawDescOnce sync.Once
@@ -621,40 +754,45 @@ func file_novam_records_v1_money_records_service_proto_rawDescGZIP() []byte {
 }
 
 var file_novam_records_v1_money_records_service_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_novam_records_v1_money_records_service_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_novam_records_v1_money_records_service_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_novam_records_v1_money_records_service_proto_goTypes = []any{
-	(WriteOp)(0),                  // 0: novam.records.v1.WriteOp
-	(*WriteRowRequest)(nil),       // 1: novam.records.v1.WriteRowRequest
-	(*WriteRowResponse)(nil),      // 2: novam.records.v1.WriteRowResponse
-	(*VoidGiftCardRequest)(nil),   // 3: novam.records.v1.VoidGiftCardRequest
-	(*VoidGiftCardResponse)(nil),  // 4: novam.records.v1.VoidGiftCardResponse
-	(*MarkSplitPaidRequest)(nil),  // 5: novam.records.v1.MarkSplitPaidRequest
-	(*MarkSplitPaidResponse)(nil), // 6: novam.records.v1.MarkSplitPaidResponse
-	(*SkipSplitRequest)(nil),      // 7: novam.records.v1.SkipSplitRequest
-	(*SkipSplitResponse)(nil),     // 8: novam.records.v1.SkipSplitResponse
-	nil,                           // 9: novam.records.v1.WriteRowRequest.ValuesEntry
-	(*v1.RequestMetadata)(nil),    // 10: novam.common.v1.RequestMetadata
+	(WriteOp)(0),                    // 0: novam.records.v1.WriteOp
+	(*WriteRowRequest)(nil),         // 1: novam.records.v1.WriteRowRequest
+	(*WriteRowResponse)(nil),        // 2: novam.records.v1.WriteRowResponse
+	(*VoidGiftCardRequest)(nil),     // 3: novam.records.v1.VoidGiftCardRequest
+	(*VoidGiftCardResponse)(nil),    // 4: novam.records.v1.VoidGiftCardResponse
+	(*MarkSplitPaidRequest)(nil),    // 5: novam.records.v1.MarkSplitPaidRequest
+	(*MarkSplitPaidResponse)(nil),   // 6: novam.records.v1.MarkSplitPaidResponse
+	(*SkipSplitRequest)(nil),        // 7: novam.records.v1.SkipSplitRequest
+	(*SkipSplitResponse)(nil),       // 8: novam.records.v1.SkipSplitResponse
+	(*ConvertEstimateRequest)(nil),  // 9: novam.records.v1.ConvertEstimateRequest
+	(*ConvertEstimateResponse)(nil), // 10: novam.records.v1.ConvertEstimateResponse
+	nil,                             // 11: novam.records.v1.WriteRowRequest.ValuesEntry
+	(*v1.RequestMetadata)(nil),      // 12: novam.common.v1.RequestMetadata
 }
 var file_novam_records_v1_money_records_service_proto_depIdxs = []int32{
-	10, // 0: novam.records.v1.WriteRowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	12, // 0: novam.records.v1.WriteRowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
 	0,  // 1: novam.records.v1.WriteRowRequest.op:type_name -> novam.records.v1.WriteOp
-	9,  // 2: novam.records.v1.WriteRowRequest.values:type_name -> novam.records.v1.WriteRowRequest.ValuesEntry
-	10, // 3: novam.records.v1.VoidGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	10, // 4: novam.records.v1.MarkSplitPaidRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	10, // 5: novam.records.v1.SkipSplitRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	1,  // 6: novam.records.v1.MoneyRecordsService.WriteRow:input_type -> novam.records.v1.WriteRowRequest
-	3,  // 7: novam.records.v1.MoneyRecordsService.VoidGiftCard:input_type -> novam.records.v1.VoidGiftCardRequest
-	5,  // 8: novam.records.v1.MoneyRecordsService.MarkSplitPaid:input_type -> novam.records.v1.MarkSplitPaidRequest
-	7,  // 9: novam.records.v1.MoneyRecordsService.SkipSplit:input_type -> novam.records.v1.SkipSplitRequest
-	2,  // 10: novam.records.v1.MoneyRecordsService.WriteRow:output_type -> novam.records.v1.WriteRowResponse
-	4,  // 11: novam.records.v1.MoneyRecordsService.VoidGiftCard:output_type -> novam.records.v1.VoidGiftCardResponse
-	6,  // 12: novam.records.v1.MoneyRecordsService.MarkSplitPaid:output_type -> novam.records.v1.MarkSplitPaidResponse
-	8,  // 13: novam.records.v1.MoneyRecordsService.SkipSplit:output_type -> novam.records.v1.SkipSplitResponse
-	10, // [10:14] is the sub-list for method output_type
-	6,  // [6:10] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	11, // 2: novam.records.v1.WriteRowRequest.values:type_name -> novam.records.v1.WriteRowRequest.ValuesEntry
+	12, // 3: novam.records.v1.VoidGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	12, // 4: novam.records.v1.MarkSplitPaidRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	12, // 5: novam.records.v1.SkipSplitRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	12, // 6: novam.records.v1.ConvertEstimateRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	1,  // 7: novam.records.v1.MoneyRecordsService.WriteRow:input_type -> novam.records.v1.WriteRowRequest
+	3,  // 8: novam.records.v1.MoneyRecordsService.VoidGiftCard:input_type -> novam.records.v1.VoidGiftCardRequest
+	5,  // 9: novam.records.v1.MoneyRecordsService.MarkSplitPaid:input_type -> novam.records.v1.MarkSplitPaidRequest
+	7,  // 10: novam.records.v1.MoneyRecordsService.SkipSplit:input_type -> novam.records.v1.SkipSplitRequest
+	9,  // 11: novam.records.v1.MoneyRecordsService.ConvertEstimate:input_type -> novam.records.v1.ConvertEstimateRequest
+	2,  // 12: novam.records.v1.MoneyRecordsService.WriteRow:output_type -> novam.records.v1.WriteRowResponse
+	4,  // 13: novam.records.v1.MoneyRecordsService.VoidGiftCard:output_type -> novam.records.v1.VoidGiftCardResponse
+	6,  // 14: novam.records.v1.MoneyRecordsService.MarkSplitPaid:output_type -> novam.records.v1.MarkSplitPaidResponse
+	8,  // 15: novam.records.v1.MoneyRecordsService.SkipSplit:output_type -> novam.records.v1.SkipSplitResponse
+	10, // 16: novam.records.v1.MoneyRecordsService.ConvertEstimate:output_type -> novam.records.v1.ConvertEstimateResponse
+	12, // [12:17] is the sub-list for method output_type
+	7,  // [7:12] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_novam_records_v1_money_records_service_proto_init() }
@@ -668,7 +806,7 @@ func file_novam_records_v1_money_records_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_records_v1_money_records_service_proto_rawDesc), len(file_novam_records_v1_money_records_service_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -20,6 +20,9 @@ service MoneyRecordsService {
   rpc MarkSplitPaid(MarkSplitPaidRequest) returns (MarkSplitPaidResponse);
   // Skips a draft helper split: the helper isn't owed for the visit.
   rpc SkipSplit(SkipSplitRequest) returns (SkipSplitResponse);
+  // Makes an estimate's invoice in one transaction: the invoice novam-data worked out (created as the invoices service
+  // creates one), its approved change orders billed on it, and the estimate invoiced.
+  rpc ConvertEstimate(ConvertEstimateRequest) returns (ConvertEstimateResponse);
 }
 
 enum WriteOp {
@@ -80,3 +83,16 @@ message SkipSplitRequest {
 }
 
 message SkipSplitResponse {}
+
+message ConvertEstimateRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string estimate_id = 2;
+  string invoice_id = 3;
+  // The invoice's wire fields as JSON, as InvoicesService.CreateInvoice takes them; numbered when invoice_number is empty.
+  string invoice_json = 4;
+  // The approved change orders its lines carry; refused when one was billed or changed meanwhile.
+  repeated string change_order_ids = 5;
+  string estimate_resource_name = 6;
+}
+
+message ConvertEstimateResponse {}

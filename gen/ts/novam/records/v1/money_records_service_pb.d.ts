@@ -229,6 +229,63 @@ export declare type SkipSplitResponse = Message<"novam.records.v1.SkipSplitRespo
 export declare const SkipSplitResponseSchema: GenMessage<SkipSplitResponse>;
 
 /**
+ * @generated from message novam.records.v1.ConvertEstimateRequest
+ */
+export declare type ConvertEstimateRequest = Message<"novam.records.v1.ConvertEstimateRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string estimate_id = 2;
+   */
+  estimateId: string;
+
+  /**
+   * @generated from field: string invoice_id = 3;
+   */
+  invoiceId: string;
+
+  /**
+   * The invoice's wire fields as JSON, as InvoicesService.CreateInvoice takes them; numbered when invoice_number is empty.
+   *
+   * @generated from field: string invoice_json = 4;
+   */
+  invoiceJson: string;
+
+  /**
+   * The approved change orders its lines carry; refused when one was billed or changed meanwhile.
+   *
+   * @generated from field: repeated string change_order_ids = 5;
+   */
+  changeOrderIds: string[];
+
+  /**
+   * @generated from field: string estimate_resource_name = 6;
+   */
+  estimateResourceName: string;
+};
+
+/**
+ * Describes the message novam.records.v1.ConvertEstimateRequest.
+ * Use `create(ConvertEstimateRequestSchema)` to create a new message.
+ */
+export declare const ConvertEstimateRequestSchema: GenMessage<ConvertEstimateRequest>;
+
+/**
+ * @generated from message novam.records.v1.ConvertEstimateResponse
+ */
+export declare type ConvertEstimateResponse = Message<"novam.records.v1.ConvertEstimateResponse"> & {
+};
+
+/**
+ * Describes the message novam.records.v1.ConvertEstimateResponse.
+ * Use `create(ConvertEstimateResponseSchema)` to create a new message.
+ */
+export declare const ConvertEstimateResponseSchema: GenMessage<ConvertEstimateResponse>;
+
+/**
  * @generated from enum novam.records.v1.WriteOp
  */
 export enum WriteOp {
@@ -312,6 +369,17 @@ export declare const MoneyRecordsService: GenService<{
     methodKind: "unary";
     input: typeof SkipSplitRequestSchema;
     output: typeof SkipSplitResponseSchema;
+  },
+  /**
+   * Makes an estimate's invoice in one transaction: the invoice novam-data worked out (created as the invoices service
+   * creates one), its approved change orders billed on it, and the estimate invoiced.
+   *
+   * @generated from rpc novam.records.v1.MoneyRecordsService.ConvertEstimate
+   */
+  convertEstimate: {
+    methodKind: "unary";
+    input: typeof ConvertEstimateRequestSchema;
+    output: typeof ConvertEstimateResponseSchema;
   },
 }>;
 

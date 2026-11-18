@@ -19,10 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	MoneyRecordsService_WriteRow_FullMethodName      = "/novam.records.v1.MoneyRecordsService/WriteRow"
-	MoneyRecordsService_VoidGiftCard_FullMethodName  = "/novam.records.v1.MoneyRecordsService/VoidGiftCard"
-	MoneyRecordsService_MarkSplitPaid_FullMethodName = "/novam.records.v1.MoneyRecordsService/MarkSplitPaid"
-	MoneyRecordsService_SkipSplit_FullMethodName     = "/novam.records.v1.MoneyRecordsService/SkipSplit"
+	MoneyRecordsService_WriteRow_FullMethodName        = "/novam.records.v1.MoneyRecordsService/WriteRow"
+	MoneyRecordsService_VoidGiftCard_FullMethodName    = "/novam.records.v1.MoneyRecordsService/VoidGiftCard"
+	MoneyRecordsService_MarkSplitPaid_FullMethodName   = "/novam.records.v1.MoneyRecordsService/MarkSplitPaid"
+	MoneyRecordsService_SkipSplit_FullMethodName       = "/novam.records.v1.MoneyRecordsService/SkipSplit"
+	MoneyRecordsService_ConvertEstimate_FullMethodName = "/novam.records.v1.MoneyRecordsService/ConvertEstimate"
 )
 
 // MoneyRecordsServiceClient is the client API for MoneyRecordsService service.
@@ -43,6 +44,9 @@ type MoneyRecordsServiceClient interface {
 	MarkSplitPaid(ctx context.Context, in *MarkSplitPaidRequest, opts ...grpc.CallOption) (*MarkSplitPaidResponse, error)
 	// Skips a draft helper split: the helper isn't owed for the visit.
 	SkipSplit(ctx context.Context, in *SkipSplitRequest, opts ...grpc.CallOption) (*SkipSplitResponse, error)
+	// Makes an estimate's invoice in one transaction: the invoice novam-data worked out (created as the invoices service
+	// creates one), its approved change orders billed on it, and the estimate invoiced.
+	ConvertEstimate(ctx context.Context, in *ConvertEstimateRequest, opts ...grpc.CallOption) (*ConvertEstimateResponse, error)
 }
 
 type moneyRecordsServiceClient struct {
@@ -93,6 +97,16 @@ func (c *moneyRecordsServiceClient) SkipSplit(ctx context.Context, in *SkipSplit
 	return out, nil
 }
 
+func (c *moneyRecordsServiceClient) ConvertEstimate(ctx context.Context, in *ConvertEstimateRequest, opts ...grpc.CallOption) (*ConvertEstimateResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ConvertEstimateResponse)
+	err := c.cc.Invoke(ctx, MoneyRecordsService_ConvertEstimate_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // MoneyRecordsServiceServer is the server API for MoneyRecordsService service.
 // All implementations must embed UnimplementedMoneyRecordsServiceServer
 // for forward compatibility.
@@ -111,6 +125,9 @@ type MoneyRecordsServiceServer interface {
 	MarkSplitPaid(context.Context, *MarkSplitPaidRequest) (*MarkSplitPaidResponse, error)
 	// Skips a draft helper split: the helper isn't owed for the visit.
 	SkipSplit(context.Context, *SkipSplitRequest) (*SkipSplitResponse, error)
+	// Makes an estimate's invoice in one transaction: the invoice novam-data worked out (created as the invoices service
+	// creates one), its approved change orders billed on it, and the estimate invoiced.
+	ConvertEstimate(context.Context, *ConvertEstimateRequest) (*ConvertEstimateResponse, error)
 	mustEmbedUnimplementedMoneyRecordsServiceServer()
 }
 
@@ -132,6 +149,9 @@ func (UnimplementedMoneyRecordsServiceServer) MarkSplitPaid(context.Context, *Ma
 }
 func (UnimplementedMoneyRecordsServiceServer) SkipSplit(context.Context, *SkipSplitRequest) (*SkipSplitResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method SkipSplit not implemented")
+}
+func (UnimplementedMoneyRecordsServiceServer) ConvertEstimate(context.Context, *ConvertEstimateRequest) (*ConvertEstimateResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ConvertEstimate not implemented")
 }
 func (UnimplementedMoneyRecordsServiceServer) mustEmbedUnimplementedMoneyRecordsServiceServer() {}
 func (UnimplementedMoneyRecordsServiceServer) testEmbeddedByValue()                             {}
@@ -226,6 +246,24 @@ func _MoneyRecordsService_SkipSplit_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _MoneyRecordsService_ConvertEstimate_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ConvertEstimateRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(MoneyRecordsServiceServer).ConvertEstimate(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: MoneyRecordsService_ConvertEstimate_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(MoneyRecordsServiceServer).ConvertEstimate(ctx, req.(*ConvertEstimateRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // MoneyRecordsService_ServiceDesc is the grpc.ServiceDesc for MoneyRecordsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -248,6 +286,10 @@ var MoneyRecordsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SkipSplit",
 			Handler:    _MoneyRecordsService_SkipSplit_Handler,
+		},
+		{
+			MethodName: "ConvertEstimate",
+			Handler:    _MoneyRecordsService_ConvertEstimate_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
