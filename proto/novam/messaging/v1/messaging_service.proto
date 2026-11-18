@@ -1,0 +1,63 @@
+syntax = "proto3";
+
+package novam.messaging.v1;
+
+import "novam/common/v1/common.proto";
+
+option go_package = "github.com/novamonline/novam-protos/gen/go/novam/messaging/v1;messagingv1";
+
+// MessagingService runs in novam-engine's workflows server and delivers the texts and emails novam-data sends: it
+// holds the Twilio and SMTP connections. novam-data decides who gets what (opt-outs, plan limits, consent) before it
+// asks; this only delivers. Sign-in codes don't come here, so signing in never depends on the engine.
+//
+// UNAVAILABLE means nothing was sent and novam-data may send it itself: the engine has no Twilio or SMTP set up, or
+// sends for another Twilio account. ABORTED means the provider couldn't be reached or refused for now; nothing was
+// sent. FAILED_PRECONDITION means the provider refused the message.
+service MessagingService {
+  rpc SendText(SendTextRequest) returns (SendTextResponse);
+  rpc SendEmail(SendEmailRequest) returns (SendEmailResponse);
+}
+
+message SendTextRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // E.164.
+  string to = 2;
+  string body = 3;
+  // The number it comes from, E.164; empty to send through messaging_service_sid.
+  string from = 4;
+  string messaging_service_sid = 5;
+  // Where Twilio reports the text's later status; empty for none.
+  string status_callback = 6;
+  // The Twilio account novam-data sends from; the engine refuses (UNAVAILABLE) when it sends from another.
+  string account_sid = 7;
+}
+
+message SendTextResponse {
+  string sid = 1;
+  // Twilio's status, e.g. queued.
+  string status = 2;
+}
+
+message Attachment {
+  string filename = 1;
+  bytes content = 2;
+  string content_type = 3;
+}
+
+message SendEmailRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The From header, e.g. "Novam Pro <no-reply@novam.online>".
+  string from = 2;
+  string to = 3;
+  string subject = 4;
+  string text = 5;
+  // Sent beside text as multipart/alternative when set.
+  string html = 6;
+  // Extra headers, such as List-Unsubscribe.
+  map<string, string> headers = 7;
+  repeated Attachment attachments = 8;
+}
+
+message SendEmailResponse {
+  string message_id = 1;
+}
