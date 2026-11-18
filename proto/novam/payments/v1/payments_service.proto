@@ -82,6 +82,16 @@ service PaymentsService {
   rpc CancelPlanNow(CancelPlanNowRequest) returns (CancelPlanNowResponse);
   // Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
   rpc DetachPlanMethods(DetachPlanMethodsRequest) returns (DetachPlanMethodsResponse);
+  // Works out the business's partner statements for the last whole week or month now, for every partner who has none
+  // yet, and approves and sends them when statements go on their own.
+  rpc DraftPartnerStatements(DraftPartnerStatementsRequest) returns (DraftPartnerStatementsResponse);
+  // Approves draft partner statements (the ones named, or every draft), sending each to pay when they go on their own.
+  rpc ApprovePartnerStatements(ApprovePartnerStatementsRequest) returns (ApprovePartnerStatementsResponse);
+  // Sends an approved statement to the partner to pay: a Stripe invoice from the business's own account.
+  // FAILED_PRECONDITION with the reason when it can't be.
+  rpc SendPartnerStatement(SendPartnerStatementRequest) returns (SendPartnerStatementResponse);
+  // Records that an approved statement was paid another way, marking its open Stripe invoice paid outside Stripe first.
+  rpc MarkPartnerStatementCollected(MarkPartnerStatementCollectedRequest) returns (MarkPartnerStatementCollectedResponse);
 }
 
 message RecordPaymentRequest {
@@ -428,3 +438,38 @@ message DetachPlanMethodsRequest {
 message DetachPlanMethodsResponse {
   int32 detached = 1;
 }
+
+message DraftPartnerStatementsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+}
+
+message DraftPartnerStatementsResponse {
+  int32 drafted = 1;
+}
+
+message ApprovePartnerStatementsRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  // The statements to approve; with all, every draft.
+  repeated string ids = 2;
+  bool all = 3;
+  // Who approved them, kept on each statement.
+  string approved_by = 4;
+}
+
+message ApprovePartnerStatementsResponse {
+  int32 approved = 1;
+}
+
+message SendPartnerStatementRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string statement_id = 2;
+}
+
+message SendPartnerStatementResponse {}
+
+message MarkPartnerStatementCollectedRequest {
+  novam.common.v1.RequestMetadata metadata = 1;
+  string statement_id = 2;
+}
+
+message MarkPartnerStatementCollectedResponse {}

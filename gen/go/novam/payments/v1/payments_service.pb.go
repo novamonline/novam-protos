@@ -2953,6 +2953,384 @@ func (x *DetachPlanMethodsResponse) GetDetached() int32 {
 	return 0
 }
 
+type DraftPartnerStatementsRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DraftPartnerStatementsRequest) Reset() {
+	*x = DraftPartnerStatementsRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[46]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DraftPartnerStatementsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DraftPartnerStatementsRequest) ProtoMessage() {}
+
+func (x *DraftPartnerStatementsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[46]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DraftPartnerStatementsRequest.ProtoReflect.Descriptor instead.
+func (*DraftPartnerStatementsRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{46}
+}
+
+func (x *DraftPartnerStatementsRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+type DraftPartnerStatementsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Drafted       int32                  `protobuf:"varint,1,opt,name=drafted,proto3" json:"drafted,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *DraftPartnerStatementsResponse) Reset() {
+	*x = DraftPartnerStatementsResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[47]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *DraftPartnerStatementsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*DraftPartnerStatementsResponse) ProtoMessage() {}
+
+func (x *DraftPartnerStatementsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[47]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use DraftPartnerStatementsResponse.ProtoReflect.Descriptor instead.
+func (*DraftPartnerStatementsResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{47}
+}
+
+func (x *DraftPartnerStatementsResponse) GetDrafted() int32 {
+	if x != nil {
+		return x.Drafted
+	}
+	return 0
+}
+
+type ApprovePartnerStatementsRequest struct {
+	state    protoimpl.MessageState `protogen:"open.v1"`
+	Metadata *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	// The statements to approve; with all, every draft.
+	Ids []string `protobuf:"bytes,2,rep,name=ids,proto3" json:"ids,omitempty"`
+	All bool     `protobuf:"varint,3,opt,name=all,proto3" json:"all,omitempty"`
+	// Who approved them, kept on each statement.
+	ApprovedBy    string `protobuf:"bytes,4,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ApprovePartnerStatementsRequest) Reset() {
+	*x = ApprovePartnerStatementsRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[48]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ApprovePartnerStatementsRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ApprovePartnerStatementsRequest) ProtoMessage() {}
+
+func (x *ApprovePartnerStatementsRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[48]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ApprovePartnerStatementsRequest.ProtoReflect.Descriptor instead.
+func (*ApprovePartnerStatementsRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{48}
+}
+
+func (x *ApprovePartnerStatementsRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *ApprovePartnerStatementsRequest) GetIds() []string {
+	if x != nil {
+		return x.Ids
+	}
+	return nil
+}
+
+func (x *ApprovePartnerStatementsRequest) GetAll() bool {
+	if x != nil {
+		return x.All
+	}
+	return false
+}
+
+func (x *ApprovePartnerStatementsRequest) GetApprovedBy() string {
+	if x != nil {
+		return x.ApprovedBy
+	}
+	return ""
+}
+
+type ApprovePartnerStatementsResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Approved      int32                  `protobuf:"varint,1,opt,name=approved,proto3" json:"approved,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ApprovePartnerStatementsResponse) Reset() {
+	*x = ApprovePartnerStatementsResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[49]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ApprovePartnerStatementsResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ApprovePartnerStatementsResponse) ProtoMessage() {}
+
+func (x *ApprovePartnerStatementsResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[49]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ApprovePartnerStatementsResponse.ProtoReflect.Descriptor instead.
+func (*ApprovePartnerStatementsResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{49}
+}
+
+func (x *ApprovePartnerStatementsResponse) GetApproved() int32 {
+	if x != nil {
+		return x.Approved
+	}
+	return 0
+}
+
+type SendPartnerStatementRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	StatementId   string                 `protobuf:"bytes,2,opt,name=statement_id,json=statementId,proto3" json:"statement_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendPartnerStatementRequest) Reset() {
+	*x = SendPartnerStatementRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[50]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendPartnerStatementRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendPartnerStatementRequest) ProtoMessage() {}
+
+func (x *SendPartnerStatementRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[50]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendPartnerStatementRequest.ProtoReflect.Descriptor instead.
+func (*SendPartnerStatementRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{50}
+}
+
+func (x *SendPartnerStatementRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *SendPartnerStatementRequest) GetStatementId() string {
+	if x != nil {
+		return x.StatementId
+	}
+	return ""
+}
+
+type SendPartnerStatementResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *SendPartnerStatementResponse) Reset() {
+	*x = SendPartnerStatementResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[51]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *SendPartnerStatementResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*SendPartnerStatementResponse) ProtoMessage() {}
+
+func (x *SendPartnerStatementResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[51]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use SendPartnerStatementResponse.ProtoReflect.Descriptor instead.
+func (*SendPartnerStatementResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{51}
+}
+
+type MarkPartnerStatementCollectedRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Metadata      *v1.RequestMetadata    `protobuf:"bytes,1,opt,name=metadata,proto3" json:"metadata,omitempty"`
+	StatementId   string                 `protobuf:"bytes,2,opt,name=statement_id,json=statementId,proto3" json:"statement_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarkPartnerStatementCollectedRequest) Reset() {
+	*x = MarkPartnerStatementCollectedRequest{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[52]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkPartnerStatementCollectedRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkPartnerStatementCollectedRequest) ProtoMessage() {}
+
+func (x *MarkPartnerStatementCollectedRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[52]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkPartnerStatementCollectedRequest.ProtoReflect.Descriptor instead.
+func (*MarkPartnerStatementCollectedRequest) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{52}
+}
+
+func (x *MarkPartnerStatementCollectedRequest) GetMetadata() *v1.RequestMetadata {
+	if x != nil {
+		return x.Metadata
+	}
+	return nil
+}
+
+func (x *MarkPartnerStatementCollectedRequest) GetStatementId() string {
+	if x != nil {
+		return x.StatementId
+	}
+	return ""
+}
+
+type MarkPartnerStatementCollectedResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *MarkPartnerStatementCollectedResponse) Reset() {
+	*x = MarkPartnerStatementCollectedResponse{}
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[53]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *MarkPartnerStatementCollectedResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*MarkPartnerStatementCollectedResponse) ProtoMessage() {}
+
+func (x *MarkPartnerStatementCollectedResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_novam_payments_v1_payments_service_proto_msgTypes[53]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use MarkPartnerStatementCollectedResponse.ProtoReflect.Descriptor instead.
+func (*MarkPartnerStatementCollectedResponse) Descriptor() ([]byte, []int) {
+	return file_novam_payments_v1_payments_service_proto_rawDescGZIP(), []int{53}
+}
+
 var File_novam_payments_v1_payments_service_proto protoreflect.FileDescriptor
 
 const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
@@ -3183,7 +3561,27 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\x18DetachPlanMethodsRequest\x12<\n" +
 	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\"7\n" +
 	"\x19DetachPlanMethodsResponse\x12\x1a\n" +
-	"\bdetached\x18\x01 \x01(\x05R\bdetached2\x93\x12\n" +
+	"\bdetached\x18\x01 \x01(\x05R\bdetached\"]\n" +
+	"\x1dDraftPartnerStatementsRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\":\n" +
+	"\x1eDraftPartnerStatementsResponse\x12\x18\n" +
+	"\adrafted\x18\x01 \x01(\x05R\adrafted\"\xa4\x01\n" +
+	"\x1fApprovePartnerStatementsRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12\x10\n" +
+	"\x03ids\x18\x02 \x03(\tR\x03ids\x12\x10\n" +
+	"\x03all\x18\x03 \x01(\bR\x03all\x12\x1f\n" +
+	"\vapproved_by\x18\x04 \x01(\tR\n" +
+	"approvedBy\">\n" +
+	" ApprovePartnerStatementsResponse\x12\x1a\n" +
+	"\bapproved\x18\x01 \x01(\x05R\bapproved\"~\n" +
+	"\x1bSendPartnerStatementRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12!\n" +
+	"\fstatement_id\x18\x02 \x01(\tR\vstatementId\"\x1e\n" +
+	"\x1cSendPartnerStatementResponse\"\x87\x01\n" +
+	"$MarkPartnerStatementCollectedRequest\x12<\n" +
+	"\bmetadata\x18\x01 \x01(\v2 .novam.common.v1.RequestMetadataR\bmetadata\x12!\n" +
+	"\fstatement_id\x18\x02 \x01(\tR\vstatementId\"'\n" +
+	"%MarkPartnerStatementCollectedResponse2\xa6\x16\n" +
 	"\x0fPaymentsService\x12b\n" +
 	"\rRecordPayment\x12'.novam.payments.v1.RecordPaymentRequest\x1a(.novam.payments.v1.RecordPaymentResponse\x12n\n" +
 	"\x11MarkPaidIfCovered\x12+.novam.payments.v1.MarkPaidIfCoveredRequest\x1a,.novam.payments.v1.MarkPaidIfCoveredResponse\x12_\n" +
@@ -3211,7 +3609,11 @@ const file_novam_payments_v1_payments_service_proto_rawDesc = "" +
 	"\n" +
 	"ResumePlan\x12$.novam.payments.v1.ResumePlanRequest\x1a%.novam.payments.v1.ResumePlanResponse\x12b\n" +
 	"\rCancelPlanNow\x12'.novam.payments.v1.CancelPlanNowRequest\x1a(.novam.payments.v1.CancelPlanNowResponse\x12n\n" +
-	"\x11DetachPlanMethods\x12+.novam.payments.v1.DetachPlanMethodsRequest\x1a,.novam.payments.v1.DetachPlanMethodsResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/payments/v1;paymentsv1b\x06proto3"
+	"\x11DetachPlanMethods\x12+.novam.payments.v1.DetachPlanMethodsRequest\x1a,.novam.payments.v1.DetachPlanMethodsResponse\x12}\n" +
+	"\x16DraftPartnerStatements\x120.novam.payments.v1.DraftPartnerStatementsRequest\x1a1.novam.payments.v1.DraftPartnerStatementsResponse\x12\x83\x01\n" +
+	"\x18ApprovePartnerStatements\x122.novam.payments.v1.ApprovePartnerStatementsRequest\x1a3.novam.payments.v1.ApprovePartnerStatementsResponse\x12w\n" +
+	"\x14SendPartnerStatement\x12..novam.payments.v1.SendPartnerStatementRequest\x1a/.novam.payments.v1.SendPartnerStatementResponse\x12\x92\x01\n" +
+	"\x1dMarkPartnerStatementCollected\x127.novam.payments.v1.MarkPartnerStatementCollectedRequest\x1a8.novam.payments.v1.MarkPartnerStatementCollectedResponseBIZGgithub.com/novamonline/novam-protos/gen/go/novam/payments/v1;paymentsv1b\x06proto3"
 
 var (
 	file_novam_payments_v1_payments_service_proto_rawDescOnce sync.Once
@@ -3225,135 +3627,155 @@ func file_novam_payments_v1_payments_service_proto_rawDescGZIP() []byte {
 	return file_novam_payments_v1_payments_service_proto_rawDescData
 }
 
-var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 46)
+var file_novam_payments_v1_payments_service_proto_msgTypes = make([]protoimpl.MessageInfo, 54)
 var file_novam_payments_v1_payments_service_proto_goTypes = []any{
-	(*RecordPaymentRequest)(nil),      // 0: novam.payments.v1.RecordPaymentRequest
-	(*RecordPaymentResponse)(nil),     // 1: novam.payments.v1.RecordPaymentResponse
-	(*MarkPaidIfCoveredRequest)(nil),  // 2: novam.payments.v1.MarkPaidIfCoveredRequest
-	(*MarkPaidIfCoveredResponse)(nil), // 3: novam.payments.v1.MarkPaidIfCoveredResponse
-	(*ReopenIfOwedRequest)(nil),       // 4: novam.payments.v1.ReopenIfOwedRequest
-	(*ReopenIfOwedResponse)(nil),      // 5: novam.payments.v1.ReopenIfOwedResponse
-	(*FailPaymentRequest)(nil),        // 6: novam.payments.v1.FailPaymentRequest
-	(*FailPaymentResponse)(nil),       // 7: novam.payments.v1.FailPaymentResponse
-	(*RefundPaymentRequest)(nil),      // 8: novam.payments.v1.RefundPaymentRequest
-	(*RefundPaymentResponse)(nil),     // 9: novam.payments.v1.RefundPaymentResponse
-	(*DisputePaymentRequest)(nil),     // 10: novam.payments.v1.DisputePaymentRequest
-	(*DisputePaymentResponse)(nil),    // 11: novam.payments.v1.DisputePaymentResponse
-	(*DeletePaymentRequest)(nil),      // 12: novam.payments.v1.DeletePaymentRequest
-	(*DeletePaymentResponse)(nil),     // 13: novam.payments.v1.DeletePaymentResponse
-	(*RestorePaymentRequest)(nil),     // 14: novam.payments.v1.RestorePaymentRequest
-	(*RestorePaymentResponse)(nil),    // 15: novam.payments.v1.RestorePaymentResponse
-	(*RedeemGiftCardRequest)(nil),     // 16: novam.payments.v1.RedeemGiftCardRequest
-	(*RedeemGiftCardResponse)(nil),    // 17: novam.payments.v1.RedeemGiftCardResponse
-	(*RunAutopayRequest)(nil),         // 18: novam.payments.v1.RunAutopayRequest
-	(*RunAutopayResponse)(nil),        // 19: novam.payments.v1.RunAutopayResponse
-	(*PayInvoiceRequest)(nil),         // 20: novam.payments.v1.PayInvoiceRequest
-	(*PayInvoiceResponse)(nil),        // 21: novam.payments.v1.PayInvoiceResponse
-	(*RefreshIntentRequest)(nil),      // 22: novam.payments.v1.RefreshIntentRequest
-	(*RefreshIntentResponse)(nil),     // 23: novam.payments.v1.RefreshIntentResponse
-	(*ApplyIntentEventRequest)(nil),   // 24: novam.payments.v1.ApplyIntentEventRequest
-	(*ApplyIntentEventResponse)(nil),  // 25: novam.payments.v1.ApplyIntentEventResponse
-	(*OpenCheckoutRequest)(nil),       // 26: novam.payments.v1.OpenCheckoutRequest
-	(*OpenCheckoutResponse)(nil),      // 27: novam.payments.v1.OpenCheckoutResponse
-	(*SettleCheckoutRequest)(nil),     // 28: novam.payments.v1.SettleCheckoutRequest
-	(*SettleCheckoutResponse)(nil),    // 29: novam.payments.v1.SettleCheckoutResponse
-	(*FailCheckoutRequest)(nil),       // 30: novam.payments.v1.FailCheckoutRequest
-	(*FailCheckoutResponse)(nil),      // 31: novam.payments.v1.FailCheckoutResponse
-	(*ApplyStripeEventRequest)(nil),   // 32: novam.payments.v1.ApplyStripeEventRequest
-	(*ApplyStripeEventResponse)(nil),  // 33: novam.payments.v1.ApplyStripeEventResponse
-	(*ChangePlanRequest)(nil),         // 34: novam.payments.v1.ChangePlanRequest
-	(*ChangePlanResponse)(nil),        // 35: novam.payments.v1.ChangePlanResponse
-	(*StartPlanCardRequest)(nil),      // 36: novam.payments.v1.StartPlanCardRequest
-	(*StartPlanCardResponse)(nil),     // 37: novam.payments.v1.StartPlanCardResponse
-	(*FinishPlanCardRequest)(nil),     // 38: novam.payments.v1.FinishPlanCardRequest
-	(*FinishPlanCardResponse)(nil),    // 39: novam.payments.v1.FinishPlanCardResponse
-	(*ResumePlanRequest)(nil),         // 40: novam.payments.v1.ResumePlanRequest
-	(*ResumePlanResponse)(nil),        // 41: novam.payments.v1.ResumePlanResponse
-	(*CancelPlanNowRequest)(nil),      // 42: novam.payments.v1.CancelPlanNowRequest
-	(*CancelPlanNowResponse)(nil),     // 43: novam.payments.v1.CancelPlanNowResponse
-	(*DetachPlanMethodsRequest)(nil),  // 44: novam.payments.v1.DetachPlanMethodsRequest
-	(*DetachPlanMethodsResponse)(nil), // 45: novam.payments.v1.DetachPlanMethodsResponse
-	(*v1.RequestMetadata)(nil),        // 46: novam.common.v1.RequestMetadata
-	(*timestamppb.Timestamp)(nil),     // 47: google.protobuf.Timestamp
-	(*structpb.Struct)(nil),           // 48: google.protobuf.Struct
+	(*RecordPaymentRequest)(nil),                  // 0: novam.payments.v1.RecordPaymentRequest
+	(*RecordPaymentResponse)(nil),                 // 1: novam.payments.v1.RecordPaymentResponse
+	(*MarkPaidIfCoveredRequest)(nil),              // 2: novam.payments.v1.MarkPaidIfCoveredRequest
+	(*MarkPaidIfCoveredResponse)(nil),             // 3: novam.payments.v1.MarkPaidIfCoveredResponse
+	(*ReopenIfOwedRequest)(nil),                   // 4: novam.payments.v1.ReopenIfOwedRequest
+	(*ReopenIfOwedResponse)(nil),                  // 5: novam.payments.v1.ReopenIfOwedResponse
+	(*FailPaymentRequest)(nil),                    // 6: novam.payments.v1.FailPaymentRequest
+	(*FailPaymentResponse)(nil),                   // 7: novam.payments.v1.FailPaymentResponse
+	(*RefundPaymentRequest)(nil),                  // 8: novam.payments.v1.RefundPaymentRequest
+	(*RefundPaymentResponse)(nil),                 // 9: novam.payments.v1.RefundPaymentResponse
+	(*DisputePaymentRequest)(nil),                 // 10: novam.payments.v1.DisputePaymentRequest
+	(*DisputePaymentResponse)(nil),                // 11: novam.payments.v1.DisputePaymentResponse
+	(*DeletePaymentRequest)(nil),                  // 12: novam.payments.v1.DeletePaymentRequest
+	(*DeletePaymentResponse)(nil),                 // 13: novam.payments.v1.DeletePaymentResponse
+	(*RestorePaymentRequest)(nil),                 // 14: novam.payments.v1.RestorePaymentRequest
+	(*RestorePaymentResponse)(nil),                // 15: novam.payments.v1.RestorePaymentResponse
+	(*RedeemGiftCardRequest)(nil),                 // 16: novam.payments.v1.RedeemGiftCardRequest
+	(*RedeemGiftCardResponse)(nil),                // 17: novam.payments.v1.RedeemGiftCardResponse
+	(*RunAutopayRequest)(nil),                     // 18: novam.payments.v1.RunAutopayRequest
+	(*RunAutopayResponse)(nil),                    // 19: novam.payments.v1.RunAutopayResponse
+	(*PayInvoiceRequest)(nil),                     // 20: novam.payments.v1.PayInvoiceRequest
+	(*PayInvoiceResponse)(nil),                    // 21: novam.payments.v1.PayInvoiceResponse
+	(*RefreshIntentRequest)(nil),                  // 22: novam.payments.v1.RefreshIntentRequest
+	(*RefreshIntentResponse)(nil),                 // 23: novam.payments.v1.RefreshIntentResponse
+	(*ApplyIntentEventRequest)(nil),               // 24: novam.payments.v1.ApplyIntentEventRequest
+	(*ApplyIntentEventResponse)(nil),              // 25: novam.payments.v1.ApplyIntentEventResponse
+	(*OpenCheckoutRequest)(nil),                   // 26: novam.payments.v1.OpenCheckoutRequest
+	(*OpenCheckoutResponse)(nil),                  // 27: novam.payments.v1.OpenCheckoutResponse
+	(*SettleCheckoutRequest)(nil),                 // 28: novam.payments.v1.SettleCheckoutRequest
+	(*SettleCheckoutResponse)(nil),                // 29: novam.payments.v1.SettleCheckoutResponse
+	(*FailCheckoutRequest)(nil),                   // 30: novam.payments.v1.FailCheckoutRequest
+	(*FailCheckoutResponse)(nil),                  // 31: novam.payments.v1.FailCheckoutResponse
+	(*ApplyStripeEventRequest)(nil),               // 32: novam.payments.v1.ApplyStripeEventRequest
+	(*ApplyStripeEventResponse)(nil),              // 33: novam.payments.v1.ApplyStripeEventResponse
+	(*ChangePlanRequest)(nil),                     // 34: novam.payments.v1.ChangePlanRequest
+	(*ChangePlanResponse)(nil),                    // 35: novam.payments.v1.ChangePlanResponse
+	(*StartPlanCardRequest)(nil),                  // 36: novam.payments.v1.StartPlanCardRequest
+	(*StartPlanCardResponse)(nil),                 // 37: novam.payments.v1.StartPlanCardResponse
+	(*FinishPlanCardRequest)(nil),                 // 38: novam.payments.v1.FinishPlanCardRequest
+	(*FinishPlanCardResponse)(nil),                // 39: novam.payments.v1.FinishPlanCardResponse
+	(*ResumePlanRequest)(nil),                     // 40: novam.payments.v1.ResumePlanRequest
+	(*ResumePlanResponse)(nil),                    // 41: novam.payments.v1.ResumePlanResponse
+	(*CancelPlanNowRequest)(nil),                  // 42: novam.payments.v1.CancelPlanNowRequest
+	(*CancelPlanNowResponse)(nil),                 // 43: novam.payments.v1.CancelPlanNowResponse
+	(*DetachPlanMethodsRequest)(nil),              // 44: novam.payments.v1.DetachPlanMethodsRequest
+	(*DetachPlanMethodsResponse)(nil),             // 45: novam.payments.v1.DetachPlanMethodsResponse
+	(*DraftPartnerStatementsRequest)(nil),         // 46: novam.payments.v1.DraftPartnerStatementsRequest
+	(*DraftPartnerStatementsResponse)(nil),        // 47: novam.payments.v1.DraftPartnerStatementsResponse
+	(*ApprovePartnerStatementsRequest)(nil),       // 48: novam.payments.v1.ApprovePartnerStatementsRequest
+	(*ApprovePartnerStatementsResponse)(nil),      // 49: novam.payments.v1.ApprovePartnerStatementsResponse
+	(*SendPartnerStatementRequest)(nil),           // 50: novam.payments.v1.SendPartnerStatementRequest
+	(*SendPartnerStatementResponse)(nil),          // 51: novam.payments.v1.SendPartnerStatementResponse
+	(*MarkPartnerStatementCollectedRequest)(nil),  // 52: novam.payments.v1.MarkPartnerStatementCollectedRequest
+	(*MarkPartnerStatementCollectedResponse)(nil), // 53: novam.payments.v1.MarkPartnerStatementCollectedResponse
+	(*v1.RequestMetadata)(nil),                    // 54: novam.common.v1.RequestMetadata
+	(*timestamppb.Timestamp)(nil),                 // 55: google.protobuf.Timestamp
+	(*structpb.Struct)(nil),                       // 56: google.protobuf.Struct
 }
 var file_novam_payments_v1_payments_service_proto_depIdxs = []int32{
-	46, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	47, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
-	46, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 3: novam.payments.v1.ReopenIfOwedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 4: novam.payments.v1.FailPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 5: novam.payments.v1.RefundPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 6: novam.payments.v1.DisputePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 7: novam.payments.v1.DeletePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 8: novam.payments.v1.RestorePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 9: novam.payments.v1.RedeemGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 10: novam.payments.v1.RunAutopayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 11: novam.payments.v1.PayInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 12: novam.payments.v1.RefreshIntentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 13: novam.payments.v1.ApplyIntentEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 14: novam.payments.v1.OpenCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 15: novam.payments.v1.SettleCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 16: novam.payments.v1.FailCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 17: novam.payments.v1.ApplyStripeEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	48, // 18: novam.payments.v1.ApplyStripeEventRequest.object:type_name -> google.protobuf.Struct
-	46, // 19: novam.payments.v1.ChangePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 20: novam.payments.v1.StartPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 21: novam.payments.v1.FinishPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 22: novam.payments.v1.ResumePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 23: novam.payments.v1.CancelPlanNowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	46, // 24: novam.payments.v1.DetachPlanMethodsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
-	0,  // 25: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
-	2,  // 26: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
-	4,  // 27: novam.payments.v1.PaymentsService.ReopenIfOwed:input_type -> novam.payments.v1.ReopenIfOwedRequest
-	6,  // 28: novam.payments.v1.PaymentsService.FailPayment:input_type -> novam.payments.v1.FailPaymentRequest
-	8,  // 29: novam.payments.v1.PaymentsService.RefundPayment:input_type -> novam.payments.v1.RefundPaymentRequest
-	10, // 30: novam.payments.v1.PaymentsService.DisputePayment:input_type -> novam.payments.v1.DisputePaymentRequest
-	12, // 31: novam.payments.v1.PaymentsService.DeletePayment:input_type -> novam.payments.v1.DeletePaymentRequest
-	14, // 32: novam.payments.v1.PaymentsService.RestorePayment:input_type -> novam.payments.v1.RestorePaymentRequest
-	16, // 33: novam.payments.v1.PaymentsService.RedeemGiftCard:input_type -> novam.payments.v1.RedeemGiftCardRequest
-	18, // 34: novam.payments.v1.PaymentsService.RunAutopay:input_type -> novam.payments.v1.RunAutopayRequest
-	20, // 35: novam.payments.v1.PaymentsService.PayInvoice:input_type -> novam.payments.v1.PayInvoiceRequest
-	22, // 36: novam.payments.v1.PaymentsService.RefreshIntent:input_type -> novam.payments.v1.RefreshIntentRequest
-	24, // 37: novam.payments.v1.PaymentsService.ApplyIntentEvent:input_type -> novam.payments.v1.ApplyIntentEventRequest
-	26, // 38: novam.payments.v1.PaymentsService.OpenCheckout:input_type -> novam.payments.v1.OpenCheckoutRequest
-	28, // 39: novam.payments.v1.PaymentsService.SettleCheckout:input_type -> novam.payments.v1.SettleCheckoutRequest
-	30, // 40: novam.payments.v1.PaymentsService.FailCheckout:input_type -> novam.payments.v1.FailCheckoutRequest
-	32, // 41: novam.payments.v1.PaymentsService.ApplyStripeEvent:input_type -> novam.payments.v1.ApplyStripeEventRequest
-	34, // 42: novam.payments.v1.PaymentsService.ChangePlan:input_type -> novam.payments.v1.ChangePlanRequest
-	36, // 43: novam.payments.v1.PaymentsService.StartPlanCard:input_type -> novam.payments.v1.StartPlanCardRequest
-	38, // 44: novam.payments.v1.PaymentsService.FinishPlanCard:input_type -> novam.payments.v1.FinishPlanCardRequest
-	40, // 45: novam.payments.v1.PaymentsService.ResumePlan:input_type -> novam.payments.v1.ResumePlanRequest
-	42, // 46: novam.payments.v1.PaymentsService.CancelPlanNow:input_type -> novam.payments.v1.CancelPlanNowRequest
-	44, // 47: novam.payments.v1.PaymentsService.DetachPlanMethods:input_type -> novam.payments.v1.DetachPlanMethodsRequest
-	1,  // 48: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
-	3,  // 49: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
-	5,  // 50: novam.payments.v1.PaymentsService.ReopenIfOwed:output_type -> novam.payments.v1.ReopenIfOwedResponse
-	7,  // 51: novam.payments.v1.PaymentsService.FailPayment:output_type -> novam.payments.v1.FailPaymentResponse
-	9,  // 52: novam.payments.v1.PaymentsService.RefundPayment:output_type -> novam.payments.v1.RefundPaymentResponse
-	11, // 53: novam.payments.v1.PaymentsService.DisputePayment:output_type -> novam.payments.v1.DisputePaymentResponse
-	13, // 54: novam.payments.v1.PaymentsService.DeletePayment:output_type -> novam.payments.v1.DeletePaymentResponse
-	15, // 55: novam.payments.v1.PaymentsService.RestorePayment:output_type -> novam.payments.v1.RestorePaymentResponse
-	17, // 56: novam.payments.v1.PaymentsService.RedeemGiftCard:output_type -> novam.payments.v1.RedeemGiftCardResponse
-	19, // 57: novam.payments.v1.PaymentsService.RunAutopay:output_type -> novam.payments.v1.RunAutopayResponse
-	21, // 58: novam.payments.v1.PaymentsService.PayInvoice:output_type -> novam.payments.v1.PayInvoiceResponse
-	23, // 59: novam.payments.v1.PaymentsService.RefreshIntent:output_type -> novam.payments.v1.RefreshIntentResponse
-	25, // 60: novam.payments.v1.PaymentsService.ApplyIntentEvent:output_type -> novam.payments.v1.ApplyIntentEventResponse
-	27, // 61: novam.payments.v1.PaymentsService.OpenCheckout:output_type -> novam.payments.v1.OpenCheckoutResponse
-	29, // 62: novam.payments.v1.PaymentsService.SettleCheckout:output_type -> novam.payments.v1.SettleCheckoutResponse
-	31, // 63: novam.payments.v1.PaymentsService.FailCheckout:output_type -> novam.payments.v1.FailCheckoutResponse
-	33, // 64: novam.payments.v1.PaymentsService.ApplyStripeEvent:output_type -> novam.payments.v1.ApplyStripeEventResponse
-	35, // 65: novam.payments.v1.PaymentsService.ChangePlan:output_type -> novam.payments.v1.ChangePlanResponse
-	37, // 66: novam.payments.v1.PaymentsService.StartPlanCard:output_type -> novam.payments.v1.StartPlanCardResponse
-	39, // 67: novam.payments.v1.PaymentsService.FinishPlanCard:output_type -> novam.payments.v1.FinishPlanCardResponse
-	41, // 68: novam.payments.v1.PaymentsService.ResumePlan:output_type -> novam.payments.v1.ResumePlanResponse
-	43, // 69: novam.payments.v1.PaymentsService.CancelPlanNow:output_type -> novam.payments.v1.CancelPlanNowResponse
-	45, // 70: novam.payments.v1.PaymentsService.DetachPlanMethods:output_type -> novam.payments.v1.DetachPlanMethodsResponse
-	48, // [48:71] is the sub-list for method output_type
-	25, // [25:48] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	54, // 0: novam.payments.v1.RecordPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	55, // 1: novam.payments.v1.RecordPaymentRequest.paid_at:type_name -> google.protobuf.Timestamp
+	54, // 2: novam.payments.v1.MarkPaidIfCoveredRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 3: novam.payments.v1.ReopenIfOwedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 4: novam.payments.v1.FailPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 5: novam.payments.v1.RefundPaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 6: novam.payments.v1.DisputePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 7: novam.payments.v1.DeletePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 8: novam.payments.v1.RestorePaymentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 9: novam.payments.v1.RedeemGiftCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 10: novam.payments.v1.RunAutopayRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 11: novam.payments.v1.PayInvoiceRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 12: novam.payments.v1.RefreshIntentRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 13: novam.payments.v1.ApplyIntentEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 14: novam.payments.v1.OpenCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 15: novam.payments.v1.SettleCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 16: novam.payments.v1.FailCheckoutRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 17: novam.payments.v1.ApplyStripeEventRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	56, // 18: novam.payments.v1.ApplyStripeEventRequest.object:type_name -> google.protobuf.Struct
+	54, // 19: novam.payments.v1.ChangePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 20: novam.payments.v1.StartPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 21: novam.payments.v1.FinishPlanCardRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 22: novam.payments.v1.ResumePlanRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 23: novam.payments.v1.CancelPlanNowRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 24: novam.payments.v1.DetachPlanMethodsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 25: novam.payments.v1.DraftPartnerStatementsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 26: novam.payments.v1.ApprovePartnerStatementsRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 27: novam.payments.v1.SendPartnerStatementRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	54, // 28: novam.payments.v1.MarkPartnerStatementCollectedRequest.metadata:type_name -> novam.common.v1.RequestMetadata
+	0,  // 29: novam.payments.v1.PaymentsService.RecordPayment:input_type -> novam.payments.v1.RecordPaymentRequest
+	2,  // 30: novam.payments.v1.PaymentsService.MarkPaidIfCovered:input_type -> novam.payments.v1.MarkPaidIfCoveredRequest
+	4,  // 31: novam.payments.v1.PaymentsService.ReopenIfOwed:input_type -> novam.payments.v1.ReopenIfOwedRequest
+	6,  // 32: novam.payments.v1.PaymentsService.FailPayment:input_type -> novam.payments.v1.FailPaymentRequest
+	8,  // 33: novam.payments.v1.PaymentsService.RefundPayment:input_type -> novam.payments.v1.RefundPaymentRequest
+	10, // 34: novam.payments.v1.PaymentsService.DisputePayment:input_type -> novam.payments.v1.DisputePaymentRequest
+	12, // 35: novam.payments.v1.PaymentsService.DeletePayment:input_type -> novam.payments.v1.DeletePaymentRequest
+	14, // 36: novam.payments.v1.PaymentsService.RestorePayment:input_type -> novam.payments.v1.RestorePaymentRequest
+	16, // 37: novam.payments.v1.PaymentsService.RedeemGiftCard:input_type -> novam.payments.v1.RedeemGiftCardRequest
+	18, // 38: novam.payments.v1.PaymentsService.RunAutopay:input_type -> novam.payments.v1.RunAutopayRequest
+	20, // 39: novam.payments.v1.PaymentsService.PayInvoice:input_type -> novam.payments.v1.PayInvoiceRequest
+	22, // 40: novam.payments.v1.PaymentsService.RefreshIntent:input_type -> novam.payments.v1.RefreshIntentRequest
+	24, // 41: novam.payments.v1.PaymentsService.ApplyIntentEvent:input_type -> novam.payments.v1.ApplyIntentEventRequest
+	26, // 42: novam.payments.v1.PaymentsService.OpenCheckout:input_type -> novam.payments.v1.OpenCheckoutRequest
+	28, // 43: novam.payments.v1.PaymentsService.SettleCheckout:input_type -> novam.payments.v1.SettleCheckoutRequest
+	30, // 44: novam.payments.v1.PaymentsService.FailCheckout:input_type -> novam.payments.v1.FailCheckoutRequest
+	32, // 45: novam.payments.v1.PaymentsService.ApplyStripeEvent:input_type -> novam.payments.v1.ApplyStripeEventRequest
+	34, // 46: novam.payments.v1.PaymentsService.ChangePlan:input_type -> novam.payments.v1.ChangePlanRequest
+	36, // 47: novam.payments.v1.PaymentsService.StartPlanCard:input_type -> novam.payments.v1.StartPlanCardRequest
+	38, // 48: novam.payments.v1.PaymentsService.FinishPlanCard:input_type -> novam.payments.v1.FinishPlanCardRequest
+	40, // 49: novam.payments.v1.PaymentsService.ResumePlan:input_type -> novam.payments.v1.ResumePlanRequest
+	42, // 50: novam.payments.v1.PaymentsService.CancelPlanNow:input_type -> novam.payments.v1.CancelPlanNowRequest
+	44, // 51: novam.payments.v1.PaymentsService.DetachPlanMethods:input_type -> novam.payments.v1.DetachPlanMethodsRequest
+	46, // 52: novam.payments.v1.PaymentsService.DraftPartnerStatements:input_type -> novam.payments.v1.DraftPartnerStatementsRequest
+	48, // 53: novam.payments.v1.PaymentsService.ApprovePartnerStatements:input_type -> novam.payments.v1.ApprovePartnerStatementsRequest
+	50, // 54: novam.payments.v1.PaymentsService.SendPartnerStatement:input_type -> novam.payments.v1.SendPartnerStatementRequest
+	52, // 55: novam.payments.v1.PaymentsService.MarkPartnerStatementCollected:input_type -> novam.payments.v1.MarkPartnerStatementCollectedRequest
+	1,  // 56: novam.payments.v1.PaymentsService.RecordPayment:output_type -> novam.payments.v1.RecordPaymentResponse
+	3,  // 57: novam.payments.v1.PaymentsService.MarkPaidIfCovered:output_type -> novam.payments.v1.MarkPaidIfCoveredResponse
+	5,  // 58: novam.payments.v1.PaymentsService.ReopenIfOwed:output_type -> novam.payments.v1.ReopenIfOwedResponse
+	7,  // 59: novam.payments.v1.PaymentsService.FailPayment:output_type -> novam.payments.v1.FailPaymentResponse
+	9,  // 60: novam.payments.v1.PaymentsService.RefundPayment:output_type -> novam.payments.v1.RefundPaymentResponse
+	11, // 61: novam.payments.v1.PaymentsService.DisputePayment:output_type -> novam.payments.v1.DisputePaymentResponse
+	13, // 62: novam.payments.v1.PaymentsService.DeletePayment:output_type -> novam.payments.v1.DeletePaymentResponse
+	15, // 63: novam.payments.v1.PaymentsService.RestorePayment:output_type -> novam.payments.v1.RestorePaymentResponse
+	17, // 64: novam.payments.v1.PaymentsService.RedeemGiftCard:output_type -> novam.payments.v1.RedeemGiftCardResponse
+	19, // 65: novam.payments.v1.PaymentsService.RunAutopay:output_type -> novam.payments.v1.RunAutopayResponse
+	21, // 66: novam.payments.v1.PaymentsService.PayInvoice:output_type -> novam.payments.v1.PayInvoiceResponse
+	23, // 67: novam.payments.v1.PaymentsService.RefreshIntent:output_type -> novam.payments.v1.RefreshIntentResponse
+	25, // 68: novam.payments.v1.PaymentsService.ApplyIntentEvent:output_type -> novam.payments.v1.ApplyIntentEventResponse
+	27, // 69: novam.payments.v1.PaymentsService.OpenCheckout:output_type -> novam.payments.v1.OpenCheckoutResponse
+	29, // 70: novam.payments.v1.PaymentsService.SettleCheckout:output_type -> novam.payments.v1.SettleCheckoutResponse
+	31, // 71: novam.payments.v1.PaymentsService.FailCheckout:output_type -> novam.payments.v1.FailCheckoutResponse
+	33, // 72: novam.payments.v1.PaymentsService.ApplyStripeEvent:output_type -> novam.payments.v1.ApplyStripeEventResponse
+	35, // 73: novam.payments.v1.PaymentsService.ChangePlan:output_type -> novam.payments.v1.ChangePlanResponse
+	37, // 74: novam.payments.v1.PaymentsService.StartPlanCard:output_type -> novam.payments.v1.StartPlanCardResponse
+	39, // 75: novam.payments.v1.PaymentsService.FinishPlanCard:output_type -> novam.payments.v1.FinishPlanCardResponse
+	41, // 76: novam.payments.v1.PaymentsService.ResumePlan:output_type -> novam.payments.v1.ResumePlanResponse
+	43, // 77: novam.payments.v1.PaymentsService.CancelPlanNow:output_type -> novam.payments.v1.CancelPlanNowResponse
+	45, // 78: novam.payments.v1.PaymentsService.DetachPlanMethods:output_type -> novam.payments.v1.DetachPlanMethodsResponse
+	47, // 79: novam.payments.v1.PaymentsService.DraftPartnerStatements:output_type -> novam.payments.v1.DraftPartnerStatementsResponse
+	49, // 80: novam.payments.v1.PaymentsService.ApprovePartnerStatements:output_type -> novam.payments.v1.ApprovePartnerStatementsResponse
+	51, // 81: novam.payments.v1.PaymentsService.SendPartnerStatement:output_type -> novam.payments.v1.SendPartnerStatementResponse
+	53, // 82: novam.payments.v1.PaymentsService.MarkPartnerStatementCollected:output_type -> novam.payments.v1.MarkPartnerStatementCollectedResponse
+	56, // [56:83] is the sub-list for method output_type
+	29, // [29:56] is the sub-list for method input_type
+	29, // [29:29] is the sub-list for extension type_name
+	29, // [29:29] is the sub-list for extension extendee
+	0,  // [0:29] is the sub-list for field type_name
 }
 
 func init() { file_novam_payments_v1_payments_service_proto_init() }
@@ -3369,7 +3791,7 @@ func file_novam_payments_v1_payments_service_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_novam_payments_v1_payments_service_proto_rawDesc), len(file_novam_payments_v1_payments_service_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   46,
+			NumMessages:   54,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

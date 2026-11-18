@@ -1394,6 +1394,155 @@ export declare type DetachPlanMethodsResponse = Message<"novam.payments.v1.Detac
 export declare const DetachPlanMethodsResponseSchema: GenMessage<DetachPlanMethodsResponse>;
 
 /**
+ * @generated from message novam.payments.v1.DraftPartnerStatementsRequest
+ */
+export declare type DraftPartnerStatementsRequest = Message<"novam.payments.v1.DraftPartnerStatementsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+};
+
+/**
+ * Describes the message novam.payments.v1.DraftPartnerStatementsRequest.
+ * Use `create(DraftPartnerStatementsRequestSchema)` to create a new message.
+ */
+export declare const DraftPartnerStatementsRequestSchema: GenMessage<DraftPartnerStatementsRequest>;
+
+/**
+ * @generated from message novam.payments.v1.DraftPartnerStatementsResponse
+ */
+export declare type DraftPartnerStatementsResponse = Message<"novam.payments.v1.DraftPartnerStatementsResponse"> & {
+  /**
+   * @generated from field: int32 drafted = 1;
+   */
+  drafted: number;
+};
+
+/**
+ * Describes the message novam.payments.v1.DraftPartnerStatementsResponse.
+ * Use `create(DraftPartnerStatementsResponseSchema)` to create a new message.
+ */
+export declare const DraftPartnerStatementsResponseSchema: GenMessage<DraftPartnerStatementsResponse>;
+
+/**
+ * @generated from message novam.payments.v1.ApprovePartnerStatementsRequest
+ */
+export declare type ApprovePartnerStatementsRequest = Message<"novam.payments.v1.ApprovePartnerStatementsRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * The statements to approve; with all, every draft.
+   *
+   * @generated from field: repeated string ids = 2;
+   */
+  ids: string[];
+
+  /**
+   * @generated from field: bool all = 3;
+   */
+  all: boolean;
+
+  /**
+   * Who approved them, kept on each statement.
+   *
+   * @generated from field: string approved_by = 4;
+   */
+  approvedBy: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.ApprovePartnerStatementsRequest.
+ * Use `create(ApprovePartnerStatementsRequestSchema)` to create a new message.
+ */
+export declare const ApprovePartnerStatementsRequestSchema: GenMessage<ApprovePartnerStatementsRequest>;
+
+/**
+ * @generated from message novam.payments.v1.ApprovePartnerStatementsResponse
+ */
+export declare type ApprovePartnerStatementsResponse = Message<"novam.payments.v1.ApprovePartnerStatementsResponse"> & {
+  /**
+   * @generated from field: int32 approved = 1;
+   */
+  approved: number;
+};
+
+/**
+ * Describes the message novam.payments.v1.ApprovePartnerStatementsResponse.
+ * Use `create(ApprovePartnerStatementsResponseSchema)` to create a new message.
+ */
+export declare const ApprovePartnerStatementsResponseSchema: GenMessage<ApprovePartnerStatementsResponse>;
+
+/**
+ * @generated from message novam.payments.v1.SendPartnerStatementRequest
+ */
+export declare type SendPartnerStatementRequest = Message<"novam.payments.v1.SendPartnerStatementRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string statement_id = 2;
+   */
+  statementId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.SendPartnerStatementRequest.
+ * Use `create(SendPartnerStatementRequestSchema)` to create a new message.
+ */
+export declare const SendPartnerStatementRequestSchema: GenMessage<SendPartnerStatementRequest>;
+
+/**
+ * @generated from message novam.payments.v1.SendPartnerStatementResponse
+ */
+export declare type SendPartnerStatementResponse = Message<"novam.payments.v1.SendPartnerStatementResponse"> & {
+};
+
+/**
+ * Describes the message novam.payments.v1.SendPartnerStatementResponse.
+ * Use `create(SendPartnerStatementResponseSchema)` to create a new message.
+ */
+export declare const SendPartnerStatementResponseSchema: GenMessage<SendPartnerStatementResponse>;
+
+/**
+ * @generated from message novam.payments.v1.MarkPartnerStatementCollectedRequest
+ */
+export declare type MarkPartnerStatementCollectedRequest = Message<"novam.payments.v1.MarkPartnerStatementCollectedRequest"> & {
+  /**
+   * @generated from field: novam.common.v1.RequestMetadata metadata = 1;
+   */
+  metadata?: RequestMetadata;
+
+  /**
+   * @generated from field: string statement_id = 2;
+   */
+  statementId: string;
+};
+
+/**
+ * Describes the message novam.payments.v1.MarkPartnerStatementCollectedRequest.
+ * Use `create(MarkPartnerStatementCollectedRequestSchema)` to create a new message.
+ */
+export declare const MarkPartnerStatementCollectedRequestSchema: GenMessage<MarkPartnerStatementCollectedRequest>;
+
+/**
+ * @generated from message novam.payments.v1.MarkPartnerStatementCollectedResponse
+ */
+export declare type MarkPartnerStatementCollectedResponse = Message<"novam.payments.v1.MarkPartnerStatementCollectedResponse"> & {
+};
+
+/**
+ * Describes the message novam.payments.v1.MarkPartnerStatementCollectedResponse.
+ * Use `create(MarkPartnerStatementCollectedResponseSchema)` to create a new message.
+ */
+export declare const MarkPartnerStatementCollectedResponseSchema: GenMessage<MarkPartnerStatementCollectedResponse>;
+
+/**
  * PaymentsService runs in novam-engine's workflows server and records a business's payments (ADR-0009): the row and
  * what novam-data does around it, in one transaction. novam-data checks who may record it and that the request is
  * sound first, then asks here; it reads the payment back to answer.
@@ -1654,6 +1803,48 @@ export declare const PaymentsService: GenService<{
     methodKind: "unary";
     input: typeof DetachPlanMethodsRequestSchema;
     output: typeof DetachPlanMethodsResponseSchema;
+  },
+  /**
+   * Works out the business's partner statements for the last whole week or month now, for every partner who has none
+   * yet, and approves and sends them when statements go on their own.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.DraftPartnerStatements
+   */
+  draftPartnerStatements: {
+    methodKind: "unary";
+    input: typeof DraftPartnerStatementsRequestSchema;
+    output: typeof DraftPartnerStatementsResponseSchema;
+  },
+  /**
+   * Approves draft partner statements (the ones named, or every draft), sending each to pay when they go on their own.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.ApprovePartnerStatements
+   */
+  approvePartnerStatements: {
+    methodKind: "unary";
+    input: typeof ApprovePartnerStatementsRequestSchema;
+    output: typeof ApprovePartnerStatementsResponseSchema;
+  },
+  /**
+   * Sends an approved statement to the partner to pay: a Stripe invoice from the business's own account.
+   * FAILED_PRECONDITION with the reason when it can't be.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.SendPartnerStatement
+   */
+  sendPartnerStatement: {
+    methodKind: "unary";
+    input: typeof SendPartnerStatementRequestSchema;
+    output: typeof SendPartnerStatementResponseSchema;
+  },
+  /**
+   * Records that an approved statement was paid another way, marking its open Stripe invoice paid outside Stripe first.
+   *
+   * @generated from rpc novam.payments.v1.PaymentsService.MarkPartnerStatementCollected
+   */
+  markPartnerStatementCollected: {
+    methodKind: "unary";
+    input: typeof MarkPartnerStatementCollectedRequestSchema;
+    output: typeof MarkPartnerStatementCollectedResponseSchema;
   },
 }>;
 

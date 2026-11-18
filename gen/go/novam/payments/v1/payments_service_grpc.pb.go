@@ -19,29 +19,33 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	PaymentsService_RecordPayment_FullMethodName     = "/novam.payments.v1.PaymentsService/RecordPayment"
-	PaymentsService_MarkPaidIfCovered_FullMethodName = "/novam.payments.v1.PaymentsService/MarkPaidIfCovered"
-	PaymentsService_ReopenIfOwed_FullMethodName      = "/novam.payments.v1.PaymentsService/ReopenIfOwed"
-	PaymentsService_FailPayment_FullMethodName       = "/novam.payments.v1.PaymentsService/FailPayment"
-	PaymentsService_RefundPayment_FullMethodName     = "/novam.payments.v1.PaymentsService/RefundPayment"
-	PaymentsService_DisputePayment_FullMethodName    = "/novam.payments.v1.PaymentsService/DisputePayment"
-	PaymentsService_DeletePayment_FullMethodName     = "/novam.payments.v1.PaymentsService/DeletePayment"
-	PaymentsService_RestorePayment_FullMethodName    = "/novam.payments.v1.PaymentsService/RestorePayment"
-	PaymentsService_RedeemGiftCard_FullMethodName    = "/novam.payments.v1.PaymentsService/RedeemGiftCard"
-	PaymentsService_RunAutopay_FullMethodName        = "/novam.payments.v1.PaymentsService/RunAutopay"
-	PaymentsService_PayInvoice_FullMethodName        = "/novam.payments.v1.PaymentsService/PayInvoice"
-	PaymentsService_RefreshIntent_FullMethodName     = "/novam.payments.v1.PaymentsService/RefreshIntent"
-	PaymentsService_ApplyIntentEvent_FullMethodName  = "/novam.payments.v1.PaymentsService/ApplyIntentEvent"
-	PaymentsService_OpenCheckout_FullMethodName      = "/novam.payments.v1.PaymentsService/OpenCheckout"
-	PaymentsService_SettleCheckout_FullMethodName    = "/novam.payments.v1.PaymentsService/SettleCheckout"
-	PaymentsService_FailCheckout_FullMethodName      = "/novam.payments.v1.PaymentsService/FailCheckout"
-	PaymentsService_ApplyStripeEvent_FullMethodName  = "/novam.payments.v1.PaymentsService/ApplyStripeEvent"
-	PaymentsService_ChangePlan_FullMethodName        = "/novam.payments.v1.PaymentsService/ChangePlan"
-	PaymentsService_StartPlanCard_FullMethodName     = "/novam.payments.v1.PaymentsService/StartPlanCard"
-	PaymentsService_FinishPlanCard_FullMethodName    = "/novam.payments.v1.PaymentsService/FinishPlanCard"
-	PaymentsService_ResumePlan_FullMethodName        = "/novam.payments.v1.PaymentsService/ResumePlan"
-	PaymentsService_CancelPlanNow_FullMethodName     = "/novam.payments.v1.PaymentsService/CancelPlanNow"
-	PaymentsService_DetachPlanMethods_FullMethodName = "/novam.payments.v1.PaymentsService/DetachPlanMethods"
+	PaymentsService_RecordPayment_FullMethodName                 = "/novam.payments.v1.PaymentsService/RecordPayment"
+	PaymentsService_MarkPaidIfCovered_FullMethodName             = "/novam.payments.v1.PaymentsService/MarkPaidIfCovered"
+	PaymentsService_ReopenIfOwed_FullMethodName                  = "/novam.payments.v1.PaymentsService/ReopenIfOwed"
+	PaymentsService_FailPayment_FullMethodName                   = "/novam.payments.v1.PaymentsService/FailPayment"
+	PaymentsService_RefundPayment_FullMethodName                 = "/novam.payments.v1.PaymentsService/RefundPayment"
+	PaymentsService_DisputePayment_FullMethodName                = "/novam.payments.v1.PaymentsService/DisputePayment"
+	PaymentsService_DeletePayment_FullMethodName                 = "/novam.payments.v1.PaymentsService/DeletePayment"
+	PaymentsService_RestorePayment_FullMethodName                = "/novam.payments.v1.PaymentsService/RestorePayment"
+	PaymentsService_RedeemGiftCard_FullMethodName                = "/novam.payments.v1.PaymentsService/RedeemGiftCard"
+	PaymentsService_RunAutopay_FullMethodName                    = "/novam.payments.v1.PaymentsService/RunAutopay"
+	PaymentsService_PayInvoice_FullMethodName                    = "/novam.payments.v1.PaymentsService/PayInvoice"
+	PaymentsService_RefreshIntent_FullMethodName                 = "/novam.payments.v1.PaymentsService/RefreshIntent"
+	PaymentsService_ApplyIntentEvent_FullMethodName              = "/novam.payments.v1.PaymentsService/ApplyIntentEvent"
+	PaymentsService_OpenCheckout_FullMethodName                  = "/novam.payments.v1.PaymentsService/OpenCheckout"
+	PaymentsService_SettleCheckout_FullMethodName                = "/novam.payments.v1.PaymentsService/SettleCheckout"
+	PaymentsService_FailCheckout_FullMethodName                  = "/novam.payments.v1.PaymentsService/FailCheckout"
+	PaymentsService_ApplyStripeEvent_FullMethodName              = "/novam.payments.v1.PaymentsService/ApplyStripeEvent"
+	PaymentsService_ChangePlan_FullMethodName                    = "/novam.payments.v1.PaymentsService/ChangePlan"
+	PaymentsService_StartPlanCard_FullMethodName                 = "/novam.payments.v1.PaymentsService/StartPlanCard"
+	PaymentsService_FinishPlanCard_FullMethodName                = "/novam.payments.v1.PaymentsService/FinishPlanCard"
+	PaymentsService_ResumePlan_FullMethodName                    = "/novam.payments.v1.PaymentsService/ResumePlan"
+	PaymentsService_CancelPlanNow_FullMethodName                 = "/novam.payments.v1.PaymentsService/CancelPlanNow"
+	PaymentsService_DetachPlanMethods_FullMethodName             = "/novam.payments.v1.PaymentsService/DetachPlanMethods"
+	PaymentsService_DraftPartnerStatements_FullMethodName        = "/novam.payments.v1.PaymentsService/DraftPartnerStatements"
+	PaymentsService_ApprovePartnerStatements_FullMethodName      = "/novam.payments.v1.PaymentsService/ApprovePartnerStatements"
+	PaymentsService_SendPartnerStatement_FullMethodName          = "/novam.payments.v1.PaymentsService/SendPartnerStatement"
+	PaymentsService_MarkPartnerStatementCollected_FullMethodName = "/novam.payments.v1.PaymentsService/MarkPartnerStatementCollected"
 )
 
 // PaymentsServiceClient is the client API for PaymentsService service.
@@ -122,6 +126,16 @@ type PaymentsServiceClient interface {
 	CancelPlanNow(ctx context.Context, in *CancelPlanNowRequest, opts ...grpc.CallOption) (*CancelPlanNowResponse, error)
 	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
 	DetachPlanMethods(ctx context.Context, in *DetachPlanMethodsRequest, opts ...grpc.CallOption) (*DetachPlanMethodsResponse, error)
+	// Works out the business's partner statements for the last whole week or month now, for every partner who has none
+	// yet, and approves and sends them when statements go on their own.
+	DraftPartnerStatements(ctx context.Context, in *DraftPartnerStatementsRequest, opts ...grpc.CallOption) (*DraftPartnerStatementsResponse, error)
+	// Approves draft partner statements (the ones named, or every draft), sending each to pay when they go on their own.
+	ApprovePartnerStatements(ctx context.Context, in *ApprovePartnerStatementsRequest, opts ...grpc.CallOption) (*ApprovePartnerStatementsResponse, error)
+	// Sends an approved statement to the partner to pay: a Stripe invoice from the business's own account.
+	// FAILED_PRECONDITION with the reason when it can't be.
+	SendPartnerStatement(ctx context.Context, in *SendPartnerStatementRequest, opts ...grpc.CallOption) (*SendPartnerStatementResponse, error)
+	// Records that an approved statement was paid another way, marking its open Stripe invoice paid outside Stripe first.
+	MarkPartnerStatementCollected(ctx context.Context, in *MarkPartnerStatementCollectedRequest, opts ...grpc.CallOption) (*MarkPartnerStatementCollectedResponse, error)
 }
 
 type paymentsServiceClient struct {
@@ -362,6 +376,46 @@ func (c *paymentsServiceClient) DetachPlanMethods(ctx context.Context, in *Detac
 	return out, nil
 }
 
+func (c *paymentsServiceClient) DraftPartnerStatements(ctx context.Context, in *DraftPartnerStatementsRequest, opts ...grpc.CallOption) (*DraftPartnerStatementsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(DraftPartnerStatementsResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_DraftPartnerStatements_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) ApprovePartnerStatements(ctx context.Context, in *ApprovePartnerStatementsRequest, opts ...grpc.CallOption) (*ApprovePartnerStatementsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ApprovePartnerStatementsResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_ApprovePartnerStatements_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) SendPartnerStatement(ctx context.Context, in *SendPartnerStatementRequest, opts ...grpc.CallOption) (*SendPartnerStatementResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SendPartnerStatementResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_SendPartnerStatement_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *paymentsServiceClient) MarkPartnerStatementCollected(ctx context.Context, in *MarkPartnerStatementCollectedRequest, opts ...grpc.CallOption) (*MarkPartnerStatementCollectedResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(MarkPartnerStatementCollectedResponse)
+	err := c.cc.Invoke(ctx, PaymentsService_MarkPartnerStatementCollected_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // PaymentsServiceServer is the server API for PaymentsService service.
 // All implementations must embed UnimplementedPaymentsServiceServer
 // for forward compatibility.
@@ -440,6 +494,16 @@ type PaymentsServiceServer interface {
 	CancelPlanNow(context.Context, *CancelPlanNowRequest) (*CancelPlanNowResponse, error)
 	// Takes every saved card and bank account off the business's plan customer (a new owner pays with their own).
 	DetachPlanMethods(context.Context, *DetachPlanMethodsRequest) (*DetachPlanMethodsResponse, error)
+	// Works out the business's partner statements for the last whole week or month now, for every partner who has none
+	// yet, and approves and sends them when statements go on their own.
+	DraftPartnerStatements(context.Context, *DraftPartnerStatementsRequest) (*DraftPartnerStatementsResponse, error)
+	// Approves draft partner statements (the ones named, or every draft), sending each to pay when they go on their own.
+	ApprovePartnerStatements(context.Context, *ApprovePartnerStatementsRequest) (*ApprovePartnerStatementsResponse, error)
+	// Sends an approved statement to the partner to pay: a Stripe invoice from the business's own account.
+	// FAILED_PRECONDITION with the reason when it can't be.
+	SendPartnerStatement(context.Context, *SendPartnerStatementRequest) (*SendPartnerStatementResponse, error)
+	// Records that an approved statement was paid another way, marking its open Stripe invoice paid outside Stripe first.
+	MarkPartnerStatementCollected(context.Context, *MarkPartnerStatementCollectedRequest) (*MarkPartnerStatementCollectedResponse, error)
 	mustEmbedUnimplementedPaymentsServiceServer()
 }
 
@@ -518,6 +582,18 @@ func (UnimplementedPaymentsServiceServer) CancelPlanNow(context.Context, *Cancel
 }
 func (UnimplementedPaymentsServiceServer) DetachPlanMethods(context.Context, *DetachPlanMethodsRequest) (*DetachPlanMethodsResponse, error) {
 	return nil, status.Error(codes.Unimplemented, "method DetachPlanMethods not implemented")
+}
+func (UnimplementedPaymentsServiceServer) DraftPartnerStatements(context.Context, *DraftPartnerStatementsRequest) (*DraftPartnerStatementsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method DraftPartnerStatements not implemented")
+}
+func (UnimplementedPaymentsServiceServer) ApprovePartnerStatements(context.Context, *ApprovePartnerStatementsRequest) (*ApprovePartnerStatementsResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method ApprovePartnerStatements not implemented")
+}
+func (UnimplementedPaymentsServiceServer) SendPartnerStatement(context.Context, *SendPartnerStatementRequest) (*SendPartnerStatementResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method SendPartnerStatement not implemented")
+}
+func (UnimplementedPaymentsServiceServer) MarkPartnerStatementCollected(context.Context, *MarkPartnerStatementCollectedRequest) (*MarkPartnerStatementCollectedResponse, error) {
+	return nil, status.Error(codes.Unimplemented, "method MarkPartnerStatementCollected not implemented")
 }
 func (UnimplementedPaymentsServiceServer) mustEmbedUnimplementedPaymentsServiceServer() {}
 func (UnimplementedPaymentsServiceServer) testEmbeddedByValue()                         {}
@@ -954,6 +1030,78 @@ func _PaymentsService_DetachPlanMethods_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _PaymentsService_DraftPartnerStatements_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DraftPartnerStatementsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).DraftPartnerStatements(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_DraftPartnerStatements_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).DraftPartnerStatements(ctx, req.(*DraftPartnerStatementsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_ApprovePartnerStatements_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ApprovePartnerStatementsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).ApprovePartnerStatements(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_ApprovePartnerStatements_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).ApprovePartnerStatements(ctx, req.(*ApprovePartnerStatementsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_SendPartnerStatement_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SendPartnerStatementRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).SendPartnerStatement(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_SendPartnerStatement_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).SendPartnerStatement(ctx, req.(*SendPartnerStatementRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _PaymentsService_MarkPartnerStatementCollected_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(MarkPartnerStatementCollectedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(PaymentsServiceServer).MarkPartnerStatementCollected(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: PaymentsService_MarkPartnerStatementCollected_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(PaymentsServiceServer).MarkPartnerStatementCollected(ctx, req.(*MarkPartnerStatementCollectedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // PaymentsService_ServiceDesc is the grpc.ServiceDesc for PaymentsService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -1052,6 +1200,22 @@ var PaymentsService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DetachPlanMethods",
 			Handler:    _PaymentsService_DetachPlanMethods_Handler,
+		},
+		{
+			MethodName: "DraftPartnerStatements",
+			Handler:    _PaymentsService_DraftPartnerStatements_Handler,
+		},
+		{
+			MethodName: "ApprovePartnerStatements",
+			Handler:    _PaymentsService_ApprovePartnerStatements_Handler,
+		},
+		{
+			MethodName: "SendPartnerStatement",
+			Handler:    _PaymentsService_SendPartnerStatement_Handler,
+		},
+		{
+			MethodName: "MarkPartnerStatementCollected",
+			Handler:    _PaymentsService_MarkPartnerStatementCollected_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
